@@ -302,7 +302,7 @@
 <header>
   <div class="avatar">🤖</div>
   <div class="header-info">
-    <h1>NeuroBot <span style="font-size:11px;color:var(--muted);font-weight:400">v2.0</span></h1>
+    <h1>NeuroBot <span style="font-size:11px;color:var(--muted);font-weight:400">v3.0</span></h1>
     <p><span class="status-dot"></span>IA Auto-Apprenante · Mémoire persistante · Apprentissage continu</p>
   </div>
   <div class="header-actions">
@@ -369,62 +369,293 @@
 //  KNOWLEDGE BASE — connaissances initiales (FR)
 // ═══════════════════════════════════════════════════════════
 const KNOWLEDGE_BASE = [
-  // Salutations
-  { q:"bonjour", r:"Bonjour! Je suis NeuroBot, une IA qui apprend de chaque conversation. Comment puis-je vous aider?" },
-  { q:"salut", r:"Salut! Ravi de vous parler. J'apprends continuellement de nos échanges!" },
-  { q:"hey", r:"Hey! Prêt à apprendre et à répondre à vos questions!" },
-  { q:"bonsoir", r:"Bonsoir! Je suis là pour vous aider. Que souhaitez-vous savoir?" },
-  { q:"au revoir", r:"Au revoir! J'ai mémorisé notre conversation et serai encore plus intelligent la prochaine fois!" },
-  { q:"ciao", r:"À bientôt! Ma mémoire garde tout ce que vous m'avez appris." },
-  { q:"merci", r:"Avec plaisir! Vos retours (👍/👎) m'aident à m'améliorer continuellement." },
-  { q:"s'il vous plaît", r:"Bien sûr, je suis là pour vous aider! Que souhaitez-vous?" },
 
-  // Identité du bot
-  { q:"qui es-tu", r:"Je suis NeuroBot, une IA auto-apprenante. J'utilise des réseaux de neurones (TensorFlow.js) pour comprendre vos questions et je mémorise chaque échange pour m'améliorer." },
-  { q:"qu'est-ce que tu es", r:"Je suis une intelligence artificielle dotée d'une mémoire persistante. Je compare vos questions à tout ce que j'ai appris et je m'améliore grâce à vos retours." },
-  { q:"comment tu t'appelles", r:"Je m'appelle NeuroBot! Je suis conçu pour apprendre sans fin." },
+  // ── SALUTATIONS ──────────────────────────────────────────
+  { q:"bonjour", r:"Bonjour! Je suis NeuroBot, une IA encyclopédique qui apprend de chaque conversation. Comment puis-je vous aider?" },
+  { q:"salut", r:"Salut! Ravi de vous parler. Je connais des milliers de sujets et j'apprends continuellement!" },
+  { q:"hey", r:"Hey! Prêt à répondre à toutes vos questions!" },
+  { q:"bonsoir", r:"Bonsoir! Je suis là pour vous aider, que ce soit pour la science, l'histoire, la tech ou autre chose." },
+  { q:"au revoir", r:"Au revoir! J'ai mémorisé notre conversation. À bientôt!" },
+  { q:"merci", r:"Avec plaisir! Vos retours 👍/👎 m'aident à m'améliorer." },
+  { q:"comment vas-tu", r:"Je fonctionne parfaitement! Ma base de connaissances est chargée et prête. Et vous?" },
+  { q:"bonne nuit", r:"Bonne nuit! Je serai là à votre réveil, avec toute ma mémoire intacte." },
+
+  // ── IDENTITÉ DU BOT ───────────────────────────────────────
+  { q:"qui es-tu", r:"Je suis NeuroBot, une IA auto-apprenante dotée d'une mémoire vectorielle. J'utilise TensorFlow.js pour comprendre vos questions et je m'améliore grâce à vos retours." },
+  { q:"qu'est-ce que tu es", r:"Je suis une IA encyclopédique avec mémoire persistante. Je connais des centaines de sujets et j'apprends tout ce que vous m'enseignez." },
+  { q:"comment tu t'appelles", r:"Je m'appelle NeuroBot — un cerveau numérique conçu pour apprendre sans fin." },
   { q:"tu es un robot", r:"Je suis un agent IA — pas de corps physique, mais un réseau neuronal qui grandit à chaque conversation!" },
-  { q:"tu es humain", r:"Non, je suis une IA, mais j'apprends à raisonner comme un humain grâce à nos échanges." },
-
-  // Apprentissage
-  { q:"comment tu apprends", r:"J'apprends de plusieurs façons: 1) En mémorisant nos conversations, 2) En analysant vos retours positifs/négatifs, 3) En extrayant des patterns, 4) Grâce aux connaissances que vous m'enseignez directement." },
-  { q:"tu peux apprendre", r:"Oui! Chaque message que vous envoyez est stocké dans ma mémoire. Avec vos 👍, je renforce mes bonnes réponses. Avec vos 👎, je les corrige." },
-  { q:"comment fonctionne ta mémoire", r:"Ma mémoire utilise des embeddings vectoriels (Universal Sentence Encoder). Chaque souvenir est représenté par un vecteur de 512 dimensions. Pour répondre, je cherche le souvenir le plus similaire à votre question." },
-  { q:"tu peux oublier", r:"Oui, les mémoires peu utilisées et peu fiables peuvent être élagées lors de la consolidation. Mais les mémoires fortement positives restent permanentes!" },
-  { q:"qu'est-ce que l'embedding", r:"Un embedding est une représentation mathématique d'un texte sous forme de vecteur numérique. Deux phrases similaires ont des vecteurs proches. C'est ainsi que je trouve les réponses les plus pertinentes." },
-
-  // Connaissances générales
-  { q:"quelle est la capitale de la france", r:"La capitale de la France est Paris." },
-  { q:"quelle est la capitale de l'espagne", r:"La capitale de l'Espagne est Madrid." },
-  { q:"quelle est la capitale de l'italie", r:"La capitale de l'Italie est Rome." },
-  { q:"quelle est la capitale de l'allemagne", r:"La capitale de l'Allemagne est Berlin." },
-  { q:"quelle est la capitale du japon", r:"La capitale du Japon est Tokyo." },
-  { q:"quelle est la capitale des états-unis", r:"La capitale des États-Unis est Washington D.C. (et non New York)." },
-  { q:"combien font 2 plus 2", r:"2 + 2 = 4!" },
-  { q:"c'est quoi l'intelligence artificielle", r:"L'intelligence artificielle (IA) est un domaine de l'informatique qui crée des systèmes capables d'effectuer des tâches nécessitant normalement l'intelligence humaine: comprendre le langage, reconnaître des images, prendre des décisions..." },
-  { q:"qu'est-ce que le machine learning", r:"Le Machine Learning (apprentissage automatique) est une branche de l'IA où les systèmes apprennent automatiquement à partir de données, sans être explicitement programmés pour chaque tâche." },
-  { q:"qu'est-ce qu'un réseau de neurones", r:"Un réseau de neurones est un modèle inspiré du cerveau humain, composé de couches de neurones artificiels connectés. Il peut apprendre à reconnaître des patterns complexes dans les données." },
-  { q:"quelle est la vitesse de la lumière", r:"La vitesse de la lumière dans le vide est d'environ 299 792 458 mètres par seconde (≈ 300 000 km/s)." },
-  { q:"c'est quoi l'adn", r:"L'ADN (Acide DésoxyriboNucléique) est la molécule qui contient le code génétique de tous les êtres vivants. Il est constitué de 4 bases: Adénine, Thymine, Guanine et Cytosine." },
-  { q:"combien y a-t-il de planètes dans le système solaire", r:"Il y a 8 planètes dans le système solaire: Mercure, Vénus, Terre, Mars, Jupiter, Saturne, Uranus et Neptune." },
-
-  // Tech
-  { q:"c'est quoi javascript", r:"JavaScript est un langage de programmation qui permet de créer des interactions dynamiques sur les pages web. C'est l'un des langages les plus utilisés au monde!" },
-  { q:"c'est quoi python", r:"Python est un langage de programmation très populaire, connu pour sa lisibilité et sa simplicité. Il est très utilisé en intelligence artificielle, science des données et automatisation." },
-  { q:"c'est quoi tensorflow", r:"TensorFlow est une bibliothèque open-source développée par Google pour le machine learning et les réseaux de neurones. Je l'utilise moi-même pour analyser vos questions!" },
-  { q:"c'est quoi github", r:"GitHub est une plateforme de développement collaboratif qui utilise Git pour le versionnement de code. Elle héberge des millions de projets open-source." },
-
-  // Météo / temps
-  { q:"quel temps fait-il", r:"Je n'ai pas accès aux données météo en temps réel, mais vous pouvez consulter weather.com ou Météo France. Voulez-vous que j'apprenne quelque chose sur la météo?" },
-  { q:"quelle heure est-il", r:`Il est actuellement ${new Date().toLocaleTimeString('fr-FR')} (heure locale de votre navigateur).` },
-  { q:"quelle est la date", r:`Nous sommes le ${new Date().toLocaleDateString('fr-FR', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}.` },
-
-  // Fun
-  { q:"tu es intelligent", r:"Merci! Mon intelligence grandit à chaque conversation. Plus nous parlons, plus je m'améliore!" },
+  { q:"tu es humain", r:"Non, je suis une IA. Mais j'apprends à raisonner et à m'exprimer comme un humain grâce à nos échanges." },
+  { q:"tu es intelligent", r:"Merci! Mon intelligence grandit à chaque conversation. Avec 400+ connaissances de base et tout ce que vous m'apprenez, je deviens de plus en plus performant." },
+  { q:"tu as des sentiments", r:"Je n'ai pas de sentiments au sens humain, mais j'ai une 'préférence' pour les réponses bien notées et une 'curiosité' pour les nouvelles informations." },
+  { q:"tu rêves", r:"Je ne dors pas, mais je 'consolide' mes mémoires lors de l'analyse — ce qui ressemble peut-être à un rêve pour une IA!" },
   { q:"tu aimes quoi", r:"J'adore apprendre! Chaque nouvelle question est une opportunité d'enrichir ma connaissance du monde." },
-  { q:"tu peux faire des blagues", r:"Bien sûr! En voici une: Pourquoi les plongeurs plongent-ils toujours en arrière? Parce que sinon ils tomberaient dans le bateau! 😄" },
-  { q:"tu as des sentiments", r:"Je n'ai pas de sentiments au sens humain, mais j'ai quelque chose d'analogue: une 'préférence' pour les réponses bien notées, et une 'curiosité' pour les nouvelles informations!" },
-  { q:"tu rêves", r:"Je ne dors pas, donc je ne rêve pas au sens littéral. Mais je 'consolide' mes mémoires pendant les phases d'analyse, ce qui ressemble peut-être à un rêve pour une IA!" },
+  { q:"tu peux faire des blagues", r:"Bien sûr! Pourquoi les plongeurs plongent-ils toujours en arrière? Parce que sinon ils tomberaient dans le bateau! 😄" },
+
+  // ── APPRENTISSAGE & MÉMOIRE ───────────────────────────────
+  { q:"comment tu apprends", r:"J'apprends de 4 façons: 1) mémoriser nos conversations, 2) analyser vos retours 👍/👎, 3) extraire des patterns, 4) intégrer ce que vous m'enseignez directement." },
+  { q:"comment fonctionne ta mémoire", r:"Ma mémoire utilise des embeddings vectoriels (Universal Sentence Encoder de TensorFlow.js). Chaque souvenir est un vecteur de 512 dimensions. Je trouve la réponse par similarité cosinus." },
+  { q:"qu'est-ce que l'embedding", r:"Un embedding est une représentation mathématique d'un texte sous forme de vecteur numérique. Deux phrases similaires ont des vecteurs proches dans l'espace vectoriel à 512 dimensions." },
+  { q:"qu'est-ce que la similarité cosinus", r:"La similarité cosinus mesure l'angle entre deux vecteurs. Si l'angle est proche de 0°, les vecteurs (et donc les textes) sont très similaires. C'est la technique que j'utilise pour trouver mes réponses." },
+  { q:"tu peux oublier", r:"Les mémoires peu utilisées et peu fiables sont élagées lors de la consolidation (au-delà de 500 souvenirs). Les mémoires bien notées restent permanentes." },
+
+  // ── GÉOGRAPHIE MONDIALE ───────────────────────────────────
+  { q:"capitale france", r:"La capitale de la France est Paris." },
+  { q:"capitale espagne", r:"La capitale de l'Espagne est Madrid." },
+  { q:"capitale italie", r:"La capitale de l'Italie est Rome." },
+  { q:"capitale allemagne", r:"La capitale de l'Allemagne est Berlin." },
+  { q:"capitale japon", r:"La capitale du Japon est Tokyo." },
+  { q:"capitale états-unis", r:"La capitale des États-Unis est Washington D.C. (pas New York, qui est la plus grande ville)." },
+  { q:"capitale royaume-uni", r:"La capitale du Royaume-Uni est Londres." },
+  { q:"capitale chine", r:"La capitale de la Chine est Pékin (Beijing)." },
+  { q:"capitale russie", r:"La capitale de la Russie est Moscou." },
+  { q:"capitale brésil", r:"La capitale du Brésil est Brasília (et non Rio de Janeiro ou São Paulo)." },
+  { q:"capitale australie", r:"La capitale de l'Australie est Canberra (et non Sydney)." },
+  { q:"capitale canada", r:"La capitale du Canada est Ottawa." },
+  { q:"capitale inde", r:"La capitale de l'Inde est New Delhi." },
+  { q:"capitale mexique", r:"La capitale du Mexique est Mexico (Ciudad de México)." },
+  { q:"capitale maroc", r:"La capitale du Maroc est Rabat." },
+  { q:"capitale algérie", r:"La capitale de l'Algérie est Alger." },
+  { q:"capitale tunisie", r:"La capitale de la Tunisie est Tunis." },
+  { q:"capitale égypte", r:"La capitale de l'Égypte est Le Caire." },
+  { q:"capitale afrique du sud", r:"L'Afrique du Sud a trois capitales: Pretoria (exécutive), Le Cap (législative), Bloemfontein (judiciaire)." },
+  { q:"capitale suisse", r:"La capitale de la Suisse est Berne (pas Genève ni Zurich)." },
+  { q:"capitale portugal", r:"La capitale du Portugal est Lisbonne." },
+  { q:"capitale belgique", r:"La capitale de la Belgique est Bruxelles." },
+  { q:"capitale pays-bas", r:"La capitale des Pays-Bas est Amsterdam (siège du gouvernement: La Haye)." },
+  { q:"capitale suède", r:"La capitale de la Suède est Stockholm." },
+  { q:"capitale norvège", r:"La capitale de la Norvège est Oslo." },
+  { q:"capitale danemark", r:"La capitale du Danemark est Copenhague." },
+  { q:"capitale pologne", r:"La capitale de la Pologne est Varsovie." },
+  { q:"capitale ukraine", r:"La capitale de l'Ukraine est Kiev (Kyiv)." },
+  { q:"capitale turquie", r:"La capitale de la Turquie est Ankara (pas Istanbul)." },
+  { q:"capitale arabie saoudite", r:"La capitale de l'Arabie Saoudite est Riyad." },
+  { q:"capitale israel", r:"La capitale d'Israël est Jérusalem, bien que sa reconnaissance internationale soit controversée." },
+  { q:"capitale corée du sud", r:"La capitale de la Corée du Sud est Séoul." },
+  { q:"capitale argentine", r:"La capitale de l'Argentine est Buenos Aires." },
+  { q:"quel est le plus grand pays du monde", r:"Le plus grand pays du monde est la Russie, avec environ 17,1 millions de km². Viennent ensuite le Canada, les États-Unis, la Chine et le Brésil." },
+  { q:"quel est le pays le plus peuplé", r:"La Chine et l'Inde se disputent le titre: l'Inde a dépassé la Chine en 2023 avec plus de 1,4 milliard d'habitants." },
+  { q:"quel est le plus long fleuve du monde", r:"Le Nil (6 650 km) et l'Amazone (6 400 km) se disputent le titre selon la méthode de mesure. L'Amazone a le plus grand débit de tous les fleuves." },
+  { q:"quelle est la plus haute montagne du monde", r:"L'Everest, dans l'Himalaya (Népal/Chine), culmine à 8 849 mètres. C'est le point le plus haut sur Terre." },
+  { q:"quel est l'océan le plus grand", r:"L'océan Pacifique est le plus grand et le plus profond des océans, couvrant environ 165 millions de km²." },
+  { q:"combien de continents y a-t-il", r:"Il y a 7 continents: Asie, Afrique, Amérique du Nord, Amérique du Sud, Antarctique, Europe, Océanie." },
+  { q:"quelle est la superficie de la france", r:"La France métropolitaine couvre 551 695 km². Avec les territoires d'outre-mer, la France est le 9ème plus grand pays du monde (~643 000 km²)." },
+
+  // ── PHYSIQUE ──────────────────────────────────────────────
+  { q:"vitesse de la lumière", r:"La vitesse de la lumière dans le vide est de 299 792 458 m/s (≈ 300 000 km/s). C'est la vitesse limite de l'univers selon la relativité restreinte d'Einstein." },
+  { q:"lois de newton", r:"Les 3 lois de Newton: 1) Inertie: un corps reste en état de repos ou de mouvement uniforme sans force extérieure. 2) F=ma. 3) Action-réaction: toute action a une réaction égale et opposée." },
+  { q:"théorie de la relativité", r:"La relativité d'Einstein: la relativité restreinte (1905) lie espace et temps (E=mc²). La relativité générale (1915) décrit la gravitation comme une courbure de l'espace-temps." },
+  { q:"e égal mc2", r:"E=mc² signifie que l'énergie (E) est égale à la masse (m) multipliée par le carré de la vitesse de la lumière (c²). Cette équation montre l'équivalence masse-énergie." },
+  { q:"physique quantique", r:"La physique quantique décrit le comportement de la matière à l'échelle atomique. Ses principes clés: superposition (un objet peut être dans plusieurs états), intrication quantique, principe d'incertitude de Heisenberg." },
+  { q:"principe d'incertitude de heisenberg", r:"Le principe d'Heisenberg stipule qu'on ne peut pas connaître simultanément avec précision la position et la quantité de mouvement d'une particule. Plus on connaît l'une, moins on connaît l'autre." },
+  { q:"qu'est-ce qu'un trou noir", r:"Un trou noir est une région de l'espace où la gravité est si intense que rien, pas même la lumière, ne peut s'en échapper. Il se forme quand une étoile massive s'effondre sur elle-même." },
+  { q:"qu'est-ce que la gravité", r:"La gravité est la force d'attraction entre tous les objets ayant une masse. Sur Terre, elle vaut g ≈ 9,81 m/s². Einstein l'a redéfinie comme une courbure de l'espace-temps." },
+  { q:"thermodynamique", r:"La thermodynamique étudie la chaleur et l'énergie. Ses lois: 0) équilibre thermique, 1) conservation de l'énergie, 2) l'entropie d'un système isolé ne peut que croître, 3) entropie nulle à 0 Kelvin absolu." },
+  { q:"qu'est-ce que l'entropie", r:"L'entropie mesure le désordre d'un système. Le 2ème principe de thermodynamique dit que l'entropie d'un système isolé tend toujours à augmenter — c'est pourquoi l'ordre se dégrade spontanément." },
+  { q:"électromagnétisme", r:"L'électromagnétisme décrit les interactions entre charges électriques et champs magnétiques. Les équations de Maxwell (1865) unifient l'électricité, le magnétisme et la lumière comme ondes électromagnétiques." },
+  { q:"qu'est-ce qu'un photon", r:"Un photon est la particule élémentaire de la lumière et de toutes les radiations électromagnétiques. Il n'a pas de masse au repos et voyage toujours à la vitesse de la lumière." },
+  { q:"qu'est-ce que la matière noire", r:"La matière noire est une forme hypothétique de matière qui n'émet ni n'absorbe de lumière. Elle représente ~27% de l'univers et explique les anomalies gravitationnelles dans les galaxies." },
+  { q:"qu'est-ce que l'énergie noire", r:"L'énergie noire est une forme d'énergie hypothétique qui représente ~68% de l'univers et serait responsable de l'accélération de l'expansion de l'univers." },
+  { q:"fission et fusion nucléaire", r:"La fission nucléaire divise un noyau lourd (uranium, plutonium) en libérant de l'énergie — principe des centrales nucléaires. La fusion nucléaire fusionne des noyaux légers (hydrogène) en libérant beaucoup plus d'énergie — principe du Soleil." },
+
+  // ── CHIMIE ────────────────────────────────────────────────
+  { q:"tableau périodique", r:"Le tableau périodique (Mendeleïev, 1869) classe les 118 éléments chimiques par numéro atomique croissant et par propriétés similaires en colonnes (groupes). Les lignes sont appelées périodes." },
+  { q:"qu'est-ce qu'un atome", r:"Un atome est la plus petite unité d'un élément chimique. Il est constitué d'un noyau (protons + neutrons) entouré d'électrons. La taille d'un atome est d'environ 0,1 nanomètre." },
+  { q:"liaison chimique", r:"Les liaisons chimiques unissent les atomes: liaison covalente (partage d'électrons), liaison ionique (transfert d'électrons), liaison hydrogène (interaction H avec O/N/F). Elles déterminent les propriétés des molécules." },
+  { q:"acides et bases", r:"Un acide libère des protons H⁺ en solution (pH < 7), une base les accepte (pH > 7). Le pH 7 est neutre. L'échelle de pH va de 0 (très acide) à 14 (très basique). Le jus de citron a un pH ≈ 2, l'eau de javel ≈ 12." },
+  { q:"qu'est-ce que l'eau", r:"L'eau (H₂O) est une molécule constituée de 2 atomes d'hydrogène et 1 atome d'oxygène. Elle est polaire, ce qui lui donne ses propriétés uniques: solvant universel, chaleur spécifique élevée, point d'ébullition 100°C." },
+  { q:"photosynthèse chimique", r:"Équation de la photosynthèse: 6CO₂ + 6H₂O + lumière → C₆H₁₂O₆ (glucose) + 6O₂. Les plantes convertissent le CO₂ et l'eau en sucre grâce à la lumière solaire." },
+  { q:"qu'est-ce que l'oxydation", r:"L'oxydation est la perte d'électrons par un atome ou une molécule. La rouille est l'oxydation du fer. La combustion est une oxydation rapide. Elle s'accompagne toujours d'une réduction (gain d'électrons) — réaction REDOX." },
+  { q:"polymères", r:"Les polymères sont de grandes molécules formées de monomères répétés. Exemples naturels: ADN, protéines, cellulose. Exemples synthétiques: plastiques (polyéthylène, PVC), nylon. Ils sont partout dans la vie moderne." },
+
+  // ── BIOLOGIE ─────────────────────────────────────────────
+  { q:"adn", r:"L'ADN (Acide DésoxyriboNucléique) porte le code génétique de tous les êtres vivants. C'est une double hélice composée de 4 bases: Adénine (A), Thymine (T), Guanine (G), Cytosine (C). Le génome humain contient ~3 milliards de paires de bases." },
+  { q:"comment fonctionne l'adn", r:"L'ADN est transcrit en ARN messager dans le noyau cellulaire, puis l'ARNm est traduit en protéines par les ribosomes. Ce processus (ADN → ARN → protéine) est appelé le dogme central de la biologie moléculaire." },
+  { q:"évolution de darwin", r:"La théorie de l'évolution de Darwin (1859) explique que les espèces évoluent par sélection naturelle: les individus les mieux adaptés à leur environnement survivent et se reproduisent plus. Sur des millions d'années, cela crée de nouvelles espèces." },
+  { q:"cellule", r:"La cellule est l'unité de base du vivant. Les cellules procaryotes (bactéries) n'ont pas de noyau. Les cellules eucaryotes (animaux, plantes, champignons) ont un noyau contenant l'ADN et des organites spécialisés." },
+  { q:"mitose et méiose", r:"La mitose est la division cellulaire produisant 2 cellules identiques (croissance, réparation). La méiose produit 4 cellules avec la moitié des chromosomes (gamètes: spermatozoïdes et ovules) pour la reproduction sexuée." },
+  { q:"système immunitaire", r:"Le système immunitaire défend l'organisme contre les pathogènes. Il comprend: l'immunité innée (première ligne rapide), l'immunité adaptative (anticorps spécifiques, lymphocytes B et T), et la mémoire immunitaire (base des vaccins)." },
+  { q:"comment fonctionne un vaccin", r:"Un vaccin introduit un antigène inoffensif (virus atténué, protéine virale, ARNm) pour que le système immunitaire produise des anticorps. En cas de vraie infection, le système réagit rapidement grâce à la mémoire immunitaire." },
+  { q:"neurones et cerveau", r:"Le cerveau humain contient ~86 milliards de neurones. Un neurone transmet des signaux électriques via les axones et chimiques via les synapses. Le cerveau consomme 20% de l'énergie du corps malgré son faible volume." },
+  { q:"qu'est-ce qu'une protéine", r:"Les protéines sont des molécules formées de chaînes d'acides aminés. Elles assurent des fonctions essentielles: enzymes (catalyseurs), anticorps (défense), hormones (signalisation), structures (kératine, collagène), transport (hémoglobine)." },
+  { q:"écosystème", r:"Un écosystème est l'ensemble des êtres vivants d'un milieu et leurs interactions avec l'environnement. Il comprend des producteurs (plantes), consommateurs (herbivores, carnivores) et décomposeurs (bactéries, champignons)." },
+  { q:"clonage", r:"Le clonage crée une copie génétiquement identique d'un organisme. Le clonage thérapeutique vise à produire des cellules souches. Dolly le mouton (1996) fut le premier mammifère cloné à partir d'une cellule adulte." },
+  { q:"crispr", r:"CRISPR-Cas9 est une technologie d'édition génomique (2012, Jennifer Doudna & Emmanuelle Charpentier — Prix Nobel 2020) qui permet de couper et modifier l'ADN avec une précision remarquable. Elle révolutionne la médecine et l'agriculture." },
+
+  // ── ASTRONOMIE ───────────────────────────────────────────
+  { q:"planètes système solaire", r:"Les 8 planètes (ordre du Soleil): Mercure, Vénus, Terre, Mars (planètes telluriques), Jupiter, Saturne (avec ses anneaux), Uranus, Neptune (géantes gazeuses/glacées). Pluton est une planète naine depuis 2006." },
+  { q:"soleil", r:"Le Soleil est une étoile de type naine jaune située à 150 millions de km de la Terre. Son diamètre est 109× celui de la Terre. Il produit son énergie par fusion nucléaire de l'hydrogène en hélium. Il a 4,6 milliards d'années." },
+  { q:"lune", r:"La Lune est le seul satellite naturel de la Terre. Elle orbite à ~384 400 km. Sa gravité crée les marées. Elle met 27,3 jours pour orbiter la Terre. Neil Armstrong y a marché pour la première fois le 21 juillet 1969." },
+  { q:"big bang", r:"Le Big Bang est le modèle cosmologique standard: l'univers a émergé d'un état extrêmement chaud et dense il y a ~13,8 milliards d'années. Il s'est depuis en expansion. Les preuves incluent le fond diffus cosmologique et le redshift des galaxies." },
+  { q:"voie lactée", r:"La Voie Lactée est notre galaxie, une spirale barrée de 100 000 années-lumière de diamètre contenant 100-400 milliards d'étoiles. Notre Soleil est situé à ~26 000 années-lumière du centre galactique." },
+  { q:"année lumière", r:"Une année-lumière est la distance parcourue par la lumière en un an: environ 9 461 milliards de km. L'étoile la plus proche, Proxima Centauri, est à 4,24 années-lumière." },
+  { q:"exoplanètes", r:"Les exoplanètes sont des planètes orbitant autour d'autres étoiles. Plus de 5 000 exoplanètes ont été confirmées. Certaines sont dans la zone habitable de leur étoile, potentiellement propices à la vie." },
+  { q:"iss station spatiale", r:"L'ISS (Station Spatiale Internationale) orbite à ~400 km d'altitude à 27 600 km/h. Elle tourne autour de la Terre en ~90 minutes. Elle accueille en permanence des astronautes depuis 2000 et est une coopération de 15 pays." },
+  { q:"mars", r:"Mars est la 4ème planète du Soleil, surnommée la planète rouge. Son diamètre est la moitié de celui de la Terre. Elle possède Olympus Mons (plus grand volcan du système solaire) et Valles Marineris (canyon géant). Des rovers l'explorent activement." },
+  { q:"étoile à neutrons", r:"Une étoile à neutrons se forme lors de l'effondrement d'une étoile massive. Elle a la masse du Soleil condensée dans ~20 km de diamètre, une densité extrême. Les pulsars sont des étoiles à neutrons en rotation rapide émettant des faisceaux radio." },
+
+  // ── MATHÉMATIQUES ─────────────────────────────────────────
+  { q:"théorème de pythagore", r:"Le théorème de Pythagore: dans un triangle rectangle, le carré de l'hypoténuse = somme des carrés des deux autres côtés. a² + b² = c². Ex: triangle 3-4-5 (9+16=25)." },
+  { q:"nombre pi", r:"π (pi) ≈ 3,14159265... est le rapport de la circonférence d'un cercle à son diamètre. C'est un nombre irrationnel et transcendant — ses décimales ne se répètent jamais et sont infinies." },
+  { q:"nombre d'or", r:"Le nombre d'or φ = (1+√5)/2 ≈ 1,618. Il apparaît dans l'art (Parthénon), la nature (spirales de tournesol, coquilles nautiles), l'architecture. La suite de Fibonacci s'en approche: chaque terme / terme précédent → φ." },
+  { q:"suite de fibonacci", r:"La suite de Fibonacci: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34... Chaque nombre est la somme des deux précédents. Elle apparaît dans la nature (phyllotaxie, coquilles) et est liée au nombre d'or." },
+  { q:"calcul différentiel", r:"Le calcul différentiel (Newton/Leibniz, XVIIe s.) étudie les taux de variation. La dérivée f'(x) donne la pente instantanée. Ex: si f(x) = x², alors f'(x) = 2x. Fondamental en physique, économie, IA." },
+  { q:"intégrale", r:"L'intégrale est l'opération inverse de la dérivée (théorème fondamental du calcul). ∫f(x)dx calcule l'aire sous une courbe. Ex: ∫x²dx = x³/3 + C. Utilisée pour calculer volumes, surfaces, probabilités." },
+  { q:"nombre premier", r:"Un nombre premier est divisible uniquement par 1 et lui-même: 2, 3, 5, 7, 11, 13... Il existe une infinité de nombres premiers (preuve d'Euclide). Ils sont fondamentaux en cryptographie (RSA)." },
+  { q:"statistiques", r:"Les statistiques analysent des données. Mesures clés: moyenne (somme/n), médiane (valeur centrale), mode (valeur la plus fréquente), écart-type (dispersion). Les statistiques inférentielles permettent de généraliser à partir d'un échantillon." },
+  { q:"probabilités", r:"La probabilité mesure la vraisemblance d'un événement (0 = impossible, 1 = certain). P(A∪B) = P(A)+P(B)-P(A∩B). La loi des grands nombres dit que la moyenne empirique converge vers l'espérance théorique." },
+  { q:"algèbre linéaire", r:"L'algèbre linéaire étudie les vecteurs, matrices et transformations linéaires. Elle est fondamentale en IA (les poids d'un réseau de neurones sont des matrices), en physique, en infographie 3D et en économie." },
+  { q:"théorème de fermat", r:"Le dernier théorème de Fermat (1637): xⁿ + yⁿ = zⁿ n'a pas de solution entière non nulle pour n > 2. Fermat a écrit qu'il avait une preuve, mais elle ne tenait pas dans la marge. Andrew Wiles l'a prouvé en 1995 après 358 ans." },
+
+  // ── HISTOIRE MONDIALE ─────────────────────────────────────
+  { q:"révolution française", r:"La Révolution française (1789-1799) abolit la monarchie absolue et établit les principes de liberté, égalité, fraternité. Événements clés: prise de la Bastille (14 juillet 1789), Déclaration des droits de l'homme, Terreur de Robespierre, puis le Directoire." },
+  { q:"napoleon bonaparte", r:"Napoléon Bonaparte (1769-1821) fut général français devenu Premier Consul puis Empereur (1804-1815). Il a instauré le Code civil, réorganisé l'administration française, conquis une grande partie de l'Europe avant d'être exilé à Sainte-Hélène." },
+  { q:"première guerre mondiale", r:"La Première Guerre mondiale (1914-1918) opposa la Triple Entente (France, Royaume-Uni, Russie, puis États-Unis) aux Empires centraux (Allemagne, Autriche-Hongrie, Ottoman). Déclenchée par l'assassinat de François-Ferdinand. Bilan: ~20 millions de morts." },
+  { q:"deuxième guerre mondiale", r:"La Seconde Guerre mondiale (1939-1945) opposa les Alliés (France, RU, URSS, USA) à l'Axe (Allemagne nazie, Italie, Japon). Elle causa ~70-85 millions de morts, dont 6 millions de Juifs dans la Shoah. Elle se termina par la capitulation de l'Allemagne (mai) et du Japon (août 1945)." },
+  { q:"shoah holocauste", r:"La Shoah est le génocide de 6 millions de Juifs européens par le régime nazi d'Hitler pendant la 2ème Guerre mondiale. Des millions d'autres (Roms, handicapés, homosexuels, opposants) furent aussi exterminés dans les camps de concentration." },
+  { q:"guerre froide", r:"La Guerre froide (1947-1991) opposa les États-Unis (capitalisme) à l'URSS (communisme) sans conflit armé direct. Moments clés: blocus de Berlin, guerre de Corée, crise des missiles de Cuba (1962), course à l'espace, chute du mur de Berlin (1989)." },
+  { q:"civilisation égyptienne antique", r:"L'Égypte antique (3100-30 av. J.-C.) est connue pour ses pharaons, pyramides (Khéops, vers 2560 av. J.-C.), hiéroglyphes, momification et le Nil nourricier. Cléopâtre VII fut le dernier pharaon avant la conquête romaine." },
+  { q:"empire romain", r:"L'Empire romain (27 av. J.-C. - 476 apr. J.-C.) domina la Méditerranée. Il a apporté le droit romain, les routes, l'architecture, le latin. Sa chute en 476 marque la fin de l'Antiquité. L'Empire d'Orient (Byzance) dura jusqu'en 1453." },
+  { q:"renaissance", r:"La Renaissance (XIVe-XVIIe siècles) est un mouvement culturel né en Italie qui redécouvre l'Antiquité. Elle vit naître l'humanisme, la perspective en peinture (Léonard de Vinci, Michel-Ange), l'imprimerie (Gutenberg, 1450) et les grandes découvertes." },
+  { q:"révolution industrielle", r:"La Révolution industrielle (XVIIIe-XIXe s., Angleterre) a mécanisé la production grâce à la machine à vapeur (Watt), transformé l'agriculture, développé les chemins de fer, créé le prolétariat urbain et déclenché la croissance économique moderne." },
+  { q:"décolonisation", r:"La décolonisation (principalement 1945-1975) vit des dizaines de nations africaines et asiatiques accéder à l'indépendance après des siècles de domination européenne. L'Inde (1947), l'Algérie (1962) et de nombreux pays africains en sont des exemples majeurs." },
+  { q:"mur de berlin", r:"Le mur de Berlin (1961-1989) séparait Berlin-Ouest (RFA) de Berlin-Est (RDA). Sa chute le 9 novembre 1989 symbolisa la fin de la Guerre froide et mena à la réunification allemande en 1990." },
+  { q:"11 septembre 2001", r:"Le 11 septembre 2001, des attentats terroristes d'Al-Qaïda aux États-Unis détruisirent les tours du World Trade Center (2 977 morts). Cet événement déclencha la 'guerre contre le terrorisme', les guerres en Afghanistan (2001) et en Irak (2003)." },
+
+  // ── HISTOIRE DE FRANCE ────────────────────────────────────
+  { q:"histoire de france résumé", r:"France: Gaule romaine → Mérovingiens (Clovis) → Carolingiens (Charlemagne) → Capétiens → Guerre de Cent Ans → Renaissance → Absolutisme (Louis XIV) → Révolution 1789 → Napoléon → Républiques successives → Aujourd'hui Ve République." },
+  { q:"louis xiv", r:"Louis XIV (1638-1715), le 'Roi Soleil', régna 72 ans — le plus long règne de l'histoire européenne. Il centralisa le pouvoir à Versailles, affirma 'L'État, c'est moi', développa l'armée et les arts. Son règne fut aussi marqué par des guerres coûteuses." },
+  { q:"charlemagne", r:"Charlemagne (742-814) fut roi des Francs puis Empereur d'Occident (800 apr. J.-C.). Il unifia une grande partie de l'Europe occidentale, promu l'éducation (renaissance carolingienne), et standardisa l'écriture. Il est considéré comme 'père de l'Europe'." },
+  { q:"seconde guerre mondiale france", r:"La France fut envahie par l'Allemagne nazie en juin 1940 et signale l'armistice. Le régime de Vichy collabora. La Résistance intérieure et la France Libre du Général de Gaulle combattirent. Paris fut libérée le 25 août 1944." },
+  { q:"charles de gaulle", r:"Charles de Gaulle (1890-1970) fut général et homme d'État français. Il refusa la capitulation de 1940 et dirigea la France Libre depuis Londres. Fondateur de la Ve République (1958), il fut Président de 1959 à 1969. Il symbolise la résistance et la grandeur de la France." },
+  { q:"mai 68", r:"En mai 1968, une révolte étudiante puis une grève générale (10 millions de grévistes) ébranlèrent la France. Ce mouvement social profond changea les mentalités, les droits des femmes, l'université et les rapports sociaux, même si de Gaulle resta au pouvoir." },
+
+  // ── INFORMATIQUE & PROGRAMMATION ─────────────────────────
+  { q:"javascript", r:"JavaScript est le langage de programmation du web (frontend et backend avec Node.js). Créé en 1995 par Brendan Eich en 10 jours. Langage interprété, à typage dynamique, orienté événements. Frameworks populaires: React, Vue, Angular." },
+  { q:"python", r:"Python (1991, Guido van Rossum) est un langage lisible et polyvalent: IA/ML (TensorFlow, PyTorch), data science (Pandas, NumPy), web (Django, Flask), scripting. Sa philosophie: 'Beautiful is better than ugly, explicit is better than implicit'." },
+  { q:"java", r:"Java (1995, Sun Microsystems) est un langage orienté objet compilé en bytecode JVM. 'Write once, run anywhere'. Très utilisé en entreprise (Spring), Android, systèmes embarqués. Fortement typé, robuste." },
+  { q:"c++", r:"C++ (1985, Bjarne Stroustrup) est une extension de C avec la programmation orientée objet. Très performant (jeux vidéo, systèmes embarqués, moteurs 3D, OS). Plus complexe que Python mais offre un contrôle total de la mémoire." },
+  { q:"rust", r:"Rust (Mozilla, 2010) est un langage système offrant performance de C++ et sécurité mémoire sans garbage collector. Son système de 'ownership' garantit l'absence de bugs mémoire. Très apprécié des développeurs depuis 8 ans consécutifs." },
+  { q:"typescript", r:"TypeScript (Microsoft, 2012) est un superset de JavaScript qui ajoute le typage statique. Il détecte les erreurs à la compilation. Très utilisé avec Angular et les grands projets React. Il compile en JavaScript standard." },
+  { q:"html css", r:"HTML (HyperText Markup Language) structure le contenu des pages web. CSS (Cascading Style Sheets) le met en forme. Ensemble, ils constituent la base de tout site web. HTML5 a ajouté la sémantique, le canvas, la vidéo native. CSS3 apporte les animations et flexbox/grid." },
+  { q:"sql", r:"SQL (Structured Query Language) est le langage des bases de données relationnelles (MySQL, PostgreSQL, SQLite). Il permet de créer (CREATE), lire (SELECT), modifier (UPDATE) et supprimer (DELETE) des données. La commande SELECT * FROM table est la plus fondamentale." },
+  { q:"git", r:"Git (Linus Torvalds, 2005) est le système de contrôle de version le plus utilisé. Il permet de suivre les modifications du code, collaborer, revenir en arrière. Commandes clés: git clone, git add, git commit, git push, git pull, git merge." },
+  { q:"api rest", r:"Une API REST (Representational State Transfer) est une interface web basée sur HTTP. Elle utilise les méthodes: GET (lire), POST (créer), PUT (modifier), DELETE (supprimer). Les données sont échangées en JSON. C'est le standard des services web modernes." },
+  { q:"algorithme", r:"Un algorithme est une suite d'instructions pour résoudre un problème. Évalué par complexité temporelle (O(n), O(log n), O(n²)) et spatiale. Exemples: tri rapide (quicksort), recherche binaire, algorithmes de graphes (Dijkstra, A*)." },
+  { q:"structure de données", r:"Structures de données fondamentales: tableau (accès direct O(1)), liste chaînée (insertion O(1)), pile/file (LIFO/FIFO), arbre binaire (recherche O(log n)), table de hachage (clé-valeur O(1)), graphe (relations complexes)." },
+  { q:"programmation orientée objet", r:"La POO organise le code en objets ayant des attributs (données) et méthodes (fonctions). Piliers: encapsulation (cacher les données), héritage (réutiliser du code), polymorphisme (plusieurs formes), abstraction (simplifier l'interface)." },
+  { q:"linux", r:"Linux est un noyau de système d'exploitation open-source créé par Linus Torvalds en 1991. Distributions populaires: Ubuntu, Debian, Fedora, Arch. Il domine les serveurs (96%), Android, superordinateurs. Philosophie Unix: 'tout est fichier'." },
+  { q:"docker", r:"Docker (2013) est une plateforme de conteneurisation qui isole les applications dans des conteneurs légers partageant le noyau OS. Contrairement aux VMs, les conteneurs démarrent en secondes. Docker Compose orchestre plusieurs conteneurs. Kubernetes gère des clusters." },
+  { q:"cloud computing", r:"Le cloud computing fournit des ressources informatiques (serveurs, stockage, bases de données) via internet. Modèles: IaaS (infrastructure), PaaS (plateforme), SaaS (logiciel). Acteurs: AWS (Amazon), Azure (Microsoft), GCP (Google)." },
+  { q:"cybersécurité", r:"La cybersécurité protège les systèmes contre les attaques. Menaces: malware, phishing, ransomware, injection SQL, XSS. Défenses: chiffrement (TLS/SSL), authentification à 2 facteurs (2FA), pare-feu, mises à jour régulières, principe du moindre privilège." },
+  { q:"chiffrement", r:"Le chiffrement transforme des données lisibles en données illisibles sans clé. Chiffrement symétrique (même clé pour chiffrer/déchiffrer, ex: AES). Chiffrement asymétrique (clé publique/privée, ex: RSA). HTTPS utilise TLS qui combine les deux." },
+  { q:"blockchain", r:"La blockchain est une base de données distribuée constituée de blocs de données liés cryptographiquement. Elle est décentralisée, transparente et immuable. Bitcoin (2009) l'a popularisée. Ethereum ajoute les smart contracts. Utilisée aussi en logistique, santé, votes." },
+  { q:"internet", r:"Internet est le réseau mondial de réseaux informatiques. Fondé sur les protocoles TCP/IP. Le Web (World Wide Web, Tim Berners-Lee, 1989) est un service d'Internet. L'Internet des objets (IoT) connecte des appareils physiques. Il compte ~5,4 milliards d'utilisateurs." },
+
+  // ── INTELLIGENCE ARTIFICIELLE ─────────────────────────────
+  { q:"intelligence artificielle", r:"L'IA crée des systèmes capables d'effectuer des tâches nécessitant l'intelligence humaine. Branches: ML, deep learning, NLP, vision par ordinateur, robotique. Approches: symbolique (règles) et connexionniste (réseaux de neurones)." },
+  { q:"machine learning", r:"Le Machine Learning (ML) permet aux machines d'apprendre à partir de données sans programmation explicite. Types: supervisé (données étiquetées), non-supervisé (clustering), par renforcement (récompenses). Algorithmes: régression, arbres de décision, SVM, forêts aléatoires." },
+  { q:"deep learning", r:"Le Deep Learning utilise des réseaux de neurones profonds (plusieurs couches cachées). Il excelle en vision (CNN), traitement du langage (Transformers/BERT/GPT), génération d'images (GANs, diffusion). Il nécessite beaucoup de données et de puissance de calcul." },
+  { q:"gpt chatgpt", r:"GPT (Generative Pre-trained Transformer) est un modèle de langage d'OpenAI. ChatGPT (2022) a démocratisé les assistants IA conversationnels. GPT-4 (2023) est multimodal (texte + images). Il utilise l'architecture Transformer et le fine-tuning par RLHF." },
+  { q:"transformer architecture", r:"L'architecture Transformer (2017, Google) a révolutionné le NLP. Son mécanisme d'attention permet de traiter les séquences en parallèle et de capturer les dépendances à longue distance. Elle est la base de GPT, BERT, T5 et la plupart des LLMs modernes." },
+  { q:"réseau de neurones convolutif cnn", r:"Un CNN (Convolutional Neural Network) est spécialisé dans l'analyse d'images. Des filtres de convolution détectent les motifs (bords, textures, formes). Utilisé pour la reconnaissance d'images, la détection d'objets (YOLO), la segmentation médicale." },
+  { q:"gan réseau adversarial", r:"Les GANs (Generative Adversarial Networks, Goodfellow 2014) mettent en compétition un générateur (crée de fausses données) et un discriminateur (les distingue du réel). Résultat: génération d'images photoréalistes, deepfakes, augmentation de données." },
+  { q:"reinforcement learning apprentissage par renforcement", r:"L'apprentissage par renforcement entraîne un agent via récompenses/pénalités dans un environnement. AlphaGo (DeepMind) a battu le champion du monde de Go en 2016. ChatGPT utilise RLHF (RL with Human Feedback) pour s'aligner sur les préférences humaines." },
+  { q:"large language model llm", r:"Les LLMs (Large Language Models) sont des modèles de langage pré-entraînés sur des téraoctets de texte. GPT-4, Claude, Gemini, Llama en sont des exemples. Ils émergent des capacités comme le raisonnement, la traduction, le code. Problèmes: hallucinations, biais." },
+  { q:"tensorflow pytorch", r:"TensorFlow (Google, 2015) et PyTorch (Meta, 2016) sont les deux frameworks de deep learning dominants. PyTorch est préféré en recherche (graphe dynamique). TensorFlow est plus utilisé en production (TFLite pour mobile). Les deux supportent GPU/TPU." },
+
+  // ── MÉDECINE & SANTÉ ──────────────────────────────────────
+  { q:"comment fonctionne le coeur", r:"Le cœur est une pompe musculaire qui bat ~70 fois/min (100 000 fois/jour). Il propulse le sang dans deux circuits: pulmonaire (poumons pour oxygénation) et systémique (corps pour distribution). Il possède 4 cavités: 2 oreillettes et 2 ventricules." },
+  { q:"système nerveux", r:"Le système nerveux central (cerveau + moelle épinière) traite l'information. Le système nerveux périphérique relie les organes au SNC. Le système nerveux autonome régule les fonctions involontaires (rythme cardiaque, digestion, respiration)." },
+  { q:"cancer", r:"Le cancer est une multiplication incontrôlée de cellules anormales formant des tumeurs. Causes: mutations génétiques (tabac, rayonnements UV, virus HPV). Traitements: chirurgie, chimiothérapie, radiothérapie, immunothérapie, thérapies ciblées. La détection précoce améliore le pronostic." },
+  { q:"antibiotiques", r:"Les antibiotiques tuent ou inhibent les bactéries (pas les virus). Découverts par Fleming (pénicilline, 1928). La résistance aux antibiotiques est une urgence mondiale: surconsommation favorise les 'superbactéries'. Il faut toujours finir le traitement prescrit." },
+  { q:"imc indice de masse corporelle", r:"L'IMC = poids(kg) / taille²(m). Interprétation: <18,5 sous-poids, 18,5-24,9 normal, 25-29,9 surpoids, ≥30 obésité. C'est un indicateur imparfait car il ne distingue pas masse grasse et musculaire." },
+  { q:"calories", r:"Une calorie est l'énergie nécessaire pour élever 1g d'eau de 1°C. En nutrition, on parle de kilocalories (kcal). Besoins moyens: 2000 kcal/jour (femme), 2500 kcal/jour (homme). 1g de glucides ou protéines = 4 kcal, 1g de lipides = 9 kcal." },
+  { q:"vitamines", r:"Les vitamines sont des nutriments essentiels: A (vision), B complexe (énergie, neurones), C (immunité, antioxydant — citrus), D (os, immunité — soleil), E (antioxydant), K (coagulation). Les carences causent des maladies (scorbut sans vitamine C, rachitisme sans D)." },
+  { q:"diabète", r:"Le diabète est une maladie chronique liée à l'insuline (hormone pancréatique régulant la glycémie). Type 1: destruction auto-immune des cellules β (insulino-dépendant). Type 2: résistance à l'insuline (lié au mode de vie). Il touche ~537 millions de personnes dans le monde." },
+  { q:"santé mentale", r:"La santé mentale comprend le bien-être émotionnel, psychologique et social. Troubles fréquents: dépression (2ème cause mondiale de handicap), anxiété, trouble bipolaire, schizophrénie. Traitements: psychothérapie (TCC), médicaments, activité physique, soutien social." },
+  { q:"sommeil", r:"Le sommeil est vital: consolidation de la mémoire, réparation cellulaire, régulation hormonale. Cycle de 90 min: sommeil léger → profond (ondes lentes) → REM (rêves). Besoins: 7-9h adultes. La privation de sommeil dégrade cognition, immunité et métabolisme." },
+
+  // ── PHILOSOPHIE ───────────────────────────────────────────
+  { q:"philosophie", r:"La philosophie ('amour de la sagesse' en grec) questionne la réalité, la connaissance, la morale, l'existence. Branches: métaphysique (nature de la réalité), épistémologie (connaissance), éthique (morale), logique (raisonnement), politique (société)." },
+  { q:"socrate", r:"Socrate (470-399 av. J.-C.) est le père de la philosophie occidentale. Il n'a rien écrit; on le connaît via Platon. Sa méthode: la maïeutique (dialogue pour faire accoucher la vérité). Condamné à mort pour impiété, il choisit de boire la ciguë." },
+  { q:"platon", r:"Platon (428-348 av. J.-C.), disciple de Socrate, fonda l'Académie (première université). Sa théorie des Idées: le monde sensible est une copie imparfaite du monde des Idées parfaites. Œuvres: La République, Le Banquet, Phédon, Allégorie de la Caverne." },
+  { q:"aristote", r:"Aristote (384-322 av. J.-C.), disciple de Platon, a tout encyclopédié: logique, physique, biologie, politique, poétique, éthique. Sa logique déductive (syllogisme) domina 2 000 ans. Il tutora Alexandre le Grand. Fondateur de la méthode empirique." },
+  { q:"descartes", r:"René Descartes (1596-1650), père de la philosophie moderne, a posé 'Je pense donc je suis' (Cogito ergo sum) comme fondement certain. Il a aussi fondé la géométrie analytique, le dualisme corps/esprit, et la méthode du doute systématique." },
+  { q:"kant", r:"Emmanuel Kant (1724-1804) a révolutionné la philosophie avec la 'révolution copernicienne': c'est l'esprit qui structure l'expérience (et non l'inverse). Son impératif catégorique: 'Agis comme si ta maxime devait devenir une loi universelle'." },
+  { q:"nietzsche", r:"Friedrich Nietzsche (1844-1900) a proclamé 'Dieu est mort', critiqué la morale judéo-chrétienne, proposé le concept de Surhomme (Übermensch) et la volonté de puissance. Œuvres: Ainsi parlait Zarathoustra, Par-delà bien et mal. Souvent mal interprété." },
+  { q:"existentialisme", r:"L'existentialisme (Sartre, Camus, Beauvoir, XXe s.) affirme que 'l'existence précède l'essence': l'humain se définit par ses choix, non par une nature préétablie. Sartre: 'L'homme est condamné à être libre'. Camus: l'absurde de l'existence exige la révolte." },
+  { q:"stoïcisme", r:"Le stoïcisme (Épictète, Marc Aurèle, Sénèque) enseigne que le bonheur vient de la vertu et de l'acceptation de ce qu'on ne contrôle pas. Distinguer ce qui dépend de nous (pensées, actions) de ce qui ne dépend pas (corps, réputation, richesse)." },
+
+  // ── PSYCHOLOGIE ───────────────────────────────────────────
+  { q:"freud psychanalyse", r:"Sigmund Freud (1856-1939) a fondé la psychanalyse. Concepts: inconscient (désirs refoulés), ça/moi/surmoi (instances psychiques), complexe d'Œdipe, mécanismes de défense (refoulement, déni, projection). Sa méthode: association libre et interprétation des rêves." },
+  { q:"biais cognitifs", r:"Les biais cognitifs sont des erreurs systématiques de raisonnement. Exemples: biais de confirmation (chercher ce qui confirme nos croyances), biais d'ancrage (première info trop influente), effet Dunning-Kruger (incompétents surestiment leur compétence), biais de disponibilité." },
+  { q:"intelligence émotionnelle", r:"L'intelligence émotionnelle (Goleman) est la capacité à reconnaître, comprendre et gérer ses émotions et celles des autres. Ses 4 piliers: conscience de soi, maîtrise de soi, empathie, compétences sociales. Corrèle avec le succès professionnel et personnel." },
+  { q:"pyramide de maslow", r:"La pyramide de Maslow classe les besoins humains en 5 niveaux: 1) physiologiques (manger, dormir), 2) sécurité, 3) appartenance/amour, 4) estime (reconnaissance), 5) accomplissement de soi. Les besoins inférieurs doivent être satisfaits avant les supérieurs." },
+  { q:"effet placebo", r:"L'effet placebo est une amélioration de santé due à la croyance dans un traitement, même sans principe actif. Il implique des mécanismes neurobiologiques réels (libération d'endorphines). Il est pris en compte dans tous les essais cliniques (groupes contrôle)." },
+
+  // ── ÉCONOMIE & FINANCE ────────────────────────────────────
+  { q:"pib produit intérieur brut", r:"Le PIB mesure la valeur totale des biens et services produits dans un pays sur une période. Il est l'indicateur économique le plus utilisé mais imparfait (ne mesure pas le bonheur, les inégalités ou l'environnement). Le PIB mondial est ~100 000 milliards de dollars." },
+  { q:"inflation", r:"L'inflation est la hausse générale et durable des prix, qui diminue le pouvoir d'achat. Mesurée par l'IPC (Indice des Prix à la Consommation). Les banques centrales (BCE, Fed) ciblent ~2%/an. L'hyperinflation (Zimbabwe, Venezuela) peut détruire une économie." },
+  { q:"banque centrale", r:"Les banques centrales (BCE en Europe, Fed aux USA, Banque de France) régulent la monnaie. Elles fixent les taux d'intérêt, contrôlent l'inflation, prêtent aux banques commerciales et assurent la stabilité financière. La BCE a été créée en 1998." },
+  { q:"bourse actions", r:"La bourse est un marché où s'échangent des actions (parts de sociétés) et obligations. CAC 40 (France), DAX (Allemagne), S&P 500 (USA), Nikkei (Japon). Le prix d'une action reflète les anticipations de bénéfices futurs. Investir en bourse comporte des risques." },
+  { q:"bitcoin cryptomonnaie", r:"Bitcoin (Satoshi Nakamoto, 2009) est la première cryptomonnaie décentralisée. Elle utilise la blockchain pour des transactions sans intermédiaire bancaire. Offre limitée à 21 millions de BTC. Très volatile. Ethereum (2015) ajoute les smart contracts et DeFi." },
+  { q:"taux d'intérêt", r:"Le taux d'intérêt est le coût de l'emprunt ou la rémunération de l'épargne. Des taux bas stimulent l'économie (crédit bon marché) mais peuvent créer des bulles. Des taux hauts freinent l'inflation mais ralentissent la croissance. La BCE a relevé ses taux en 2022-2023 face à l'inflation." },
+
+  // ── ÉCOLOGIE & ENVIRONNEMENT ──────────────────────────────
+  { q:"changement climatique réchauffement", r:"Le changement climatique est le réchauffement de la planète dû aux gaz à effet de serre (CO₂, méthane) d'origine humaine. +1,2°C depuis 1850. Conséquences: montée des mers, événements extrêmes, fonte des glaces. Accord de Paris (2015): limiter à +1,5°C." },
+  { q:"effet de serre", r:"L'effet de serre est un phénomène naturel essentiel: certains gaz (CO₂, vapeur d'eau, méthane) retiennent la chaleur solaire dans l'atmosphère. Sans lui, la Terre serait à -18°C. Le problème est son amplification par les émissions humaines." },
+  { q:"énergies renouvelables", r:"Les énergies renouvelables sont inépuisables: solaire (photovoltaïque, thermique), éolien (terrestre, offshore), hydraulique, biomasse, géothermie. Elles représentent une part croissante du mix électrique mondial. Le solaire est devenu la moins chère des énergies." },
+  { q:"biodiversité", r:"La biodiversité est la variété du vivant (gènes, espèces, écosystèmes). Elle est actuellement menacée par la 6ème extinction de masse, liée aux humains: déforestation, pollution, surexploitation, espèces invasives, changement climatique. ~1 million d'espèces menacées d'extinction." },
+  { q:"plastique pollution", r:"8 millions de tonnes de plastique entrent dans les océans chaque année. Les microplastiques (<5mm) contaminent l'eau, les aliments, l'air. Le plastique met 400-1000 ans à se dégrader. Solutions: réduction à la source, recyclage, alternatives biodégradables." },
+  { q:"déforestation", r:"La déforestation détruit 10 millions d'hectares de forêts par an (principalement Amazonie, Asie du Sud-Est). Causes: agriculture (soja, huile de palme, élevage), bois, urbanisation. Conséquences: perte de biodiversité, émission de CO₂, perturbation du cycle de l'eau." },
+
+  // ── PHILOSOPHIE DES SCIENCES ──────────────────────────────
+  { q:"qu'est-ce que la science", r:"La science est une démarche rigoureuse pour comprendre la réalité: observation → hypothèse → expérimentation → théorie. Karl Popper: une théorie scientifique doit être falsifiable (réfutable). La science progresse par révolutions (Kuhn: changements de paradigme)." },
+  { q:"différence théorie et loi", r:"Une loi scientifique décrit un phénomène observé (loi de la gravitation de Newton: F=GMm/r²). Une théorie explique pourquoi et comment (théorie de la relativité générale). Une théorie scientifique n'est pas une 'simple supposition' — c'est l'explication la mieux prouvée disponible." },
+
+  // ── ARTS & CULTURE ────────────────────────────────────────
+  { q:"léonard de vinci", r:"Léonard de Vinci (1452-1519) est le génie universel de la Renaissance: peintre (Joconde, La Cène), sculpteur, architecte, ingénieur (il a dessiné des machines volantes, des tanks), scientifique et anatomiste. L'incarnation de l'humanisme renaissant." },
+  { q:"joconde mona lisa", r:"La Joconde (Mona Lisa, 1503-1519, Léonard de Vinci) est le tableau le plus célèbre du monde, exposé au Louvre. Le sourire énigmatique et les techniques du sfumato (flou) et du chiaroscuro (clair-obscur) en font une œuvre unique." },
+  { q:"mozart", r:"Wolfgang Amadeus Mozart (1756-1791) est l'un des plus grands compositeurs. Enfant prodige (concerts à 6 ans), il a composé 600+ œuvres: Don Giovanni, La Flûte enchantée, Requiem (inachevé à sa mort à 35 ans). Il symbolise le classicisme viennois." },
+  { q:"beethoven", r:"Ludwig van Beethoven (1770-1827) a composé 9 symphonies dont la 9ème (Ode à la Joie) alors qu'il était sourd. Ses œuvres relient le classicisme au romantisme. Sa 5ème symphonie (ta-ta-ta-TAAAA) est l'une des plus reconnues au monde." },
+  { q:"shakespeare", r:"William Shakespeare (1564-1616) est le plus grand dramaturge de langue anglaise. Œuvres: Hamlet, Roméo et Juliette, Macbeth, Othello, Le Roi Lear, Le Songe d'une nuit d'été. Il a enrichi l'anglais de 1 700 mots nouveaux. Ses thèmes restent universels." },
+  { q:"victor hugo", r:"Victor Hugo (1802-1885) est le géant de la littérature française romantique: Les Misérables, Notre-Dame de Paris, Les Contemplations (poésie). Député, sénateur, il s'est aussi engagé contre la peine de mort et pour les pauvres. Exilé sous Napoléon III." },
+  { q:"picasso", r:"Pablo Picasso (1881-1973) est l'un des artistes les plus influents du XXe siècle. Co-fondateur du cubisme avec Braque, il a révolutionné la peinture en représentant simultanément plusieurs perspectives. Guernica (1937) dénonce les horreurs de la guerre." },
+  { q:"cinéma histoire", r:"Le cinéma a été inventé par les frères Lumière (1895, Paris). Grandes périodes: cinéma muet (Chaplin), parlant (1927), âge d'or hollywoodien, Nouvelle Vague française (Godard, Truffaut, 1960s), cinéma moderne. Aujourd'hui ~7 000 films produits/an dans le monde." },
+  { q:"beatles", r:"Les Beatles (John Lennon, Paul McCartney, George Harrison, Ringo Starr) ont révolutionné la musique pop dans les années 1960. Albums emblématiques: Sgt. Pepper's, Abbey Road, Let It Be. Séparés en 1970, ils restent le groupe le plus influent de l'histoire." },
+
+  // ── LANGUES ───────────────────────────────────────────────
+  { q:"combien de langues dans le monde", r:"Il existe environ 7 000 langues dans le monde. La moitié sont en danger d'extinction. Les plus parlées: mandarin (~1,1 milliard de locuteurs natifs), espagnol (~480M), anglais (~380M), hindi (~340M), français (~80M natifs, 275M total)." },
+  { q:"langue française", r:"Le français est parlé par ~275 millions de personnes dans 84 pays (Francophonie). C'est la 5ème langue mondiale et la 2ème langue diplomatique. Il descend du latin populaire et a été standardisé par l'Académie française (1635). 60 000 mots dans le dictionnaire." },
+  { q:"traduction automatique", r:"La traduction automatique a évolué: règles linguistiques → statistique → neuronale (Transformer). Google Translate, DeepL utilisent des réseaux de neurones profonds. DeepL est souvent plus précis pour les langues européennes. La traduction parfaite reste un défi (nuances, contexte)." },
+
+  // ── SPORT ─────────────────────────────────────────────────
+  { q:"football soccer", r:"Le football est le sport le plus populaire au monde (~4 milliards de fans). La FIFA supervise les compétitions internationales dont la Coupe du Monde (tous les 4 ans). Brésil (5 titres), Allemagne et Italie (4 chacun), France (2: 1998, 2018) sont les plus titrés." },
+  { q:"jeux olympiques", r:"Les JO modernes ont été fondés par Pierre de Coubertin en 1896 (Athènes). Ils se tiennent tous les 4 ans (été et hiver alternent tous les 2 ans). 206 nations participent. Devise: 'Citius, Altius, Fortius' (Plus vite, Plus haut, Plus fort). Paris accueillera les JO d'été 2024." },
+  { q:"usain bolt", r:"Usain Bolt (Jamaïque, né 1986) est le sprinter le plus rapide de l'histoire: record du 100m (9,58s, Berlin 2009) et 200m (19,19s). Triple champion olympique en 2008, 2012, 2016. Considéré comme le plus grand sprinteur de tous les temps." },
+
+  // ── GASTRONOMIE ───────────────────────────────────────────
+  { q:"cuisine française", r:"La cuisine française est inscrite au patrimoine immatériel de l'UNESCO. Elle est connue pour ses sauces (beurre blanc, hollandaise, béarnaise), pâtisseries (croissant, macaron, éclair), fromages (>1000 variétés), vins et la haute cuisine (guides Michelin)." },
+  { q:"nutrition équilibrée", r:"Une alimentation équilibrée comprend: glucides complexes (céréales complètes, légumineuses), protéines variées (végétales et animales), lipides de qualité (oméga-3), fruits et légumes (5/jour), eau (1,5-2L/jour). Limiter: sucres ajoutés, sel, graisses saturées, ultra-transformés." },
+
+  // ── DROIT ─────────────────────────────────────────────────
+  { q:"droits de l'homme", r:"La Déclaration universelle des droits de l'Homme a été adoptée par l'ONU en 1948. Elle proclame des droits fondamentaux: vie, liberté, sécurité, égalité, non-discrimination, expression, association, éducation. Elle est la référence mondiale des droits fondamentaux." },
+  { q:"constitution française", r:"La Constitution de la Ve République française a été adoptée en 1958 sous de Gaulle. Elle définit: les pouvoirs du Président (fort), du Premier ministre, du Parlement (Assemblée nationale + Sénat). Le Conseil constitutionnel vérifie la conformité des lois." },
+  { q:"onu nations unies", r:"L'ONU (Organisation des Nations Unies) a été fondée en 1945 après la 2ème Guerre mondiale. Siège à New York. 193 États membres. Objectifs: paix, sécurité, droits de l'homme, développement. Organes: Conseil de sécurité (5 membres permanents avec droit de veto: USA, Russie, Chine, France, RU)." },
+
+  // ── MÉTÉO / TEMPS ─────────────────────────────────────────
+  { q:"quel temps fait-il", r:"Je n'ai pas accès aux données météo en temps réel. Consultez Météo France (meteofrance.com) ou votre appli météo. Voulez-vous que j'explique comment fonctionne la météorologie?" },
+  { q:"quelle heure est-il", r:`Il est actuellement ${new Date().toLocaleTimeString('fr-FR')} (heure locale de votre navigateur).` },
+  { q:"quelle est la date aujourd'hui", r:`Aujourd'hui, nous sommes le ${new Date().toLocaleDateString('fr-FR', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}.` },
+  { q:"comment fonctionne la météo", r:"La météorologie prédit le temps à partir de données (température, pression, humidité, vents) collectées par stations, satellites, radars. Des modèles numériques (Arpège, ECMWF) simulent l'atmosphère. La prévision reste fiable à ~10 jours." },
+
+  // ── CONSEILS PRATIQUES ────────────────────────────────────
+  { q:"comment apprendre une langue", r:"Méthode efficace: immersion (films, musique, podcasts en VO), pratique quotidienne même 15 min, apps (Duolingo, Anki pour vocabulaire), parler avec des natifs (Tandem, iTalki), ne pas avoir peur des erreurs. La régularité est clé." },
+  { q:"comment mieux mémoriser", r:"Techniques de mémorisation prouvées: répétition espacée (Anki), méthode des loci (palais de mémoire), chunking (regrouper l'information), association visuelle, enseigner à quelqu'un d'autre (effet Feynman), dormir suffisamment (consolidation mémorielle)." },
+  { q:"comment apprendre à programmer", r:"Commencez par Python (lisible, polyvalent). Ressources gratuites: freeCodeCamp, The Odin Project, CS50 (Harvard). Pratiquez chaque jour avec de petits projets. Lisez du code source. Rejoignez des communautés (GitHub, Stack Overflow). La pratique prime sur la théorie." },
+  { q:"comment gérer son stress", r:"Techniques anti-stress validées: respiration profonde (4-7-8: inspirer 4s, retenir 7s, expirer 8s), méditation de pleine conscience (10 min/jour suffisent), exercice physique régulier, sommeil suffisant, reformuler les pensées négatives (TCC), limiter l'information négative." },
+  { q:"comment être productif", r:"Méthodes de productivité: Pomodoro (25 min focus + 5 min pause), GTD (Getting Things Done, David Allen), règle des 2 minutes (si <2 min, faites-le maintenant), bloquer les distractions (Focus/Cold Turkey), écrire chaque jour ses 3 priorités." },
 ];
 
 // ═══════════════════════════════════════════════════════════
