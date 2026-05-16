@@ -13,3 +13,6 @@ Allow: /
 
 User-agent: Applebot
 Allow: /
+
+# Fichiers internes non publiés
+Disallow: /bot.html

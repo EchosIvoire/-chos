@@ -102,7 +102,6 @@
   <!-- ── PERFORMANCE HINTS ── -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
-  <link rel="preconnect" href="https://amzn.to" />
 
   <!-- Chart.js chargé en defer pour ne pas bloquer le rendu (INP / LCP) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
@@ -124,7 +123,7 @@
     .nav-tag{background:var(--accent);color:#fff;font-size:.65rem;font-weight:700;padding:.18rem .5rem;border-radius:999px;text-transform:uppercase;letter-spacing:.06em}
 
     /* AFFILIATE DISCLOSURE */
-    .aff-banner{background:rgba(245,166,35,.08);border-bottom:1px solid rgba(245,166,35,.2);padding:.5rem 2rem;font-size:.75rem;color:#c8943a;text-align:center}
+    .aff-banner{border-bottom:1px solid var(--border);padding:.35rem 2rem;font-size:.7rem;color:var(--muted);text-align:center;opacity:.7}
     .aff-banner strong{color:var(--orange)}
 
     /* HERO */
@@ -209,8 +208,8 @@
     .btn-buy.primary:hover{opacity:.82}
     .btn-buy.secondary{background:transparent;border:1px solid var(--border);color:var(--muted)}
     .btn-buy.secondary:hover{border-color:var(--accent);color:var(--accent)}
-    .btn-buy.amazon{background:#ff9900;color:#111}
-    .btn-buy.amazon:hover{opacity:.85}
+    .btn-buy.amazon{background:transparent;color:var(--accent2);border:1px solid rgba(0,217,181,.3);font-size:.78rem}
+    .btn-buy.amazon:hover{background:rgba(0,217,181,.06);border-color:var(--accent2)}
     .aff-note{font-size:.65rem;color:var(--muted);display:block;margin-top:.35rem}
 
     /* VERDICT BOX */
@@ -578,7 +577,7 @@
         <div class="pick-price">~380€</div>
         <div class="pick-why">Fait tourner Mistral 7B, Llama 3.1 8B et Qwen 14B sans problème. Limite : bloqué sur les 70B. Parfait pour tester et comprendre.</div>
         <!-- REMPLACE le href par ton lien affilié Amazon Associates -->
-        <a href="https://amzn.to/XXXXX-4060ti" class="btn-aff orange" target="_blank" rel="nofollow sponsored">Voir le prix sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=RTX+4060+Ti+16+Go" class="btn-aff orange" target="_blank" rel="nofollow sponsored">Voir le prix sur Amazon →</a>
         <span class="aff-note">🔗 Lien affilié — sans surcoût</span>
       </div>
       <div class="pick-card" style="border-color:rgba(0,217,181,.3)">
@@ -588,7 +587,7 @@
         <div class="pick-price">~700€</div>
         <div class="pick-why">48 t/s sur Qwen 3 32B, 58 t/s sur Mistral Small. Fait tourner du 70B Q4. Rapport perf/prix imbattable en 2026. C'est ce que j'achèterais si je recommençais.</div>
         <!-- REMPLACE le href par ton lien affilié Amazon Associates -->
-        <a href="https://amzn.to/XXXXX-5070ti" class="btn-aff green" target="_blank" rel="nofollow sponsored">Voir le prix sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=RTX+5070+Ti+16+Go" class="btn-aff green" target="_blank" rel="nofollow sponsored">Voir le prix sur Amazon →</a>
         <span class="aff-note">🔗 Lien affilié — sans surcoût</span>
       </div>
       <div class="pick-card">
@@ -598,7 +597,7 @@
         <div class="pick-price">~1700€</div>
         <div class="pick-why">24 Go de VRAM changent tout : 70B Q5, deux modèles en parallèle, contextes longs. Cher, mais c'est le seul GPU grand public avec autant de marge en 2026.</div>
         <!-- REMPLACE le href par ton lien affilié Amazon Associates -->
-        <a href="https://amzn.to/XXXXX-4090" class="btn-aff" target="_blank" rel="nofollow sponsored">Voir le prix sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=RTX+4090+24+Go+GDDR6X" class="btn-aff" target="_blank" rel="nofollow sponsored">Voir le prix sur Amazon →</a>
         <span class="aff-note">🔗 Lien affilié — sans surcoût</span>
       </div>
     </div>
@@ -656,8 +655,8 @@
         <div class="pc-price-box"><div class="pc-price">~700€</div><div class="pc-price-sub">Prix estimé mai 2026</div></div>
         <div class="pc-btns">
           <!-- REMPLACE les href par tes vrais liens affiliés -->
-          <a href="https://amzn.to/XXXXX-5070ti" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">🛒 Amazon</a>
-          <a href="https://www.ldlc.com/?XXXXX-aff" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
+          <a href="https://www.amazon.fr/s?k=RTX+5070+Ti+16+Go" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">Voir le prix →</a>
+          <a href="https://www.ldlc.com/" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
         </div>
       </div>
     </div>
@@ -704,8 +703,8 @@
       <div class="pc-footer">
         <div class="pc-price-box"><div class="pc-price">~380€</div><div class="pc-price-sub">Prix estimé mai 2026</div></div>
         <div class="pc-btns">
-          <a href="https://amzn.to/XXXXX-4060ti" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">🛒 Amazon</a>
-          <a href="https://www.ldlc.com/?XXXXX-aff" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
+          <a href="https://www.amazon.fr/s?k=RTX+4060+Ti+16+Go" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">Voir le prix →</a>
+          <a href="https://www.ldlc.com/" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
         </div>
       </div>
     </div>
@@ -751,8 +750,8 @@
       <div class="pc-footer">
         <div class="pc-price-box"><div class="pc-price">~1700€</div><div class="pc-price-sub">Prix estimé mai 2026</div></div>
         <div class="pc-btns">
-          <a href="https://amzn.to/XXXXX-4090" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">🛒 Amazon</a>
-          <a href="https://www.ldlc.com/?XXXXX-aff" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
+          <a href="https://www.amazon.fr/s?k=RTX+4090+24+Go+GDDR6X" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">Voir le prix →</a>
+          <a href="https://www.ldlc.com/" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
         </div>
       </div>
     </div>
@@ -794,8 +793,8 @@
       <div class="pc-footer">
         <div class="pc-price-box"><div class="pc-price">~950€</div><div class="pc-price-sub">Linux recommandé</div></div>
         <div class="pc-btns">
-          <a href="https://amzn.to/XXXXX-7900xtx" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">🛒 Amazon</a>
-          <a href="https://www.ldlc.com/?XXXXX-aff" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
+          <a href="https://www.amazon.fr/s?k=RX+7900+XTX+24+Go" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">Voir le prix →</a>
+          <a href="https://www.ldlc.com/" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
         </div>
       </div>
     </div>
@@ -927,42 +926,42 @@
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">RTX 5070 Ti 16 Go</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">Founders Edition</div>
         <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~700€</div>
-        <a href="https://amzn.to/XXXXX-5070ti" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=RTX+5070+Ti+16+Go" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">RAM</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">G.Skill Trident Z5 64 Go</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">DDR5-5600 · 2×32 Go</div>
         <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~160€</div>
-        <a href="https://amzn.to/XXXXX-gskill64" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=G.Skill+Trident+Z5+64+Go+DDR5+6000" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">SSD modèles</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">WD Black SN850X 2 To</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">NVMe Gen4 · 7300 MB/s</div>
         <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~155€</div>
-        <a href="https://amzn.to/XXXXX-sn850x" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=WD+Black+SN850X+2+To+NVMe" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">SSD système</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">Samsung 990 Pro 1 To</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">NVMe Gen4 · 7450 MB/s</div>
         <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~90€</div>
-        <a href="https://amzn.to/XXXXX-990pro" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=Samsung+990+Pro+4+To+NVMe" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">Alimentation</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">Corsair RM1000x</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">1000W · 80+ Gold · Semi-modulaire</div>
         <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~140€</div>
-        <a href="https://amzn.to/XXXXX-rm1000x" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=Corsair+RM1000x+alimentation" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">CPU</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">Ryzen 9 7900X</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">12 cœurs · 4.7 GHz · AM5</div>
         <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~380€</div>
-        <a href="https://amzn.to/XXXXX-7900x" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
+        <a href="https://www.amazon.fr/s?k=AMD+Ryzen+9+7900X" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
     </div>
     <div class="verdict success" style="margin-top:1rem"><div class="verdict-icon">💡</div><p><strong>Coût total setup IA (GPU+RAM+SSD+alim) :</strong> ~1245€. Sur 18 mois, c'est moins cher que ChatGPT Pro + Claude Pro combinés. Et tout m'appartient.</p></div>
@@ -1181,7 +1180,7 @@
     <p>Prochaine étape logique : mettre en place du <strong>RAG sur tes propres documents</strong>. C'est là que le Jarvis local devient personnel — ton IA qui parle de tes notes, tes projets, tes clients. Guide complet à venir.</p>
     <div class="cta-row">
       <!-- Lien affilié principal en conclusion -->
-      <a href="https://amzn.to/XXXXX-5070ti" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">🛒 RTX 5070 Ti sur Amazon</a>
+      <a href="https://www.amazon.fr/s?k=RTX+5070+Ti+16+Go" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">Voir le prix (RTX 5070 Ti) →</a>
       <a href="#budget" class="btn-buy primary">Calculer mon budget</a>
       <a href="#demo" class="btn-buy secondary" style="border-color:var(--border)">Tester la démo</a>
     </div>
@@ -1212,18 +1211,35 @@
 
 <footer>
   Article rédigé en mai 2026 · Benchmarks mesurés sur setup personnel · TheBenchLab<br>
-  <span style="font-size:.7rem;margin-top:.4rem;display:block">🔗 Cet article contient des liens affiliés Amazon et LDLC. Les prix sont indicatifs et peuvent varier. Remplace les liens <code style="background:none;display:inline;padding:0;font-size:.7rem">amzn.to/XXXXX-*</code> par tes vrais codes affiliés.</span>
+  <span style="font-size:.7rem;margin-top:.4rem;display:block">Certains liens peuvent être affiliés Amazon. Prix indicatifs vérifiés le 16/05/2026 — consultez Amazon pour le prix actuel.</span>
 </footer>
 
 <script>
+// ── Affiliation Amazon ──────────────────────────────────────────
+// Mets ton tag ici quand ton compte Amazon Associates est prêt :
+const AFFILIATE_TAG = ''; // ex: 'thebenchlab-21'
+function affUrl(q){
+  return 'https://www.amazon.fr/s?k='+encodeURIComponent(q)+(AFFILIATE_TAG?'&tag='+AFFILIATE_TAG:'');
+}
+// Applique le tag sur tous les liens Amazon de la page au chargement
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('a[rel*="sponsored"]').forEach(function(a){
+    var u = a.getAttribute('href');
+    if(u && u.includes('amazon.fr') && AFFILIATE_TAG && !u.includes('tag=')){
+      a.href = u + (u.includes('?') ? '&' : '?') + 'tag=' + AFFILIATE_TAG;
+    }
+  });
+});
+// ───────────────────────────────────────────────────────────────
+
 const GPU_DATA = [
-  { name:'RTX 4060 Ti',       vram:16, tps:18, price:380,  tier:'budget', verdict:'budget', aff:'https://amzn.to/XXXXX-4060ti'  },
-  { name:'RTX 4070 Super',    vram:12, tps:35, price:480,  tier:'budget', verdict:'budget', aff:'https://amzn.to/XXXXX-4070s'   },
-  { name:'RTX 4070 Ti Super', vram:16, tps:42, price:620,  tier:'mid',    verdict:'mid',    aff:'https://amzn.to/XXXXX-4070tis' },
-  { name:'RTX 5070 Ti',       vram:16, tps:58, price:700,  tier:'mid',    verdict:'sweet',  aff:'https://amzn.to/XXXXX-5070ti'  },
-  { name:'RTX 4090',          vram:24, tps:68, price:1700, tier:'pro',    verdict:'pro',    aff:'https://amzn.to/XXXXX-4090'    },
-  { name:'RTX 5090',          vram:32, tps:95, price:2400, tier:'pro',    verdict:'pro',    aff:'https://amzn.to/XXXXX-5090'    },
-  { name:'RX 7900 XTX',       vram:24, tps:51, price:950,  tier:'pro',    verdict:'amd',    aff:'https://amzn.to/XXXXX-7900xtx' },
+  { name:'RTX 4060 Ti',       vram:16, tps:18, price:350,  priceRange:'320-380€',   tier:'budget', verdict:'budget', aff:affUrl('RTX 4060 Ti 16 Go')       },
+  { name:'RTX 4070 Super',    vram:12, tps:35, price:470,  priceRange:'440-510€',   tier:'budget', verdict:'budget', aff:affUrl('RTX 4070 Super 12 Go')     },
+  { name:'RTX 4070 Ti Super', vram:16, tps:42, price:620,  priceRange:'580-660€',   tier:'mid',    verdict:'mid',    aff:affUrl('RTX 4070 Ti Super 16 Go')  },
+  { name:'RTX 5070 Ti',       vram:16, tps:58, price:750,  priceRange:'700-800€',   tier:'mid',    verdict:'sweet',  aff:affUrl('RTX 5070 Ti 16 Go')        },
+  { name:'RTX 4090',          vram:24, tps:68, price:1600, priceRange:'1400-1800€', tier:'pro',    verdict:'pro',    aff:affUrl('RTX 4090 24 Go GDDR6X')    },
+  { name:'RTX 5090',          vram:32, tps:95, price:2500, priceRange:'2200-2800€', tier:'pro',    verdict:'pro',    aff:affUrl('RTX 5090 32 Go GDDR7')     },
+  { name:'RX 7900 XTX',       vram:24, tps:51, price:920,  priceRange:'850-1000€',  tier:'pro',    verdict:'amd',    aff:affUrl('RX 7900 XTX 24 Go')        },
 ];
 
 const MODEL_DATA = [
@@ -1244,11 +1260,11 @@ const FAQ_DATA = [
 ];
 
 const BUDGET_PRESETS = [
-  { max:600,  label:'Débutant',         gpu:'RTX 4060 Ti 16 Go',       ram:'32 Go DDR4-3600', ssd:'1 To NVMe Gen4', models:['Mistral 7B Q8','Llama 3.2 8B','Qwen 2.5 14B Q5'], gp:380, rp:75,  sp:85,  affGpu:'https://amzn.to/XXXXX-4060ti', affRam:'https://amzn.to/XXXXX-ram32', affSsd:'https://amzn.to/XXXXX-ssd1to' },
-  { max:1000, label:'Passionné',        gpu:'RTX 4070 Ti Super 16 Go',  ram:'64 Go DDR5-5600', ssd:'2 To NVMe Gen4', models:['Qwen 3 32B Q4','Llama 3.3 70B Q4'], gp:620, rp:150, sp:150, affGpu:'https://amzn.to/XXXXX-4070tis', affRam:'https://amzn.to/XXXXX-gskill64', affSsd:'https://amzn.to/XXXXX-sn850x' },
-  { max:1500, label:'★ Sweet spot 2026',gpu:'RTX 5070 Ti 16 Go',        ram:'64 Go DDR5-5600', ssd:'2 To NVMe Gen4', models:['Qwen 3 32B Q5','Llama 3.3 70B Q4','Mistral Small 3.1'], gp:700, rp:150, sp:160, affGpu:'https://amzn.to/XXXXX-5070ti', affRam:'https://amzn.to/XXXXX-gskill64', affSsd:'https://amzn.to/XXXXX-sn850x' },
-  { max:2500, label:'Dev agents',       gpu:'RTX 4090 24 Go',           ram:'128 Go DDR5',     ssd:'4 To NVMe Gen4', models:['Llama 3.3 70B Q5','Qwen 3 72B','2 modèles parallèle'], gp:1700, rp:250, sp:300, affGpu:'https://amzn.to/XXXXX-4090', affRam:'https://amzn.to/XXXXX-ram128', affSsd:'https://amzn.to/XXXXX-ssd4to' },
-  { max:9999, label:'Studio Pro',       gpu:'RTX 5090 32 Go',           ram:'128 Go DDR5',     ssd:'4 To NVMe Gen4', models:['70B Q5','Qwen 3 235B Q4','Multi-agents'], gp:2400, rp:250, sp:300, affGpu:'https://amzn.to/XXXXX-5090', affRam:'https://amzn.to/XXXXX-ram128', affSsd:'https://amzn.to/XXXXX-ssd4to' },
+  { max:600,  label:'Débutant',         gpu:'RTX 4060 Ti 16 Go',       ram:'32 Go DDR4-3600', ssd:'1 To NVMe Gen4', models:['Mistral 7B Q8','Llama 3.2 8B','Qwen 2.5 14B Q5'], gp:380, rp:75,  sp:85,  affGpu:affUrl('RTX 4060 Ti 16 Go'), affRam:affUrl('RAM DDR5 64 Go 6000MHz'), affSsd:affUrl('SSD NVMe 2 To PCIe 4') },
+  { max:1000, label:'Passionné',        gpu:'RTX 4070 Ti Super 16 Go',  ram:'64 Go DDR5-5600', ssd:'2 To NVMe Gen4', models:['Qwen 3 32B Q4','Llama 3.3 70B Q4'], gp:620, rp:150, sp:150, affGpu:affUrl('RTX 4070 Ti Super 16 Go'), affRam:affUrl('RAM DDR5 64 Go 6000MHz'), affSsd:affUrl('SSD NVMe 2 To PCIe 4') },
+  { max:1500, label:'★ Sweet spot 2026',gpu:'RTX 5070 Ti 16 Go',        ram:'64 Go DDR5-5600', ssd:'2 To NVMe Gen4', models:['Qwen 3 32B Q5','Llama 3.3 70B Q4','Mistral Small 3.1'], gp:700, rp:150, sp:160, affGpu:affUrl('RTX 5070 Ti 16 Go'), affRam:affUrl('RAM DDR5 64 Go 6000MHz'), affSsd:affUrl('SSD NVMe 2 To PCIe 4') },
+  { max:2500, label:'Dev agents',       gpu:'RTX 4090 24 Go',           ram:'128 Go DDR5',     ssd:'4 To NVMe Gen4', models:['Llama 3.3 70B Q5','Qwen 3 72B','2 modèles parallèle'], gp:1700, rp:250, sp:300, affGpu:affUrl('RTX 4090 24 Go GDDR6X'), affRam:affUrl('RAM DDR5 64 Go 6000MHz'), affSsd:affUrl('SSD NVMe 2 To PCIe 4') },
+  { max:9999, label:'Studio Pro',       gpu:'RTX 5090 32 Go',           ram:'128 Go DDR5',     ssd:'4 To NVMe Gen4', models:['70B Q5','Qwen 3 235B Q4','Multi-agents'], gp:2400, rp:250, sp:300, affGpu:affUrl('RTX 5090 32 Go GDDR7'), affRam:affUrl('RAM DDR5 64 Go 6000MHz'), affSsd:affUrl('SSD NVMe 2 To PCIe 4') },
 ];
 
 const DEMO_TEXT = "En 2026, faire tourner une IA locale digne de ce nom n\'est plus réservé aux chercheurs. Sur ma machine, sans connexion internet, sans abonnement mensuel, je génère du code Python en quelques secondes, résume des documents de 50 pages, et automatise mes emails avec n8n branché directement sur Ollama. Le modèle ne connaît pas de latence réseau, ne partage aucune donnée, et tourne 24 heures sur 24. C\'est ça, un Jarvis local qui fonctionne vraiment.";
@@ -1351,7 +1367,7 @@ function updateBudget(val) {
     <div style="margin-top:.6rem;font-size:.75rem;color:var(--muted)">Modèles recommandés :</div>
     <div class="mpills">${p.models.map(m=>`<span class="mpill">${m}</span>`).join('')}</div>
     <div class="calc-aff-btns">
-      <a href="${p.affGpu}" target="_blank" rel="nofollow sponsored" class="amz">🛒 GPU sur Amazon</a>
+      <a href="${p.affGpu}" target="_blank" rel="nofollow sponsored" class="amz">Voir le prix →</a>
       <a href="${p.affRam}" target="_blank" rel="nofollow sponsored">RAM sur Amazon</a>
       <a href="${p.affSsd}" target="_blank" rel="nofollow sponsored">SSD sur Amazon</a>
     </div>`;
