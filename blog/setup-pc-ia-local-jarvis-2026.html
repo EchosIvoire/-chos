@@ -363,6 +363,32 @@
 
     footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center;font-size:.75rem;color:var(--muted)}
 
+    /* ── VIDEO EMBEDS (lazy-load) ── */
+    .vid-section{margin-top:1.25rem}
+    .vid-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
+    .vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
+    .vid-wrap{position:relative;border-radius:12px;overflow:hidden;background:#000;cursor:pointer;border:1px solid var(--border);aspect-ratio:16/9}
+    .vid-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
+    .vid-wrap:hover img{opacity:.8}
+    .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;background:rgba(255,255,255,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;pointer-events:none}
+    .play-btn::after{content:'';border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #111;margin-left:3px}
+    .vid-wrap:hover .play-btn{transform:translate(-50%,-50%) scale(1.1);background:#fff}
+    .vid-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+    .vid-meta{padding:.65rem 0 0;font-size:.8rem;color:var(--muted)}
+    .vid-meta strong{color:var(--text);display:block;margin-bottom:.1rem;font-size:.85rem}
+    .vid-solo{max-width:640px;margin-top:.75rem}
+
+    /* ── SVG MOCKUPS ── */
+    .mockup-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-top:1rem;background:#050709}
+    .mockup-bar{background:#1a1f2e;padding:.45rem .75rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid var(--border)}
+    .mockup-dot{width:10px;height:10px;border-radius:50%}
+    .mockup-title{font-size:.72rem;color:var(--muted);margin:0 auto}
+    .mockup-body{padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.7;color:#c5c8d6;min-height:120px}
+    .mockup-body .cmd{color:var(--accent2)}
+    .mockup-body .out{color:#7a7f96}
+    .mockup-body .hi{color:var(--accent)}
+    .mockup-body .ok{color:#00d9b5}
+
     /* ── MOBILE ── */
     @media(max-width:768px){
       /* Nav : scroll horizontal, liens cachés sur très petit */
@@ -370,6 +396,7 @@
       nav::-webkit-scrollbar{display:none}
       nav a{white-space:nowrap;font-size:.78rem;flex-shrink:0}
       .nav-tag{flex-shrink:0}
+      .vid-grid{grid-template-columns:1fr}
 
       /* Hero */
       .hero{padding:2.5rem 1rem 1.5rem}
@@ -805,6 +832,33 @@
     </div>
   </div>
 
+  <!-- ═══ VIDEO — BENCHMARKS GPU ═══ -->
+  <div class="vid-section" style="padding:0 0 .5rem">
+    <div class="vid-label">▶ Vidéo — benchmark terrain</div>
+    <div class="vid-grid">
+      <div>
+        <div class="vid-wrap" onclick="loadVideo(this,'eJJQ8SmSBQs')" role="button" tabindex="0"
+             aria-label="Lire : 4090 Local AI Server Benchmarks"
+             onkeydown="if(event.key==='Enter'||event.key===' '){loadVideo(this,'eJJQ8SmSBQs');event.preventDefault();}">
+          <img src="https://img.youtube.com/vi/eJJQ8SmSBQs/maxresdefault.jpg"
+               alt="Benchmark local AI server — RTX 4090 vs LLM open source" loading="lazy" />
+          <div class="play-btn"></div>
+        </div>
+        <div class="vid-meta"><strong>4090 Local AI Server — Benchmarks réels</strong>Performances GPU sur LLM open source · ~12 min</div>
+      </div>
+      <div>
+        <div class="vid-wrap" onclick="loadVideo(this,'UtSSMs6ObqY')" role="button" tabindex="0"
+             aria-label="Lire : Learn Ollama in 15 Minutes"
+             onkeydown="if(event.key==='Enter'||event.key===' '){loadVideo(this,'UtSSMs6ObqY');event.preventDefault();}">
+          <img src="https://img.youtube.com/vi/UtSSMs6ObqY/maxresdefault.jpg"
+               alt="Apprendre Ollama en 15 minutes — tutoriel complet" loading="lazy" />
+          <div class="play-btn"></div>
+        </div>
+        <div class="vid-meta"><strong>Apprendre Ollama en 15 min</strong>Installation, modèles, API locale · ~15 min</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ DÉMO LIVE ═══ -->
   <div class="section" id="demo">
     <div class="section-head">
@@ -827,6 +881,28 @@
         <div class="ds">Tokens : <span id="st">0</span></div>
         <div class="ds">Temps : <span id="stm">0.0</span>s</div>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══ MOCKUP TERMINAL OLLAMA ═══ -->
+  <div class="mockup-wrap" style="margin:0 0 .5rem">
+    <div class="mockup-bar">
+      <div class="mockup-dot" style="background:#ff5f57"></div>
+      <div class="mockup-dot" style="background:#febc2e"></div>
+      <div class="mockup-dot" style="background:#28c840"></div>
+      <div class="mockup-title">Terminal — Ollama sur RTX 5070 Ti</div>
+    </div>
+    <div class="mockup-body">
+      <div><span class="cmd">$ ollama run qwen3:32b</span></div>
+      <div class="out">pulling manifest ...</div>
+      <div class="out">pulling d2d6bb8c13f6... 100% ▕████████████████▏ 19 GB</div>
+      <div class="out">verifying sha256 digest</div>
+      <div class="out">writing manifest</div>
+      <div class="ok">success</div>
+      <div><span class="cmd">&gt;&gt;&gt;</span> Explique-moi la quantization GGUF en 3 phrases</div>
+      <div class="out">La quantization GGUF réduit la précision des poids du modèle</div>
+      <div class="out">(32 bits → 4 bits) pour diminuer la VRAM nécessaire. Q4_K_M</div>
+      <div class="out">offre le meilleur compromis qualité/taille. <span class="hi">58 tokens/sec</span> ✓</div>
     </div>
   </div>
 
@@ -966,6 +1042,43 @@
         <div class="sc-desc">Interface desktop pour tester des modèles GGUF depuis Hugging Face. Utile pour explorer avant de passer sous Ollama. Pas pour l'usage quotidien.</div>
         <div class="sc-verdict free">Gratuit</div>
         <code>lmstudio.ai</code>
+      </div>
+    </div>
+
+    <!-- Open WebUI mockup -->
+    <div class="mockup-wrap">
+      <div class="mockup-bar">
+        <div class="mockup-dot" style="background:#ff5f57"></div>
+        <div class="mockup-dot" style="background:#febc2e"></div>
+        <div class="mockup-dot" style="background:#28c840"></div>
+        <div class="mockup-title">Open WebUI — localhost:3000</div>
+      </div>
+      <div class="mockup-body">
+        <div class="out">┌─────────────────────────────────────────────┐</div>
+        <div class="out">│  <span class="hi">Open WebUI</span>          Modèle : <span class="ok">qwen3:32b ▾</span>  │</div>
+        <div class="out">├─────────────────────────────────────────────┤</div>
+        <div class="out">│  Nouvelle conversation                       │</div>
+        <div class="out">│  ▶ Résumé PDF — rapport_Q1.pdf              │</div>
+        <div class="out">│  ▶ Code review — api_auth.py               │</div>
+        <div class="out">│  ▶ Draft email client Durand               │</div>
+        <div class="out">├─────────────────────────────────────────────┤</div>
+        <div><span class="cmd">Vous :</span> <span class="out">Résume ce PDF en 5 points clés</span></div>
+        <div><span class="ok">IA :</span> <span class="out">Voici les 5 points essentiels du rapport... <span class="hi">▌</span></span></div>
+      </div>
+    </div>
+
+    <!-- Video Open WebUI FR -->
+    <div class="vid-section">
+      <div class="vid-label">▶ Tuto français — Open WebUI + Ollama</div>
+      <div class="vid-solo">
+        <div class="vid-wrap" onclick="loadVideo(this,'XHl-guck9po')" role="button" tabindex="0"
+             aria-label="Lire : Open WebUI, interface graphique pour Ollama (tuto français)"
+             onkeydown="if(event.key==='Enter'||event.key===' '){loadVideo(this,'XHl-guck9po');event.preventDefault();}">
+          <img src="https://img.youtube.com/vi/XHl-guck9po/maxresdefault.jpg"
+               alt="Open WebUI — interface graphique pour Ollama, tutoriel en français" loading="lazy" />
+          <div class="play-btn"></div>
+        </div>
+        <div class="vid-meta"><strong>Open WebUI — interface graphique pour Ollama</strong>Tutoriel complet en français · Installation Docker incluse</div>
       </div>
     </div>
   </div>
@@ -1232,6 +1345,17 @@ function toggleFaq(i,el){
   document.querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
   document.querySelectorAll('.faq-q').forEach(x=>{x.classList.remove('open');x.setAttribute('aria-expanded','false');});
   if(!open){a.classList.add('open');el.classList.add('open');el.setAttribute('aria-expanded','true');}
+}
+
+function loadVideo(el,vid){
+  const iframe=document.createElement('iframe');
+  iframe.src='https://www.youtube.com/embed/'+vid+'?autoplay=1&rel=0';
+  iframe.allow='autoplay; fullscreen; picture-in-picture';
+  iframe.allowFullscreen=true;
+  iframe.title=el.getAttribute('aria-label')||'Vidéo YouTube';
+  el.innerHTML='';
+  el.appendChild(iframe);
+  el.style.cursor='default';
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
