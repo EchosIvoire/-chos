@@ -271,7 +271,99 @@
     .cta-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.25rem}
 
     footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center;font-size:.75rem;color:var(--muted)}
-    @media(max-width:640px){nav{padding:.55rem 1rem}.hero{padding:2.5rem 1rem 1.5rem}.container{padding:0 1rem 4rem}}
+
+    /* ── MOBILE ── */
+    @media(max-width:768px){
+      /* Nav : scroll horizontal, liens cachés sur très petit */
+      nav{padding:.55rem 1rem;gap:.75rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+      nav::-webkit-scrollbar{display:none}
+      nav a{white-space:nowrap;font-size:.78rem;flex-shrink:0}
+      .nav-tag{flex-shrink:0}
+
+      /* Hero */
+      .hero{padding:2.5rem 1rem 1.5rem}
+      .hero h1{font-size:1.5rem}
+      .hero-lead{font-size:.92rem}
+      .hero-meta{gap:.65rem;font-size:.75rem}
+      .hero-verdict{margin-left:0;width:100%}
+
+      /* Container */
+      .container{padding:0 1rem 4rem}
+
+      /* Stats */
+      .stats-row{grid-template-columns:repeat(2,1fr)}
+      .stat .sv{font-size:1.4rem}
+
+      /* Quick picks : 1 col */
+      .picks-grid{grid-template-columns:1fr}
+
+      /* Sections */
+      .section{margin-top:2.25rem}
+      .section-head h2{font-size:1.15rem}
+
+      /* Product cards */
+      .pc-head{gap:.65rem}
+      .pc-score .score-num{font-size:1.25rem}
+      .pc-body{grid-template-columns:1fr}
+      .pc-footer{flex-direction:column;align-items:stretch}
+      .pc-btns{justify-content:stretch}
+      .pc-btns .btn-buy{flex:1;text-align:center;justify-content:center;padding:.55rem .75rem}
+      .btn-buy{min-height:44px;display:flex;align-items:center;justify-content:center}
+
+      /* Affiliate buy buttons full-width sur mobile */
+      .btn-aff{padding:.6rem;min-height:44px;font-size:.82rem}
+
+      /* "Ce qui marche" section — passe en 1 col */
+      .works-grid{grid-template-columns:1fr !important}
+
+      /* GPU table */
+      .table-wrap{border-radius:8px;font-size:.78rem}
+      th,td{padding:.55rem .65rem}
+
+      /* Demo */
+      .demo-gpus{gap:.35rem}
+      .gpu-btn{padding:.45rem .7rem;font-size:.75rem;min-height:40px}
+      #demo-play{min-height:40px;padding:.45rem .9rem}
+      .demo-out{font-size:.78rem}
+
+      /* Models grid : 1 col sur très petit */
+      .models-grid{grid-template-columns:1fr}
+
+      /* Stack grid */
+      .stack-grid{grid-template-columns:1fr}
+
+      /* Budget calc */
+      .calc-aff-btns{flex-direction:column}
+      .calc-aff-btns a{min-height:44px;display:flex;align-items:center;justify-content:center}
+
+      /* Profils */
+      .profiles-grid{grid-template-columns:1fr 1fr}
+
+      /* CTA row */
+      .cta-row{flex-direction:column}
+      .cta-row .btn-buy{text-align:center;justify-content:center;min-height:48px}
+
+      /* Conclusion */
+      .conclusion{padding:1.5rem}
+
+      /* Footer */
+      footer{padding:1.5rem 1rem}
+
+      /* Aff banner */
+      .aff-banner{font-size:.7rem;padding:.5rem 1rem}
+
+      /* TOC */
+      .toc{padding:.9rem 1.1rem}
+      .toc ol{font-size:.8rem}
+    }
+
+    @media(max-width:400px){
+      /* Très petits écrans (iPhone SE, etc.) */
+      .hero h1{font-size:1.3rem}
+      .picks-grid,.profiles-grid,.stats-row{grid-template-columns:1fr}
+      nav a:not(:first-child):not(:last-child){display:none} /* garde logo + tag, cache les liens */
+      .nav-links-hint{display:flex;font-size:.7rem;color:var(--muted);align-items:center;gap:.3rem}
+    }
   </style>
 </head>
 <body>
@@ -285,7 +377,8 @@
   <span class="logo">EchosIvoire</span>
   <a href="#top-picks">Sélection</a>
   <a href="#gpu-tests">GPU testés</a>
-  <a href="#demo">Démo live</a>
+  <a href="#benchmarks">Benchmarks</a>
+  <a href="#demo">Démo</a>
   <a href="#budget">Budget</a>
   <a href="#faq">FAQ</a>
   <span class="nav-tag">Mai 2026</span>
@@ -700,7 +793,7 @@
       <h2>Ce qui marche — et ce qui ne marche pas</h2>
       <span class="sh-sub">Bilan honnête après 6 mois d'usage quotidien</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem">
+    <div class="works-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem">
       <div class="product-card" style="border-top:3px solid var(--accent2);margin-bottom:0">
         <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent2);margin-bottom:.75rem">Ce qui marche très bien</div>
         <div style="display:flex;flex-direction:column;gap:.5rem">
