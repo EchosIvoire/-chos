@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://echosivoire.github.io/-chos/sitemap.xml
+Sitemap: https://thebenchlab.fr/sitemap.xml
 
 # Interdire les crawlers qui ne respectent pas le contenu
 User-agent: GPTBot
