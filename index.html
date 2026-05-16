@@ -1,83 +1,634 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Échos</title>
-    <style>
-        body {
-            background-color: #2c2f33;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #game {
-            display: grid;
-            grid-template-columns: repeat(8, 50px);
-            grid-template-rows: repeat(8, 50px);
-            gap: 2px;
-        }
-        .cell {
-            width: 50px;
-            height: 50px;
-            background-color: #99aab5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #2c2f33;
-        }
-        .player {
-            background-color: #7289da;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EchosIvoire — Tests terrain IA &amp; Hardware, sans bullshit</title>
+
+  <!-- SEO CORE -->
+  <meta name="description" content="EchosIvoire : tests terrain de GPU, LLM locaux et stacks IA. Benchmarks réels, en français, par quelqu'un qui paie ses propres factures d'électricité." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="EchosIvoire" />
+  <meta name="theme-color" content="#0d0f14" />
+  <link rel="canonical" href="https://echosivoire.github.io/-chos/" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:site_name" content="EchosIvoire" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://echosivoire.github.io/-chos/" />
+  <meta property="og:title" content="EchosIvoire — Tests terrain IA &amp; Hardware, sans bullshit" />
+  <meta property="og:description" content="Benchmarks GPU réels, LLM en local, stacks IA — écrits en français par un passionné qui teste vraiment le matos avant d'en parler." />
+  <meta property="og:image" content="https://echosivoire.github.io/-chos/og/setup-pc-ia-local-2026.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="EchosIvoire — Blog tech en français" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@EchosIvoire" />
+  <meta name="twitter:creator" content="@EchosIvoire" />
+  <meta name="twitter:title" content="EchosIvoire — Tests terrain IA &amp; Hardware, sans bullshit" />
+  <meta name="twitter:description" content="Benchmarks GPU réels, LLM en local, stacks IA — écrits en français par un passionné qui teste vraiment le matos." />
+  <meta name="twitter:image" content="https://echosivoire.github.io/-chos/og/setup-pc-ia-local-2026.png" />
+
+  <!-- JSON-LD : WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "EchosIvoire",
+    "url": "https://echosivoire.github.io/-chos/",
+    "description": "Tests terrain GPU, LLM locaux et stacks IA en français",
+    "inLanguage": "fr-FR",
+    "author": {
+      "@type": "Person",
+      "name": "EchosIvoire",
+      "url": "https://echosivoire.github.io/-chos/about.html"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://echosivoire.github.io/-chos/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- JSON-LD : BlogPosting (article vedette) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "PC IA local en 2026 : j'ai testé 6 GPU, voici ce qui marche vraiment",
+    "description": "J'ai monté et testé 6 setups PC pour faire tourner des LLM en local en 2026. GPU, RAM, Ollama, Qwen 3, Llama 3.3 — benchmarks réels, erreurs et recommandations honnêtes.",
+    "image": "https://echosivoire.github.io/-chos/og/setup-pc-ia-local-2026.png",
+    "url": "https://echosivoire.github.io/-chos/blog/setup-pc-ia-local-jarvis-2026.html",
+    "datePublished": "2026-05-16T00:00:00+02:00",
+    "dateModified": "2026-05-16T00:00:00+02:00",
+    "author": {
+      "@type": "Person",
+      "name": "EchosIvoire",
+      "url": "https://echosivoire.github.io/-chos/about.html"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "EchosIvoire",
+      "url": "https://echosivoire.github.io/-chos/"
+    },
+    "keywords": ["GPU","LLM local","Ollama","IA","hardware","benchmark"]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #12151f;
+      --bg3: #1a1f2e;
+      --border: #252a3a;
+      --accent: #6c63ff;
+      --accent2: #00d9b5;
+      --accent3: #f5a623;
+      --text: #e8eaf0;
+      --muted: #6a7090;
+      --card: #12151f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* GRADIENT BAR */
+    .gradient-bar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 15, 20, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text);
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: inline-block;
+    }
+    nav a.nav-link {
+      color: var(--muted);
+      font-size: .85rem;
+      font-weight: 500;
+      transition: color .2s;
+      padding: .25rem 0;
+    }
+    nav a.nav-link:hover, nav a.nav-link.active { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 5rem 2rem 3.5rem;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--accent2);
+      margin-bottom: 1.25rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 2px;
+      background: var(--accent2);
+      border-radius: 1px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      letter-spacing: -.02em;
+    }
+    .hero h1 .accent { color: var(--accent); }
+    .hero h1 .accent2 { color: var(--accent2); }
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+    .hero-desc strong { color: var(--text); }
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .h-stat {
+      display: flex;
+      flex-direction: column;
+      gap: .15rem;
+    }
+    .h-stat .val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .h-stat .lbl {
+      font-size: .72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* SECTION TITLES */
+    .section { margin-top: 4rem; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.75rem;
+    }
+    .section-header h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .section-header .sh-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-header .sh-count {
+      font-size: .75rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* ARTICLE CARD */
+    .article-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      transition: border-color .2s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .article-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .article-card:hover {
+      border-color: rgba(108, 99, 255, .35);
+      transform: translateY(-2px);
+    }
+    .article-card:hover::before { opacity: 1; }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: .9rem;
+      flex-wrap: wrap;
+    }
+    .card-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: .2rem .6rem;
+      border-radius: 6px;
+      background: rgba(108, 99, 255, .12);
+      color: var(--accent);
+      border: 1px solid rgba(108, 99, 255, .22);
+    }
+    .card-date {
+      font-size: .76rem;
+      color: var(--muted);
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: .75rem;
+      color: var(--text);
+      transition: color .2s;
+    }
+    .article-card:hover .card-title { color: var(--accent); }
+    .card-excerpt {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .card-stats {
+      font-size: .73rem;
+      color: var(--muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .card-stats span { color: var(--accent2); font-weight: 700; }
+    .btn-read {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 1.1rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 700;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-read:hover { opacity: .85; transform: translateX(2px); }
+
+    /* EMAIL CAPTURE */
+    .email-section {
+      margin-top: 4rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .email-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .email-glow {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 160px;
+      background: radial-gradient(ellipse, rgba(108, 99, 255, .12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .email-section h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: .6rem;
+      position: relative;
+    }
+    .email-section p {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-bottom: 1.5rem;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+    .email-form {
+      display: flex;
+      gap: .6rem;
+      max-width: 420px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .email-input {
+      flex: 1;
+      padding: .7rem 1rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: .9rem;
+      font-family: system-ui, sans-serif;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .email-input::placeholder { color: var(--muted); }
+    .email-input:focus { border-color: var(--accent); }
+    .btn-subscribe {
+      padding: .7rem 1.3rem;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: system-ui, sans-serif;
+      transition: opacity .2s;
+    }
+    .btn-subscribe:hover { opacity: .88; }
+    .email-note {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-top: .75rem;
+      position: relative;
+    }
+
+    @media (max-width: 480px) {
+      .email-form { flex-direction: column; }
+      .btn-subscribe { width: 100%; }
+    }
+
+    /* WHY THIS BLOG */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .9rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 620px) {
+      .why-grid { grid-template-columns: 1fr; }
+    }
+    .why-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      transition: border-color .2s;
+    }
+    .why-card:hover { border-color: rgba(108, 99, 255, .3); }
+    .why-icon {
+      font-size: 1.5rem;
+      margin-bottom: .75rem;
+      display: block;
+    }
+    .why-card h3 {
+      font-size: .95rem;
+      font-weight: 800;
+      margin-bottom: .5rem;
+      color: var(--text);
+    }
+    .why-card p {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    footer a { color: var(--muted); transition: color .2s; }
+    footer a:hover { color: var(--accent2); }
+    .footer-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .hero { padding: 3.5rem 1.25rem 2.5rem; }
+      .container { padding: 0 1.25rem 4rem; }
+      .article-card { padding: 1.25rem; }
+      .email-section { padding: 2rem 1.25rem; }
+    }
+  </style>
 </head>
 <body>
-    <div id="game"></div>
 
-    <script>
-        const gridSize = 8;
-        const game = document.getElementById('game');
-        let playerPos = { x: 0, y: 0 };
+  <div class="gradient-bar"></div>
 
-        function createGrid() {
-            game.innerHTML = '';
-            for (let y = 0; y < gridSize; y++) {
-                for (let x = 0; x < gridSize; x++) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('cell');
-                    if (x === playerPos.x && y === playerPos.y) {
-                        cell.classList.add('player');
-                        cell.textContent = 'X';
-                    }
-                    game.appendChild(cell);
-                }
-            }
-        }
+  <nav>
+    <a href="/-chos/" class="logo">
+      <span class="logo-dot"></span>
+      EchosIvoire
+    </a>
+    <a href="/-chos/" class="nav-link active">Accueil</a>
+    <a href="/-chos/about.html" class="nav-link">À propos</a>
+  </nav>
 
-        window.addEventListener('keydown', (e) => {
-            switch (e.key) {
-                case 'ArrowUp':
-                    if (playerPos.y > 0) playerPos.y--;
-                    break;
-                case 'ArrowDown':
-                    if (playerPos.y < gridSize - 1) playerPos.y++;
-                    break;
-                case 'ArrowLeft':
-                    if (playerPos.x > 0) playerPos.x--;
-                    break;
-                case 'ArrowRight':
-                    if (playerPos.x < gridSize - 1) playerPos.x++;
-                    break;
-            }
-            createGrid();
-        });
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Blog tech indépendant</div>
+    <h1>Tests terrain,<br><span class="accent">sans bullshit.</span></h1>
+    <p class="hero-desc">
+      Passionné de tech depuis plus longtemps que je ne veux l'admettre, je teste du <strong>vrai matériel</strong>
+      avec de <strong>vrais LLM</strong> — et j'écris ce que j'aurais voulu lire avant d'acheter.
+      En français. Sans jargon inutile. Depuis fin 2024.
+    </p>
+    <div class="hero-stats">
+      <div class="h-stat">
+        <span class="val">6</span>
+        <span class="lbl">GPU testés</span>
+      </div>
+      <div class="h-stat">
+        <span class="val">95 t/s</span>
+        <span class="lbl">Meilleur score</span>
+      </div>
+      <div class="h-stat">
+        <span class="val">0 €</span>
+        <span class="lbl">Abonnement cloud</span>
+      </div>
+      <div class="h-stat">
+        <span class="val">100%</span>
+        <span class="lbl">Tests perso</span>
+      </div>
+    </div>
+  </section>
 
-        createGrid();
-    </script>
-    <a href="bot.html" style="position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#7c5cbf,#5b8dd9);color:#fff;padding:10px 18px;border-radius:24px;text-decoration:none;font-family:system-ui,sans-serif;font-size:13px;font-weight:600;box-shadow:0 4px 14px rgba(124,92,191,.5)">🤖 NeuroBot IA</a>
+  <!-- ARTICLES -->
+  <main class="container">
+    <div class="section">
+      <div class="section-header">
+        <h2>Articles</h2>
+        <div class="sh-line"></div>
+        <span class="sh-count">1 article</span>
+      </div>
+
+      <article class="article-card">
+        <div class="card-meta">
+          <span class="card-tag">IA · Hardware</span>
+          <span class="card-date">16 mai 2026</span>
+        </div>
+        <h2 class="card-title">
+          <a href="/-chos/blog/setup-pc-ia-local-jarvis-2026.html">
+            PC IA local en 2026 : j'ai testé 6 GPU, voici ce qui marche vraiment
+          </a>
+        </h2>
+        <p class="card-excerpt">
+          J'ai monté six configurations différentes pour faire tourner des LLM en local — de la RTX 4060 Ti budget à la RTX 5070 Ti haut de gamme — et mesuré les tokens par seconde sur Qwen 3 et Llama 3.3 avec Ollama.
+          Résultat : deux GPU se démarquent vraiment, deux déçoivent, et un m'a coûté trois semaines de debug pour un conflit de drivers.
+        </p>
+        <div class="card-footer">
+          <span class="card-stats"><span>6 GPU testés</span> · <span>95 t/s max</span> · <span>0 €/mois</span></span>
+          <a href="/-chos/blog/setup-pc-ia-local-jarvis-2026.html" class="btn-read">
+            Lire l'article →
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <!-- EMAIL CAPTURE -->
+    <div class="email-section">
+      <div class="email-glow"></div>
+      <h2>Reçois les prochains tests en avant-première</h2>
+      <p>Un email quand un nouvel article sort. Pas de pub, pas de newsletter hebdo vide. Juste le contenu.</p>
+      <form class="email-form" action="https://VOTRE_URL_BREVO_ICI" method="post">
+        <input
+          class="email-input"
+          type="email"
+          name="EMAIL"
+          placeholder="ton@email.fr"
+          required
+          autocomplete="email"
+        />
+        <button class="btn-subscribe" type="submit">S'abonner</button>
+      </form>
+      <p class="email-note">Désabonnement en un clic. Aucune revente de données.</p>
+    </div>
+
+    <!-- WHY THIS BLOG -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Pourquoi ce blog</h2>
+        <div class="sh-line"></div>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <span class="why-icon">🔧</span>
+          <h3>Terrain</h3>
+          <p>Chaque test est fait sur mon propre matériel, dans mes vraies conditions. Pas de prêt presse, pas de config idéale préparée par une PR.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-icon">🎯</span>
+          <h3>Honnête</h3>
+          <p>Quand quelque chose ne marche pas — driver incompatible, modèle décevant, benchmark plat — je le dis. Un avis honnête vaut mieux qu'un article publicitaire.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-icon">🔗</span>
+          <h3>Monétisé clairement</h3>
+          <p>Certains liens sont affiliés Amazon. Je le signale toujours explicitement. Ça ne change rien à mes recommandations — je ne parle que de ce que j'utilise.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 EchosIvoire — Tous droits réservés</span>
+      <nav style="display:flex;gap:1.25rem;">
+        <a href="/-chos/about.html">À propos</a>
+        <a href="/-chos/about.html#affiliation">Affiliation</a>
+      </nav>
+    </div>
+  </footer>
+
 </body>
 </html>

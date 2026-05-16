@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>À propos — EchosIvoire</title>
+
+  <!-- SEO CORE -->
+  <meta name="description" content="Qui est derrière EchosIvoire ? Un passionné de tech qui teste de vrais GPU, des LLM en local, et écrit ce qu'il aurait voulu lire avant d'acheter. En français, depuis fin 2024." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="EchosIvoire" />
+  <meta name="theme-color" content="#0d0f14" />
+  <link rel="canonical" href="https://echosivoire.github.io/-chos/about.html" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:site_name" content="EchosIvoire" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:url" content="https://echosivoire.github.io/-chos/about.html" />
+  <meta property="og:title" content="À propos — EchosIvoire" />
+  <meta property="og:description" content="Tests terrain GPU et LLM locaux. Benchmarks réels, erreurs comprises, écrits en français par quelqu'un qui paie ses propres factures d'électricité." />
+  <meta property="og:image" content="https://echosivoire.github.io/-chos/og/setup-pc-ia-local-2026.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@EchosIvoire" />
+  <meta name="twitter:creator" content="@EchosIvoire" />
+  <meta name="twitter:title" content="À propos — EchosIvoire" />
+  <meta name="twitter:description" content="Tests terrain GPU et LLM locaux. Benchmarks réels, écrits en français." />
+
+  <!-- JSON-LD : Person -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "EchosIvoire",
+    "url": "https://echosivoire.github.io/-chos/about.html",
+    "description": "Passionné de tech, testeur de GPU et de LLM locaux. Écrit en français depuis fin 2024.",
+    "sameAs": [
+      "https://twitter.com/EchosIvoire",
+      "https://linkedin.com/in/VOTRE_PROFIL_ICI",
+      "https://github.com/echosivoire"
+    ],
+    "knowsAbout": ["GPU", "LLM local", "Ollama", "IA", "hardware", "benchmark"],
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://echosivoire.github.io/-chos/about.html"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #12151f;
+      --bg3: #1a1f2e;
+      --border: #252a3a;
+      --accent: #6c63ff;
+      --accent2: #00d9b5;
+      --accent3: #f5a623;
+      --text: #e8eaf0;
+      --muted: #6a7090;
+      --card: #12151f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* GRADIENT BAR */
+    .gradient-bar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 15, 20, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text);
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: inline-block;
+    }
+    nav a.nav-link {
+      color: var(--muted);
+      font-size: .85rem;
+      font-weight: 500;
+      transition: color .2s;
+      padding: .25rem 0;
+    }
+    nav a.nav-link:hover, nav a.nav-link.active { color: var(--text); }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* HERO AUTHOR */
+    .author-hero {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 4.5rem 2rem 3rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .author-avatar {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(108, 99, 255, .2), rgba(0, 217, 181, .2));
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .author-info { flex: 1; min-width: 200px; }
+    .author-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--accent2);
+      margin-bottom: .75rem;
+    }
+    .author-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 2px;
+      background: var(--accent2);
+      border-radius: 1px;
+    }
+    .author-hero h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: .75rem;
+      letter-spacing: -.02em;
+    }
+    .author-hero .tagline {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+    }
+    .author-hero .tagline strong { color: var(--text); }
+
+    /* SECTION HEADERS */
+    .section { margin-top: 3.5rem; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+    .section-header h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .section-header .sh-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* BIO CARD */
+    .bio-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .bio-card p {
+      font-size: .92rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1.1rem;
+    }
+    .bio-card p:last-child { margin-bottom: 0; }
+    .bio-card p strong { color: var(--text); }
+    .bio-card p em { color: var(--accent3); font-style: normal; }
+    .bio-card .highlight-block {
+      border-left: 3px solid var(--accent);
+      padding: .75rem 1rem;
+      background: rgba(108, 99, 255, .06);
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .bio-card .highlight-block strong { color: var(--text); }
+
+    /* SETUP TABLE */
+    .setup-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    .setup-table tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .setup-table tr:last-child { border-bottom: none; }
+    .setup-table td {
+      padding: .75rem 1rem;
+      vertical-align: middle;
+    }
+    .setup-table td:first-child {
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      width: 110px;
+      white-space: nowrap;
+    }
+    .setup-table td:last-child {
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .85rem;
+    }
+    .setup-badge {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      padding: .15rem .5rem;
+      border-radius: 5px;
+      margin-left: .5rem;
+      vertical-align: middle;
+    }
+    .badge-gpu {
+      background: rgba(108, 99, 255, .12);
+      color: var(--accent);
+      border: 1px solid rgba(108, 99, 255, .22);
+    }
+    .badge-new {
+      background: rgba(0, 217, 181, .1);
+      color: var(--accent2);
+      border: 1px solid rgba(0, 217, 181, .2);
+    }
+
+    /* AFFILIATION SECTION */
+    .affil-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .affil-card p {
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .affil-card p:last-child { margin-bottom: 0; }
+    .affil-card p strong { color: var(--text); }
+    .affil-list {
+      list-style: none;
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .affil-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: .65rem;
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .affil-list li::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0;
+      margin-top: .45em;
+    }
+
+    /* CONTACT SECTION */
+    .contact-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .contact-card p {
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .contact-card p:last-child { margin-bottom: 0; }
+    .contact-email {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--accent2);
+      font-weight: 600;
+      font-size: .95rem;
+      border-bottom: 1px solid rgba(0, 217, 181, .3);
+      padding-bottom: 1px;
+      transition: border-color .2s;
+    }
+    .contact-email:hover { border-color: var(--accent2); }
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: 1.25rem;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color .2s, border-color .2s;
+    }
+    .social-link:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    footer a { color: var(--muted); transition: color .2s; }
+    footer a:hover { color: var(--accent2); }
+    .footer-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .author-hero { padding: 3rem 1.25rem 2rem; gap: 1.25rem; }
+      .container { padding: 0 1.25rem 4rem; }
+      .bio-card, .affil-card, .contact-card { padding: 1.25rem; }
+      .setup-table td:first-child { width: 90px; }
+    }
+
+    @media (max-width: 400px) {
+      .author-hero { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="gradient-bar"></div>
+
+  <nav>
+    <a href="/-chos/" class="logo">
+      <span class="logo-dot"></span>
+      EchosIvoire
+    </a>
+    <a href="/-chos/" class="nav-link">Accueil</a>
+    <a href="/-chos/about.html" class="nav-link active">À propos</a>
+  </nav>
+
+  <!-- HERO AUTEUR -->
+  <header class="author-hero">
+    <div class="author-avatar" aria-hidden="true">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Avatar EchosIvoire">
+        <text
+          x="50%"
+          y="50%"
+          dominant-baseline="central"
+          text-anchor="middle"
+          font-family="system-ui, sans-serif"
+          font-weight="800"
+          font-size="18"
+          fill="url(#avatar-grad)"
+        >EI</text>
+        <defs>
+          <linearGradient id="avatar-grad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#6c63ff"/>
+            <stop offset="100%" stop-color="#00d9b5"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="author-info">
+      <div class="author-eyebrow">Auteur</div>
+      <h1>EchosIvoire</h1>
+      <p class="tagline">
+        Passionné de tech, <strong>testeur de GPU et de LLM en local</strong>.<br>
+        J'écris en français ce que j'aurais voulu lire avant d'acheter — benchmarks réels, erreurs incluses.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- BIO -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Pourquoi ce blog</h2>
+        <div class="sh-line"></div>
+      </div>
+      <div class="bio-card">
+        <p>
+          Tout a commencé fin 2024. Les abonnements cloud IA commençaient à sérieusement peser sur
+          le budget — ChatGPT Plus, Claude Pro, Copilot, Gemini Advanced — ça s'accumule vite.
+          Je me suis dit : <strong>et si je faisais tourner tout ça en local ?</strong>
+          Spoiler : c'est possible, mais ça demande un peu plus de travail que ce que les tutos YouTube laissent entendre.
+        </p>
+
+        <div class="highlight-block">
+          <strong>La frustration fondatrice :</strong> j'ai passé trois semaines à débugger un conflit
+          CUDA 12.4 / driver 555 sur ma première config — erreur silencieuse, Ollama qui charge mais génère
+          du garbage, impossible à diagnostiquer. J'ai fini par trouver la cause dans un post de forum
+          enterré à la page 4 d'une recherche DuckDuckGo. <strong>J'ai créé ce blog pour que personne d'autre
+          ne perde ce temps.</strong>
+        </div>
+
+        <p>
+          Depuis, je teste méthodiquement : différents GPU, différents modèles (Qwen 3, Llama 3.3,
+          Mistral, Phi-4...), différentes stacks (Ollama, LM Studio, llama.cpp direct).
+          Je mesure les tokens par seconde, la consommation VRAM, la stabilité sur des sessions longues.
+          <strong>Du terrain, pas du copier-coller de communiqué de presse.</strong>
+        </p>
+
+        <p>
+          Je travaille dans la tech au quotidien — donc je comprends l'architecture,
+          je lis les issues GitHub, je sais débugger un CUDA OOM à 3h du mat.
+          Mais je ne suis pas chercheur en IA, je suis utilisateur. Ce que j'écris,
+          c'est du point de vue de quelqu'un qui veut que ça marche, pas de celui qui l'a conçu.
+        </p>
+
+        <p>
+          <em>Depuis fin 2024.</em> En continu. Avec ma propre électricité et mon propre budget matos.
+        </p>
+      </div>
+    </div>
+
+    <!-- SETUP ACTUEL -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Setup actuel</h2>
+        <div class="sh-line"></div>
+      </div>
+      <div class="bio-card" style="padding: 0; overflow: hidden;">
+        <table class="setup-table">
+          <tbody>
+            <tr>
+              <td>GPU</td>
+              <td>
+                RTX 5070 Ti 16 Go
+                <span class="setup-badge badge-gpu">GPU principal</span>
+                <span class="setup-badge badge-new">2025</span>
+              </td>
+            </tr>
+            <tr>
+              <td>CPU</td>
+              <td>AMD Ryzen 9 7900X (12c / 24t)</td>
+            </tr>
+            <tr>
+              <td>RAM</td>
+              <td>64 Go DDR5-6000 (2×32 Go)</td>
+            </tr>
+            <tr>
+              <td>Stockage</td>
+              <td>2 To NVMe PCIe 5.0 + 4 To HDD pour les modèles</td>
+            </tr>
+            <tr>
+              <td>OS</td>
+              <td>Ubuntu 24.04 LTS (dual-boot Windows 11)</td>
+            </tr>
+            <tr>
+              <td>Stack IA</td>
+              <td>Ollama 0.7 · Open WebUI · llama.cpp (builds custom)</td>
+            </tr>
+            <tr>
+              <td>CUDA</td>
+              <td>12.6 · Driver 570 · cuDNN 9.x</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- POLITIQUE D'AFFILIATION -->
+    <div class="section" id="affiliation">
+      <div class="section-header">
+        <h2>Politique d'affiliation</h2>
+        <div class="sh-line"></div>
+      </div>
+      <div class="affil-card">
+        <p>
+          Ce blog contient des <strong>liens affiliés Amazon</strong>. Voici exactement comment ça fonctionne,
+          sans ambiguïté :
+        </p>
+        <ul class="affil-list">
+          <li>
+            Quand je recommande un produit avec un lien affilié, je touche une petite commission si vous l'achetez.
+            Le prix que vous payez ne change pas d'un centime.
+          </li>
+          <li>
+            <strong>Je signale systématiquement les liens affiliés</strong> dans les articles avec la mention
+            "(lien affilié)" ou "(Amazon, affilié)". Jamais de lien caché.
+          </li>
+          <li>
+            Je ne recommande que du <strong>matériel que j'ai physiquement testé</strong>. Si je n'ai pas eu
+            le produit en main, je ne mets pas de lien affilié dessus.
+          </li>
+          <li>
+            L'affiliation ne dicte pas mes conclusions. Si un GPU est décevant, je le dis — même si
+            j'ai un lien affilié dessus. L'article sur le RX 7900 GRE en est un exemple.
+          </li>
+        </ul>
+        <p>
+          Ce modèle me permet de financer le matos, l'électricité, et le temps passé à écrire ces articles.
+          <strong>La transparence là-dessus n'est pas négociable.</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Contact</h2>
+        <div class="sh-line"></div>
+      </div>
+      <div class="contact-card">
+        <p>
+          Une question sur un test ? Une erreur à me signaler ? Un GPU à me faire tester ?
+          Le meilleur moyen de me joindre reste l'email :
+        </p>
+        <p>
+          <a href="mailto:contact@echosivoire.fr" class="contact-email">
+            contact@echosivoire.fr
+          </a>
+        </p>
+        <p>
+          Je réponds en général dans les 48h. Si vous m'écrivez pour un partenariat commercial,
+          lisez d'abord la section affiliation ci-dessus — ça vous fera gagner du temps à tous les deux.
+        </p>
+        <div class="social-links">
+          <a href="https://twitter.com/EchosIvoire" class="social-link" target="_blank" rel="noopener">
+            Twitter / X
+          </a>
+          <a href="https://github.com/echosivoire" class="social-link" target="_blank" rel="noopener">
+            GitHub
+          </a>
+          <a href="https://linkedin.com/in/VOTRE_PROFIL_ICI" class="social-link" target="_blank" rel="noopener">
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 EchosIvoire — Tous droits réservés</span>
+      <nav style="display:flex;gap:1.25rem;">
+        <a href="/-chos/">Accueil</a>
+        <a href="/-chos/about.html#affiliation">Affiliation</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

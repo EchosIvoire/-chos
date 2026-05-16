@@ -5,8 +5,14 @@
   <url>
     <loc>https://echosivoire.github.io/-chos/</loc>
     <lastmod>2026-05-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://echosivoire.github.io/-chos/about.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://echosivoire.github.io/-chos/blog/setup-pc-ia-local-jarvis-2026.html</loc>

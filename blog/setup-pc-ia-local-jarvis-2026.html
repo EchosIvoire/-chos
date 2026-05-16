@@ -495,7 +495,7 @@
 </div>
 
 <nav aria-label="Navigation principale">
-  <span class="logo" aria-label="EchosIvoire - Accueil">EchosIvoire</span>
+  <a href="/" class="logo" aria-label="EchosIvoire - Accueil" style="text-decoration:none;color:inherit">EchosIvoire</a>
   <a href="#top-picks">Sélection</a>
   <a href="#gpu-tests">GPU testés</a>
   <a href="#benchmarks">Benchmarks</a>
@@ -523,6 +523,14 @@
     <span>🔬 Benchmarks réels</span>
     <span>💰 Liens affiliés présents</span>
     <span>✅ Mis à jour : mai 2026</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border)">
+    <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;color:#fff;flex-shrink:0">EI</div>
+    <div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--text)">EchosIvoire</div>
+      <div style="font-size:.75rem;color:var(--muted)">Testeur terrain · <a href="/about.html" style="color:var(--accent);text-decoration:none">À propos de l'auteur →</a></div>
+    </div>
+    <div style="margin-left:auto;font-size:.72rem;color:var(--muted);text-align:right">6 mois de tests<br>sur setup personnel</div>
   </div>
 </div>
 
@@ -1177,6 +1185,25 @@
       <a href="#budget" class="btn-buy primary">Calculer mon budget</a>
       <a href="#demo" class="btn-buy secondary" style="border-color:var(--border)">Tester la démo</a>
     </div>
+  </div>
+
+  <!-- ═══ EMAIL CAPTURE ═══ -->
+  <div style="background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(0,217,181,.05));border:1px solid rgba(108,99,255,.2);border-radius:14px;padding:1.75rem 2rem;margin-top:1.5rem;text-align:center">
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem">Newsletter — Tests terrain</div>
+    <h3 style="font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:.5rem">Le prochain test arrive dans ta boîte.</h3>
+    <p style="font-size:.84rem;color:var(--muted);margin-bottom:1.25rem;max-width:480px;margin-left:auto;margin-right:auto">Un article par semaine. Benchmarks réels, setup détaillé, erreurs terrain. Aucun spam — désabonnement en un clic.</p>
+    <form action="https://REMPLACE_PAR_TON_URL_BREVO_OU_MAILCHIMP" method="post" target="_blank"
+          style="display:flex;gap:.6rem;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center"
+          onsubmit="this.querySelector('button').textContent='✓ Inscrit !';return true;">
+      <input type="email" name="email" required placeholder="ton@email.com"
+             aria-label="Ton adresse email"
+             style="flex:1;min-width:200px;background:#12151f;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;color:var(--text);font-size:.88rem;outline:none" />
+      <button type="submit"
+              style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.7rem 1.25rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap">
+        M'inscrire →
+      </button>
+    </form>
+    <p style="font-size:.7rem;color:var(--muted);margin-top:.75rem;opacity:.7">Pas de spam · Désabonnement en 1 clic · Données jamais revendues</p>
   </div>
 
 </div><!-- /.container -->

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ════════════════════════════════════════════════
+       SLOT : TITRE
+       Règles : 50-60 chars · mot-clé principal en premier
+       Exemple : "Ollama vs LM Studio : lequel est vraiment mieux en 2026 ?"
+       ════════════════════════════════════════════════ -->
+  <title>TITRE_ARTICLE | EchosIvoire</title>
+
+  <meta name="description" content="DESCRIPTION_150_CHARS_MAX" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="EchosIvoire" />
+  <meta name="theme-color" content="#0d0f14" />
+  <link rel="canonical" href="https://echosivoire.github.io/-chos/blog/NOM_FICHIER.html" />
+  <link rel="hreflang" hreflang="fr-FR" href="https://echosivoire.github.io/-chos/blog/NOM_FICHIER.html" />
+
+  <!-- ── OPEN GRAPH ── -->
+  <meta property="og:site_name" content="EchosIvoire" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://echosivoire.github.io/-chos/blog/NOM_FICHIER.html" />
+  <meta property="og:title" content="TITRE_OG_MAX_95_CHARS" />
+  <meta property="og:description" content="DESCRIPTION_OG_MAX_200_CHARS" />
+  <meta property="og:image" content="https://echosivoire.github.io/-chos/og/NOM_OG.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="DESCRIPTION_IMAGE_OG" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="article:published_time" content="AAAA-MM-JJTHH:MM:SS+02:00" />
+  <meta property="article:modified_time" content="AAAA-MM-JJTHH:MM:SS+02:00" />
+  <meta property="article:author" content="EchosIvoire" />
+  <meta property="article:section" content="CATEGORIE" />
+  <meta property="article:tag" content="TAG_1" />
+  <meta property="article:tag" content="TAG_2" />
+  <meta property="article:tag" content="TAG_3" />
+
+  <!-- ── TWITTER CARD ── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@EchosIvoire" />
+  <meta name="twitter:creator" content="@EchosIvoire" />
+  <meta name="twitter:title" content="TITRE_TWITTER_MAX_70_CHARS" />
+  <meta name="twitter:description" content="DESCRIPTION_TWITTER_MAX_200_CHARS" />
+  <meta name="twitter:image" content="https://echosivoire.github.io/-chos/og/NOM_OG.png" />
+  <meta name="twitter:image:alt" content="DESCRIPTION_IMAGE_TWITTER" />
+
+  <!-- ── JSON-LD Article ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "TITRE_ARTICLE",
+    "description": "DESCRIPTION_150_CHARS_MAX",
+    "image": "https://echosivoire.github.io/-chos/og/NOM_OG.png",
+    "datePublished": "AAAA-MM-JJTHH:MM:SS+02:00",
+    "dateModified": "AAAA-MM-JJTHH:MM:SS+02:00",
+    "author": {
+      "@type": "Person",
+      "name": "EchosIvoire",
+      "url": "https://echosivoire.github.io/-chos/about.html"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "EchosIvoire",
+      "url": "https://echosivoire.github.io/-chos/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://echosivoire.github.io/-chos/og/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://echosivoire.github.io/-chos/blog/NOM_FICHIER.html"
+    },
+    "keywords": ["MOT_CLE_1","MOT_CLE_2","MOT_CLE_3","MOT_CLE_4","MOT_CLE_5"]
+  }
+  </script>
+
+  <!-- ── JSON-LD FAQPage ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "QUESTION_FAQ_1 ?",
+        "acceptedAnswer": {"@type":"Answer","text":"REPONSE_FAQ_1 (150+ chars recommandé pour featured snippet)"}
+      },
+      {
+        "@type": "Question",
+        "name": "QUESTION_FAQ_2 ?",
+        "acceptedAnswer": {"@type":"Answer","text":"REPONSE_FAQ_2"}
+      },
+      {
+        "@type": "Question",
+        "name": "QUESTION_FAQ_3 ?",
+        "acceptedAnswer": {"@type":"Answer","text":"REPONSE_FAQ_3"}
+      }
+    ]
+  }
+  </script>
+
+  <!-- ── JSON-LD BreadcrumbList ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"EchosIvoire","item":"https://echosivoire.github.io/-chos/"},
+      {"@type":"ListItem","position":2,"name":"Blog","item":"https://echosivoire.github.io/-chos/blog/"},
+      {"@type":"ListItem","position":3,"name":"TITRE_COURT","item":"https://echosivoire.github.io/-chos/blog/NOM_FICHIER.html"}
+    ]
+  }
+  </script>
+
+  <!-- ── PERFORMANCE ── -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <!-- Décommenter si l'article utilise Chart.js : -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script> -->
+
+  <style>
+    /* ════ DESIGN SYSTEM (identique à tous les articles) ════ */
+    :root{
+      --bg:#0d0f14;--bg2:#12151f;--bg3:#1a1f2e;
+      --text:#e8eaf0;--muted:#6a7090;--border:#252a3a;
+      --accent:#6c63ff;--accent2:#00d9b5;--accent3:#f5a623;
+      --orange:#f5a623;--red:#e85d75;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.6}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    code{background:var(--bg3);padding:.15em .4em;border-radius:4px;font-size:.85em;font-family:'Courier New',monospace;color:var(--accent2)}
+
+    /* ── SKIP LINK ── */
+    .skip-link{position:absolute;top:-100%;left:1rem;background:var(--accent);color:#fff;padding:.5rem 1rem;border-radius:0 0 8px 8px;z-index:999;font-weight:700;font-size:.85rem}
+    .skip-link:focus{top:0}
+
+    /* ── BARRE ACCENT ── */
+    .accent-bar{height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:100%}
+
+    /* ── BANNIÈRE AFFILIATION ── */
+    .aff-banner{background:rgba(245,166,35,.08);border-bottom:1px solid rgba(245,166,35,.2);padding:.5rem 2rem;font-size:.75rem;color:#c8943a;text-align:center}
+
+    /* ── NAV ── */
+    nav{display:flex;align-items:center;gap:1.5rem;padding:.7rem 2rem;background:rgba(13,15,20,.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+    .logo{font-weight:800;font-size:1.05rem;color:var(--text);flex-shrink:0;text-decoration:none}
+    nav a{font-size:.82rem;color:var(--muted);transition:color .15s;white-space:nowrap}
+    nav a:hover{color:var(--text);text-decoration:none}
+    .nav-tag{margin-left:auto;font-size:.68rem;font-weight:700;background:rgba(108,99,255,.15);color:var(--accent);padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(108,99,255,.3);flex-shrink:0}
+
+    /* ── HERO ── */
+    .hero{max-width:860px;margin:0 auto;padding:4rem 2rem 2rem}
+    .hero-eyebrow{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap}
+    .tag{display:inline-flex;align-items:center;padding:.25rem .7rem;border-radius:20px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent);border:1px solid rgba(108,99,255,.3)}
+    .tag.green{background:rgba(0,217,181,.12);color:var(--accent2);border:1px solid rgba(0,217,181,.3)}
+    .tag.orange{background:rgba(245,166,35,.12);color:var(--orange);border:1px solid rgba(245,166,35,.3)}
+    .hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:.9rem}
+    .hero h1 em{font-style:normal;color:var(--accent)}
+    .hero-lead{font-size:1rem;color:var(--muted);max-width:660px;margin-bottom:1.25rem;line-height:1.7}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:var(--muted);padding:.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .hero-meta span{display:flex;align-items:center;gap:.3rem}
+
+    /* ── CONTAINER & SECTIONS ── */
+    .container{max-width:860px;margin:0 auto;padding:0 2rem 4rem}
+    .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-top:1.25rem}
+    .section-head{margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+    .section-head h2{font-size:1.2rem;font-weight:800;color:var(--text);margin-bottom:.2rem}
+    .sh-sub{font-size:.75rem;color:var(--muted)}
+
+    /* ── PRODUCT CARDS ── */
+    .product-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:.75rem}
+    .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}
+    .card-name{font-size:1.05rem;font-weight:800;color:var(--text)}
+    .card-price{font-size:1.2rem;font-weight:800;color:var(--accent);flex-shrink:0}
+    .card-rating{display:flex;gap:.25rem;margin:.4rem 0}
+    .star{color:var(--orange);font-size:.95rem}
+    .star.empty{color:var(--border)}
+    .card-pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:.75rem 0}
+    .pros,.cons{font-size:.8rem;color:var(--muted)}
+    .pros li::before{content:"✅ ";color:var(--accent2)}
+    .cons li::before{content:"❌ ";color:var(--red)}
+    ul.check{list-style:none;display:flex;flex-direction:column;gap:.3rem}
+    .btn-buy{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.83rem;text-decoration:none;min-height:44px;transition:opacity .15s;border:none;cursor:pointer}
+    .btn-buy:hover{opacity:.88;text-decoration:none}
+    .btn-buy.amazon{background:linear-gradient(90deg,#f5a623,#e8941a);color:#000}
+    .btn-buy.primary{background:linear-gradient(90deg,var(--accent),#5450d8);color:#fff}
+    .btn-buy.secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+    .cta-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+
+    /* ── VERDICT ── */
+    .verdict{display:flex;gap:.75rem;align-items:flex-start;padding:1rem 1.25rem;border-radius:10px;margin:.75rem 0;border:1px solid}
+    .verdict.success{background:rgba(0,217,181,.07);border-color:rgba(0,217,181,.25)}
+    .verdict.warning{background:rgba(245,166,35,.07);border-color:rgba(245,166,35,.25)}
+    .verdict.danger{background:rgba(232,93,117,.07);border-color:rgba(232,93,117,.25)}
+    .verdict-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem}
+    .verdict p{font-size:.85rem;color:#9aa0b8;line-height:1.6}
+
+    /* ── CHART ── */
+    .chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-top:.75rem}
+    .chart-title{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.75rem}
+    .chart-canvas{height:280px;position:relative}
+    .chart-note{font-size:.72rem;color:var(--muted);margin-top:.6rem}
+
+    /* ── FAQ ── */
+    .faq-item{border-bottom:1px solid var(--border)}
+    .faq-item:last-child{border-bottom:none}
+    .faq-q{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--text);user-select:none;gap:.5rem}
+    .faq-q:hover{color:var(--accent)}
+    .faq-q.open .chev{transform:rotate(180deg)}
+    .chev{transition:transform .2s;font-size:.7rem;color:var(--muted);flex-shrink:0}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+    .faq-a.open{max-height:600px}
+    .faq-a-in{padding:.1rem 0 1rem;font-size:.85rem;color:#9aa0b8;line-height:1.7}
+
+    /* ── CONCLUSION ── */
+    .conclusion{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(0,217,181,.07));border:1px solid rgba(108,99,255,.25);border-radius:14px;padding:2rem;margin-top:2rem}
+    .conclusion h2{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:.75rem}
+    .conclusion p{font-size:.88rem;color:#9aa0b8;margin-bottom:.75rem}
+    .recomm-box{background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.3);border-radius:8px;padding:.9rem 1.1rem;font-size:.85rem;color:var(--text);margin:.75rem 0}
+    .recomm-box strong{display:block;color:var(--accent);margin-bottom:.3rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+
+    /* ── LAZY VIDEO ── */
+    .vid-section{margin-top:1.25rem}
+    .vid-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
+    .vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
+    .vid-wrap{position:relative;border-radius:12px;overflow:hidden;background:#000;cursor:pointer;border:1px solid var(--border);aspect-ratio:16/9}
+    .vid-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
+    .vid-wrap:hover img{opacity:.8}
+    .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;background:rgba(255,255,255,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;pointer-events:none}
+    .play-btn::after{content:'';border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #111;margin-left:3px}
+    .vid-wrap:hover .play-btn{transform:translate(-50%,-50%) scale(1.1);background:#fff}
+    .vid-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+    .vid-meta{padding:.65rem 0 0;font-size:.8rem;color:var(--muted)}
+    .vid-meta strong{color:var(--text);display:block;margin-bottom:.1rem;font-size:.85rem}
+    .vid-solo{max-width:640px;margin-top:.75rem}
+
+    /* ── MOCKUP TERMINAL ── */
+    .mockup-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-top:1rem;background:#050709}
+    .mockup-bar{background:#1a1f2e;padding:.45rem .75rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid var(--border)}
+    .mockup-dot{width:10px;height:10px;border-radius:50%}
+    .mockup-title{font-size:.72rem;color:var(--muted);margin:0 auto}
+    .mockup-body{padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.7;color:#c5c8d6;min-height:120px}
+    .mockup-body .cmd{color:var(--accent2)}
+    .mockup-body .out{color:#7a7f96}
+    .mockup-body .hi{color:var(--accent)}
+    .mockup-body .ok{color:#00d9b5}
+
+    /* ── FOOTER ── */
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;font-size:.78rem;color:var(--muted);text-align:center}
+    footer a{color:var(--muted)}
+    footer a:hover{color:var(--text)}
+
+    /* ── MOBILE ── */
+    @media(max-width:768px){
+      nav{padding:.55rem 1rem;gap:.75rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+      nav::-webkit-scrollbar{display:none}
+      nav a{white-space:nowrap;font-size:.78rem;flex-shrink:0}
+      .hero{padding:2.5rem 1rem 1.5rem}
+      .hero h1{font-size:1.5rem}
+      .hero-lead{font-size:.92rem}
+      .hero-meta{gap:.65rem;font-size:.75rem}
+      .container{padding:0 1rem 3rem}
+      .section{padding:1.1rem}
+      .card-pros-cons{grid-template-columns:1fr}
+      .vid-grid{grid-template-columns:1fr}
+      .cta-row{flex-direction:column}
+      .btn-buy{width:100%;text-align:center;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
+<div class="accent-bar"></div>
+
+<!-- BANNIÈRE AFFILIATION — obligatoire si liens affiliés dans l'article -->
+<div class="aff-banner" role="note" aria-label="Information liens affiliés">
+  ℹ️ Cet article contient des <strong>liens affiliés Amazon</strong>. Si tu achètes via ces liens, je touche une petite commission, sans surcoût pour toi. Seul ce que j'ai personnellement testé est recommandé.
+</div>
+
+<nav aria-label="Navigation principale">
+  <a href="/" class="logo">EchosIvoire</a>
+  <a href="/#articles">Articles</a>
+  <a href="/about.html">À propos</a>
+  <!-- Ajoute d'autres ancres de section ici -->
+  <span class="nav-tag">MOIS AAAA</span>
+</nav>
+
+<main id="main-content">
+<article itemscope itemtype="https://schema.org/Article">
+
+<div class="hero" id="top">
+  <div class="hero-eyebrow">
+    <!-- SLOT : tags de l'article -->
+    <span class="tag purple">CATEGORIE</span>
+    <span class="tag green">ANGLE</span>
+    <span class="tag orange">Liens affiliés</span>
+  </div>
+
+  <!-- SLOT : H1 — inclure le mot-clé principal, max 65 chars -->
+  <h1>TITRE_H1 avec <em>mot-clé principal</em></h1>
+
+  <!-- SLOT : accroche — 2 phrases max, ton terrain, première personne -->
+  <p class="hero-lead">ACCROCHE_2_PHRASES. Ce guide dit ce que les autres ne disent pas.</p>
+
+  <div class="hero-meta">
+    <span>📅 JJ mois AAAA</span>
+    <span>⏱ XX min</span>
+    <span>🔬 Tests terrain</span>
+    <span>💰 Liens affiliés présents</span>
+    <span>✅ Mis à jour : mois AAAA</span>
+  </div>
+
+  <!-- Auteur — NE PAS SUPPRIMER, requis E-E-A-T -->
+  <div style="display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border)">
+    <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;color:#fff;flex-shrink:0">EI</div>
+    <div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--text)">EchosIvoire</div>
+      <div style="font-size:.75rem;color:var(--muted)">Testeur terrain · <a href="/about.html" style="color:var(--accent)">À propos →</a></div>
+    </div>
+    <div style="margin-left:auto;font-size:.72rem;color:var(--muted);text-align:right">DUREE_TEST<br>sur setup personnel</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══ TOC (Sommaire) — maintenir à jour ═══ -->
+  <!--
+  <div class="toc">
+    <div class="toc-t">Sommaire</div>
+    <ol>
+      <li><a href="#section1">SECTION 1</a></li>
+      <li><a href="#section2">SECTION 2</a></li>
+      <li><a href="#conclusion">Verdict final</a></li>
+    </ol>
+  </div>
+  -->
+
+  <!-- ═══ SECTION EXEMPLE : PRODUIT/TEST ═══ -->
+  <div class="section" id="section1">
+    <div class="section-head">
+      <h2>TITRE_SECTION_H2</h2>
+      <span class="sh-sub">SOUS_TITRE_CONTEXTUEL</span>
+    </div>
+
+    <!-- Product card avec affilié — PATTERN OBLIGATOIRE -->
+    <div class="product-card">
+      <div class="card-head">
+        <div>
+          <div class="tag purple" style="margin-bottom:.4rem;font-size:.62rem">CATEGORIE_PRODUIT</div>
+          <div class="card-name">NOM_PRODUIT</div>
+        </div>
+        <div class="card-price">~XXX€</div>
+      </div>
+      <div class="card-rating" aria-label="Note : X sur 5">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span>
+        <span style="font-size:.78rem;color:var(--muted);margin-left:.3rem">4/5 — VERDICT_COURT</span>
+      </div>
+      <div class="card-pros-cons">
+        <ul class="check pros">
+          <li>AVANTAGE_1</li>
+          <li>AVANTAGE_2</li>
+          <li>AVANTAGE_3</li>
+        </ul>
+        <ul class="check cons">
+          <li>INCONVENIENT_1</li>
+          <li>INCONVENIENT_2</li>
+        </ul>
+      </div>
+      <div class="cta-row">
+        <a href="https://amzn.to/XXXXX-PRODUIT" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">🛒 Amazon</a>
+        <a href="https://www.ldlc.com/?XXXXX-aff" class="btn-buy secondary" target="_blank" rel="nofollow sponsored">LDLC</a>
+      </div>
+    </div>
+
+    <!-- Verdict inline -->
+    <div class="verdict success">
+      <div class="verdict-icon">✅</div>
+      <p><strong>Mon avis :</strong> AVIS_TERRAIN_EN_1_PHRASE.</p>
+    </div>
+  </div>
+
+  <!-- ═══ VIDEO LAZY-LOAD (optionnel) ═══ -->
+  <!--
+  <div class="vid-section">
+    <div class="vid-label">▶ Vidéo associée</div>
+    <div class="vid-solo">
+      <div class="vid-wrap" onclick="loadVideo(this,'VIDEO_ID_YOUTUBE')" role="button" tabindex="0"
+           aria-label="Lire : TITRE_VIDEO"
+           onkeydown="if(event.key==='Enter'||event.key===' '){loadVideo(this,'VIDEO_ID_YOUTUBE');event.preventDefault();}">
+        <img src="https://img.youtube.com/vi/VIDEO_ID_YOUTUBE/maxresdefault.jpg"
+             alt="ALT_IMAGE_VIDEO" loading="lazy" />
+        <div class="play-btn"></div>
+      </div>
+      <div class="vid-meta"><strong>TITRE_VIDEO</strong>CHAINE · DUREE</div>
+    </div>
+  </div>
+  -->
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="section" id="faq">
+    <div class="section-head">
+      <h2>Questions fréquentes</h2>
+      <span class="sh-sub">Optimisées Google featured snippets</span>
+    </div>
+    <div id="faq-container"></div>
+  </div>
+
+  <!-- ═══ CONCLUSION ═══ -->
+  <div class="conclusion">
+    <div class="tag green" style="margin-bottom:.75rem">Verdict final</div>
+    <h2>TITRE_CONCLUSION</h2>
+    <p>PARAGRAPHE_CONCLUSION_1. Ton terrain. Honnête.</p>
+    <div class="recomm-box">
+      <strong>Ma recommandation principale</strong>
+      RECOMMANDATION_CONCRETE avec budget estimé.
+    </div>
+    <p>PARAGRAPHE_TEASER_PROCHAIN_ARTICLE avec lien interne vers sujet connexe.</p>
+    <div class="cta-row">
+      <a href="https://amzn.to/XXXXX-PRODUIT_PRINCIPAL" class="btn-buy amazon" target="_blank" rel="nofollow sponsored">🛒 PRODUIT_PRINCIPAL sur Amazon</a>
+      <a href="/" class="btn-buy secondary">← Tous les articles</a>
+    </div>
+  </div>
+
+  <!-- ═══ EMAIL CAPTURE — NE PAS SUPPRIMER ═══ -->
+  <div style="background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(0,217,181,.05));border:1px solid rgba(108,99,255,.2);border-radius:14px;padding:1.75rem 2rem;margin-top:1.5rem;text-align:center">
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem">Newsletter — Tests terrain</div>
+    <h3 style="font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:.5rem">Le prochain test arrive dans ta boîte.</h3>
+    <p style="font-size:.84rem;color:var(--muted);margin-bottom:1.25rem;max-width:480px;margin-left:auto;margin-right:auto">Un article par semaine. Benchmarks réels, setup détaillé, erreurs terrain. Aucun spam — désabonnement en 1 clic.</p>
+    <form action="https://REMPLACE_PAR_TON_URL_BREVO_OU_MAILCHIMP" method="post" target="_blank"
+          style="display:flex;gap:.6rem;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center"
+          onsubmit="this.querySelector('button').textContent='✓ Inscrit !';return true;">
+      <input type="email" name="email" required placeholder="ton@email.com"
+             aria-label="Ton adresse email"
+             style="flex:1;min-width:200px;background:#12151f;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;color:var(--text);font-size:.88rem;outline:none" />
+      <button type="submit"
+              style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.7rem 1.25rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap">
+        M'inscrire →
+      </button>
+    </form>
+    <p style="font-size:.7rem;color:var(--muted);margin-top:.75rem;opacity:.7">Pas de spam · Désabonnement en 1 clic · Données jamais revendues</p>
+  </div>
+
+</div><!-- /.container -->
+</article>
+</main>
+
+<footer>
+  <a href="/">EchosIvoire</a> · Article rédigé en MOIS AAAA · Tests sur setup personnel<br>
+  <span style="font-size:.7rem;margin-top:.4rem;display:block">🔗 Cet article contient des liens affiliés. Les prix sont indicatifs. <a href="/about.html">À propos & politique d'affiliation →</a></span>
+</footer>
+
+<script>
+/* ── FAQ DATA — Remplis les questions/réponses ── */
+const FAQ_DATA = [
+  { q:'QUESTION_FAQ_1 ?', a:'REPONSE_FAQ_1 en 2-3 phrases avec le mot-clé dedans. Réponds directement et concrètement.' },
+  { q:'QUESTION_FAQ_2 ?', a:'REPONSE_FAQ_2.' },
+  { q:'QUESTION_FAQ_3 ?', a:'REPONSE_FAQ_3.' },
+];
+
+function renderFaq(){
+  document.getElementById('faq-container').innerHTML=FAQ_DATA.map((item,i)=>`
+    <div class="faq-item">
+      <div class="faq-q" role="button" tabindex="0" aria-expanded="false" aria-controls="faq-a-${i}"
+           onclick="toggleFaq(${i},this)"
+           onkeydown="if(event.key==='Enter'||event.key===' '){toggleFaq(${i},this);event.preventDefault();}">
+        <span>${item.q}</span><span class="chev" aria-hidden="true">▼</span>
+      </div>
+      <div class="faq-a" id="faq-a-${i}" role="region"><div class="faq-a-in">${item.a}</div></div>
+    </div>`).join('');
+}
+
+function toggleFaq(i,el){
+  const a=document.getElementById(`faq-a-${i}`),open=a.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(x=>{x.classList.remove('open');x.setAttribute('aria-expanded','false');});
+  if(!open){a.classList.add('open');el.classList.add('open');el.setAttribute('aria-expanded','true');}
+}
+
+function loadVideo(el,vid){
+  const iframe=document.createElement('iframe');
+  iframe.src='https://www.youtube.com/embed/'+vid+'?autoplay=1&rel=0';
+  iframe.allow='autoplay; fullscreen; picture-in-picture';
+  iframe.allowFullscreen=true;
+  iframe.title=el.getAttribute('aria-label')||'Vidéo YouTube';
+  el.innerHTML='';
+  el.appendChild(iframe);
+  el.style.cursor='default';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderFaq();
+  /* Appelle initCharts() ici si tu utilises Chart.js */
+});
+</script>
+</body>
+</html>
