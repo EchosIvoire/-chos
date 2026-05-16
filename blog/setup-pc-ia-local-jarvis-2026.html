@@ -469,11 +469,11 @@
       Les vitesses varient selon le prompt, la longueur du contexte et la charge système. Ces chiffres représentent mon expérience quotidienne, pas des conditions de laboratoire idéalisées. En usage réel, attends ±10-15%.
     </div>
 
-    <div class="filter-row">
-      <button class="filter-btn active" onclick="filterTable('all',event)">Tous les GPU</button>
-      <button class="filter-btn" onclick="filterTable('budget',event)">Budget (&lt;500€)</button>
-      <button class="filter-btn" onclick="filterTable('mid',event)">Mid-range</button>
-      <button class="filter-btn" onclick="filterTable('pro',event)">Pro (&gt;1000€)</button>
+    <div class="filter-row" id="gpu-filters">
+      <button class="filter-btn active" onclick="filterTable('all',this)">Tous les GPU</button>
+      <button class="filter-btn" onclick="filterTable('budget',this)">Budget (&lt;500€)</button>
+      <button class="filter-btn" onclick="filterTable('mid',this)">Mid-range</button>
+      <button class="filter-btn" onclick="filterTable('pro',this)">Pro (&gt;1000€)</button>
     </div>
 
     <div class="gpu-table-wrap">
@@ -843,49 +843,6 @@
     </div>
   </div>
 
-  <!-- ═══ BONUS CRÉATEURS ═══ -->
-  <div class="bonus-section">
-    <div class="section-label" style="color:var(--accent)">Bonus créateurs</div>
-    <h2 style="font-size:1.1rem;color:#fff;margin-bottom:0">Ressources pour réutiliser ce contenu</h2>
-
-    <h3>Méta description SEO (156 caractères)</h3>
-    <div class="meta-desc-box">J'ai testé 6 GPU pour faire tourner des LLM en local en 2026. Benchmarks réels, erreurs terrain, stack Ollama + Qwen 3. Guide complet avec démo live et calculateur de budget.</div>
-
-    <h3>3 propositions de titres</h3>
-    <ul class="bonus-list">
-      <li><strong>Très SEO Google :</strong> "Quel GPU pour faire tourner un LLM en local en 2026 ? Test de 6 cartes graphiques sous Ollama"</li>
-      <li><strong>Très clic YouTube :</strong> "J'ai testé 6 GPU pour mon IA locale — celui-là m'a surpris (résultats choquants)"</li>
-      <li><strong>Équilibré crédibilité + clic :</strong> "PC IA local en 2026 : j'ai testé 6 GPU et voici ce qui marche vraiment (Ollama, Qwen 3, Llama 3.3)"</li>
-    </ul>
-
-    <h3>5 titres alternatifs SEO</h3>
-    <ul class="bonus-list">
-      <li>"Setup PC pour LLM local en 2026 : GPU, RAM, stack — le guide terrain complet"</li>
-      <li>"Faire tourner Llama 3.3 70B en local : quel GPU faut-il vraiment en 2026 ?"</li>
-      <li>"RTX 5070 Ti vs 4090 pour l'IA locale : mes benchmarks Ollama en conditions réelles"</li>
-      <li>"Comment j'ai remplacé ChatGPT par mon propre PC IA local pour moins de 1500€"</li>
-      <li>"Ollama + Qwen 3 + Open WebUI : le meilleur setup IA local en 2026 (guide complet)"</li>
-    </ul>
-
-    <h3>5 idées de Shorts TikTok / YouTube</h3>
-    <ul class="bonus-list">
-      <li><strong>Hook : "2 t/s vs 95 t/s"</strong> — Côte à côte, même prompt lancé sur vieux PC vs setup actuel. Le contraste fait tout.</li>
-      <li><strong>"Ce que mon PC sait faire sans internet"</strong> — Screen record live : résumé PDF, code Python, email rédigé, tout local, en temps réel.</li>
-      <li><strong>"GPU pour IA locale : le piège des 8 Go de VRAM"</strong> — Explication visuelle avec la règle de la VRAM et pourquoi ça bloque sur les bons modèles.</li>
-      <li><strong>"Ollama installé en 60 secondes sur Windows"</strong> — Tutorial chrono, copier-coller, modèle qui tourne. Sans bullshit.</li>
-      <li><strong>"Pourquoi j'ai arrêté de payer ChatGPT"</strong> — Format vlog rapide : facture OpenAI ancienne vs coût électricité mensuel, comparaison qualité.</li>
-    </ul>
-
-    <h3>Mots-clés secondaires intégrés dans l'article</h3>
-    <ul class="bonus-list">
-      <li>faire tourner un LLM en local · IA locale sur PC · inference LLM local · modèle de langage local</li>
-      <li>Ollama tutoriel français · Open WebUI installation · Qwen 3 benchmark · Llama 3.3 test</li>
-      <li>GPU pour intelligence artificielle · VRAM pour LLM · PC pour IA générative</li>
-      <li>alternative ChatGPT gratuite · IA sans abonnement · confidentialité données IA</li>
-      <li>quantization GGUF explication · Q4 vs Q8 LLM · meilleur modèle open source 2026</li>
-    </ul>
-  </div>
-
 </div>
 
 <footer>
@@ -921,7 +878,7 @@ const FAQ_DATA = [
   },
   {
     q: 'Combien de RAM faut-il pour faire tourner une IA locale ?',
-    a: '32 Go est le minimum absolu en 2026. En pratique, 64 Go DDR5 est recommandé pour utiliser des LLM avec Open WebUI, des agents n8n et d'autres applications en parallèle sans saturation. La RAM système prend le relais quand le modèle déborde de VRAM — si elle est trop faible, les performances s\'effondrent d'un facteur 10 à 20x.'
+    a: 'La règle : 32 Go minimum absolu, 64 Go DDR5 recommandé. En pratique, avec Open WebUI, des agents n8n actifs et un navigateur ouvert, 32 Go sature vite. La RAM système prend le relais quand le modèle déborde de VRAM — si elle est insuffisante, les performances s\'effondrent d\'un facteur 10 à 20x.'
   },
   {
     q: 'Ollama est-il le meilleur outil pour faire tourner des LLM en local ?',
@@ -929,7 +886,7 @@ const FAQ_DATA = [
   },
   {
     q: 'Quelle quantization GGUF choisir pour un modèle LLM local ?',
-    a: 'Q4_K_M est le meilleur point de départ : bon compromis taille/qualité pour la majorité des setups. Si vous avez assez de VRAM, Q5_K_M améliore la cohérence des réponses longues et la précision sur les tâches complexes. Q8_0 offre la meilleure qualité possible sans quantization, au coût d'une VRAM plus importante. Évitez Q2 sauf contrainte extrême — la qualité chute de façon très visible sur les raisonnements complexes.'
+    a: 'Q4_K_M est le meilleur point de départ : bon compromis taille/qualité pour la majorité des setups. Si vous avez assez de VRAM, Q5_K_M améliore la cohérence des réponses longues. Q8_0 offre la meilleure qualité sans quantization, au coût d\'une VRAM plus importante. Évitez Q2 sauf contrainte extrême — la qualité chute de façon très visible sur les raisonnements complexes.'
   },
   {
     q: 'L\'IA locale peut-elle vraiment remplacer ChatGPT en 2026 ?',
@@ -968,9 +925,9 @@ function renderGpuTable(data) {
     </tr>`).join('');
 }
 
-function filterTable(tier, e) {
-  document.querySelectorAll('.filter-row .filter-btn').forEach(b => b.classList.remove('active'));
-  if (e && e.target) e.target.classList.add('active');
+function filterTable(tier, btn) {
+  document.querySelectorAll('#gpu-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
   renderGpuTable(tier === 'all' ? GPU_DATA : GPU_DATA.filter(g => g.tier === tier));
 }
 
