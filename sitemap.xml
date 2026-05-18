@@ -4,7 +4,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://thebenchlab.fr/</loc>
-    <lastmod>2026-05-16</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -31,5 +31,35 @@
       <image:loc>https://thebenchlab.fr/og/setup-pc-ia-local-2026.svg</image:loc>
       <image:title>Setup PC IA local 2026 — Benchmarks GPU pour LLM</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://thebenchlab.fr/blog/ollama-vs-lm-studio-2026.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <news:news>
+      <news:publication>
+        <news:name>TheBenchLab</news:name>
+        <news:language>fr</news:language>
+      </news:publication>
+      <news:publication_date>2026-05-18T00:00:00+02:00</news:publication_date>
+      <news:title>Ollama vs LM Studio en 2026 : lequel choisir pour vos LLM locaux ?</news:title>
+    </news:news>
+    <image:image>
+      <image:loc>https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.svg</image:loc>
+      <image:title>Ollama vs LM Studio 2026 — Benchmark LLM locaux</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://thebenchlab.fr/mentions-legales.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://thebenchlab.fr/politique-confidentialite.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

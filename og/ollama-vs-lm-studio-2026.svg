@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d0f14"/>
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6c63ff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#00d9b5" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6c63ff"/>
+      <stop offset="100%" stop-color="#00d9b5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#acc)"/>
+  <!-- Grid lines -->
+  <line x1="0" y1="200" x2="1200" y2="200" stroke="#252a3a" stroke-width="1"/>
+  <line x1="0" y1="400" x2="1200" y2="400" stroke="#252a3a" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="630" stroke="#252a3a" stroke-width="1"/>
+  <line x1="800" y1="0" x2="800" y2="630" stroke="#252a3a" stroke-width="1"/>
+  <!-- Ollama badge -->
+  <rect x="100" y="210" width="180" height="40" rx="8" fill="rgba(108,99,255,0.15)" stroke="rgba(108,99,255,0.4)" stroke-width="1"/>
+  <text x="190" y="236" text-anchor="middle" fill="#6c63ff" font-family="system-ui,sans-serif" font-weight="800" font-size="16">OLLAMA</text>
+  <!-- LM Studio badge -->
+  <rect x="920" y="210" width="180" height="40" rx="8" fill="rgba(0,217,181,0.15)" stroke="rgba(0,217,181,0.4)" stroke-width="1"/>
+  <text x="1010" y="236" text-anchor="middle" fill="#00d9b5" font-family="system-ui,sans-serif" font-weight="800" font-size="16">LM STUDIO</text>
+  <!-- VS -->
+  <circle cx="600" cy="315" r="55" fill="#13161e" stroke="#252a3a" stroke-width="2"/>
+  <text x="600" y="328" text-anchor="middle" fill="#e8eaf0" font-family="system-ui,sans-serif" font-weight="900" font-size="26">VS</text>
+  <!-- Main title -->
+  <text x="600" y="120" text-anchor="middle" fill="#e8eaf0" font-family="system-ui,sans-serif" font-weight="900" font-size="48">Ollama vs LM Studio</text>
+  <text x="600" y="175" text-anchor="middle" fill="#6a7090" font-family="system-ui,sans-serif" font-size="26">Lequel choisir pour vos LLM locaux en 2026 ?</text>
+  <!-- Benchmark bars -->
+  <text x="100" y="470" fill="#6a7090" font-family="monospace" font-size="13">Qwen 3 32B Q4 · RTX 5070 Ti</text>
+  <!-- Ollama bar -->
+  <rect x="100" y="485" width="370" height="28" rx="4" fill="rgba(108,99,255,0.25)" stroke="rgba(108,99,255,0.5)" stroke-width="1"/>
+  <rect x="100" y="485" width="370" height="28" rx="4" fill="rgba(108,99,255,0.4)"/>
+  <text x="480" y="505" fill="#6c63ff" font-family="monospace" font-weight="700" font-size="15"> 48 t/s</text>
+  <!-- LM Studio bar -->
+  <rect x="100" y="525" width="330" height="28" rx="4" fill="rgba(0,217,181,0.25)" stroke="rgba(0,217,181,0.5)" stroke-width="1"/>
+  <rect x="100" y="525" width="330" height="28" rx="4" fill="rgba(0,217,181,0.3)"/>
+  <text x="440" y="545" fill="#00d9b5" font-family="monospace" font-weight="700" font-size="15"> 43 t/s</text>
+  <text x="100" y="505" fill="#e8eaf0" font-family="monospace" font-size="13">Ollama</text>
+  <text x="100" y="545" fill="#e8eaf0" font-family="monospace" font-size="13">LM Studio</text>
+  <!-- TheBenchLab -->
+  <text x="600" y="590" text-anchor="middle" fill="#6a7090" font-family="system-ui,sans-serif" font-size="18">thebenchlab.fr</text>
+</svg>

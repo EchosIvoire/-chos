@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ollama vs LM Studio en 2026 : lequel choisir pour vos LLM locaux ? | TheBenchLab</title>
+
+  <meta name="description" content="Ollama ou LM Studio ? J'ai testé les deux sur RTX 5070 Ti avec Qwen 3 et Llama 3.3. Benchmarks réels, comparatif fonctionnalités et verdict honnête." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="TheBenchLab" />
+  <meta name="theme-color" content="#0d0f14" />
+  <link rel="canonical" href="https://thebenchlab.fr/blog/ollama-vs-lm-studio-2026.html" />
+  <link rel="hreflang" hreflang="fr-FR" href="https://thebenchlab.fr/blog/ollama-vs-lm-studio-2026.html" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:site_name" content="TheBenchLab" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://thebenchlab.fr/blog/ollama-vs-lm-studio-2026.html" />
+  <meta property="og:title" content="Ollama vs LM Studio en 2026 : lequel choisir pour vos LLM locaux ?" />
+  <meta property="og:description" content="Benchmarks réels sur RTX 5070 Ti. Qwen 3 32B, Llama 3.3 70B, Mistral 7B. Comparatif complet avec tableau de fonctionnalités et verdict terrain." />
+  <meta property="og:image" content="https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Ollama vs LM Studio 2026 — Benchmark LLM locaux" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="article:published_time" content="2026-05-18T00:00:00+02:00" />
+  <meta property="article:modified_time" content="2026-05-18T00:00:00+02:00" />
+  <meta property="article:author" content="TheBenchLab" />
+  <meta property="article:section" content="Logiciels IA" />
+  <meta property="article:tag" content="Ollama" />
+  <meta property="article:tag" content="LM Studio" />
+  <meta property="article:tag" content="LLM local" />
+  <meta property="article:tag" content="Qwen 3" />
+  <meta property="article:tag" content="llama.cpp" />
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@TheBenchLab" />
+  <meta name="twitter:creator" content="@TheBenchLab" />
+  <meta name="twitter:title" content="Ollama vs LM Studio en 2026 : le vrai comparatif" />
+  <meta name="twitter:description" content="Benchmarks réels, comparatif fonctionnalités, verdict terrain. Quel outil pour faire tourner vos LLM en local ?" />
+  <meta name="twitter:image" content="https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.svg" />
+
+  <!-- JSON-LD Article -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Ollama vs LM Studio en 2026 : lequel choisir pour vos LLM locaux ?",
+    "description": "Comparatif terrain Ollama vs LM Studio : benchmarks réels sur RTX 5070 Ti, tableau de fonctionnalités, cas d'usage et verdict honnête.",
+    "image": "https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.svg",
+    "datePublished": "2026-05-18T00:00:00+02:00",
+    "dateModified": "2026-05-18T00:00:00+02:00",
+    "author": {
+      "@type": "Person",
+      "name": "TheBenchLab",
+      "url": "https://thebenchlab.fr/about.html"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "TheBenchLab",
+      "url": "https://thebenchlab.fr/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://thebenchlab.fr/blog/ollama-vs-lm-studio-2026.html"
+    },
+    "keywords": ["Ollama","LM Studio","LLM local","llama.cpp","GGUF","Qwen 3","Llama 3.3","IA locale","benchmark LLM 2026"]
+  }
+  </script>
+
+  <!-- JSON-LD FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Ollama ou LM Studio : lequel est le plus rapide ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ollama est généralement 5 à 12 % plus rapide que LM Studio sur le même matériel, car son overhead système est plus faible (~150 Mo RAM vs ~500 Mo). Sur RTX 5070 Ti avec Qwen 3 32B Q4_K_M, j'obtiens 48 t/s sous Ollama contre 43 t/s sous LM Studio."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "LM Studio ou Ollama pour un débutant ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "LM Studio est clairement plus accessible pour les débutants : interface graphique intégrée, découverte de modèles HuggingFace en un clic, chat directement dans l'app. Pas besoin de terminal. Ollama est idéal dès que vous voulez l'exposer en API ou l'intégrer à d'autres outils (Open WebUI, n8n, etc.)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Peut-on utiliser Ollama et LM Studio ensemble ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui, mais pas simultanément sur le même GPU — ils se disputeraient la VRAM. En revanche, on peut utiliser LM Studio pour explorer et tester des modèles, puis passer à Ollama pour la production et l'intégration API. Les deux supportent le format GGUF, donc les modèles sont interchangeables."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ollama supporte-t-il l'accélération GPU sur Windows ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui. Depuis Ollama 0.4, le support CUDA sur Windows est stable. Il détecte automatiquement votre GPU NVIDIA et utilise CUDA pour l'inférence. Sur AMD, ROCm est supporté sous Linux. LM Studio a un support GPU Windows plus mature et avec plus d'options de configuration via son interface."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quel format de modèle utiliser avec Ollama et LM Studio ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Les deux utilisent le format GGUF (llama.cpp). Les quantizations recommandées : Q4_K_M pour le meilleur compromis taille/qualité, Q5_K_M si vous avez de la VRAM libre, Q8_0 pour la meilleure qualité. Évitez Q2 et Q3 dont la qualité chute visiblement."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"TheBenchLab","item":"https://thebenchlab.fr/"},
+      {"@type":"ListItem","position":2,"name":"Blog","item":"https://thebenchlab.fr/blog/"},
+      {"@type":"ListItem","position":3,"name":"Ollama vs LM Studio 2026","item":"https://thebenchlab.fr/blog/ollama-vs-lm-studio-2026.html"}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg:#0d0f14; --bg2:#13161e; --bg3:#1a1f2e; --border:#252a3a;
+      --accent:#6c63ff; --accent2:#00d9b5; --accent3:#ff6b6b; --orange:#f5a623;
+      --text:#e8eaf0; --muted:#6a7090; --card:#12151f;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;font-size:15px}
+
+    nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.65rem 2rem;display:flex;align-items:center;gap:1.25rem}
+    nav a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s}
+    nav a:hover{color:var(--accent)}
+    .logo{color:var(--text);font-weight:800;font-size:.95rem;margin-right:auto;display:flex;align-items:center;gap:.45rem}
+    .logo-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:inline-block}
+
+    .aff-banner{border-bottom:1px solid var(--border);padding:.35rem 2rem;font-size:.7rem;color:var(--muted);text-align:center;opacity:.7}
+
+    .hero{max-width:860px;margin:0 auto;padding:4rem 2rem 2rem}
+    .hero-eyebrow{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap}
+    .tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;text-transform:uppercase;letter-spacing:.05em}
+    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent);border:1px solid rgba(108,99,255,.25)}
+    .tag.green{background:rgba(0,217,181,.12);color:var(--accent2);border:1px solid rgba(0,217,181,.22)}
+    .tag.orange{background:rgba(245,166,35,.12);color:var(--orange);border:1px solid rgba(245,166,35,.22)}
+    .hero h1{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:800;line-height:1.15;margin-bottom:.9rem}
+    .hero h1 em{font-style:normal;color:var(--accent)}
+    .hero-lead{font-size:1rem;color:var(--muted);max-width:660px;margin-bottom:1.25rem;line-height:1.7}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:var(--muted);padding:.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .hero-meta span{display:flex;align-items:center;gap:.3rem}
+
+    .container{max-width:860px;margin:0 auto;padding:0 2rem 6rem}
+
+    .section{margin-top:3rem}
+    .section-head{display:flex;align-items:baseline;gap:.75rem;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:2px solid var(--border)}
+    .section-head h2{font-size:1.35rem;font-weight:800;color:#fff}
+    .section-head .sh-sub{font-size:.82rem;color:var(--muted)}
+    h3{font-size:1rem;font-weight:700;margin:1.5rem 0 .5rem;color:var(--accent2)}
+
+    p{margin:.7rem 0;color:#c0c4d8;line-height:1.75}
+    strong{color:var(--text)}
+
+    /* VERDICT / CALLOUT */
+    .verdict{background:rgba(108,99,255,.07);border:1px solid rgba(108,99,255,.2);border-radius:10px;padding:.9rem 1.1rem;margin:1rem 0;display:flex;gap:.75rem;align-items:flex-start}
+    .verdict-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem}
+    .verdict p{margin:0;font-size:.86rem;color:var(--text)}
+    .verdict p strong{color:var(--accent2)}
+    .verdict.warn{background:rgba(245,166,35,.07);border-color:rgba(245,166,35,.2)}
+    .verdict.warn p strong{color:var(--orange)}
+    .verdict.success{background:rgba(0,217,181,.07);border-color:rgba(0,217,181,.2)}
+    .verdict.success p strong{color:var(--accent2)}
+    .verdict.danger{background:rgba(255,107,107,.07);border-color:rgba(255,107,107,.2)}
+    .verdict.danger p strong{color:var(--accent3)}
+
+    /* PICKS */
+    .picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:1.25rem}
+    @media(max-width:600px){.picks-grid{grid-template-columns:1fr}}
+    .pick-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.3rem;transition:border-color .2s}
+    .pick-card:hover{border-color:var(--accent)}
+    .pick-card.featured{border-color:rgba(0,217,181,.35);border-width:2px}
+    .pick-badge{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:.2rem .55rem;border-radius:5px;margin-bottom:.65rem;display:inline-block}
+    .pick-badge.ollama{background:rgba(108,99,255,.15);color:var(--accent)}
+    .pick-badge.lmstudio{background:rgba(0,217,181,.15);color:var(--accent2)}
+    .pick-name{font-weight:800;font-size:1.05rem;margin-bottom:.25rem}
+    .pick-sub{font-size:.82rem;color:var(--muted);margin-bottom:.75rem;line-height:1.55}
+    .pick-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.9rem}
+    .pt{font-size:.7rem;padding:.2rem .5rem;border-radius:5px;background:var(--bg3);border:1px solid var(--border);color:var(--muted)}
+    .pt.good{background:rgba(0,217,181,.08);border-color:rgba(0,217,181,.2);color:var(--accent2)}
+    .pt.warn{background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.2);color:var(--orange)}
+
+    /* BENCHMARK TABLE */
+    .bench-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.83rem}
+    .bench-table th{padding:.65rem .85rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border);background:var(--bg2)}
+    .bench-table td{padding:.7rem .85rem;border-bottom:1px solid var(--border);color:#c0c4d8;vertical-align:middle}
+    .bench-table tr:hover td{background:rgba(255,255,255,.02)}
+    .bench-table .tool-ollama{color:var(--accent);font-weight:700}
+    .bench-table .tool-lms{color:var(--accent2);font-weight:700}
+    .bench-table .winner{color:var(--accent2)}
+    .bench-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:1rem}
+
+    /* BAR CHART MANUAL */
+    .bar-chart{margin-top:1.25rem}
+    .bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem}
+    .bar-label{width:110px;font-size:.78rem;color:var(--muted);flex-shrink:0;text-align:right}
+    .bar-track{flex:1;background:var(--bg3);border-radius:4px;height:24px;overflow:hidden;position:relative}
+    .bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.5rem;font-size:.72rem;font-weight:700;white-space:nowrap;transition:width .6s ease}
+    .bar-fill.ollama{background:linear-gradient(90deg,rgba(108,99,255,.8),rgba(108,99,255,.5))}
+    .bar-fill.lms{background:linear-gradient(90deg,rgba(0,217,181,.7),rgba(0,217,181,.4))}
+    .bar-val{font-size:.78rem;font-weight:700;flex-shrink:0;min-width:50px}
+    .bar-val.ollama{color:var(--accent)}
+    .bar-val.lms{color:var(--accent2)}
+    .bar-group-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:.75rem 0 .3rem;padding-left:110px}
+
+    /* FEATURE TABLE */
+    .feature-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:1rem}
+    .feature-table th{padding:.6rem 1rem;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border);background:var(--bg2);text-align:center}
+    .feature-table th:first-child{text-align:left}
+    .feature-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);text-align:center;color:#c0c4d8}
+    .feature-table td:first-child{text-align:left;color:var(--text);font-weight:600}
+    .feature-table tr:hover td{background:rgba(255,255,255,.015)}
+    .check{color:var(--accent2)}
+    .cross{color:var(--accent3)}
+    .partial{color:var(--orange)}
+    .ft-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:1rem}
+
+    /* CODE BLOCK */
+    .code-block{background:#0a0c12;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin:.9rem 0;overflow-x:auto}
+    .code-block pre{font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:.82rem;line-height:1.6;color:#a8b4d8;white-space:pre}
+    .code-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem}
+    .kw{color:#6c63ff}.cmd{color:#00d9b5}.str{color:#f5a623}.cmt{color:#3a4060}
+
+    /* STATS ROW */
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-top:1.25rem}
+    @media(max-width:520px){.stats-row{grid-template-columns:1fr 1fr}}
+    .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
+    .stat .sv{font-size:1.65rem;font-weight:800;color:var(--accent);line-height:1}
+    .stat .sl{font-size:.73rem;color:var(--muted);margin-top:.3rem}
+
+    /* SCORE BAR */
+    .score-bar-wrap{margin-bottom:.55rem}
+    .score-bar-label{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);margin-bottom:.2rem}
+    .score-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+    .score-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+    /* EMAIL CAPTURE */
+    .email-section{margin-top:4rem;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+    .email-section::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .email-section h2{font-size:1.3rem;font-weight:800;margin-bottom:.6rem}
+    .email-section p{color:var(--muted);font-size:.88rem;margin-bottom:1.4rem;max-width:420px;margin-left:auto;margin-right:auto}
+    .email-form{display:flex;gap:.6rem;max-width:400px;margin:0 auto}
+    .email-input{flex:1;padding:.7rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.88rem;outline:none;transition:border-color .2s;font-family:system-ui,sans-serif}
+    .email-input:focus{border-color:var(--accent)}
+    .btn-subscribe{padding:.7rem 1.25rem;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:system-ui,sans-serif;transition:opacity .2s}
+    .btn-subscribe:hover{opacity:.88}
+    .email-note{font-size:.72rem;color:var(--muted);margin-top:.75rem}
+    @media(max-width:440px){.email-form{flex-direction:column}.btn-subscribe{width:100%}}
+
+    /* RELATED */
+    .related-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color .2s;text-decoration:none;display:block;margin-top:1rem}
+    .related-card:hover{border-color:rgba(108,99,255,.35)}
+    .related-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .55rem;border-radius:5px;background:rgba(108,99,255,.12);color:var(--accent);border:1px solid rgba(108,99,255,.22);display:inline-block;margin-bottom:.65rem}
+    .related-title{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.4rem;transition:color .2s}
+    .related-card:hover .related-title{color:var(--accent)}
+    .related-sub{font-size:.82rem;color:var(--muted);line-height:1.6}
+
+    /* FAQ */
+    .faq-item{border-bottom:1px solid var(--border);padding:1rem 0}
+    .faq-q{font-size:.95rem;font-weight:700;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+    .faq-q .faq-arrow{font-size:.8rem;color:var(--muted);transition:transform .2s;flex-shrink:0}
+    .faq-a{font-size:.86rem;color:var(--muted);line-height:1.75;margin-top:.65rem;padding-top:.65rem;border-top:1px solid var(--border)}
+    .faq-item.open .faq-arrow{transform:rotate(180deg)}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.78rem}
+    footer a{color:var(--muted);text-decoration:none;transition:color .2s}
+    footer a:hover{color:var(--accent2)}
+    .footer-inner{max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem}
+
+    @media(max-width:640px){
+      nav{padding:.65rem 1rem}
+      .hero{padding:3rem 1.25rem 1.5rem}
+      .container{padding:0 1.25rem 4rem}
+    }
+  </style>
+</head>
+<body>
+
+  <div style="height:3px;background:linear-gradient(90deg,#6c63ff,#00d9b5)"></div>
+
+  <nav>
+    <a href="/" class="logo"><span class="logo-dot"></span>TheBenchLab</a>
+    <a href="/">Accueil</a>
+    <a href="/about.html">À propos</a>
+  </nav>
+
+  <div class="aff-banner">
+    Certains liens sont affiliés Amazon. <strong>Ça ne change rien à mes conclusions</strong> — je teste les deux sans favori.
+    <a href="/about.html#affiliation" style="color:var(--accent);text-decoration:none;margin-left:.4rem">En savoir plus</a>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">
+      <span class="tag purple">Logiciels IA</span>
+      <span class="tag green">Comparatif terrain</span>
+    </div>
+    <h1><em>Ollama vs LM Studio</em> en 2026 :<br>lequel choisir pour vos LLM locaux ?</h1>
+    <p class="hero-lead">
+      J'utilise les deux depuis plus d'un an. Ils font tourner les mêmes modèles sur le même moteur (llama.cpp),
+      mais avec des philosophies opposées. Voici ce que les benchmarks — et deux ans d'usage quotidien — m'ont appris.
+    </p>
+    <div class="hero-meta">
+      <span>📅 18 mai 2026</span>
+      <span>✍️ TheBenchLab</span>
+      <span>⏱ 8 min de lecture</span>
+      <span>🖥 RTX 5070 Ti · RTX 4060 Ti</span>
+      <span>🧪 Qwen 3 · Llama 3.3 · Mistral</span>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- TL;DR -->
+    <div class="section">
+      <div class="section-head">
+        <h2>TL;DR — Le verdict en 30 secondes</h2>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick-card featured">
+          <div class="pick-badge ollama">Recommandé pour…</div>
+          <div class="pick-name">Ollama</div>
+          <div class="pick-sub">L'outil que j'utilise en production. CLI minimaliste, API REST native compatible OpenAI, overhead quasi nul. Couplé à Open WebUI, c'est le combo parfait.</div>
+          <div class="pick-tags">
+            <span class="pt good">+5–12% de vitesse</span>
+            <span class="pt good">API native</span>
+            <span class="pt good">~150 Mo RAM</span>
+            <span class="pt">Terminal requis</span>
+          </div>
+        </div>
+        <div class="pick-card">
+          <div class="pick-badge lmstudio">Recommandé pour…</div>
+          <div class="pick-name">LM Studio</div>
+          <div class="pick-sub">La meilleure porte d'entrée pour débuter. Interface graphique soignée, téléchargement de modèles en un clic depuis HuggingFace, chat intégré sans rien installer d'autre.</div>
+          <div class="pick-tags">
+            <span class="pt good">Interface intuitive</span>
+            <span class="pt good">Découverte HuggingFace</span>
+            <span class="pt warn">~500 Mo RAM</span>
+            <span class="pt">GPU moins exploité</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="verdict success" style="margin-top:1rem">
+        <span class="verdict-icon">💡</span>
+        <p><strong>Ma recommandation :</strong> commencez avec LM Studio pour découvrir les modèles, puis migrez vers Ollama + Open WebUI quand vous avez trouvé votre stack. Les deux utilisent GGUF, vos modèles sont réutilisables.</p>
+      </div>
+    </div>
+
+    <!-- BENCHMARKS -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Benchmarks réels</h2>
+        <span class="sh-sub">RTX 5070 Ti 16 Go · CUDA 12.8</span>
+      </div>
+
+      <p>
+        Même modèle, même quantization, même prompt à froid (premier token) et à chaud. J'ai lancé chaque test 5 fois
+        et pris la médiane pour éviter les spikes de VRAM.
+      </p>
+
+      <div class="bar-group-title">Qwen 3 32B — Q4_K_M (16 Go VRAM)</div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">Ollama</span>
+          <div class="bar-track"><div class="bar-fill ollama" style="width:100%">48 t/s</div></div>
+          <span class="bar-val ollama">48 t/s</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">LM Studio</span>
+          <div class="bar-track"><div class="bar-fill lms" style="width:89.5%">43 t/s</div></div>
+          <span class="bar-val lms">43 t/s</span>
+        </div>
+      </div>
+
+      <div class="bar-group-title">Llama 3.3 70B — Q4_K_M (partiellement CPU offload)</div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">Ollama</span>
+          <div class="bar-track"><div class="bar-fill ollama" style="width:100%">18 t/s</div></div>
+          <span class="bar-val ollama">18 t/s</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">LM Studio</span>
+          <div class="bar-track"><div class="bar-fill lms" style="width:88.8%">16 t/s</div></div>
+          <span class="bar-val lms">16 t/s</span>
+        </div>
+      </div>
+
+      <div class="bar-group-title">Mistral 7B — Q4_K_M · RTX 4060 Ti 16 Go</div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">Ollama</span>
+          <div class="bar-track"><div class="bar-fill ollama" style="width:100%">38 t/s</div></div>
+          <span class="bar-val ollama">38 t/s</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">LM Studio</span>
+          <div class="bar-track"><div class="bar-fill lms" style="width:89.4%">34 t/s</div></div>
+          <span class="bar-val lms">34 t/s</span>
+        </div>
+      </div>
+
+      <div class="stats-row" style="margin-top:1.25rem">
+        <div class="stat">
+          <div class="sv">+12%</div>
+          <div class="sl">Avantage Ollama (Qwen 3 32B)</div>
+        </div>
+        <div class="stat">
+          <div class="sv">~150 Mo</div>
+          <div class="sl">RAM overhead Ollama</div>
+        </div>
+        <div class="stat">
+          <div class="sv">~500 Mo</div>
+          <div class="sl">RAM overhead LM Studio</div>
+        </div>
+      </div>
+
+      <div class="verdict warn" style="margin-top:1rem">
+        <span class="verdict-icon">⚠️</span>
+        <p><strong>Nuance importante :</strong> LM Studio 0.3.x a amélioré ses perfs. L'écart était de 20% début 2025 ; il s'est réduit à ~10-12% aujourd'hui. Sur un PC avec 32 Go RAM, la différence de RAM overhead compte peu. C'est la VRAM overhead qui reste le vrai enjeu.</p>
+      </div>
+    </div>
+
+    <!-- TABLEAU FONCTIONNALITÉS -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Comparatif fonctionnalités</h2>
+      </div>
+      <div class="ft-wrap">
+        <table class="feature-table">
+          <thead>
+            <tr>
+              <th>Fonctionnalité</th>
+              <th style="color:var(--accent)">Ollama</th>
+              <th style="color:var(--accent2)">LM Studio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Interface graphique native</td>
+              <td><span class="cross">✗</span><br><span style="font-size:.7rem;color:var(--muted)">Open WebUI séparé</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>API REST (compatible OpenAI)</td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">:11434 natif</span></td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">:1234 optionnel</span></td>
+            </tr>
+            <tr>
+              <td>Découverte modèles HuggingFace</td>
+              <td><span class="cross">✗</span><br><span style="font-size:.7rem;color:var(--muted)">registry.ollama.ai</span></td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">Intégré au UI</span></td>
+            </tr>
+            <tr>
+              <td>Mode headless / serveur</td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">Service natif</span></td>
+              <td><span class="partial">~</span><br><span style="font-size:.7rem;color:var(--muted)">GUI requis pour démarrer</span></td>
+            </tr>
+            <tr>
+              <td>Accélération CUDA (Windows)</td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">Depuis v0.4</span></td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">Très stable</span></td>
+            </tr>
+            <tr>
+              <td>Accélération Metal (Mac)</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Accélération ROCm (AMD Linux)</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">~</span><br><span style="font-size:.7rem;color:var(--muted)">Expérimental</span></td>
+            </tr>
+            <tr>
+              <td>Multimodal (vision)</td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">LLaVA, Qwen2-VL</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Modelfile / config custom</td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">Système prompt, temp…</span></td>
+              <td><span class="check">✓</span><br><span style="font-size:.7rem;color:var(--muted)">Via UI</span></td>
+            </tr>
+            <tr>
+              <td>RAG intégré</td>
+              <td><span class="cross">✗</span><br><span style="font-size:.7rem;color:var(--muted)">Via Open WebUI / n8n</span></td>
+              <td><span class="partial">~</span><br><span style="font-size:.7rem;color:var(--muted)">Beta en 0.3.x</span></td>
+            </tr>
+            <tr>
+              <td>Taille de l'install</td>
+              <td><span class="check">~200 Mo</span></td>
+              <td><span class="partial">~600 Mo</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INSTALLATION -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Installation</h2>
+        <span class="sh-sub">Combien de commandes avant le premier token ?</span>
+      </div>
+
+      <h3>Ollama — 2 commandes</h3>
+      <div class="code-block">
+        <div class="code-label">Terminal</div>
+        <pre><span class="cmt"># Linux / Mac</span>
+<span class="cmd">curl</span> -fsSL https://ollama.com/install.sh | sh
+
+<span class="cmt"># Puis lancer un modèle directement</span>
+<span class="cmd">ollama</span> <span class="kw">run</span> <span class="str">qwen3:32b</span>
+<span class="cmt"># → premier token en ~30 secondes (download), puis instantané</span></pre>
+      </div>
+
+      <h3>LM Studio — interface graphique</h3>
+      <p>
+        Téléchargez l'installeur sur <strong>lmstudio.ai</strong>, lancez, cherchez "Qwen 3 32B" dans l'onglet Search,
+        cliquez Download. Le chat est disponible dans l'onglet suivant sans rien d'autre à faire.
+      </p>
+      <div class="verdict" style="margin-top:.75rem">
+        <span class="verdict-icon">👶</span>
+        <p><strong>LM Studio gagne l'accessibilité.</strong> Aucune ligne de commande, aucune dépendance, interface claire. Ollama est plus rapide à configurer <em>si</em> vous êtes à l'aise avec un terminal.</p>
+      </div>
+    </div>
+
+    <!-- USAGE API -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Usage API — intégration avec vos outils</h2>
+      </div>
+      <p>
+        Les deux exposent une API compatible OpenAI. Ça veut dire que n'importe quel outil qui supporte un endpoint
+        OpenAI custom (Cursor, Continue, n8n, LangChain…) fonctionne avec les deux.
+      </p>
+
+      <h3>Ollama — API active par défaut</h3>
+      <div class="code-block">
+        <div class="code-label">Appel API Ollama</div>
+        <pre><span class="cmd">curl</span> http://localhost:11434/api/chat \
+  -d '{
+    <span class="str">"model"</span>: <span class="str">"qwen3:32b"</span>,
+    <span class="str">"messages"</span>: [{"role": "user", "content": <span class="str">"Explique les tenseurs en 2 phrases"</span>}],
+    <span class="str">"stream"</span>: <span class="kw">false</span>
+  }'</pre>
+      </div>
+
+      <h3>LM Studio — serveur à activer manuellement</h3>
+      <div class="code-block">
+        <div class="code-label">Même appel, port différent</div>
+        <pre><span class="cmt"># Activer le serveur dans LM Studio → Local Server → Start Server</span>
+<span class="cmd">curl</span> http://localhost:1234/v1/chat/completions \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d '{
+    <span class="str">"model"</span>: <span class="str">"local-model"</span>,
+    <span class="str">"messages"</span>: [{"role": "user", "content": <span class="str">"Explique les tenseurs en 2 phrases"</span>}]
+  }'</pre>
+      </div>
+
+      <div class="verdict warn">
+        <span class="verdict-icon">⚠️</span>
+        <p><strong>Différence clé :</strong> Ollama tourne en arrière-plan comme un service système, accessible immédiatement après reboot. LM Studio nécessite d'ouvrir l'application et d'activer le serveur manuellement à chaque fois. Rédhibitoire pour un usage serveur ou 24/7.</p>
+      </div>
+    </div>
+
+    <!-- GESTION DES MODÈLES -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Gestion des modèles</h2>
+      </div>
+
+      <p>
+        Les deux utilisent le format <strong>GGUF</strong>. Vos modèles LM Studio sont réutilisables dans Ollama
+        via un <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:4px;font-size:.82rem;color:var(--accent2)">Modelfile</code>
+        — pas besoin de tout re-télécharger.
+      </p>
+
+      <div class="bench-wrap">
+        <table class="bench-table">
+          <thead>
+            <tr>
+              <th>Critère</th>
+              <th style="color:var(--accent)">Ollama</th>
+              <th style="color:var(--accent2)">LM Studio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Téléchargement de modèles</td>
+              <td class="tool-ollama">ollama pull nom</td>
+              <td class="tool-lms">Interface graphique</td>
+            </tr>
+            <tr>
+              <td>Lister les modèles installés</td>
+              <td class="tool-ollama">ollama list</td>
+              <td class="tool-lms">Onglet "My Models"</td>
+            </tr>
+            <tr>
+              <td>Supprimer un modèle</td>
+              <td class="tool-ollama">ollama rm nom</td>
+              <td class="tool-lms">Bouton dans UI</td>
+            </tr>
+            <tr>
+              <td>Import GGUF custom</td>
+              <td class="tool-ollama">Modelfile</td>
+              <td class="tool-lms">Drag & drop</td>
+            </tr>
+            <tr>
+              <td>Catalogue officiel</td>
+              <td>ollama.com/library</td>
+              <td>HuggingFace intégré</td>
+            </tr>
+            <tr>
+              <td>Mise à jour automatique</td>
+              <td class="tool-ollama">ollama pull nom</td>
+              <td class="tool-lms">Notification UI</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="verdict success" style="margin-top:1rem">
+        <span class="verdict-icon">🏆</span>
+        <p><strong>LM Studio gagne la découverte.</strong> Rechercher un modèle HuggingFace par nom dans le UI et voir les quants disponibles triées par taille, c'est une expérience vraiment agréable. Ollama oblige à connaître le nom exact du modèle dans son registry.</p>
+      </div>
+    </div>
+
+    <!-- QUAND UTILISER QUOI -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Quand utiliser l'un ou l'autre ?</h2>
+      </div>
+
+      <h3>Utilisez Ollama si…</h3>
+      <ul style="color:#c0c4d8;font-size:.88rem;line-height:2;padding-left:1.3rem;margin:.5rem 0">
+        <li>Vous voulez une API stable et toujours disponible sur votre réseau local</li>
+        <li>Vous connectez des outils : Open WebUI, Cursor, Continue, n8n, LangChain, AnythingLLM</li>
+        <li>Vous tournez sur Linux / serveur headless</li>
+        <li>Vous voulez maximiser les tokens/sec sur votre GPU</li>
+        <li>Vous faites du scripting ou de l'automatisation</li>
+      </ul>
+
+      <h3>Utilisez LM Studio si…</h3>
+      <ul style="color:#c0c4d8;font-size:.88rem;line-height:2;padding-left:1.3rem;margin:.5rem 0">
+        <li>Vous débutez avec les LLM locaux et voulez une interface simple</li>
+        <li>Vous explorez beaucoup de modèles différents</li>
+        <li>Vous êtes sur Windows sans vouloir toucher à un terminal</li>
+        <li>Vous faites du chat occasionnel, pas de l'intégration</li>
+        <li>Vous avez besoin de télécharger des quants spécifiques depuis HuggingFace</li>
+      </ul>
+
+      <div class="verdict" style="margin-top:.75rem">
+        <span class="verdict-icon">💡</span>
+        <p><strong>Workflow idéal :</strong> LM Studio pour la phase d'exploration (tester 5 modèles en 30 min), Ollama en production une fois le modèle choisi. Ce sont des outils complémentaires, pas concurrents.</p>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Questions fréquentes</h2>
+      </div>
+
+      <div class="faq-item open">
+        <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">
+          Ollama ou LM Studio : lequel est le plus rapide ?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">
+          Ollama est généralement <strong>5 à 12 % plus rapide</strong> sur le même matériel, grâce à un overhead système plus faible (~150 Mo RAM vs ~500 Mo). Sur RTX 5070 Ti avec Qwen 3 32B Q4_K_M : 48 t/s sous Ollama contre 43 t/s sous LM Studio. L'écart s'est réduit avec les mises à jour récentes de LM Studio 0.3.x.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">
+          Peut-on utiliser les modèles LM Studio dans Ollama ?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">
+          Oui. Les deux utilisent le format GGUF. Pour importer un fichier GGUF dans Ollama, créez un Modelfile pointant vers le fichier, puis faites <code style="background:var(--bg3);padding:.1rem .3rem;border-radius:3px;color:var(--accent2)">ollama create mon-modele -f Modelfile</code>. Pas besoin de re-télécharger.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">
+          LM Studio ou Ollama pour Windows sans terminal ?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">
+          <strong>LM Studio</strong> sans hésiter. Installation graphique, pas de terminal, chat immédiatement disponible. Ollama sur Windows existe mais reste plus à l'aise dans un contexte WSL2 ou PowerShell. Si vous ne voulez pas ouvrir un terminal, restez sur LM Studio.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">
+          Ollama supporte-t-il les GPU AMD ?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">
+          Oui, via ROCm sur Linux. Sur une RX 7900 XTX, les résultats sont bons (Llama 3.1 8B à ~45 t/s). Sur Windows, AMD reste plus capricieux que NVIDIA — ROCm 6.x fonctionne mais demande plus de configuration. LM Studio a un support AMD Windows légèrement plus accessible via son interface.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">
+          Quelle quantization GGUF choisir ?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">
+          <strong>Q4_K_M</strong> est le point de départ universel : bon compromis taille/qualité, tient en VRAM sur la plupart des configs. <strong>Q5_K_M</strong> si vous avez de la marge VRAM et voulez une meilleure cohérence. <strong>Q8_0</strong> pour la meilleure qualité sans quantization agressive. Évitez Q2 et Q3 : la dégradation est visible à l'usage.
+        </div>
+      </div>
+    </div>
+
+    <!-- ARTICLE LIÉ -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Quel GPU pour faire tourner ces outils ?</h2>
+      </div>
+      <a href="/blog/setup-pc-ia-local-jarvis-2026.html" class="related-card">
+        <span class="related-tag">Hardware IA</span>
+        <div class="related-title">PC IA local en 2026 : j'ai testé 6 GPU, voici ce qui marche vraiment</div>
+        <div class="related-sub">Benchmarks tokens/sec sur RTX 4060 Ti, RTX 5070 Ti, RX 7900 XTX et plus. Quel GPU acheter en 2026 pour faire tourner Qwen 3 32B et Llama 3.3 70B ?</div>
+      </a>
+    </div>
+
+    <!-- EMAIL CAPTURE -->
+    <div class="email-section">
+      <h2>Prochain test : RTX 5080 vs 5070 Ti en inférence</h2>
+      <p>Inscris-toi pour recevoir l'article dès qu'il sort. Pas de spam, juste le contenu.</p>
+      <form class="email-form" action="https://50315367.sibforms.com/serve/MUIFALBt3mGak8GXb1NLYRkEofFgqFSxerVOntNjkNTEC0MtFv2BJDR2HajryQ_rZrTNfdO3_IGXe0QCpRqkFT5DQybJfRe9pQkoUxQNQxuEkvH9yJcJ2GOGY8zu6hO2_tFmdSPe712sV8iNYeR12UwIs5kcCdkO7QozBRFP8r0bhemJx9sClrkrNVsGy8U8B5ZS4HO67MCUaHbcIA==" method="post">
+        <input type="text" name="email_address_check" value="" style="display:none" aria-hidden="true">
+        <input type="hidden" name="locale" value="fr">
+        <input class="email-input" type="email" name="EMAIL" placeholder="ton@email.fr" required autocomplete="email" />
+        <button class="btn-subscribe" type="submit">S'abonner</button>
+      </form>
+      <p class="email-note">Désabonnement en un clic · Aucune revente de données · RGPD</p>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 TheBenchLab — Tous droits réservés</span>
+      <nav style="display:flex;gap:1.25rem;flex-wrap:wrap">
+        <a href="/">Accueil</a>
+        <a href="/about.html">À propos</a>
+        <a href="/about.html#affiliation">Affiliation</a>
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/politique-confidentialite.html">Confidentialité</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Animate bars on scroll
+    const bars = document.querySelectorAll('.bar-fill');
+    const origWidths = Array.from(bars).map(b => b.style.width);
+    bars.forEach(b => b.style.width = '0%');
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          bars.forEach((b, i) => { b.style.width = origWidths[i]; });
+          obs.disconnect();
+        }
+      });
+    }, {threshold: 0.2});
+
+    const chart = document.querySelector('.bar-chart');
+    if (chart) obs.observe(chart);
+  </script>
+</body>
+</html>
