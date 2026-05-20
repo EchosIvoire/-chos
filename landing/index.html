@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="L'outil tout-en-un pour les indépendants. Agenda, clients, caisse, factures — gérez votre activité sans y penser.">
-  <meta property="og:title" content="SOLEA — Gérez votre activité sans y penser">
-  <meta property="og:description" content="L'outil tout-en-un pour les indépendants du service. Agenda, clients, caisse, factures.">
+  <meta name="description" content="Faites vos devis et factures en 2 minutes depuis votre téléphone. L'outil simple pour les artisans indépendants.">
+  <meta property="og:title" content="SOLEA — Vos devis et factures, en deux minutes">
+  <meta property="og:description" content="De la demande client à la facture payée. Depuis votre téléphone, sur le chantier. Gratuit 3 mois.">
   <meta property="og:type" content="website">
-  <title>SOLEA — Gérez votre activité sans y penser</title>
+  <title>SOLEA — Vos devis et factures, en deux minutes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -35,37 +35,26 @@
     .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
     .btn-ghost { border: 1px solid var(--stone-100); color: var(--ink); display:inline-block; padding: 14px 32px; font-size: 14px; font-weight: 500; transition: border-color .2s; cursor:pointer; text-decoration:none; background:none; font-family:inherit; }
     .btn-ghost:hover { border-color: var(--stone-300); }
-    hr.thin { border: none; border-top: 1px solid var(--stone-100); }
     .feature-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 400; color: var(--stone-100); line-height: 1; }
     input[type=email], input[type=text] {
-      width: 100%;
-      padding: 14px 18px;
-      border: 1px solid var(--stone-100);
-      background: var(--cream);
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--ink);
-      transition: border-color .2s;
-      outline: none;
+      width: 100%; padding: 14px 18px; border: 1px solid var(--stone-100);
+      background: var(--cream); font-size: 15px; font-family: inherit;
+      color: var(--ink); transition: border-color .2s; outline: none;
     }
     input[type=email]:focus, input[type=text]:focus { border-color: var(--stone-300); }
     select {
-      width: 100%;
-      padding: 14px 18px;
-      border: 1px solid var(--stone-100);
-      background: var(--cream);
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--ink);
-      outline: none;
-      appearance: none;
+      width: 100%; padding: 14px 18px; border: 1px solid var(--stone-100);
+      background: var(--cream); font-size: 15px; font-family: inherit;
+      color: var(--ink); outline: none; appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23777772' stroke-width='1.5'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 18px center;
+      background-repeat: no-repeat; background-position: right 18px center;
     }
     .form-msg { font-size: 14px; padding: 14px 18px; margin-top: 12px; }
     .form-msg.success { background: #EAF3EC; color: #2D5A3A; border-left: 3px solid #6DAB8A; }
-    .form-msg.error { background: #F5E5E0; color: #8A3A20; border-left: 3px solid #C97A5A; }
+    .status-badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:500; padding:4px 10px; border-radius:100px; }
+    .status-paid { background:#EAF3EC; color:#2D5A3A; }
+    .status-pending { background:#FBF3E3; color:#8A6020; }
+    .status-sent { background:#E8EEF8; color:#2A4A8A; }
   </style>
 </head>
 <body>
@@ -75,7 +64,7 @@
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
     <span class="serif" style="font-size:20px;font-weight:600;letter-spacing:.04em;">SOLEA</span>
     <div style="display:flex;align-items:center;gap:32px;">
-      <a href="#features" style="font-size:14px;color:var(--muted);text-decoration:none;" class="nav-hide">Fonctionnalités</a>
+      <a href="#comment" style="font-size:14px;color:var(--muted);text-decoration:none;" class="nav-hide">Comment ça marche</a>
       <a href="#prix" style="font-size:14px;color:var(--muted);text-decoration:none;" class="nav-hide">Tarifs</a>
       <a href="#waitlist" class="btn-primary" style="padding:10px 24px;">Accès beta gratuit</a>
     </div>
@@ -89,90 +78,123 @@
     <div>
       <span class="appear" style="display:inline-block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:28px;">Beta ouverte · Gratuit 3 mois</span>
       <h1 class="serif appear-2" style="font-size:clamp(44px,5vw,64px);line-height:1.12;font-weight:600;margin:0 0 24px;">
-        Gérez votre activité<br>
-        <em style="font-weight:400;color:var(--stone-500);">sans y penser.</em>
+        Vos devis et factures,<br>
+        <em style="font-weight:400;color:var(--stone-500);">en deux minutes.</em>
       </h1>
       <p class="appear-3" style="font-size:17px;line-height:1.75;color:var(--muted);max-width:480px;margin:0 0 40px;">
-        Agenda, clients, caisse, factures — tout en un seul endroit. Pensé pour les indépendants qui veulent se concentrer sur leur métier, pas sur l'administratif.
+        De la demande client à la facture payée. Depuis votre téléphone, sur le chantier. Plus de Word, plus d'Excel, plus de papier.
       </p>
       <div class="appear-3" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
-        <a href="#waitlist" class="btn-primary">Rejoindre la beta</a>
-        <a href="#features" class="btn-ghost">Voir ce que ça fait →</a>
+        <a href="#waitlist" class="btn-primary">Rejoindre la beta gratuite</a>
+        <a href="#comment" class="btn-ghost">Voir comment ça marche →</a>
       </div>
-      <p style="font-size:13px;color:var(--muted);">Sans carte bancaire · Opérationnel en 5 minutes</p>
+      <p style="font-size:13px;color:var(--muted);">Sans carte bancaire · Prêt en 5 minutes</p>
     </div>
 
-    <!-- APP MOCKUP -->
+    <!-- APP MOCKUP — devis screen -->
     <div style="display:flex;justify-content:center;">
-      <div class="phone-glow" style="background:white;border-radius:20px;width:288px;overflow:hidden;border:1px solid var(--stone-100);">
+      <div class="phone-glow" style="background:white;border-radius:20px;width:292px;overflow:hidden;border:1px solid var(--stone-100);">
 
+        <!-- Header -->
         <div style="background:var(--stone-50);padding:16px 20px 14px;border-bottom:1px solid var(--stone-100);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
             <span class="serif" style="font-size:14px;font-weight:600;">Solea</span>
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--stone-300);"></div>
-          </div>
-          <p style="font-size:11px;color:var(--muted);margin:0;">Mercredi 20 mai 2026</p>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--stone-100);">
-          <div style="padding:14px 18px;border-right:1px solid var(--stone-100);">
-            <p style="font-size:11px;color:var(--muted);margin:0 0 2px;">Aujourd'hui</p>
-            <p style="font-size:22px;font-weight:600;margin:0;font-family:'Playfair Display',serif;">4</p>
-            <p style="font-size:11px;color:var(--muted);margin:0;">rendez-vous</p>
-          </div>
-          <div style="padding:14px 18px;">
-            <p style="font-size:11px;color:var(--muted);margin:0 0 2px;">Ce mois</p>
-            <p style="font-size:22px;font-weight:600;margin:0;font-family:'Playfair Display',serif;">2 340€</p>
-            <p style="font-size:11px;color:var(--muted);margin:0;">encaissés</p>
+            <span style="font-size:11px;font-weight:500;color:var(--stone-300);">Mercredi</span>
           </div>
         </div>
 
-        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:var(--stone-50);">
-            <div style="width:3px;height:32px;border-radius:2px;background:var(--stone-300);flex-shrink:0;"></div>
-            <div style="flex:1;min-width:0;">
-              <p style="font-size:12px;font-weight:500;margin:0;">Sophie Martin</p>
-              <p style="font-size:11px;color:var(--muted);margin:0;">14h00 · Consultation · 60min</p>
-            </div>
-            <span style="font-size:12px;font-weight:500;flex-shrink:0;">80€</span>
+        <!-- Dashboard KPIs -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--stone-100);">
+          <div style="padding:12px 14px;border-right:1px solid var(--stone-100);">
+            <p style="font-size:10px;color:var(--muted);margin:0 0 2px;">Ce mois</p>
+            <p style="font-size:17px;font-weight:600;margin:0;font-family:'Playfair Display',serif;">4 200€</p>
+            <p style="font-size:9px;color:#6DAB8A;margin:0;font-weight:500;">↑ +18%</p>
           </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;">
-            <div style="width:3px;height:32px;border-radius:2px;background:var(--stone-100);flex-shrink:0;"></div>
-            <div style="flex:1;min-width:0;">
-              <p style="font-size:12px;font-weight:500;margin:0;">Marc Dupont</p>
-              <p style="font-size:11px;color:var(--muted);margin:0;">15h30 · Intervention · 45min</p>
-            </div>
-            <span style="font-size:12px;font-weight:500;color:var(--muted);flex-shrink:0;">65€</span>
+          <div style="padding:12px 14px;border-right:1px solid var(--stone-100);">
+            <p style="font-size:10px;color:var(--muted);margin:0 0 2px;">En attente</p>
+            <p style="font-size:17px;font-weight:600;margin:0;font-family:'Playfair Display',serif;">850€</p>
+            <p style="font-size:9px;color:#D4884A;margin:0;font-weight:500;">2 factures</p>
           </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;">
-            <div style="width:3px;height:32px;border-radius:2px;background:var(--stone-100);flex-shrink:0;"></div>
-            <div style="flex:1;min-width:0;">
-              <p style="font-size:12px;font-weight:500;margin:0;">Léa Chen</p>
-              <p style="font-size:11px;color:var(--muted);margin:0;">17h00 · Séance · 30min</p>
-            </div>
-            <span style="font-size:12px;font-weight:500;color:var(--muted);flex-shrink:0;">45€</span>
+          <div style="padding:12px 14px;">
+            <p style="font-size:10px;color:var(--muted);margin:0 0 2px;">Devis signés</p>
+            <p style="font-size:17px;font-weight:600;margin:0;font-family:'Playfair Display',serif;">7/8</p>
+            <p style="font-size:9px;color:var(--stone-300);margin:0;font-weight:500;">88%</p>
           </div>
-          <button style="width:100%;margin-top:4px;padding:10px;border:1px dashed var(--stone-100);border-radius:8px;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;">+ Nouveau rendez-vous</button>
         </div>
 
+        <!-- Documents récents -->
+        <div style="padding:12px 16px;">
+          <p style="font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;">Documents récents</p>
+
+          <div style="display:flex;flex-direction:column;gap:6px;">
+
+            <!-- Devis -->
+            <div style="border:1px solid var(--stone-100);border-radius:8px;padding:11px 13px;">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+                <div>
+                  <p style="font-size:11px;font-weight:600;margin:0;">Devis #2026-14</p>
+                  <p style="font-size:11px;color:var(--muted);margin:2px 0 0;">M. Bernard · Remplacement chaudière</p>
+                </div>
+                <span class="status-badge status-pending">En attente</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <p style="font-size:11px;color:var(--muted);margin:0;">Envoyé il y a 2j</p>
+                <p style="font-size:13px;font-weight:600;margin:0;">792€ TTC</p>
+              </div>
+            </div>
+
+            <!-- Facture payée -->
+            <div style="border:1px solid var(--stone-100);border-radius:8px;padding:11px 13px;">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+                <div>
+                  <p style="font-size:11px;font-weight:600;margin:0;">Facture #2026-22</p>
+                  <p style="font-size:11px;color:var(--muted);margin:2px 0 0;">Mme Rousseau · Installation VMC</p>
+                </div>
+                <span class="status-badge status-paid">Payée ✓</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <p style="font-size:11px;color:var(--muted);margin:0;">20 mai 2026</p>
+                <p style="font-size:13px;font-weight:600;margin:0;">1 080€ TTC</p>
+              </div>
+            </div>
+
+            <!-- Devis signé -->
+            <div style="border:1px solid var(--stone-100);border-radius:8px;padding:11px 13px;background:var(--stone-50);">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <p style="font-size:11px;font-weight:600;margin:0;">Devis #2026-15 — Signé</p>
+                <span class="status-badge status-sent">→ Facturer</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+                <p style="font-size:11px;color:var(--muted);margin:0;">M. Lefèvre · Pose parquet</p>
+                <p style="font-size:13px;font-weight:600;margin:0;">640€ TTC</p>
+              </div>
+            </div>
+
+          </div>
+
+          <button style="width:100%;margin-top:10px;padding:10px;background:var(--ink);border:none;border-radius:8px;font-size:12px;color:white;cursor:pointer;font-family:inherit;font-weight:500;">+ Nouveau devis</button>
+        </div>
+
+        <!-- Bottom nav -->
         <div style="border-top:1px solid var(--stone-100);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 4px;">
           <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--ink);">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span style="font-size:9px;margin-top:3px;font-weight:500;">Agenda</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-size:9px;margin-top:3px;font-weight:500;">Devis</span>
+          </button>
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--muted);">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span style="font-size:9px;margin-top:3px;">Factures</span>
           </button>
           <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--muted);">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <span style="font-size:9px;margin-top:3px;">Clients</span>
           </button>
           <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--muted);">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            <span style="font-size:9px;margin-top:3px;">Caisse</span>
-          </button>
-          <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--muted);">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             <span style="font-size:9px;margin-top:3px;">Stats</span>
           </button>
         </div>
+
       </div>
     </div>
   </div>
@@ -181,9 +203,9 @@
 <!-- TRUST BAR -->
 <div style="background:white;border-top:1px solid var(--stone-100);border-bottom:1px solid var(--stone-100);padding:24px;">
   <div style="max-width:1100px;margin:0 auto;text-align:center;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin:0 0 16px;">Conçu pour les indépendants du service</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin:0 0 16px;">Conçu pour les artisans indépendants</p>
     <p style="font-size:14px;color:var(--muted);margin:0;line-height:1.8;">
-      Esthéticiennes · Coiffeurs · Masseurs · Photographes · Plombiers · Coachs · Kinés · Tatoueurs · Artisans
+      Plombiers · Électriciens · Menuisiers · Peintres · Carreleurs · Maçons · Chauffagistes · Jardiniers · Piscinistes
     </p>
   </div>
 </div>
@@ -191,81 +213,146 @@
 <!-- PROBLÈME -->
 <section style="padding:80px 24px;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">Le constat</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">Le problème</p>
     <h2 class="serif" style="font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.2;max-width:680px;margin:0 0 64px;">
-      Travailler seul, c'est jongler avec trop d'outils.
+      La paperasse, c'est un deuxième métier que vous n'avez pas choisi.
     </h2>
     <div class="problem-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--stone-100);">
       <div style="background:var(--cream);padding:40px 32px;">
         <span class="feature-num">01</span>
-        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">Les no-shows vous coûtent cher</h3>
-        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Sans rappel automatique, 1 client sur 5 oublie son RDV. C'est du temps et de l'argent perdus.</p>
+        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">Vos devis sur Word vous coûtent du temps</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Formater un devis, calculer la TVA, trouver les bons libellés... 20 minutes perdues par intervention. 5 devis par semaine, c'est 100 minutes gaspillées.</p>
       </div>
       <div style="background:var(--cream);padding:40px 32px;">
         <span class="feature-num">02</span>
-        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">La paperasse mange votre temps</h3>
-        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Factures manuelles, suivi des paiements, notes dispersées — des heures perdues chaque semaine.</p>
+        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">Vos factures doivent être conformes</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Numérotation séquentielle, mentions légales, TVA, coordonnées... Une facture non conforme vous expose à des pénalités en cas de contrôle.</p>
       </div>
       <div style="background:var(--cream);padding:40px 32px;">
         <span class="feature-num">03</span>
-        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">Vos clients vont ailleurs</h3>
-        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Sans suivi personnalisé ni relance, la fidélisation reste aléatoire. Et coûteuse.</p>
+        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">Les impayés s'accumulent sans relance</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Sans suivi automatisé, vous oubliez de relancer. Ou vous évitez de le faire par inconfort. Résultat : de l'argent qui dorme.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section id="features" style="padding:80px 24px;background:var(--stone-50);">
+<!-- HOW IT WORKS -->
+<section id="comment" style="padding:80px 24px;background:var(--stone-50);">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">La solution</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">Comment ça marche</p>
     <h2 class="serif" style="font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.2;max-width:680px;margin:0 0 64px;">
-      Tout ce dont vous avez besoin.<br>
+      Du chantier à l'encaissement,<br>
+      <em style="font-weight:400;">sans quitter votre téléphone.</em>
+    </h2>
+
+    <div style="display:flex;flex-direction:column;gap:1px;background:var(--stone-100);">
+
+      <div style="background:var(--cream);padding:40px 40px;display:flex;align-items:flex-start;gap:40px;">
+        <div style="flex-shrink:0;">
+          <span class="serif" style="font-size:56px;font-weight:400;color:var(--stone-100);line-height:1;">01</span>
+        </div>
+        <div style="padding-top:8px;">
+          <h3 style="font-size:18px;font-weight:500;margin:0 0 10px;">Client appelle → vous faites le devis sur place</h3>
+          <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0 0 12px;">Sélectionnez vos prestations depuis votre catalogue (que vous créez en 5 min), ajustez les quantités, Solea calcule la TVA et génère un devis PDF professionnel.</p>
+          <p style="font-size:13px;color:var(--stone-500);font-weight:500;">⏱ 2 minutes, depuis votre mobile, n'importe où.</p>
+        </div>
+      </div>
+
+      <div style="background:var(--cream);padding:40px 40px;display:flex;align-items:flex-start;gap:40px;">
+        <div style="flex-shrink:0;">
+          <span class="serif" style="font-size:56px;font-weight:400;color:var(--stone-100);line-height:1;">02</span>
+        </div>
+        <div style="padding-top:8px;">
+          <h3 style="font-size:18px;font-weight:500;margin:0 0 10px;">Client accepte → vous convertissez en facture</h3>
+          <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0 0 12px;">Un seul bouton pour transformer un devis signé en facture conforme. Numérotée automatiquement. Mentionnes légales incluses. Envoyée par email instantanément.</p>
+          <p style="font-size:13px;color:var(--stone-500);font-weight:500;">✓ Factures légalement conformes, toujours.</p>
+        </div>
+      </div>
+
+      <div style="background:var(--cream);padding:40px 40px;display:flex;align-items:flex-start;gap:40px;">
+        <div style="flex-shrink:0;">
+          <span class="serif" style="font-size:56px;font-weight:400;color:var(--stone-100);line-height:1;">03</span>
+        </div>
+        <div style="padding-top:8px;">
+          <h3 style="font-size:18px;font-weight:500;margin:0 0 10px;">Solea suit les paiements pour vous</h3>
+          <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0 0 12px;">Suivi des factures payées / en attente / en retard. Relances automatiques par email à J+7 et J+30. Tableau de bord avec votre chiffre d'affaires en temps réel.</p>
+          <p style="font-size:13px;color:var(--stone-500);font-weight:500;">↑ Moyenne : -60% d'impayés chez les bêta-testeurs.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES SECONDAIRES -->
+<section style="padding:80px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">Et aussi</p>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.2;max-width:600px;margin:0 0 56px;">
+      Tout ce qu'il faut.<br>
       <em style="font-weight:400;">Rien de superflu.</em>
     </h2>
-    <div class="features-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:32px;">
+    <div class="features-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--stone-100);">
 
-      <div style="background:white;padding:40px;border:1px solid var(--stone-100);">
-        <div style="width:40px;height:40px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
-          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <div style="background:var(--cream);padding:36px 32px;">
+        <div style="width:36px;height:36px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <svg width="16" height="16" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         </div>
-        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Agenda intelligent</h3>
-        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">Vos clients réservent en ligne via votre lien personnel. Rappels SMS automatiques J-1. Fini les no-shows.</p>
+        <h3 style="font-size:16px;font-weight:500;margin:0 0 10px;">Planning des interventions</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Agenda visuel pour planifier vos chantiers. Notes par intervention, adresse, rappels.</p>
       </div>
 
-      <div style="background:white;padding:40px;border:1px solid var(--stone-100);">
-        <div style="width:40px;height:40px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
-          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <div style="background:var(--cream);padding:36px 32px;">
+        <div style="width:36px;height:36px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <svg width="16" height="16" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
-        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Fiche client complète</h3>
-        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">Historique des prestations, notes, préférences, contacts. Retrouvez tout en deux secondes.</p>
+        <h3 style="font-size:16px;font-weight:500;margin:0 0 10px;">Fiche client & historique</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Tous les devis et factures liés à un client, accessibles en deux secondes. Même 3 ans après.</p>
       </div>
 
-      <div style="background:white;padding:40px;border:1px solid var(--stone-100);">
-        <div style="width:40px;height:40px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
-          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      <div style="background:var(--cream);padding:36px 32px;">
+        <div style="width:36px;height:36px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <svg width="16" height="16" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
-        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Caisse & paiement</h3>
-        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">Encaissement rapide, reçus instantanés, suivi des paiements en attente. CB, espèces, virement.</p>
+        <h3 style="font-size:16px;font-weight:500;margin:0 0 10px;">Signature électronique</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Envoyez un devis par lien, votre client signe depuis son téléphone. Valeur légale garantie.</p>
       </div>
 
-      <div style="background:white;padding:40px;border:1px solid var(--stone-100);">
-        <div style="width:40px;height:40px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
-          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <div style="background:var(--cream);padding:36px 32px;">
+        <div style="width:36px;height:36px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <svg width="16" height="16" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </div>
-        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Devis & factures automatiques</h3>
-        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">PDF générés automatiquement, numérotation conforme, envoi par email en un clic.</p>
+        <h3 style="font-size:16px;font-weight:500;margin:0 0 10px;">Acomptes & paiement partiel</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Demandez 30% à la commande, le solde à la livraison. Suivi automatique des montants restants.</p>
       </div>
+
+      <div style="background:var(--cream);padding:36px 32px;">
+        <div style="width:36px;height:36px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <svg width="16" height="16" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 style="font-size:16px;font-weight:500;margin:0 0 10px;">Dashboard chiffre d'affaires</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Vue mensuelle / annuelle. Pratique pour votre déclaration URSSAF et pour voir si votre activité progresse.</p>
+      </div>
+
+      <div style="background:var(--cream);padding:36px 32px;">
+        <div style="width:36px;height:36px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <svg width="16" height="16" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <h3 style="font-size:16px;font-weight:500;margin:0 0 10px;">Relances automatiques</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Rappels de devis non signés et factures impayées envoyés automatiquement. Polis, professionnels.</p>
+      </div>
+
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="prix" style="padding:80px 24px;">
+<section id="prix" style="padding:80px 24px;background:var(--stone-50);">
   <div style="max-width:1100px;margin:0 auto;">
     <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">Tarifs</p>
     <h2 class="serif" style="font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.2;margin:0 0 16px;">Simple, transparent.</h2>
-    <p style="font-size:16px;color:var(--muted);margin:0 0 64px;">Pas de commissions, pas de surprises.</p>
+    <p style="font-size:16px;color:var(--muted);margin:0 0 64px;">Pas de commissions, pas de surprises. Vous gardez 100% de ce que vous encaissez.</p>
 
     <div class="pricing-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--stone-100);max-width:780px;">
       <div style="background:var(--cream);padding:48px 40px;">
@@ -275,10 +362,10 @@
           <span style="font-size:14px;color:var(--muted);">pour toujours</span>
         </div>
         <ul style="list-style:none;padding:0;margin:0 0 40px;display:flex;flex-direction:column;gap:12px;">
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> 1 agenda</li>
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> Jusqu'à 50 clients</li>
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> Prise de RDV en ligne</li>
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> Caisse simple</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">—</span> 5 devis / mois</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">—</span> 5 factures / mois</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">—</span> Jusqu'à 20 clients</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">—</span> PDF conformes</li>
         </ul>
         <a href="#waitlist" class="btn-ghost" style="width:100%;text-align:center;display:block;">Commencer</a>
       </div>
@@ -290,15 +377,17 @@
           <span style="font-size:14px;color:#999;"> / mois</span>
         </div>
         <ul style="list-style:none;padding:0;margin:0 0 40px;display:flex;flex-direction:column;gap:12px;">
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Clients illimités</li>
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> SMS de rappel inclus</li>
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Facturation & devis PDF</li>
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Dashboard & statistiques</li>
-          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Page de réservation brandée</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">✓</span> Devis & factures illimités</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">✓</span> Signature électronique</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">✓</span> Relances automatiques</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">✓</span> Acomptes & paiement partiel</li>
+          <li style="font-size:14px;display:flex;gap:10px;"><span style="color:var(--stone-300);">✓</span> Dashboard & export comptable</li>
         </ul>
         <a href="#waitlist" style="display:block;width:100%;text-align:center;background:white;color:var(--ink);padding:14px;font-size:14px;font-weight:500;text-decoration:none;">Essayer 3 mois gratuit</a>
       </div>
     </div>
+
+    <p style="font-size:13px;color:var(--muted);margin-top:20px;max-width:780px;">Pour un artisan à 10 devis/mois, Solea coûte <strong>1,90€ par devis</strong>. Récupérez un seul impayé grâce aux relances automatiques et vous l'avez rentabilisé pour l'année entière.</p>
   </div>
 </section>
 
@@ -307,11 +396,11 @@
   <div style="max-width:560px;margin:0 auto;text-align:center;">
     <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin:0 0 16px;">Liste d'attente · Places limitées</p>
     <h2 class="serif" style="font-size:clamp(36px,4vw,52px);font-weight:600;line-height:1.15;margin:0 0 24px;">
-      Rejoignez la beta.<br>
-      <em style="font-weight:400;color:var(--stone-300);">Gratuitement.</em>
+      Essayez sur<br>
+      <em style="font-weight:400;color:var(--stone-300);">votre prochain chantier.</em>
     </h2>
     <p style="font-size:16px;line-height:1.7;color:#aaa;margin:0 0 48px;">
-      Accès prioritaire pendant la beta · 3 mois Pro offerts · Tarif bloqué à vie
+      Accès prioritaire · 3 mois Pro offerts · Tarif bloqué à vie
     </p>
 
     <form
@@ -327,38 +416,49 @@
 
       <div>
         <label style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#999;margin-bottom:8px;display:block;">Votre prénom</label>
-        <input type="text" name="prenom" required placeholder="Camille" autocomplete="given-name">
+        <input type="text" name="prenom" required placeholder="Jean" autocomplete="given-name">
       </div>
 
       <div>
         <label style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#999;margin-bottom:8px;display:block;">Votre email</label>
-        <input type="email" name="email" required placeholder="vous@exemple.com" autocomplete="email">
+        <input type="email" name="email" required placeholder="jean@exemple.com" autocomplete="email">
       </div>
 
       <div>
         <label style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#999;margin-bottom:8px;display:block;">Votre métier</label>
         <select name="metier" required>
           <option value="">Choisir...</option>
-          <option value="esthetique">Esthétique / Soins</option>
-          <option value="coiffure">Coiffure / Barbier</option>
-          <option value="massage">Massage / Bien-être</option>
-          <option value="kine">Kiné / Ostéo / Santé</option>
-          <option value="coaching">Coaching / Formation</option>
-          <option value="photo">Photographie / Vidéo</option>
-          <option value="tatouage">Tatouage / Piercing</option>
-          <option value="artisan">Artisanat (plomberie, élec, menuiserie...)</option>
-          <option value="autre">Autre service</option>
+          <option value="plombier">Plombier / Chauffagiste</option>
+          <option value="electricien">Électricien</option>
+          <option value="menuisier">Menuisier / Charpentier</option>
+          <option value="peintre">Peintre / Plaquiste</option>
+          <option value="carreleur">Carreleur / Sol</option>
+          <option value="macon">Maçon / Gros œuvre</option>
+          <option value="jardinier">Jardinier / Paysagiste</option>
+          <option value="autre-btp">Autre BTP / Artisan</option>
+          <option value="autre">Autre métier</option>
         </select>
       </div>
 
-      <button type="submit" id="submit-btn" class="btn-primary" style="background:var(--stone-300);color:var(--ink);padding:16px;font-size:15px;margin-top:12px;">
+      <div>
+        <label style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#999;margin-bottom:8px;display:block;">Environ combien de devis par mois ?</label>
+        <select name="volume_devis">
+          <option value="">Choisir...</option>
+          <option value="1-5">Moins de 5</option>
+          <option value="5-15">Entre 5 et 15</option>
+          <option value="15-30">Entre 15 et 30</option>
+          <option value="30+">Plus de 30</option>
+        </select>
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn-primary" style="background:var(--stone-300);color:var(--ink);padding:16px;font-size:15px;margin-top:12px;width:100%;text-align:center;">
         Demander mon accès beta →
       </button>
 
       <div id="form-message"></div>
 
       <p style="font-size:12px;color:#666;margin:8px 0 0;text-align:center;">
-        Sans engagement · Vos données restent en France · Pas de spam, promis.
+        Sans engagement · Vos données restent en France · Pas de spam.
       </p>
     </form>
   </div>
@@ -378,47 +478,37 @@
 
 <style>
   @media (max-width: 768px) {
-    .hero-grid, .problem-grid, .features-grid, .pricing-grid {
-      grid-template-columns: 1fr !important;
-    }
+    .hero-grid, .problem-grid, .features-grid, .pricing-grid { grid-template-columns: 1fr !important; }
     .nav-hide { display: none; }
   }
 </style>
 
 <script>
-  // Backup save to localStorage in case of network issue, and analytics-friendly tracking
   (function() {
     const form = document.getElementById('waitlist-form');
     const btn = document.getElementById('submit-btn');
     const msg = document.getElementById('form-message');
-
     if (!form) return;
-
     form.addEventListener('submit', function(e) {
       const data = {
         prenom: form.prenom.value.trim(),
         email: form.email.value.trim(),
         metier: form.metier.value,
+        volume_devis: form.volume_devis.value,
         timestamp: new Date().toISOString(),
       };
-
-      // Backup in localStorage
       try {
         const existing = JSON.parse(localStorage.getItem('solea_waitlist_backup') || '[]');
         existing.push(data);
         localStorage.setItem('solea_waitlist_backup', JSON.stringify(existing));
-      } catch (err) { /* ignore */ }
-
+      } catch (err) {}
       btn.disabled = true;
       btn.textContent = 'Envoi en cours...';
-
-      // If Netlify isn't picking it up (e.g. local dev), prevent reload and show success
-      // In production on Netlify, the form posts and redirects to /merci.html
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
         e.preventDefault();
         setTimeout(function() {
           msg.className = 'form-msg success';
-          msg.textContent = '✓ Inscription enregistrée localement (dev mode). En production, l\'email sera envoyé.';
+          msg.textContent = '✓ Inscription enregistrée (dev mode).';
           btn.textContent = 'Inscrit !';
         }, 600);
       }
