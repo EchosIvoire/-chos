@@ -1,659 +1,247 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TheBenchLab — Tests terrain IA &amp; Hardware, sans bullshit</title>
-
-  <!-- SEO CORE -->
-  <meta name="description" content="TheBenchLab : tests terrain de GPU, LLM locaux et stacks IA. Benchmarks réels, en français, par quelqu'un qui paie ses propres factures d'électricité." />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-  <meta name="author" content="TheBenchLab" />
-  <meta name="theme-color" content="#0d0f14" />
-  <link rel="canonical" href="https://thebenchlab.fr/" />
-
-  <!-- OPEN GRAPH -->
-  <meta property="og:site_name" content="TheBenchLab" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://thebenchlab.fr/" />
-  <meta property="og:title" content="TheBenchLab — Tests terrain IA &amp; Hardware, sans bullshit" />
-  <meta property="og:description" content="Benchmarks GPU réels, LLM en local, stacks IA — écrits en français par un passionné qui teste vraiment le matos avant d'en parler." />
-  <meta property="og:image" content="https://thebenchlab.fr/og/setup-pc-ia-local-2026.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="TheBenchLab — Blog tech en français" />
-  <meta property="og:locale" content="fr_FR" />
-
-  <!-- TWITTER CARD -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@TheBenchLab" />
-  <meta name="twitter:creator" content="@TheBenchLab" />
-  <meta name="twitter:title" content="TheBenchLab — Tests terrain IA &amp; Hardware, sans bullshit" />
-  <meta name="twitter:description" content="Benchmarks GPU réels, LLM en local, stacks IA — écrits en français par un passionné qui teste vraiment le matos." />
-  <meta name="twitter:image" content="https://thebenchlab.fr/og/setup-pc-ia-local-2026.png" />
-
-  <!-- JSON-LD : WebSite -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "TheBenchLab",
-    "url": "https://thebenchlab.fr/",
-    "description": "Tests terrain GPU, LLM locaux et stacks IA en français",
-    "inLanguage": "fr-FR",
-    "author": {
-      "@type": "Person",
-      "name": "TheBenchLab",
-      "url": "https://thebenchlab.fr/about.html"
-    },
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://thebenchlab.fr/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-
-  <!-- JSON-LD : BlogPosting (article vedette) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "PC IA local en 2026 : j'ai testé 6 GPU, voici ce qui marche vraiment",
-    "description": "J'ai monté et testé 6 setups PC pour faire tourner des LLM en local en 2026. GPU, RAM, Ollama, Qwen 3, Llama 3.3 — benchmarks réels, erreurs et recommandations honnêtes.",
-    "image": "https://thebenchlab.fr/og/setup-pc-ia-local-2026.png",
-    "url": "https://thebenchlab.fr/blog/setup-pc-ia-local-jarvis-2026.html",
-    "datePublished": "2026-05-16T00:00:00+02:00",
-    "dateModified": "2026-05-16T00:00:00+02:00",
-    "author": {
-      "@type": "Person",
-      "name": "TheBenchLab",
-      "url": "https://thebenchlab.fr/about.html"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "TheBenchLab",
-      "url": "https://thebenchlab.fr/"
-    },
-    "keywords": ["GPU","LLM local","Ollama","IA","hardware","benchmark"]
-  }
-  </script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOLEA · Prototype — Devis sur chantier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0d0f14;
-      --bg2: #12151f;
-      --bg3: #1a1f2e;
-      --border: #252a3a;
-      --accent: #6c63ff;
-      --accent2: #00d9b5;
-      --accent3: #f5a623;
-      --text: #e8eaf0;
-      --muted: #6a7090;
-      --card: #12151f;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, sans-serif;
-      line-height: 1.65;
-      font-size: 15px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a { color: inherit; text-decoration: none; }
-
-    /* GRADIENT BAR */
-    .gradient-bar {
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
-    }
-
-    /* NAV */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(13, 15, 20, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .logo {
-      font-weight: 800;
-      font-size: 1rem;
-      color: var(--text);
-      margin-right: auto;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-    }
-    .logo-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      display: inline-block;
-    }
-    nav a.nav-link {
-      color: var(--muted);
-      font-size: .85rem;
-      font-weight: 500;
-      transition: color .2s;
-      padding: .25rem 0;
-    }
-    nav a.nav-link:hover, nav a.nav-link.active { color: var(--text); }
-
-    /* HERO */
-    .hero {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 5rem 2rem 3.5rem;
-    }
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--accent2);
-      margin-bottom: 1.25rem;
-    }
-    .hero-eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 20px;
-      height: 2px;
-      background: var(--accent2);
-      border-radius: 1px;
-    }
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1.25rem;
-      letter-spacing: -.02em;
-    }
-    .hero h1 .accent { color: var(--accent); }
-    .hero h1 .accent2 { color: var(--accent2); }
-    .hero-desc {
-      font-size: 1rem;
-      color: var(--muted);
-      max-width: 580px;
-      line-height: 1.75;
-      margin-bottom: 2rem;
-    }
-    .hero-desc strong { color: var(--text); }
-    .hero-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-    .h-stat {
-      display: flex;
-      flex-direction: column;
-      gap: .15rem;
-    }
-    .h-stat .val {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-    }
-    .h-stat .lbl {
-      font-size: .72rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    /* MAIN CONTAINER */
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 2rem 6rem;
-    }
-
-    /* SECTION TITLES */
-    .section { margin-top: 4rem; }
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      margin-bottom: 1.75rem;
-    }
-    .section-header h2 {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--text);
-    }
-    .section-header .sh-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    .section-header .sh-count {
-      font-size: .75rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    /* ARTICLE CARD */
-    .article-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.75rem;
-      transition: border-color .2s, transform .15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .article-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      opacity: 0;
-      transition: opacity .2s;
-    }
-    .article-card:hover {
-      border-color: rgba(108, 99, 255, .35);
-      transform: translateY(-2px);
-    }
-    .article-card:hover::before { opacity: 1; }
-
-    .card-meta {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      margin-bottom: .9rem;
-      flex-wrap: wrap;
-    }
-    .card-tag {
-      display: inline-flex;
-      align-items: center;
-      font-size: .68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: .2rem .6rem;
-      border-radius: 6px;
-      background: rgba(108, 99, 255, .12);
-      color: var(--accent);
-      border: 1px solid rgba(108, 99, 255, .22);
-    }
-    .card-date {
-      font-size: .76rem;
-      color: var(--muted);
-    }
-    .card-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      line-height: 1.3;
-      margin-bottom: .75rem;
-      color: var(--text);
-      transition: color .2s;
-    }
-    .article-card:hover .card-title { color: var(--accent); }
-    .card-excerpt {
-      font-size: .88rem;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 1.25rem;
-    }
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: .75rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-    }
-    .card-stats {
-      font-size: .73rem;
-      color: var(--muted);
-      font-family: 'SF Mono', 'Fira Code', monospace;
-    }
-    .card-stats span { color: var(--accent2); font-weight: 700; }
-    .btn-read {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      padding: .5rem 1.1rem;
-      background: var(--accent);
-      color: #fff;
-      border-radius: 8px;
-      font-size: .82rem;
-      font-weight: 700;
-      transition: opacity .2s, transform .15s;
-    }
-    .btn-read:hover { opacity: .85; transform: translateX(2px); }
-
-    /* EMAIL CAPTURE */
-    .email-section {
-      margin-top: 4rem;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .email-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-    }
-    .email-glow {
-      position: absolute;
-      top: -60px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 300px;
-      height: 160px;
-      background: radial-gradient(ellipse, rgba(108, 99, 255, .12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .email-section h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-bottom: .6rem;
-      position: relative;
-    }
-    .email-section p {
-      color: var(--muted);
-      font-size: .9rem;
-      margin-bottom: 1.5rem;
-      max-width: 440px;
-      margin-left: auto;
-      margin-right: auto;
-      position: relative;
-    }
-    .email-form {
-      display: flex;
-      gap: .6rem;
-      max-width: 420px;
-      margin: 0 auto;
-      position: relative;
-    }
-    .email-input {
-      flex: 1;
-      padding: .7rem 1rem;
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: .9rem;
-      font-family: system-ui, sans-serif;
-      outline: none;
-      transition: border-color .2s;
-    }
-    .email-input::placeholder { color: var(--muted); }
-    .email-input:focus { border-color: var(--accent); }
-    .btn-subscribe {
-      padding: .7rem 1.3rem;
-      background: linear-gradient(135deg, var(--accent), #8b5cf6);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: .85rem;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      font-family: system-ui, sans-serif;
-      transition: opacity .2s;
-    }
-    .btn-subscribe:hover { opacity: .88; }
-    .email-note {
-      font-size: .72rem;
-      color: var(--muted);
-      margin-top: .75rem;
-      position: relative;
-    }
-
-    @media (max-width: 480px) {
-      .email-form { flex-direction: column; }
-      .btn-subscribe { width: 100%; }
-    }
-
-    /* WHY THIS BLOG */
-    .why-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: .9rem;
-      margin-top: 1.5rem;
-    }
-    @media (max-width: 620px) {
-      .why-grid { grid-template-columns: 1fr; }
-    }
-    .why-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.4rem 1.2rem;
-      transition: border-color .2s;
-    }
-    .why-card:hover { border-color: rgba(108, 99, 255, .3); }
-    .why-icon {
-      font-size: 1.5rem;
-      margin-bottom: .75rem;
-      display: block;
-    }
-    .why-card h3 {
-      font-size: .95rem;
-      font-weight: 800;
-      margin-bottom: .5rem;
-      color: var(--text);
-    }
-    .why-card p {
-      font-size: .82rem;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem;
-      text-align: center;
-      color: var(--muted);
-      font-size: .78rem;
-    }
-    footer a { color: var(--muted); transition: color .2s; }
-    footer a:hover { color: var(--accent2); }
-    .footer-inner {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: .75rem;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 640px) {
-      nav { padding: 0 1rem; }
-      .hero { padding: 3.5rem 1.25rem 2.5rem; }
-      .container { padding: 0 1.25rem 4rem; }
-      .article-card { padding: 1.25rem; }
-      .email-section { padding: 2rem 1.25rem; }
-    }
+    :root{--cr:#FAFAF8;--s50:#F5F2EC;--s100:#EBE5D8;--s200:#D6CEBD;--s300:#BFA98E;--s500:#7A6A56;--ink:#111110;--mu:#777772;--gr:#2D7A4A;--or:#C97A3A;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:#E2DDD6;min-height:100vh;display:flex;align-items:center;justify-content:center;-webkit-font-smoothing:antialiased;}
+    .serif{font-family:'Playfair Display',serif;}
+    .wrap{display:flex;gap:48px;align-items:flex-start;padding:40px;}
+    .side{width:220px;flex-shrink:0;padding-top:12px;}
+    .side h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;line-height:1.2;margin-bottom:10px;}
+    .side p{font-size:13px;color:#888;line-height:1.6;margin-bottom:24px;}
+    .steps{display:flex;flex-direction:column;gap:2px;}
+    .step{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;transition:background .15s;}
+    .step.active{background:white;}
+    .step-n{width:22px;height:22px;border-radius:50%;background:#E0D8CC;color:#7A6A56;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,color .2s;}
+    .step.active .step-n{background:var(--ink);color:white;}
+    .step.done .step-n{background:var(--gr);color:white;}
+    .step-l{font-size:13px;color:#999;}
+    .step.active .step-l{color:var(--ink);font-weight:500;}
+    .step.done .step-l{color:var(--gr);}
+    .hint{margin-top:24px;background:white;border-radius:12px;padding:14px;font-size:12px;color:#999;line-height:1.7;}
+    .hint strong{color:var(--ink);}
+    .phone{width:393px;height:852px;border-radius:50px;background:white;overflow:hidden;position:relative;box-shadow:0 0 0 11px #1C1C1A,0 0 0 13px #2E2E2A,0 40px 100px rgba(0,0,0,.4);}
+    .sbar{height:54px;background:white;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 10px;position:relative;z-index:10;flex-shrink:0;}
+    .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:126px;height:34px;background:#111;border-radius:0 0 20px 20px;}
+    .screens{height:798px;position:relative;overflow:hidden;}
+    .scr{position:absolute;inset:0;background:var(--cr);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+    .scr.active{transform:translateX(0);}
+    .scr.behind{transform:translateX(-28%);}
+    .nav{height:52px;display:flex;align-items:center;padding:0 16px;gap:8px;border-bottom:1px solid var(--s100);background:white;flex-shrink:0;position:relative;}
+    .nav-title{position:absolute;left:50%;transform:translateX(-50%);text-align:center;}
+    .nav-title p{font-size:16px;font-weight:600;}
+    .nav-title small{font-size:11px;color:var(--mu);display:block;margin-top:1px;}
+    .back{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;border-radius:8px;color:var(--ink);}
+    .back:hover{background:var(--s50);}
+    .ml-auto{margin-left:auto;}
+    .content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    .content::-webkit-scrollbar{display:none;}
+    .bot{flex-shrink:0;border-top:1px solid var(--s100);background:white;}
+    .btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:12px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;border:none;transition:opacity .15s,transform .1s;}
+    .btn:active{transform:scale(.97);}
+    .btn-dk{background:var(--ink);color:white;}
+    .btn-dk:hover{opacity:.88;}
+    .btn-go{background:var(--s300);color:white;}
+    .btn-gh{background:none;border:1.5px solid var(--s200);color:var(--ink);}
+    .btn-gh:hover{border-color:var(--s300);}
+    .btn-add{background:none;border:1px dashed var(--s200);color:var(--mu);}
+    .btn-add:hover{border-color:var(--s300);color:var(--ink);}
+    .card{background:white;border-radius:12px;border:1px solid var(--s100);overflow:hidden;}
+    .crow{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--s100);cursor:pointer;transition:background .12s;}
+    .crow:last-child{border-bottom:none;}
+    .crow:hover{background:var(--s50);}
+    .badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:3px 8px;border-radius:100px;letter-spacing:.02em;}
+    .b-wait{background:#FBF3E3;color:#8A5A20;}
+    .b-paid{background:#EAF3EC;color:#2D7A4A;}
+    .b-sign{background:#E8EEF8;color:#2A4A8A;}
+    .b-dft{background:var(--s50);color:var(--mu);}
+    .inp{width:100%;padding:11px 14px;border:1.5px solid var(--s100);border-radius:10px;font-size:14px;font-family:inherit;color:var(--ink);background:white;outline:none;transition:border-color .2s;}
+    .inp:focus{border-color:var(--s300);}
+    .inp::placeholder{color:#ccc;}
+    .dline{display:flex;gap:8px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--s100);}
+    .dline:last-child{border-bottom:none;}
+    .qbtn{width:26px;height:26px;border-radius:7px;background:var(--s50);border:1px solid var(--s100);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-family:inherit;color:var(--ink);line-height:1;}
+    .qbtn:hover{background:var(--s100);}
+    .qdsp{width:24px;text-align:center;font-size:13px;font-weight:600;flex-shrink:0;}
+    .tbar{padding:10px 18px;display:flex;align-items:center;justify-content:space-between;}
+    .overlay{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:50;opacity:0;pointer-events:none;transition:opacity .3s;}
+    .overlay.open{opacity:1;pointer-events:all;}
+    .sheet{position:absolute;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;z-index:51;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);max-height:82%;display:flex;flex-direction:column;}
+    .sheet.open{transform:translateY(0);}
+    .shandle{width:36px;height:4px;background:#ddd;border-radius:2px;margin:10px auto 0;flex-shrink:0;}
+    .tabs{display:flex;gap:4px;overflow-x:auto;padding:0 16px;scrollbar-width:none;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .tab{padding:5px 13px;border-radius:100px;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;border:none;background:var(--s50);color:var(--mu);font-family:inherit;transition:all .15s;}
+    .tab.on{background:var(--ink);color:white;}
+    .citem{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--s100);cursor:pointer;gap:12px;transition:background .12s;}
+    .citem:hover{background:var(--s50);}
+    .cadd{width:28px;height:28px;border-radius:7px;background:var(--ink);color:white;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s;}
+    .cadd:hover{opacity:.8;}
+    .pdf-th{display:grid;grid-template-columns:1fr 36px 52px 56px;gap:4px;padding:7px 14px;background:var(--s50);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);}
+    .pdf-row{display:grid;grid-template-columns:1fr 36px 52px 56px;gap:4px;padding:10px 14px;border-bottom:1px solid var(--s100);font-size:12px;align-items:center;}
+    #sigc{touch-action:none;cursor:crosshair;display:block;width:100%;}
+    @keyframes pop{0%{transform:scale(.4);opacity:0;}70%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+    .pop{animation:pop .4s .05s ease both;}
+    @keyframes fu{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    .fu1{animation:fu .35s .15s ease both;}
+    .fu2{animation:fu .35s .25s ease both;}
+    .fu3{animation:fu .35s .35s ease both;}
+    @media(max-width:720px){.wrap{flex-direction:column;align-items:center;padding:16px;}.side{width:100%;max-width:393px;}}
   </style>
 </head>
 <body>
-
-  <div class="gradient-bar"></div>
-
-  <nav>
-    <a href="/" class="logo">
-      <span class="logo-dot"></span>
-      TheBenchLab
-    </a>
-    <a href="/" class="nav-link active">Accueil</a>
-    <a href="/about.html" class="nav-link">À propos</a>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-eyebrow">Blog tech indépendant</div>
-    <h1>Tests terrain,<br><span class="accent">sans bullshit.</span></h1>
-    <p class="hero-desc">
-      Passionné de tech depuis plus longtemps que je ne veux l'admettre, je teste du <strong>vrai matériel</strong>
-      avec de <strong>vrais LLM</strong> — et j'écris ce que j'aurais voulu lire avant d'acheter.
-      En français. Sans jargon inutile. Depuis fin 2024.
-    </p>
-    <div class="hero-stats">
-      <div class="h-stat">
-        <span class="val">6</span>
-        <span class="lbl">GPU testés</span>
-      </div>
-      <div class="h-stat">
-        <span class="val">95 t/s</span>
-        <span class="lbl">Meilleur score</span>
-      </div>
-      <div class="h-stat">
-        <span class="val">0 €</span>
-        <span class="lbl">Abonnement cloud</span>
-      </div>
-      <div class="h-stat">
-        <span class="val">100%</span>
-        <span class="lbl">Tests perso</span>
+<div class="wrap">
+  <div class="side">
+    <h2 class="serif">Faire un devis<br><em style="font-weight:400;color:#aaa;">sur place.</em></h2>
+    <p>Prototype interactif — naviguez dans le téléphone.</p>
+    <div class="steps" id="steps">
+      <div class="step active" data-s="home"><div class="step-n">1</div><span class="step-l">Accueil</span></div>
+      <div class="step" data-s="client"><div class="step-n">2</div><span class="step-l">Choisir le client</span></div>
+      <div class="step" data-s="builder"><div class="step-n">3</div><span class="step-l">Construire le devis</span></div>
+      <div class="step" data-s="preview"><div class="step-n">4</div><span class="step-l">Aperçu PDF</span></div>
+      <div class="step" data-s="sig"><div class="step-n">5</div><span class="step-l">Signature client</span></div>
+      <div class="step" data-s="ok"><div class="step-n">6</div><span class="step-l">Envoyé ✓</span></div>
+    </div>
+    <div class="hint" id="hint"><strong>Étape 1 · Accueil</strong><br>Vue d'ensemble : CA du mois, impayés, devis récents.</div>
+  </div>
+  <div class="phone">
+    <div class="sbar">
+      <span style="font-size:15px;font-weight:600;">9:41</span>
+      <div class="notch"></div>
+      <div style="display:flex;gap:5px;align-items:center;">
+        <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="5.5" width="2.5" height="5.5" rx=".8" fill="#111"/><rect x="3.5" y="3.5" width="2.5" height="7.5" rx=".8" fill="#111"/><rect x="7" y="1.5" width="2.5" height="9.5" rx=".8" fill="#111"/><rect x="10.5" y="0" width="2.5" height="11" rx=".8" fill="#111"/></svg>
+        <svg width="24" height="11" viewBox="0 0 24 11"><rect x=".5" y=".5" width="19" height="10" rx="2.5" stroke="#111" stroke-width="1" fill="none"/><rect x="2" y="2" width="14" height="7" rx="1.5" fill="#111"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="#111"/></svg>
       </div>
     </div>
-  </section>
-
-  <!-- ARTICLES -->
-  <main class="container">
-    <div class="section">
-      <div class="section-header">
-        <h2>Articles</h2>
-        <div class="sh-line"></div>
-        <span class="sh-count">2 articles</span>
+    <div class="screens">
+      <div class="scr active" id="scr-home">
+        <div style="padding:18px 20px 14px;background:white;border-bottom:1px solid var(--s100);flex-shrink:0;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div><p style="font-size:11px;color:var(--mu);">Bonjour 👋</p><p class="serif" style="font-size:20px;font-weight:600;">Jean-Marc Leblanc</p></div>
+            <div style="width:40px;height:40px;border-radius:12px;background:var(--ink);display:flex;align-items:center;justify-content:center;"><span class="serif" style="font-size:15px;color:white;font-weight:500;">JL</span></div>
+          </div>
+        </div>
+        <div class="content">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--s100);margin-bottom:20px;">
+            <div style="background:var(--cr);padding:16px 18px;"><p style="font-size:11px;color:var(--mu);margin-bottom:4px;">Ce mois</p><p class="serif" style="font-size:24px;font-weight:600;">3 250€</p><p style="font-size:11px;color:#6DAB8A;font-weight:500;margin-top:2px;">↑ +22%</p></div>
+            <div style="background:var(--cr);padding:16px 18px;"><p style="font-size:11px;color:var(--mu);margin-bottom:4px;">Impayés</p><p class="serif" style="font-size:24px;font-weight:600;color:var(--or);">420€</p><p style="font-size:11px;color:var(--or);font-weight:500;margin-top:2px;">2 en retard</p></div>
+          </div>
+          <div style="padding:0 16px 20px;">
+            <p style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:10px;">Récents</p>
+            <div class="card">
+              <div class="crow" style="cursor:default;"><div style="flex:1;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;"><p style="font-size:13px;font-weight:600;">Devis #2026-14</p><span class="badge b-wait">En attente</span></div><p style="font-size:12px;color:var(--mu);">M. Bernard · Chaudière</p></div><div style="text-align:right;"><p style="font-size:13px;font-weight:600;">792€</p><p style="font-size:11px;color:var(--mu);">il y a 2j</p></div></div>
+              <div class="crow" style="cursor:default;"><div style="flex:1;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;"><p style="font-size:13px;font-weight:600;">Facture #2026-22</p><span class="badge b-paid">Payée ✓</span></div><p style="font-size:12px;color:var(--mu);">Mme Rousseau · VMC</p></div><div style="text-align:right;"><p style="font-size:13px;font-weight:600;">1 080€</p><p style="font-size:11px;color:var(--mu);">20 mai</p></div></div>
+              <div class="crow" style="cursor:default;"><div style="flex:1;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;"><p style="font-size:13px;font-weight:600;">Devis #2026-13</p><span class="badge b-sign">Signé</span></div><p style="font-size:12px;color:var(--mu);">M. Lefèvre · Parquet</p></div><div style="text-align:right;"><p style="font-size:13px;font-weight:600;">640€</p><p style="font-size:11px;color:var(--mu);">18 mai</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="bot" style="padding:16px;"><button class="btn btn-dk" style="width:100%;" onclick="nav('client')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau devis</button></div>
       </div>
 
-      <article class="article-card">
-        <div class="card-meta">
-          <span class="card-tag">Logiciels IA</span>
-          <span class="card-date">18 mai 2026</span>
+      <div class="scr" id="scr-client">
+        <div class="nav"><button class="back" onclick="back()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><div class="nav-title"><p>Nouveau devis</p><small>Choisir le client</small></div></div>
+        <div class="content" style="padding:16px;">
+          <input class="inp" type="text" placeholder="Rechercher..." id="client-search" style="margin-bottom:14px;">
+          <div class="card" style="margin-bottom:14px;"><div class="crow" id="new-client-row"><div style="width:36px;height:36px;border-radius:10px;background:var(--s50);border:1.5px dashed var(--s200);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" fill="none" stroke="var(--mu)" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div><p style="font-size:14px;font-weight:500;color:var(--mu);">Nouveau client</p><p style="font-size:12px;color:var(--s300);">Ajouter les coordonnées</p></div></div></div>
+          <p style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;">Récents</p>
+          <div class="card" id="client-list"></div>
         </div>
-        <h2 class="card-title">
-          <a href="/blog/ollama-vs-lm-studio-2026.html">
-            Ollama vs LM Studio en 2026 : lequel choisir pour vos LLM locaux ?
-          </a>
-        </h2>
-        <p class="card-excerpt">
-          Les deux tournent sur llama.cpp, supportent GGUF, et exposent une API compatible OpenAI. Mais Ollama est 12% plus rapide, tourne en service système, et consomme 3× moins de RAM. LM Studio gagne sur la découverte de modèles et l'accessibilité sans terminal. Benchmarks réels sur RTX 5070 Ti.
-        </p>
-        <div class="card-footer">
-          <span class="card-stats"><span>3 modèles testés</span> · <span>+12% Ollama</span> · <span>Comparatif complet</span></span>
-          <a href="/blog/ollama-vs-lm-studio-2026.html" class="btn-read">
-            Lire l'article →
-          </a>
-        </div>
-      </article>
-
-      <article class="article-card">
-        <div class="card-meta">
-          <span class="card-tag">IA · Hardware</span>
-          <span class="card-date">16 mai 2026</span>
-        </div>
-        <h2 class="card-title">
-          <a href="/blog/setup-pc-ia-local-jarvis-2026.html">
-            PC IA local en 2026 : j'ai testé 6 GPU, voici ce qui marche vraiment
-          </a>
-        </h2>
-        <p class="card-excerpt">
-          J'ai monté six configurations différentes pour faire tourner des LLM en local — de la RTX 4060 Ti budget à la RTX 5070 Ti haut de gamme — et mesuré les tokens par seconde sur Qwen 3 et Llama 3.3 avec Ollama.
-          Résultat : deux GPU se démarquent vraiment, deux déçoivent, et un m'a coûté trois semaines de debug pour un conflit de drivers.
-        </p>
-        <div class="card-footer">
-          <span class="card-stats"><span>6 GPU testés</span> · <span>95 t/s max</span> · <span>0 €/mois</span></span>
-          <a href="/blog/setup-pc-ia-local-jarvis-2026.html" class="btn-read">
-            Lire l'article →
-          </a>
-        </div>
-      </article>
-    </div>
-
-    <!-- EMAIL CAPTURE -->
-    <div class="email-section">
-      <div class="email-glow"></div>
-      <h2>Reçois les prochains tests en avant-première</h2>
-      <p>Un email quand un nouvel article sort. Pas de pub, pas de newsletter hebdo vide. Juste le contenu.</p>
-      <form class="email-form" action="https://50315367.sibforms.com/serve/MUIFALBt3mGak8GXb1NLYRkEofFgqFSxerVOntNjkNTEC0MtFv2BJDR2HajryQ_rZrTNfdO3_IGXe0QCpRqkFT5DQybJfRe9pQkoUxQNQxuEkvH9yJcJ2GOGY8zu6hO2_tFmdSPe712sV8iNYeR12UwIs5kcCdkO7QozBRFP8r0bhemJx9sClrkrNVsGy8U8B5ZS4HO67MCUaHbcIA==" method="post">
-        <input type="text" name="email_address_check" value="" style="display:none" aria-hidden="true">
-        <input type="hidden" name="locale" value="fr">
-        <input
-          class="email-input"
-          type="email"
-          name="EMAIL"
-          placeholder="ton@email.fr"
-          required
-          autocomplete="email"
-        />
-        <button class="btn-subscribe" type="submit">S'abonner</button>
-      </form>
-      <p class="email-note">Désabonnement en un clic. Aucune revente de données.</p>
-    </div>
-
-    <!-- WHY THIS BLOG -->
-    <div class="section">
-      <div class="section-header">
-        <h2>Pourquoi ce blog</h2>
-        <div class="sh-line"></div>
       </div>
 
-      <div class="why-grid">
-        <div class="why-card">
-          <span class="why-icon">🔧</span>
-          <h3>Terrain</h3>
-          <p>Chaque test est fait sur mon propre matériel, dans mes vraies conditions. Pas de prêt presse, pas de config idéale préparée par une PR.</p>
+      <div class="scr" id="scr-builder">
+        <div class="nav"><button class="back" onclick="back()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><div class="nav-title"><p>Devis #2026-15</p><small id="bldr-client">—</small></div><div class="ml-auto"><span class="badge b-dft">Brouillon</span></div></div>
+        <div class="content">
+          <div style="margin:14px;"><div class="card"><div id="lines-wrap"></div><button class="btn btn-add" style="width:100%;border-radius:0;height:42px;border:none;border-top:1px dashed var(--s200);" id="add-btn"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Ajouter une prestation</button></div></div>
+          <div style="padding:0 14px 14px;"><p style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;">Type de travaux (TVA)</p><div class="tabs" style="padding:0;" id="tva-tabs"><button class="tab on" data-tva="10">Rénovation 10%</button><button class="tab" data-tva="20">Neuf 20%</button><button class="tab" data-tva="5.5">Énergie 5.5%</button></div></div>
+          <div style="padding:0 14px 20px;"><p style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;">Note chantier</p><textarea class="inp" rows="2" placeholder="Ex : accès par la porte de garage, code 4521…" style="resize:none;height:60px;font-size:13px;"></textarea></div>
         </div>
-        <div class="why-card">
-          <span class="why-icon">🎯</span>
-          <h3>Honnête</h3>
-          <p>Quand quelque chose ne marche pas — driver incompatible, modèle décevant, benchmark plat — je le dis. Un avis honnête vaut mieux qu'un article publicitaire.</p>
+        <div class="bot">
+          <div class="tbar"><div><p style="font-size:12px;color:var(--mu);" id="ht-disp">HT : 0,00 €</p><p style="font-size:11px;color:var(--mu);" id="tva-disp">TVA (10%) : 0,00 €</p></div><div style="text-align:right;"><p class="serif" style="font-size:22px;font-weight:600;" id="ttc-disp">0,00 € TTC</p></div></div>
+          <div style="padding:0 14px 14px;"><button class="btn btn-dk" style="width:100%;" id="prev-btn" disabled onclick="nav('preview')">Aperçu &amp; signature →</button></div>
         </div>
-        <div class="why-card">
-          <span class="why-icon">🔗</span>
-          <h3>Monétisé clairement</h3>
-          <p>Certains liens sont affiliés Amazon. Je le signale toujours explicitement. Ça ne change rien à mes recommandations — je ne parle que de ce que j'utilise.</p>
+        <div class="overlay" id="overlay"></div>
+        <div class="sheet" id="sheet">
+          <div class="shandle"></div>
+          <div style="padding:12px 16px 10px;border-bottom:1px solid var(--s100);flex-shrink:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><p style="font-size:15px;font-weight:600;">Ajouter une prestation</p><button id="sheet-close" style="width:28px;height:28px;border-radius:50%;background:var(--s50);border:none;cursor:pointer;font-size:18px;color:var(--mu);display:flex;align-items:center;justify-content:center;">×</button></div>
+            <input class="inp" type="text" placeholder="Rechercher dans le catalogue…" id="cat-search" style="height:38px;font-size:13px;padding:8px 12px;">
+          </div>
+          <div style="padding:8px 16px 8px;border-bottom:1px solid var(--s100);flex-shrink:0;"><div class="tabs" id="cat-tabs" style="padding:0;"><button class="tab on" data-cat="all">Tout</button><button class="tab" data-cat="MO">Main d'œuvre</button><button class="tab" data-cat="Four">Fournitures</button><button class="tab" data-cat="Forf">Forfaits</button></div></div>
+          <div style="overflow-y:auto;flex:1;" id="cat-list"></div>
+        </div>
+      </div>
+
+      <div class="scr" id="scr-preview">
+        <div class="nav"><button class="back" onclick="back()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><div class="nav-title"><p>Aperçu du devis</p></div><div class="ml-auto"><button onclick="back()" style="font-size:13px;color:var(--s500);background:none;border:none;cursor:pointer;font-family:inherit;padding:8px;">Modifier</button></div></div>
+        <div class="content" id="pdf-content"></div>
+        <div class="bot" style="padding:12px 14px;"><button class="btn btn-dk" style="width:100%;margin-bottom:8px;" onclick="nav('sig')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg>Faire signer sur l'écran</button><button class="btn btn-gh" style="width:100%;" onclick="nav('ok')">Envoyer sans signature</button></div>
+      </div>
+
+      <div class="scr" id="scr-sig">
+        <div class="nav"><button class="back" onclick="back()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><div class="nav-title"><p>Signature client</p></div></div>
+        <div class="content" style="display:flex;flex-direction:column;align-items:center;padding:20px 18px;">
+          <p style="font-size:13px;color:var(--mu);margin-bottom:6px;">Montrez l'écran à votre client</p>
+          <p class="serif" style="font-size:18px;font-weight:600;margin-bottom:3px;" id="sig-name">Client</p>
+          <p style="font-size:13px;color:var(--mu);margin-bottom:20px;">Devis #2026-15 · <span id="sig-ttc">—</span> TTC</p>
+          <div style="width:100%;background:white;border:1.5px solid var(--s200);border-radius:12px;overflow:hidden;margin-bottom:10px;position:relative;"><p style="font-size:12px;color:#ddd;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap;" id="sig-ph">Signez ici →</p><canvas id="sigc" width="357" height="190" style="height:190px;"></canvas></div>
+          <button id="clr-btn" style="font-size:13px;color:var(--mu);background:none;border:none;cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:16px;">Effacer</button>
+          <div style="background:var(--s50);border-radius:10px;padding:12px 14px;width:100%;"><p style="font-size:12px;color:var(--mu);line-height:1.65;">En signant, <strong id="sig-name2">le client</strong> accepte le devis #2026-15 et s'engage à régler <strong id="sig-ttc2">—</strong> dans les conditions mentionnées.</p></div>
+        </div>
+        <div class="bot" style="padding:12px 14px;"><button class="btn btn-go" style="width:100%;" id="val-btn" disabled onclick="nav('ok')">Valider la signature</button></div>
+      </div>
+
+      <div class="scr" id="scr-ok">
+        <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;text-align:center;">
+          <div class="pop" style="width:70px;height:70px;border-radius:50%;background:#EAF3EC;display:flex;align-items:center;justify-content:center;margin-bottom:18px;"><svg width="30" height="30" fill="none" stroke="#2D7A4A" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h2 class="serif fu1" style="font-size:28px;font-weight:600;margin-bottom:6px;">Devis envoyé !</h2>
+          <p class="fu1" style="font-size:14px;color:var(--mu);margin-bottom:4px;">Devis #2026-15 · Signé</p>
+          <p class="serif fu2" style="font-size:32px;font-weight:600;margin-bottom:28px;" id="ok-ttc">—</p>
+          <div class="fu3" style="width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:28px;">
+            <button class="btn btn-dk" style="width:100%;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Envoyer par email</button>
+            <button class="btn" style="width:100%;background:#25D366;color:white;"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M11.5 2A9.5 9.5 0 0 0 2 11.5c0 1.67.43 3.24 1.19 4.59L2 22l6.08-1.6A9.46 9.46 0 0 0 11.5 21a9.5 9.5 0 1 0 0-19z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Envoyer sur WhatsApp</button>
+            <button class="btn btn-gh" style="width:100%;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copier le lien PDF</button>
+          </div>
+          <button onclick="nav('home')" style="font-size:13px;color:var(--mu);background:none;border:none;cursor:pointer;font-family:inherit;text-decoration:underline;">Retour à l'accueil</button>
         </div>
       </div>
     </div>
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <span>© 2026 TheBenchLab — Tous droits réservés</span>
-      <nav style="display:flex;gap:1.25rem;flex-wrap:wrap">
-        <a href="/about.html">À propos</a>
-        <a href="/about.html#affiliation">Affiliation</a>
-        <a href="/mentions-legales.html">Mentions légales</a>
-        <a href="/politique-confidentialite.html">Confidentialité</a>
-      </nav>
-    </div>
-  </footer>
-
+  </div>
+</div>
+<script>
+const CLIENTS=[{id:1,name:'M. Bernard',addr:'12 rue des Lilas, 75011',phone:'06 12 34 56 78',ini:'MB'},{id:2,name:'Mme Rousseau',addr:'3 allée du Parc, 92100',phone:'06 98 76 54 32',ini:'MR'},{id:3,name:'M. Lefèvre',addr:'8 bd Haussmann, 75009',phone:'06 55 44 33 22',ini:'ML'},{id:4,name:'SARL Dupont Immo',addr:'45 rue du Commerce, 75015',phone:'01 40 00 00 00',ini:'DI'}];
+const CAT=[{id:1,cat:'MO',label:"Main d'œuvre",unit:'h',price:65,tva:10},{id:2,cat:'MO',label:'Déplacement',unit:'forfait',price:35,tva:20},{id:3,cat:'MO',label:'Mise en service chaudière',unit:'forfait',price:85,tva:10},{id:4,cat:'MO',label:'Soudure brasure',unit:'h',price:75,tva:10},{id:5,cat:'Four',label:'Joint sphérique 1/2"',unit:'unité',price:2.5,tva:20},{id:6,cat:'Four',label:'Tube PER 16mm',unit:'m',price:3.8,tva:20},{id:7,cat:'Four',label:"Robinet d'arrêt 1/2\"",unit:'unité',price:18,tva:20},{id:8,cat:'Four',label:'Vanne à bille 3/4"',unit:'unité',price:28,tva:20},{id:9,cat:'Four',label:'Chaudière Vaillant 24kW',unit:'unité',price:820,tva:20},{id:10,cat:'Four',label:"Ballon d'eau chaude 100L",unit:'unité',price:280,tva:20},{id:11,cat:'Four',label:'Siphon douche',unit:'unité',price:12,tva:20},{id:12,cat:'Forf',label:'Débouchage colonne',unit:'forfait',price:120,tva:10},{id:13,cat:'Forf',label:'Remplacement robinet',unit:'forfait',price:85,tva:10},{id:14,cat:'Forf',label:'Installation chaudière',unit:'forfait',price:450,tva:10},{id:15,cat:'Forf',label:'Détartrage chauffe-eau',unit:'forfait',price:95,tva:10},{id:16,cat:'Forf',label:'Réparation fuite',unit:'forfait',price:75,tva:10}];
+const HINTS={home:'<strong>Étape 1 · Accueil</strong><br>CA du mois, impayés, devis récents. Tap "+ Nouveau devis".',client:'<strong>Étape 2 · Client</strong><br>Sélectionnez un client existant ou créez-en un nouveau sur place.',builder:'<strong>Étape 3 · Devis</strong><br>Ajoutez des prestations depuis votre catalogue. Les totaux se calculent en temps réel.',preview:'<strong>Étape 4 · Aperçu PDF</strong><br>Le client voit exactement ce qu\'il va recevoir. Tout est conforme légalement.',sig:'<strong>Étape 5 · Signature</strong><br>Le client signe directement sur votre écran. La signature est horodatée.',ok:'<strong>Étape 6 · Envoyé ✓</strong><br>Le PDF signé est envoyé par email et/ou WhatsApp. Le devis passe en "Signé".'};
+const ORDER=['home','client','builder','preview','sig','ok'];
+let hist=['home'],client=null,lines=[],tva=10,catFilter='all',catSearch='',sigCanvas,sigCtx,drawing=false;
+function nav(to){const cur=hist[hist.length-1];if(cur===to)return;const ce=$('scr-'+cur),ne=$('scr-'+to);ce.classList.remove('active');ce.classList.add('behind');ne.classList.add('active');hist.push(to);syncUI(to);if(to==='preview')renderPDF();if(to==='sig')initSig();if(to==='ok')$('ok-ttc').textContent=fmt(calcTTC())+' TTC';}
+function back(){if(hist.length<=1)return;const cur=hist.pop(),prev=hist[hist.length-1];const ce=$('scr-'+cur),pe=$('scr-'+prev);ce.classList.remove('active');pe.classList.remove('behind');pe.classList.add('active');syncUI(prev);}
+function syncUI(scr){const idx=ORDER.indexOf(scr);document.querySelectorAll('.step').forEach((el,i)=>{el.classList.remove('active','done');if(i<idx)el.classList.add('done');else if(i===idx)el.classList.add('active');});$('hint').innerHTML=HINTS[scr]||'';}
+function $(id){return document.getElementById(id);}
+function renderClients(q=''){const list=$('client-list');const filtered=CLIENTS.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));list.innerHTML=filtered.map(c=>`<div class="crow" data-cid="${c.id}"><div style="width:36px;height:36px;border-radius:10px;background:var(--s50);border:1px solid var(--s100);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:11px;font-weight:600;color:var(--s500);">${c.ini}</span></div><div style="flex:1;"><p style="font-size:14px;font-weight:500;">${c.name}</p><p style="font-size:12px;color:var(--mu);">${c.phone}</p></div><svg width="14" height="14" fill="none" stroke="var(--s200)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>`).join('');list.querySelectorAll('[data-cid]').forEach(el=>{el.addEventListener('click',()=>{client=CLIENTS.find(c=>c.id===+el.dataset.cid);$('bldr-client').textContent=client.name;$('sig-name').textContent=client.name;$('sig-name2').textContent=client.name;nav('builder');});});}
+$('client-search').addEventListener('input',e=>renderClients(e.target.value));
+$('new-client-row').addEventListener('click',()=>{client={name:'Nouveau client',addr:'',phone:'',ini:'NC'};$('bldr-client').textContent=client.name;$('sig-name').textContent=client.name;$('sig-name2').textContent=client.name;nav('builder');});
+function fmt(n){return n.toLocaleString('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:n%1===0?0:2});}
+function calcTTC(){const ht=lines.reduce((s,l)=>s+l.price*l.qty,0);return ht+ht*tva/100;}
+function updateTotals(){const ht=lines.reduce((s,l)=>s+l.price*l.qty,0);const t=ht*tva/100;const ttc=ht+t;$('ht-disp').textContent='HT : '+fmt(ht);$('tva-disp').textContent=`TVA (${tva}%) : `+fmt(t);$('ttc-disp').textContent=fmt(ttc)+' TTC';$('prev-btn').disabled=lines.length===0;$('sig-ttc').textContent=fmt(ttc);$('sig-ttc2').textContent=fmt(ttc)+' TTC';}
+function renderLines(){const w=$('lines-wrap');if(!lines.length){w.innerHTML=`<div style="padding:24px;text-align:center;"><p style="font-size:13px;color:var(--mu);">Aucune prestation</p><p style="font-size:12px;color:var(--s300);margin-top:4px;">Appuyez sur "Ajouter" ci-dessous</p></div>`;return;}w.innerHTML=lines.map((l,i)=>`<div class="dline"><div style="flex:1;min-width:0;"><p style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${l.label}</p><p style="font-size:11px;color:var(--mu);">${fmt(l.price)} / ${l.unit}</p></div><button class="qbtn" data-op="dec" data-i="${i}">−</button><span class="qdsp">${l.qty}</span><button class="qbtn" data-op="inc" data-i="${i}">+</button><div style="width:50px;text-align:right;flex-shrink:0;"><p style="font-size:13px;font-weight:600;">${fmt(l.price*l.qty)}</p><p style="font-size:10px;color:var(--mu);">HT</p></div><button style="width:22px;height:22px;border-radius:6px;background:none;border:none;cursor:pointer;color:var(--mu);font-size:15px;line-height:1;flex-shrink:0;display:flex;align-items:center;justify-content:center;" data-op="del" data-i="${i}">×</button></div>`).join('');w.querySelectorAll('[data-op]').forEach(el=>{el.addEventListener('click',()=>{const i=+el.dataset.i,op=el.dataset.op;if(op==='inc')lines[i].qty++;else if(op==='dec'){if(lines[i].qty>1)lines[i].qty--;else lines.splice(i,1);}else if(op==='del')lines.splice(i,1);renderLines();updateTotals();});});}
+$('tva-tabs').querySelectorAll('.tab').forEach(btn=>{btn.addEventListener('click',()=>{$('tva-tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');tva=parseFloat(btn.dataset.tva);updateTotals();});});
+function openSheet(){$('overlay').classList.add('open');$('sheet').classList.add('open');renderCat();setTimeout(()=>$('cat-search').focus(),340);}
+function closeSheet(){$('overlay').classList.remove('open');$('sheet').classList.remove('open');}
+$('add-btn').addEventListener('click',openSheet);
+$('overlay').addEventListener('click',closeSheet);
+$('sheet-close').addEventListener('click',closeSheet);
+$('cat-search').addEventListener('input',e=>{catSearch=e.target.value;renderCat();});
+$('cat-tabs').querySelectorAll('.tab').forEach(btn=>{btn.addEventListener('click',()=>{$('cat-tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');catFilter=btn.dataset.cat;renderCat();});});
+function renderCat(){let items=CAT;if(catFilter!=='all')items=items.filter(i=>i.cat===catFilter);if(catSearch)items=items.filter(i=>i.label.toLowerCase().includes(catSearch.toLowerCase()));const groups={};items.forEach(i=>(groups[i.cat]=groups[i.cat]||[]).push(i));const catNames={'MO':"Main d'œuvre",'Four':'Fournitures','Forf':'Forfaits'};let html='';if(!items.length){html='<div style="padding:32px;text-align:center;"><p style="font-size:13px;color:var(--mu);">Aucun résultat</p></div>';}else Object.entries(groups).forEach(([g,its])=>{html+=`<div style="padding:8px 16px 5px;background:var(--s50);"><p style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);">${catNames[g]||g}</p></div>`;its.forEach(it=>{html+=`<div class="citem" data-iid="${it.id}"><div style="flex:1;"><p style="font-size:14px;font-weight:500;">${it.label}</p><p style="font-size:11px;color:var(--mu);">par ${it.unit} · TVA ${it.tva}%</p></div><span style="font-size:14px;font-weight:600;color:var(--s500);margin-right:10px;">${fmt(it.price)}</span><button class="cadd" data-iid="${it.id}">+</button></div>`;});});const cl=$('cat-list');cl.innerHTML=html;cl.querySelectorAll('[data-iid]').forEach(el=>{el.addEventListener('click',e=>{const id=+(el.dataset.iid||el.closest('[data-iid]').dataset.iid);const item=CAT.find(i=>i.id===id);if(!item)return;const ex=lines.find(l=>l.id===id);if(ex)ex.qty++;else lines.push({...item,qty:1});renderLines();updateTotals();el.style.background='#EAF3EC';setTimeout(()=>el.style.background='',300);if(!el.classList.contains('cadd'))closeSheet();});});}
+function renderPDF(){const cl=client||{name:'Client',addr:'',phone:''};const ht=lines.reduce((s,l)=>s+l.price*l.qty,0);const t=ht*tva/100,ttc=ht+t;const today=new Date().toLocaleDateString('fr-FR');const val=new Date(Date.now()+30*864e5).toLocaleDateString('fr-FR');const rows=lines.map(l=>`<div class="pdf-row"><span>${l.label}</span><span style="color:var(--mu);text-align:center;">${l.qty}</span><span style="text-align:right;">${fmt(l.price)}</span><span style="text-align:right;font-weight:500;">${fmt(l.price*l.qty)}</span></div>`).join('');$('pdf-content').innerHTML=`<div style="padding:20px 16px 14px;border-bottom:2px solid var(--ink);"><div style="display:flex;justify-content:space-between;margin-bottom:14px;"><div><p class="serif" style="font-size:16px;font-weight:600;">Jean-Marc Leblanc</p><p style="font-size:12px;color:var(--mu);">Plomberie · Chauffage</p><p style="font-size:12px;color:var(--mu);">SIRET 812 345 678 00019</p><p style="font-size:12px;color:var(--mu);">06 10 20 30 40</p></div><div style="text-align:right;"><p class="serif" style="font-size:16px;font-weight:600;color:var(--s500);">DEVIS</p><p style="font-size:12px;color:var(--mu);">#2026-15</p><p style="font-size:12px;color:var(--mu);">${today}</p><p style="font-size:11px;color:var(--s300);">Valide jusqu'au ${val}</p></div></div><div style="background:var(--s50);border-radius:8px;padding:10px 12px;"><p style="font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:4px;">Client</p><p style="font-size:13px;font-weight:500;">${cl.name}</p>${cl.addr?`<p style="font-size:12px;color:var(--mu);">${cl.addr}</p>`:''}</div></div><div class="pdf-th"><span>Désignation</span><span style="text-align:center;">Qté</span><span style="text-align:right;">P.U. HT</span><span style="text-align:right;">Total HT</span></div>${rows||'<div style="padding:16px;text-align:center;font-size:13px;color:var(--mu);">Aucune prestation</div>'}<div style="padding:14px 16px;"><div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0;"><span style="color:var(--mu);">Sous-total HT</span><span>${fmt(ht)}</span></div><div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0;"><span style="color:var(--mu);">TVA ${tva}%</span><span>${fmt(t)}</span></div><div style="display:flex;justify-content:space-between;font-size:15px;font-weight:600;padding:10px 0 6px;border-top:1.5px solid var(--ink);margin-top:8px;"><span>TOTAL TTC</span><span>${fmt(ttc)}</span></div><div style="background:var(--s50);border-radius:8px;padding:10px 12px;margin-top:10px;"><p style="font-size:11px;color:var(--mu);line-height:1.65;">Paiement : 30% à la commande, solde à réception · Validité 30 jours · TVA acquittée sur les encaissements · En cas de litige : tribunal compétent de Paris</p></div></div>`;}
+function initSig(){sigCanvas=$('sigc');sigCtx=sigCanvas.getContext('2d');sigCtx.strokeStyle='#111';sigCtx.lineWidth=2.5;sigCtx.lineCap='round';sigCtx.lineJoin='round';sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);$('sig-ph').style.display='';$('val-btn').disabled=true;drawing=false;const pos=e=>{const r=sigCanvas.getBoundingClientRect(),sx=sigCanvas.width/r.width,sy=sigCanvas.height/r.height,s=e.touches?e.touches[0]:e;return{x:(s.clientX-r.left)*sx,y:(s.clientY-r.top)*sy};};sigCanvas.onmousedown=sigCanvas.ontouchstart=e=>{e.preventDefault();drawing=true;sigCtx.beginPath();const p=pos(e);sigCtx.moveTo(p.x,p.y);$('sig-ph').style.display='none';};sigCanvas.onmousemove=sigCanvas.ontouchmove=e=>{e.preventDefault();if(!drawing)return;const p=pos(e);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();};sigCanvas.onmouseup=sigCanvas.ontouchend=()=>{drawing=false;const d=sigCtx.getImageData(0,0,sigCanvas.width,sigCanvas.height).data;$('val-btn').disabled=!d.some((v,i)=>i%4===3&&v>0);};}
+$('clr-btn').addEventListener('click',()=>{if(sigCtx)sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);$('sig-ph').style.display='';$('val-btn').disabled=true;});
+renderClients();renderLines();updateTotals();renderCat();
+</script>
 </body>
 </html>
