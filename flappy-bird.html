@@ -31,11 +31,14 @@
     color:var(--txt);
     font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     display:flex;align-items:center;justify-content:center;
-    min-height:100dvh;overflow:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    min-height:100vh;min-height:100svh;overflow:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
   }
   .wrap{
     position:relative;
-    width:min(96vw, calc((100dvh - 24px) * 0.6667));
+    /* svh = smallest viewport height: stable même quand la barre Safari s'affiche/disparaît,
+       ce qui évite un re-dimensionnement (et le micro-freeze) du jeu à chaque tap sur iOS. */
+    width:min(96vw, calc((100vh - 24px) * 0.6667));
+    width:min(96vw, calc((100svh - 24px) * 0.6667));
     aspect-ratio:480/720;
     border-radius:24px;
     overflow:hidden;
@@ -504,14 +507,20 @@ function haptic(ms){ if(S.haptic && navigator.vibrate) try{navigator.vibrate(ms)
 const VW=480, VH=720;          // virtual resolution
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
-let DPR=1;
+let DPR=0;
 function resize(){
-  const r=canvas.getBoundingClientRect();
-  DPR=Math.min(3, window.devicePixelRatio||1);
-  canvas.width=Math.round(VW*DPR); canvas.height=Math.round(VH*DPR);
+  // DPR capped at 2 : sur iPhone (DPR 3) ça divise par ~2 le nb de pixels à remplir.
+  const dpr=Math.min(2, window.devicePixelRatio||1);
+  const w=Math.round(VW*dpr), h=Math.round(VH*dpr);
+  // Affecter canvas.width réinitialise et réalloue le buffer : on ne le fait que si la
+  // taille change réellement (les events resize parasites d'iOS deviennent gratuits).
+  if(w===canvas.width && h===canvas.height && dpr===DPR) return;
+  DPR=dpr;
+  canvas.width=w; canvas.height=h;
   ctx.setTransform(DPR,0,0,DPR,0,0);
 }
-window.addEventListener("resize", resize);
+let _rzT=0;
+window.addEventListener("resize", ()=>{ clearTimeout(_rzT); _rzT=setTimeout(resize,150); });
 
 /* ---------------- Game state ---------------- */
 const GROUND_H=96;
@@ -573,7 +582,7 @@ function flap(){
   if(G.state!=="playing") return;
   G.bird.vy = -G.conf.flap;
   G.bird.wing = 1;
-  Audio2.flap(); haptic(8);
+  Audio2.resume(); Audio2.flap(); haptic(8);
   if(S.fx) for(let i=0;i<3;i++) addParticle(G.bird.x-6, G.bird.y+6, "feather");
 }
 function startPlaying(){
