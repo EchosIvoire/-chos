@@ -268,10 +268,11 @@
     <div class="card">
       <div class="iconbtn close" data-close="leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
       <h2>📊 Classement</h2>
-      <p class="sub">Données enregistrées sur cet appareil.</p>
+      <p class="sub" id="lbSub">Affronte les autres : grimpe le classement classé.</p>
       <div class="tabs">
-        <div class="tab active" data-lb="ranked">🏆 Classé (RP)</div>
-        <div class="tab" data-lb="score">⚡ Meilleurs scores</div>
+        <div class="tab active" data-lb="online">🌍 Mondial</div>
+        <div class="tab" data-lb="ranked">🏆 Classé local</div>
+        <div class="tab" data-lb="score">⚡ Scores</div>
       </div>
       <div class="lb" id="lbList"></div>
     </div>
@@ -334,6 +335,55 @@ function load(){
   return Object.assign({}, defaultState);
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+/* ---------------- Classement EN LIGNE (multijoueur asynchrone) ----------------
+   Pour activer le classement mondial partagé entre tous les joueurs :
+   1) Crée un projet gratuit sur https://supabase.com
+   2) Dans "SQL Editor", exécute :
+        create table flappy_scores (
+          pid text primary key,
+          name text,
+          rp int default 0,
+          score int default 0,
+          updated_at timestamptz default now()
+        );
+        alter table flappy_scores enable row level security;
+        create policy "lecture publique"  on flappy_scores for select using (true);
+        create policy "ecriture publique" on flappy_scores for insert with check (true);
+        create policy "maj publique"      on flappy_scores for update using (true) with check (true);
+   3) Dans "Project Settings → API", copie l'URL du projet et la clé "anon public",
+      puis colle-les ci-dessous. Tant que c'est vide, le jeu reste en mode local.        */
+const ONLINE = {
+  url:  "",                 // ex: "https://abcdxyz.supabase.co"
+  anon: "",                 // ex: "eyJhbGciOiJ..." (clé anon public)
+  table:"flappy_scores",
+};
+function onlineEnabled(){ return !!(ONLINE.url && ONLINE.anon); }
+function clientId(){
+  let id;
+  try{ id=localStorage.getItem("flappylab.pid"); if(!id){ id="p_"+Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem("flappylab.pid", id); } }
+  catch(e){ id="p_anon"; }
+  return id;
+}
+function onlineHeaders(){ return {"apikey":ONLINE.anon,"Authorization":"Bearer "+ONLINE.anon,"Content-Type":"application/json"}; }
+async function submitOnline(name, rp, score){
+  if(!onlineEnabled()) return;
+  try{
+    await fetch(`${ONLINE.url}/rest/v1/${ONLINE.table}?on_conflict=pid`, {
+      method:"POST",
+      headers:Object.assign(onlineHeaders(),{"Prefer":"resolution=merge-duplicates,return=minimal"}),
+      body:JSON.stringify({pid:clientId(), name:name.slice(0,14), rp, score})
+    });
+  }catch(e){}
+}
+async function fetchOnline(){
+  if(!onlineEnabled()) return null;
+  try{
+    const r=await fetch(`${ONLINE.url}/rest/v1/${ONLINE.table}?select=pid,name,rp,score&order=rp.desc&limit=100`, {headers:onlineHeaders()});
+    if(!r.ok) return null;
+    return await r.json();
+  }catch(e){ return null; }
+}
 
 /* ---------------- Options data ---------------- */
 const BIRDS = {
@@ -650,7 +700,8 @@ function endRun(){
     const promoted = afterT.idx>beforeT.idx;
     if(promoted){ setTimeout(()=>Audio2.rankup(),300); }
     upsertRankEntry(S.name, S.rp);
-    ranked={delta, before, after:S.rp, promoted, beforeT, afterT};
+    submitOnline(S.name, S.rp, S.best);   // multijoueur : pousse au classement mondial
+    ranked={delta, before, after:S.rp, promoted, beforeT, afterT, online:onlineEnabled()};
   }
   save();
   showGameOver(score, isBest, ranked);
@@ -922,13 +973,13 @@ $("quitBtn").addEventListener("click", ()=>{ Audio2.click(); goMenu(); });
 $("playFree").addEventListener("click",()=>startMode("free"));
 $("playRanked").addEventListener("click",()=>startMode("ranked"));
 $("openCustom").addEventListener("click",()=>{ Audio2.click(); buildCustomize(); showScreen("customize"); });
-$("openLb").addEventListener("click",()=>{ Audio2.click(); renderLeaderboard("ranked"); showScreen("leaderboard"); });
+$("openLb").addEventListener("click",()=>{ Audio2.click(); renderLeaderboard("online"); showScreen("leaderboard"); });
 $("openSettings").addEventListener("click",()=>{ Audio2.click(); buildSettings(); showScreen("settings"); });
 
 /* game over buttons */
 $("retryBtn").addEventListener("click",()=>startMode(G.mode));
 $("menuBtn").addEventListener("click",()=>{ Audio2.click(); goMenu(); });
-$("goLb").addEventListener("click",()=>{ Audio2.click(); renderLeaderboard(G.mode==="ranked"?"ranked":"score"); showScreen("leaderboard"); });
+$("goLb").addEventListener("click",()=>{ Audio2.click(); renderLeaderboard(G.mode==="ranked"?"online":"score"); showScreen("leaderboard"); });
 
 /* close buttons */
 document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",()=>{
@@ -1018,6 +1069,7 @@ function showGameOver(score, isBest, ranked){
           <div class="name" style="color:${r.tier.col}">${r.tier.name} ${r.div} ${ranked.promoted?'<span style="font-size:13px;color:var(--accent2)">▲ PROMU !</span>':''}</div>
           <div class="div">${ranked.after} RP <span class="rpdelta ${up?'up':'down'}">${up?'+':''}${ranked.delta}</span></div>
           <div class="rpbar"><i style="width:${Math.round(r.prog*100)}%"></i></div>
+          ${ranked.online?'<div class="div" style="color:var(--accent2);margin-top:6px">🌍 Classement mondial mis à jour</div>':''}
         </div>
       </div>`;
   } else gr.style.display="none";
@@ -1029,7 +1081,10 @@ function showGameOver(score, isBest, ranked){
 /* leaderboard render */
 function renderLeaderboard(kind){
   const list=$("lbList");
+  const sub=$("lbSub");
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.getAttribute("data-lb")===kind));
+  if(kind==="online"){ renderOnline(list, sub); return; }
+  if(sub) sub.textContent = kind==="ranked" ? "Ladder local — entraîne-toi contre les bots." : "Tes meilleurs scores sur cet appareil.";
   list.innerHTML="";
   if(kind==="ranked"){
     let L=getLadder().slice();
@@ -1063,6 +1118,36 @@ function renderLeaderboard(kind){
       list.appendChild(row);
     });
   }
+}
+async function renderOnline(list, sub){
+  if(!onlineEnabled()){
+    if(sub) sub.textContent="Classement mondial — multijoueur asynchrone.";
+    list.innerHTML='<div class="empty">🌐 <b>Classement mondial pas encore activé.</b><br><br>Pour que les scores de tous les joueurs se retrouvent ici, ouvre <code>flappy-bird.html</code> et suis le bloc « Classement EN LIGNE » en haut du script : crée un projet <b>Supabase</b> gratuit, puis colle l\'URL + la clé.<br><br>En attendant, l\'onglet « Classé local » te fait progresser hors-ligne.</div>';
+    return;
+  }
+  list.innerHTML='<div class="empty">⏳ Chargement du classement mondial…</div>';
+  const data=await fetchOnline();
+  if(!data){ list.innerHTML='<div class="empty">⚠️ Connexion au classement impossible. Vérifie ta connexion et réessaie.</div>'; return; }
+  const mine={pid:clientId(), name:S.name, rp:S.rp, score:S.best, me:true};
+  const map=new Map();
+  data.forEach(e=>map.set(e.pid, e));
+  map.set(mine.pid, Object.assign({}, map.get(mine.pid)||{}, mine));
+  const L=[...map.values()].sort((a,b)=>(b.rp||0)-(a.rp||0));
+  const myPos=L.findIndex(e=>e.pid===mine.pid)+1;
+  if(sub) sub.textContent = `Tu es ${myPos>0?("#"+myPos):"non classé"} sur ${L.length} joueur${L.length>1?"s":""}. Objectif : la 1ʳᵉ place !`;
+  list.innerHTML="";
+  L.forEach((e,i)=>{
+    const r=tierFor(e.rp||0), me=e.pid===mine.pid;
+    const row=document.createElement("div");
+    row.className="lbrow"+(me?" me":"");
+    const m=i===0?"🥇":i===1?"🥈":i===2?"🥉":String(i+1);
+    row.innerHTML=`<div class="pos">${m}</div>
+      <div class="badge" title="${r.tier.name}">${r.tier.icon}</div>
+      <div class="who">${escapeHtml(e.name||"???")}${me?' <span style="color:var(--accent)">(toi)</span>':''}</div>
+      <div class="tier">${r.tier.name} ${r.div}</div>
+      <div class="val">${e.rp||0}</div>`;
+    list.appendChild(row);
+  });
 }
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
