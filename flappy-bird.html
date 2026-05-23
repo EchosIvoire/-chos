@@ -366,6 +366,19 @@ const DIFFS = {
   hard:   {label:"Hardcore", gap:144, speed:222, interval:262, grav:1800, flap:520},
 };
 const RANKED = {label:"Classé", gap:160, speed:198, interval:280, grav:1700, flap:505};
+// Ranked difficulty scales with the player's tier (0 = Bronze … 6 = Légende).
+function rankedConf(){
+  const idx = tierFor(S.rp).idx;
+  return {
+    label:"Classé",
+    gap:      Math.max(116, 176 - idx*9),
+    speed:    178 + idx*12,
+    interval: Math.max(224, 300 - idx*12),
+    grav:     1650 + idx*25,
+    flap:     500 + idx*6,
+    tierIdx:  idx,
+  };
+}
 
 /* ---------------- Rank tiers ---------------- */
 const TIERS = [
@@ -484,7 +497,7 @@ function spawnClouds(){
 }
 function resetGame(mode){
   G.mode=mode;
-  G.conf = mode==="ranked" ? RANKED : DIFFS[S.diff];
+  G.conf = mode==="ranked" ? rankedConf() : DIFFS[S.diff];
   G.bird=makeBird();
   G.pipes=[]; G.particles=[];
   G.score=0; G.scrollG=0; G.scrollFar=0; G.scrollNear=0;
@@ -691,17 +704,22 @@ function draw(){
   // death flash
   if(G.flash>0){ ctx.fillStyle=`rgba(255,255,255,${G.flash*0.6})`; ctx.fillRect(0,0,VW,VH); }
 }
+/* Cached gradients — building a gradient every frame is the main cost on mobile,
+   so we create each one once (keyed by option) and reuse it. */
+const GC={sky:{},sun:{},pipeBody:{},pipeCap:{},birdBody:{},birdGlow:{}};
+function gSky(th){ let g=GC.sky[th.label]; if(!g){ g=ctx.createLinearGradient(0,0,0,VH); g.addColorStop(0,th.sky[0]); g.addColorStop(1,th.sky[1]); GC.sky[th.label]=g; } return g; }
+function gSun(th,sx,sy){ let g=GC.sun[th.label]; if(!g){ g=ctx.createRadialGradient(sx,sy,4,sx,sy,70); g.addColorStop(0,th.sun); g.addColorStop(1,"rgba(255,255,255,0)"); GC.sun[th.label]=g; } return g; }
+function gPipeBody(pp){ let g=GC.pipeBody[pp.label]; if(!g){ g=ctx.createLinearGradient(0,0,64,0); g.addColorStop(0,pp.c2); g.addColorStop(.35,pp.c1); g.addColorStop(.55,"#ffffff55"); g.addColorStop(.6,pp.c1); g.addColorStop(1,pp.c2); GC.pipeBody[pp.label]=g; } return g; }
+function gPipeCap(pp){ let g=GC.pipeCap[pp.label]; if(!g){ g=ctx.createLinearGradient(-5,0,69,0); g.addColorStop(0,pp.c2); g.addColorStop(.5,"#ffffff66"); g.addColorStop(1,pp.c2); GC.pipeCap[pp.label]=g; } return g; }
+function gBirdBody(bd){ let g=GC.birdBody[bd.label]; if(!g){ g=ctx.createRadialGradient(-4,-5,3,0,0,19); g.addColorStop(0,bd.belly); g.addColorStop(1,bd.body); GC.birdBody[bd.label]=g; } return g; }
+function gBirdGlow(bd){ let g=GC.birdGlow[bd.label]; if(!g){ g=ctx.createRadialGradient(0,0,4,0,0,30); g.addColorStop(0,(bd.glow||"#fff")+"99"); g.addColorStop(1,"transparent"); GC.birdGlow[bd.label]=g; } return g; }
 function drawSky(th){
-  const g=ctx.createLinearGradient(0,0,0,VH);
-  g.addColorStop(0,th.sky[0]); g.addColorStop(1,th.sky[1]);
-  ctx.fillStyle=g; ctx.fillRect(0,0,VW,VH);
+  ctx.fillStyle=gSky(th); ctx.fillRect(0,0,VW,VH);
   // sun / moon
   ctx.save();
   ctx.globalAlpha=.9;
   const sx=VW*0.74, sy=VH*0.2;
-  const sg=ctx.createRadialGradient(sx,sy,4,sx,sy,70);
-  sg.addColorStop(0,th.sun); sg.addColorStop(1,"rgba(255,255,255,0)");
-  ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(sx,sy,70,0,7); ctx.fill();
+  ctx.fillStyle=gSun(th,sx,sy); ctx.beginPath(); ctx.arc(sx,sy,70,0,7); ctx.fill();
   ctx.globalAlpha=1; ctx.fillStyle=th.sun; ctx.beginPath(); ctx.arc(sx,sy,26,0,7); ctx.fill();
   ctx.restore();
   // stars
@@ -753,22 +771,18 @@ function drawPipes(){
 function drawPipe(x, y, h, pp, isTop){
   if(h<=0) return;
   const w=64, capH=26, capW=w+10;
-  const g=ctx.createLinearGradient(x,0,x+w,0);
-  g.addColorStop(0,pp.c2); g.addColorStop(.35,pp.c1); g.addColorStop(.55,"#ffffff55"); g.addColorStop(.6,pp.c1); g.addColorStop(1,pp.c2);
+  ctx.save(); ctx.translate(x,0);
   // body
-  ctx.fillStyle=pp.c1;
-  ctx.fillRect(x,y,w,h);
-  ctx.fillStyle=g; ctx.globalAlpha=.9; ctx.fillRect(x,y,w,h); ctx.globalAlpha=1;
+  ctx.fillStyle=pp.c1; ctx.fillRect(0,y,w,h);
+  ctx.fillStyle=gPipeBody(pp); ctx.globalAlpha=.9; ctx.fillRect(0,y,w,h); ctx.globalAlpha=1;
   // edge lines
-  ctx.fillStyle=pp.edge; ctx.fillRect(x,y,3,h); ctx.fillRect(x+w-3,y,3,h);
+  ctx.fillStyle=pp.edge; ctx.fillRect(0,y,3,h); ctx.fillRect(w-3,y,3,h);
   // cap
   const capY = isTop ? y+h-capH : y;
-  roundRect(x-5, capY, capW, capH, 6);
-  ctx.fillStyle=pp.c1; ctx.fill();
-  const cg=ctx.createLinearGradient(x-5,0,x+capW,0);
-  cg.addColorStop(0,pp.c2);cg.addColorStop(.5,"#ffffff66");cg.addColorStop(1,pp.c2);
-  ctx.fillStyle=cg; ctx.globalAlpha=.7; roundRect(x-5,capY,capW,capH,6); ctx.fill(); ctx.globalAlpha=1;
-  ctx.strokeStyle=pp.edge; ctx.lineWidth=2; roundRect(x-5,capY,capW,capH,6); ctx.stroke();
+  ctx.fillStyle=pp.c1; roundRect(-5,capY,capW,capH,6); ctx.fill();
+  ctx.fillStyle=gPipeCap(pp); ctx.globalAlpha=.7; roundRect(-5,capY,capW,capH,6); ctx.fill(); ctx.globalAlpha=1;
+  ctx.strokeStyle=pp.edge; ctx.lineWidth=2; roundRect(-5,capY,capW,capH,6); ctx.stroke();
+  ctx.restore();
 }
 function roundRect(x,y,w,h,r){
   ctx.beginPath();
@@ -794,11 +808,9 @@ function drawBird(){
   ctx.save();
   ctx.translate(b.x,b.y); ctx.rotate(b.rot);
   // glow for special birds
-  if(bd.glow){ const gg=ctx.createRadialGradient(0,0,4,0,0,30); gg.addColorStop(0,bd.glow+"99"); gg.addColorStop(1,"transparent"); ctx.fillStyle=gg; ctx.beginPath(); ctx.arc(0,0,30,0,7); ctx.fill(); }
+  if(bd.glow){ ctx.fillStyle=gBirdGlow(bd); ctx.beginPath(); ctx.arc(0,0,30,0,7); ctx.fill(); }
   // body
-  const bg=ctx.createRadialGradient(-4,-5,3,0,0,b.r+4);
-  bg.addColorStop(0,bd.belly); bg.addColorStop(1,bd.body);
-  ctx.fillStyle=bg;
+  ctx.fillStyle=gBirdBody(bd);
   ctx.beginPath(); ctx.ellipse(0,0,b.r+3,b.r,0,0,7); ctx.fill();
   // belly patch
   ctx.fillStyle=bd.belly; ctx.globalAlpha=.55;
@@ -870,9 +882,10 @@ function startMode(mode){
   Audio2.resume(); Audio2.click();
   resetGame(mode);
   G.state="ready";
-  $("modeLabel").textContent = mode==="ranked"?"Classé":(DIFFS[S.diff].label);
+  const rt = tierFor(S.rp).tier;
+  $("modeLabel").textContent = mode==="ranked"? ("Classé · "+rt.name) : (DIFFS[S.diff].label);
   $("modePill").classList.toggle("ranked", mode==="ranked");
-  $("readyMode").textContent = mode==="ranked"? "🏆 Classé" : "Prêt ?";
+  $("readyMode").textContent = mode==="ranked"? ("🏆 "+rt.name) : "Prêt ?";
   $("liveScore").textContent="0";
   $("hud").style.display="block";
   showScreen("ready");
