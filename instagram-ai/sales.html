@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The AI Shortcut — 50 Done-For-You AI Workflows</title>
+
+  <meta name="description" content="50 done-for-you AI workflows to automate your work and make money. Copy-paste prompts + a full Notion library. Save 10+ hours every week." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#0d0f14" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="product" />
+  <meta property="og:title" content="The AI Shortcut — 50 Done-For-You AI Workflows" />
+  <meta property="og:description" content="Automate your work and make money with 50 copy-paste AI workflows. Save 10+ hours a week." />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #12151f;
+      --bg3: #1a1f2e;
+      --border: #252a3a;
+      --accent: #6c63ff;
+      --accent2: #00d9b5;
+      --accent3: #f5a623;
+      --text: #e8eaf0;
+      --muted: #6a7090;
+      --card: #12151f;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .gradient-bar { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%); }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,15,20,.95);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 56px;
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+    .logo { font-weight: 800; font-size: 1rem; margin-right: auto; display: flex; align-items: center; gap: .5rem; }
+    .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+    .nav-cta {
+      padding: .45rem 1rem; background: var(--accent); color: #fff;
+      border-radius: 8px; font-size: .82rem; font-weight: 700;
+    }
+
+    .hero { max-width: 820px; margin: 0 auto; padding: 4.5rem 2rem 2rem; text-align: center; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--accent2); margin-bottom: 1.25rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--accent2); border-radius: 1px; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.25rem; letter-spacing: -.02em; }
+    .hero h1 .accent { color: var(--accent); }
+    .hero h1 .accent2 { color: var(--accent2); }
+    .hero-desc { font-size: 1.05rem; color: var(--muted); max-width: 600px; margin: 0 auto 2rem; line-height: 1.75; }
+    .hero-desc strong { color: var(--text); }
+
+    .price-row { display: flex; align-items: center; justify-content: center; gap: .75rem; margin-bottom: 1.25rem; }
+    .price-old { color: var(--muted); text-decoration: line-through; font-size: 1.1rem; }
+    .price-now { color: var(--accent2); font-size: 2rem; font-weight: 800; }
+    .price-tag { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: .2rem .6rem; border-radius: 6px; background: rgba(245,166,35,.14); color: var(--accent3); border: 1px solid rgba(245,166,35,.25); }
+
+    .btn-buy {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .95rem 2.2rem;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: #fff; border-radius: 10px; font-size: 1rem; font-weight: 800;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-buy:hover { opacity: .9; transform: translateY(-2px); }
+    .buy-note { font-size: .76rem; color: var(--muted); margin-top: .75rem; }
+
+    .container { max-width: 820px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .section { margin-top: 4rem; }
+    .section-header { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.75rem; }
+    .section-header h2 { font-size: 1.4rem; font-weight: 800; }
+    .section-header .sh-line { flex: 1; height: 1px; background: var(--border); }
+
+    .pain-list { list-style: none; display: grid; gap: .75rem; }
+    .pain-list li { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; font-size: .92rem; color: var(--muted); display: flex; gap: .75rem; }
+    .pain-list li::before { content: '✕'; color: #ff6b6b; font-weight: 800; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem; }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem 1.3rem; transition: border-color .2s, transform .15s;
+    }
+    .card:hover { border-color: rgba(108,99,255,.35); transform: translateY(-2px); }
+    .card .ico { font-size: 1.5rem; display: block; margin-bottom: .75rem; }
+    .card h3 { font-size: .98rem; font-weight: 800; margin-bottom: .5rem; }
+    .card p { font-size: .85rem; color: var(--muted); line-height: 1.65; }
+
+    .whats-inside { display: grid; gap: .65rem; }
+    .whats-inside .row { display: flex; gap: .75rem; align-items: flex-start; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: .9rem 1.2rem; }
+    .whats-inside .row::before { content: '✓'; color: var(--accent2); font-weight: 800; }
+    .whats-inside .row span { font-size: .9rem; }
+
+    .offer-box {
+      margin-top: 4rem; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem 2rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .offer-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .offer-glow { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 320px; height: 170px; background: radial-gradient(ellipse, rgba(108,99,255,.14) 0%, transparent 70%); pointer-events: none; }
+    .offer-box h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: .6rem; position: relative; }
+    .offer-box p { color: var(--muted); max-width: 460px; margin: 0 auto 1.5rem; position: relative; }
+    .stack { text-align: left; max-width: 420px; margin: 0 auto 1.75rem; display: grid; gap: .5rem; position: relative; }
+    .stack .si { display: flex; justify-content: space-between; font-size: .88rem; padding-bottom: .5rem; border-bottom: 1px dashed var(--border); }
+    .stack .si .v { color: var(--muted); }
+    .stack .si.total { font-weight: 800; border-bottom: none; padding-top: .25rem; }
+    .stack .si.total .v { color: var(--accent2); }
+
+    .guarantee { margin-top: 2.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; align-items: center; }
+    .guarantee .g-ico { font-size: 2rem; }
+    .guarantee p { font-size: .88rem; color: var(--muted); }
+    .guarantee strong { color: var(--text); }
+
+    .faq { display: grid; gap: .75rem; }
+    .faq details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; }
+    .faq summary { font-weight: 700; cursor: pointer; font-size: .92rem; }
+    .faq p { font-size: .86rem; color: var(--muted); margin-top: .6rem; }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--muted); font-size: .78rem; }
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--accent2); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .hero { padding: 3rem 1.25rem 1.5rem; }
+      .container { padding: 0 1.25rem 4rem; }
+      .offer-box { padding: 2rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="gradient-bar"></div>
+
+  <nav>
+    <a href="#" class="logo"><span class="logo-dot"></span> The AI Shortcut</a>
+    <a href="#buy" class="nav-cta">Get it — $27</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Digital download · Instant access</div>
+    <h1>Automate your work.<br><span class="accent">Get your time back.</span></h1>
+    <p class="hero-desc">
+      <strong>50 done-for-you AI workflows</strong> with copy-paste prompts and a full Notion library —
+      so you can do in minutes what used to take hours. No fluff, no theory. Just <strong>steal the system</strong> and run.
+    </p>
+    <div class="price-row">
+      <span class="price-old">$47</span>
+      <span class="price-now">$27</span>
+      <span class="price-tag">Launch price</span>
+    </div>
+    <a href="#buy" class="btn-buy">Get instant access →</a>
+    <p class="buy-note">Instant download · Lifetime updates · 7-day money-back guarantee</p>
+  </section>
+
+  <main class="container">
+
+    <!-- PAIN -->
+    <div class="section">
+      <div class="section-header"><h2>If this sounds like you…</h2><div class="sh-line"></div></div>
+      <ul class="pain-list">
+        <li>You know AI is powerful but you waste time fighting bad prompts.</li>
+        <li>You're drowning in repetitive work that a machine should be doing.</li>
+        <li>You've watched 100 videos and still don't have a system that sticks.</li>
+        <li>You want to make money with AI but don't know where to start.</li>
+      </ul>
+    </div>
+
+    <!-- WHAT YOU GET -->
+    <div class="section">
+      <div class="section-header"><h2>What's inside</h2><div class="sh-line"></div></div>
+      <div class="whats-inside">
+        <div class="row"><span><strong>50 done-for-you workflows</strong> across content, productivity and money.</span></div>
+        <div class="row"><span><strong>Copy-paste prompt library</strong> in Notion — filter by use case, paste, done.</span></div>
+        <div class="row"><span><strong>Real before/after examples</strong> so you see exactly what to expect.</span></div>
+        <div class="row"><span><strong>The 5-tool stack</strong> (mostly free) that powers every workflow.</span></div>
+        <div class="row"><span><strong>Lifetime updates</strong> — new workflows added as tools evolve.</span></div>
+      </div>
+    </div>
+
+    <!-- THREE PILLARS -->
+    <div class="section">
+      <div class="section-header"><h2>Three ways it pays off</h2><div class="sh-line"></div></div>
+      <div class="grid">
+        <div class="card">
+          <span class="ico">✍️</span>
+          <h3>Content</h3>
+          <p>Turn one idea into a month of posts, scripts, captions and newsletters — on autopilot.</p>
+        </div>
+        <div class="card">
+          <span class="ico">⚡</span>
+          <h3>Productivity</h3>
+          <p>Inbox zero, instant research, meeting notes into action items. Reclaim 10+ hours a week.</p>
+        </div>
+        <div class="card">
+          <span class="ico">💰</span>
+          <h3>Money</h3>
+          <p>Offers, cold outreach, product pages and launch plans that actually convert.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- OFFER STACK -->
+    <div class="offer-box" id="buy">
+      <div class="offer-glow"></div>
+      <h2>Get The AI Shortcut</h2>
+      <p>Everything you need to put your work on autopilot — for less than a lunch.</p>
+      <div class="stack">
+        <div class="si"><span>50 done-for-you workflows</span><span class="v">$47</span></div>
+        <div class="si"><span>Copy-paste Notion prompt library</span><span class="v">$30</span></div>
+        <div class="si"><span>Before/after example pack</span><span class="v">$20</span></div>
+        <div class="si"><span>Lifetime updates</span><span class="v">$∞</span></div>
+        <div class="si total"><span>Today</span><span class="v">$27</span></div>
+      </div>
+      <a href="REPLACE_WITH_GUMROAD_OR_STAN_LINK" class="btn-buy">Get instant access →</a>
+      <p class="buy-note">Secure checkout via Stan / Gumroad · Instant delivery</p>
+    </div>
+
+    <!-- GUARANTEE -->
+    <div class="guarantee">
+      <span class="g-ico">🛡️</span>
+      <p><strong>7-day money-back guarantee.</strong> Use the workflows. If you don't save real time in your first week, email me and I'll refund you — no questions asked.</p>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section">
+      <div class="section-header"><h2>FAQ</h2><div class="sh-line"></div></div>
+      <div class="faq">
+        <details><summary>Do I need to be technical?</summary><p>No. If you can copy and paste, you can use every workflow in this guide.</p></details>
+        <details><summary>Which AI tools do I need?</summary><p>Mostly free ones. The guide lists the exact 5-tool stack and works with ChatGPT, Claude and others.</p></details>
+        <details><summary>How do I get it?</summary><p>Instant digital download after checkout, plus access to the Notion library.</p></details>
+        <details><summary>Will it stay up to date?</summary><p>Yes. You get lifetime updates as new tools and workflows are added.</p></details>
+        <details><summary>What if it's not for me?</summary><p>7-day money-back guarantee. Email me and you're refunded.</p></details>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 The AI Shortcut · <a href="links.html">Links</a> · Results vary. This is education, not a guarantee of income.
+  </footer>
+
+</body>
+</html>

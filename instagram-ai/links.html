@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The AI Shortcut — Links</title>
+  <meta name="description" content="Free AI prompts, the full workflow guide, and more. Save 10+ hours a week with AI." />
+  <meta name="theme-color" content="#0d0f14" />
+  <meta name="robots" content="index, follow" />
+
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #12151f;
+      --bg3: #1a1f2e;
+      --border: #252a3a;
+      --accent: #6c63ff;
+      --accent2: #00d9b5;
+      --accent3: #f5a623;
+      --text: #e8eaf0;
+      --muted: #6a7090;
+      --card: #12151f;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    .gradient-bar { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%); }
+
+    .wrap { max-width: 440px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    .profile { text-align: center; margin-bottom: 2rem; }
+    .avatar {
+      width: 84px; height: 84px; border-radius: 50%;
+      margin: 0 auto 1rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; font-weight: 800; color: #fff;
+      box-shadow: 0 0 0 4px rgba(108,99,255,.15);
+    }
+    .handle { font-size: 1.1rem; font-weight: 800; }
+    .tagline { color: var(--muted); font-size: .88rem; margin-top: .35rem; }
+
+    .links { display: grid; gap: .75rem; margin-top: 2rem; }
+    .link-btn {
+      display: flex; align-items: center; gap: .9rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1rem 1.25rem;
+      font-weight: 700; font-size: .95rem;
+      transition: border-color .2s, transform .15s, background .2s;
+      position: relative; overflow: hidden;
+    }
+    .link-btn::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity .2s;
+    }
+    .link-btn:hover { border-color: rgba(108,99,255,.4); transform: translateY(-2px); }
+    .link-btn:hover::before { opacity: 1; }
+    .link-btn .ico { font-size: 1.3rem; }
+    .link-btn .txt { display: flex; flex-direction: column; gap: .1rem; }
+    .link-btn .txt small { color: var(--muted); font-weight: 500; font-size: .76rem; }
+    .link-btn.primary {
+      background: linear-gradient(135deg, rgba(108,99,255,.18), rgba(0,217,181,.1));
+      border-color: rgba(108,99,255,.4);
+    }
+    .badge {
+      margin-left: auto; font-size: .64rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: .2rem .5rem; border-radius: 6px;
+      background: rgba(245,166,35,.16); color: var(--accent3);
+      border: 1px solid rgba(245,166,35,.28);
+    }
+    .badge.free { background: rgba(0,217,181,.14); color: var(--accent2); border-color: rgba(0,217,181,.28); }
+
+    .socials { display: flex; justify-content: center; gap: 1.25rem; margin-top: 2.25rem; }
+    .socials a { color: var(--muted); font-size: .82rem; font-weight: 600; transition: color .2s; }
+    .socials a:hover { color: var(--text); }
+
+    footer { text-align: center; color: var(--muted); font-size: .72rem; margin-top: 2.5rem; }
+  </style>
+</head>
+<body>
+
+  <div class="gradient-bar"></div>
+
+  <div class="wrap">
+    <div class="profile">
+      <div class="avatar">⚡</div>
+      <div class="handle">@theaishortcut</div>
+      <div class="tagline">AI shortcuts that save you 10+ hours a week</div>
+    </div>
+
+    <div class="links">
+      <a href="REPLACE_WITH_FREEBIE_OPTIN_LINK" class="link-btn primary">
+        <span class="ico">🎁</span>
+        <span class="txt">Free: 10 AI Prompts That Save 10 Hrs/Week<small>Get the PDF instantly</small></span>
+        <span class="badge free">Free</span>
+      </a>
+
+      <a href="sales.html" class="link-btn">
+        <span class="ico">📘</span>
+        <span class="txt">The AI Shortcut — 50 Workflows<small>The full system · launch price $27</small></span>
+        <span class="badge">$27</span>
+      </a>
+
+      <a href="REPLACE_WITH_UPSELL_LINK" class="link-btn">
+        <span class="ico">🚀</span>
+        <span class="txt">Pro Pack — Video course + templates<small>Go deeper · $47</small></span>
+        <span class="badge">$47</span>
+      </a>
+
+      <a href="REPLACE_WITH_LATEST_REEL_LINK" class="link-btn">
+        <span class="ico">▶️</span>
+        <span class="txt">Latest reel<small>The AI workflow everyone's saving</small></span>
+      </a>
+    </div>
+
+    <div class="socials">
+      <a href="REPLACE_WITH_IG_LINK">Instagram</a>
+      <a href="REPLACE_WITH_TIKTOK_LINK">TikTok</a>
+      <a href="REPLACE_WITH_YT_LINK">YouTube</a>
+    </div>
+
+    <footer>© 2026 The AI Shortcut</footer>
+  </div>
+
+</body>
+</html>
