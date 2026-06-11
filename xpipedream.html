@@ -19,7 +19,8 @@
   * { margin:0; padding:0; box-sizing:border-box; -webkit-user-select:none; user-select:none;
       -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent; }
   html, body { width:100%; height:100%; overflow:hidden; touch-action:none; overscroll-behavior:none;
-    background:#0a0c12; font-family:-apple-system, BlinkMacSystemFont, system-ui, sans-serif; color:#fff; }
+    background:var(--ground,#0a0c12); transition:background .6s ease;
+    font-family:-apple-system, BlinkMacSystemFont, system-ui, sans-serif; color:#fff; }
 
   /* ---------- WORLD (live, compositor-driven) ---------- */
   #scene { position:fixed; inset:0; overflow:hidden;
@@ -259,7 +260,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.20</div>
+      <div class="verline">V.1.21</div>
     </div>
   </div>
 
@@ -394,7 +395,9 @@
   const bst={ y0:0, vy0:0, t0:0, g:2100, rot0:0 };   // bird analytic state
   let birdAnim=null, bobAnim=null, raf=0;
 
-  const now=()=> performance.now()/1000;
+  // Use the ANIMATION timeline as the clock (document.timeline), so the bird's analytic position
+  // is in the exact same time domain as the compositor animations → no 1-frame desync, no flash.
+  const now=()=> (document.timeline && document.timeline.currentTime!=null ? document.timeline.currentTime : performance.now())/1000;
   const birdYAt=t=> bst.y0 + bst.vy0*(t-bst.t0) + 0.5*bst.g*(t-bst.t0)*(t-bst.t0);
   const birdVyAt=t=> bst.vy0 + bst.g*(t-bst.t0);
 
@@ -412,16 +415,6 @@
 
   // gentler pitch: tilt up on flap, only a mild nose-down on the way down
   function physRot(vy){ return vy<0 ? Math.max(-0.5, vy/680) : Math.min(0.72, vy/1100); }
-  // Read the bird's ACTUAL rendered position/rotation (from the running compositor animation),
-  // so a new flap starts exactly where the bird visually is → zero jump, perfectly fluid.
-  function birdNow(){
-    const tr=getComputedStyle(birdEl).transform;
-    let m=tr&&tr.match(/matrix3d\((.+)\)/);
-    if(m){ const p=m[1].split(",").map(parseFloat); return {y:p[13], rot:Math.atan2(p[1],p[0])}; }
-    m=tr&&tr.match(/matrix\((.+)\)/);
-    if(m){ const p=m[1].split(",").map(parseFloat); return {y:p[5], rot:Math.atan2(p[1],p[0])}; }
-    return {y:bst.y0, rot:bst.rot0};
-  }
   function animateBirdArc(){
     const g=bst.g, y0=bst.y0, v=bst.vy0, target=GROUNDY-BIRD_R;
     const disc=v*v-2*g*(y0-target);
@@ -442,6 +435,8 @@
     if(birdAnim) birdAnim.cancel();
     birdEl.style.transform="translate3d("+BIRD_X+"px,"+y0+"px,0) rotate("+bst.rot0+"rad)";
     birdAnim=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
+    // Lock the animation's start to the SAME timeline instant used by bst.t0 → perfect sync.
+    try{ birdAnim.startTime=bst.t0*1000; }catch(e){}
   }
   function flapWing(){
     if(state.reduce) return;
@@ -544,8 +539,8 @@
 
   function flap(){
     const t=now();
-    const b=birdNow();               // exact current rendered position/rotation → seamless
-    bst.rot0=b.rot; bst.y0=b.y; bst.vy0=mode.flap; bst.t0=t; bst.g=mode.gravity;
+    bst.rot0=physRot(birdVyAt(t)); bst.y0=birdYAt(t);   // current state, in the timeline clock
+    bst.vy0=mode.flap; bst.t0=t; bst.g=mode.gravity;
     animateBirdArc();
     flapWing();
     sndFlap();
