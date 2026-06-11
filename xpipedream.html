@@ -32,11 +32,11 @@
     animation:twinkle 3s ease-in-out infinite; }
   @keyframes twinkle { 0%,100%{opacity:.25} 50%{opacity:.9} }
 
-  #ground { position:absolute; left:0; right:0; bottom:0; height:calc(72px + env(safe-area-inset-bottom,0px));
+  #ground { position:absolute; left:0; right:0; bottom:0; height:calc(46px + env(safe-area-inset-bottom,0px));
     z-index:5; overflow:hidden; background:var(--ground); border-top:3px solid var(--groundTop);
     transition:background .6s, border-color .6s; }
   #groundStripes { position:absolute; left:0; top:0; height:100%; width:340vw;
-    background:repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 22px, transparent 22px 44px); will-change:transform; }
+    background:repeating-linear-gradient(90deg, rgba(255,255,255,.026) 0 26px, transparent 26px 52px); will-change:transform; }
 
   .pipe { position:absolute; top:0; left:0; width:64px; height:100%; z-index:2; will-change:transform; }
   .pipeInner { position:absolute; inset:0; will-change:transform; }
@@ -260,7 +260,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.22</div>
+      <div class="verline">V.1.23</div>
     </div>
   </div>
 
@@ -338,7 +338,7 @@
   // SIZING
   // ===========================================================================
   let VW, VH, GROUNDY;
-  const GROUND_H=72, PIPE_W=64;
+  const GROUND_H=46, PIPE_W=64;
   let BIRD_X, BIRD_R=19;
   // Measure the world from real rendered geometry. GROUNDY = the ground's actual top edge on
   // screen (via getBoundingClientRect), so the landing line === the visible ground, whatever the
@@ -516,7 +516,8 @@
   }
 
   function flap(){
-    bird.vy=mode.flap;   // instant impulse, applied on the very next frame → no ghost
+    bird.vy=mode.flap;
+    bird.rot=-0.45; setBirdTransform(bird.y, bird.rot);   // instant nose-up feedback at the tap
     flapWing();
     sndFlap();
   }
