@@ -21,6 +21,8 @@
   html, body { width:100%; height:100%; overflow:hidden; touch-action:none; overscroll-behavior:none;
     background:var(--ground,#0a0c12); transition:background .6s ease;
     font-family:-apple-system, BlinkMacSystemFont, system-ui, sans-serif; color:#fff; }
+  #ver { position:fixed; left:7px; bottom:calc(env(safe-area-inset-bottom,0px) + 3px); z-index:9999;
+    font:700 9px -apple-system, system-ui, sans-serif; color:rgba(255,255,255,.4); letter-spacing:.5px; pointer-events:none; }
 
   /* ---------- WORLD (live, compositor-driven) ---------- */
   #scene { position:fixed; inset:0; overflow:hidden;
@@ -189,6 +191,7 @@
 </style>
 </head>
 <body>
+  <div id="ver">V.1.24</div>
   <div id="scene">
     <div id="stars"></div>
     <div id="ground"><div id="groundStripes"></div></div>
@@ -260,7 +263,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.23</div>
+      <div class="verline">V.1.24</div>
     </div>
   </div>
 
@@ -356,7 +359,7 @@
 
   // ground scroll (compositor, continuous)
   let groundAnim=null;
-  function startGround(speed){ if(groundAnim) groundAnim.cancel(); groundAnim=stripes.animate([{transform:"translateX(0)"},{transform:"translateX(-44px)"}],{duration:44/speed*1000,easing:"linear",iterations:Infinity}); }
+  function startGround(speed){ /* ground is static now (was distracting when it scrolled) */ }
 
   // ===========================================================================
   // THEME + SKIN
