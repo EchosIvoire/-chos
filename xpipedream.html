@@ -145,9 +145,7 @@
       justify-content: center;
       padding: 24px;
       text-align: center;
-      background: linear-gradient(180deg, rgba(10,12,18,.72), rgba(10,12,18,.92));
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(10,12,18,.94), rgba(10,12,18,.985));
       gap: 14px;
       overflow-y: auto;
     }
@@ -368,7 +366,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v5</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -1047,15 +1045,18 @@
   function isMenuOpen() { return !menu.classList.contains("hidden") || !over.classList.contains("hidden"); }
 
   function onTap(e) {
-    if (isMenuOpen()) return;     // let buttons work
-    if (!game) return;
-    if (game.dead) return;
-    e.preventDefault();
+    if (isMenuOpen()) return;     // let menu / game-over buttons work normally
+    if (!game || game.dead) return;
+    e.preventDefault();           // suppress iOS long-press selection/callout (the freeze) + scroll
     flap();
   }
-  // pointer/touch on the canvas + playfield
-  canvas.addEventListener("pointerdown", onTap, { passive: false });
-  playHint.addEventListener("pointerdown", onTap, { passive: false });
+  // Touch (iOS/Android): touchstart is the ONLY event that reliably suppresses the
+  // long-press text-selection / magnifier that stalls Safari's main thread (~0.5s freeze).
+  // pointerdown's preventDefault does NOT stop it on iOS.
+  canvas.addEventListener("touchstart", onTap, { passive: false });
+  // Mouse (desktop): touchstart's preventDefault blocks synthesized mouse events,
+  // so this won't double-fire on touch devices.
+  canvas.addEventListener("mousedown", onTap, { passive: false });
 
   window.addEventListener("keydown", (e) => {
     if (e.code === "Space" || e.code === "ArrowUp") {
