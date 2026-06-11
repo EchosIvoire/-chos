@@ -21,7 +21,7 @@
     background:#0a0c12; font-family:-apple-system, BlinkMacSystemFont, system-ui, sans-serif; color:#fff; }
 
   /* ---------- WORLD (live, compositor-driven) ---------- */
-  #scene { position:fixed; left:0; top:0; width:100vw; height:100vh; overflow:hidden;
+  #scene { position:fixed; left:0; top:0; width:100vw; height:100vh; height:100dvh; overflow:hidden;
     background:linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 100%); transition:background .6s ease; }
 
   #stars { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity .6s; }
@@ -47,24 +47,19 @@
     background:radial-gradient(60% 55% at var(--bx,28%) var(--by,45%), transparent 0%, rgba(0,0,0,.0) 30%, rgba(0,0,0,.78) 100%); }
   #vignette.on { opacity:1; }
 
-  /* ---------- BIRD ---------- */
-  #bird { position:absolute; left:0; top:0; width:38px; height:38px; margin:-19px 0 0 -19px; z-index:7; will-change:transform; }
-  #bird .body { position:absolute; inset:0; border-radius:50%;
-    background:radial-gradient(circle at 36% 32%, var(--bGlow,#8b7bff), var(--bBody,#6c63ff) 62%, var(--bDark,#4a42c9));
-    box-shadow:inset -4px -5px rgba(0,0,0,.18), 0 3px 10px rgba(0,0,0,.3); }
-  #bird .belly { position:absolute; left:9px; top:15px; width:22px; height:17px; border-radius:50%;
-    background:var(--bBelly,#b3aaff); opacity:.9; }
-  #bird .eye { position:absolute; right:7px; top:9px; width:11px; height:11px; border-radius:50%; background:#fff; }
-  #bird .eye::after { content:''; position:absolute; right:1px; top:3px; width:5px; height:5px; border-radius:50%; background:#1a1f2e; }
-  #bird .beak { position:absolute; right:-7px; top:17px; width:12px; height:8px; border-radius:2px;
-    background:linear-gradient(#ffb43a,#f59000); }
-  #bird .wing { position:absolute; left:4px; top:18px; width:20px; height:12px; border-radius:50%;
-    background:var(--bBody,#6c63ff); filter:brightness(.85); transform-origin:80% 50%; }
-  #bird.flap .wing { animation:wingFlap .26s ease-out; }
-  @keyframes wingFlap { 0%{transform:rotate(34deg)} 100%{transform:rotate(-8deg)} }
-  #bird.rainbow .body { animation:hue 3.2s linear infinite; }
-  #bird.rainbow .wing { animation:hue 3.2s linear infinite; }
-  @keyframes hue { from{filter:hue-rotate(0)} to{filter:hue-rotate(360deg)} }
+  /* ---------- BIRD (SVG, skinnable) ---------- */
+  #bird { position:absolute; left:0; top:0; width:48px; height:40px; margin:-20px 0 0 -24px; z-index:7; will-change:transform; }
+  #birdSvg { display:block; overflow:visible; filter:drop-shadow(0 4px 7px rgba(0,0,0,.38)); }
+  #birdSvg .body  { fill:var(--bBody,#6c63ff); }
+  #birdSvg .hl    { fill:var(--bGlow,#8b7bff); opacity:.5; }
+  #birdSvg .belly { fill:var(--bBelly,#b3aaff); opacity:.92; }
+  #birdSvg .wing  { fill:var(--bDark,#4a42c9); transform-box:fill-box; transform-origin:78% 38%; }
+  #birdSvg .eyeW  { fill:#fff; } #birdSvg .eyeP { fill:#1a1f2e; }
+  #birdSvg .beak  { fill:#f59000; }
+  #bird.flap .wing { animation:wingFlap .28s ease-out; }
+  @keyframes wingFlap { 0%{transform:rotate(38deg)} 60%{transform:rotate(-14deg)} 100%{transform:rotate(0deg)} }
+  #bird.rainbow #birdSvg { animation:hue 3.2s linear infinite; }
+  @keyframes hue { from{filter:hue-rotate(0) drop-shadow(0 4px 7px rgba(0,0,0,.38))} to{filter:hue-rotate(360deg) drop-shadow(0 4px 7px rgba(0,0,0,.38))} }
 
   /* ---------- HUD (in game) ---------- */
   #hud { position:absolute; top:calc(env(safe-area-inset-top,0px) + 16px); left:0; width:100vw; text-align:center;
@@ -195,7 +190,17 @@
     <div id="stars"></div>
     <div id="ground"><div id="groundStripes"></div></div>
     <div id="vignette"></div>
-    <div id="bird"><div class="body"></div><div class="belly"></div><div class="wing"></div><div class="eye"></div><div class="beak"></div></div>
+    <div id="bird">
+      <svg id="birdSvg" viewBox="0 0 50 42" width="48" height="40" aria-hidden="true">
+        <ellipse class="body"  cx="23" cy="21" rx="19" ry="17"/>
+        <ellipse class="hl"    cx="15" cy="12" rx="9.5" ry="8"/>
+        <ellipse class="belly" cx="24" cy="29" rx="12" ry="8"/>
+        <ellipse class="wing"  cx="17" cy="23" rx="10" ry="6.5"/>
+        <circle  class="eyeW"  cx="34" cy="15" r="6.5"/>
+        <circle  class="eyeP"  cx="36" cy="15" r="3.2"/>
+        <polygon class="beak"  points="40,17 51,21 40,25"/>
+      </svg>
+    </div>
     <div id="hud"><div id="score">0</div></div>
 
     <div class="scrim" id="scrimTop"></div>
@@ -252,7 +257,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v14</div>
+      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v15</div>
     </div>
   </div>
 
@@ -401,7 +406,9 @@
     for(let i=0;i<=N;i++){
       const t=T*i/N; let y=y0+v*t+0.5*g*t*t;
       if(y<BIRD_R) y=BIRD_R; if(y>target) y=target;
-      const rot=Math.max(-0.5,Math.min(1.4,(v+g*t)/620));
+      // gentler pitch: tilt up on flap, only a mild nose-down on the way down
+      const vy=v+g*t;
+      const rot = vy<0 ? Math.max(-0.5, vy/680) : Math.min(0.72, vy/1100);
       frames.push({transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+rot+"rad)", offset:i/N});
     }
     if(birdAnim) birdAnim.cancel();
