@@ -35,7 +35,7 @@
     animation:twinkle 3s ease-in-out infinite; }
   @keyframes twinkle { 0%,100%{opacity:.25} 50%{opacity:.9} }
 
-  #ground { position:absolute; left:0; right:0; bottom:0; height:calc(46px + env(safe-area-inset-bottom,0px));
+  #ground { position:absolute; left:0; right:0; bottom:0; height:calc(28px + env(safe-area-inset-bottom,0px));
     z-index:5; overflow:hidden; background:var(--ground); border-top:3px solid var(--groundTop);
     transition:background .6s, border-color .6s; }
   #groundStripes { position:absolute; left:0; top:0; height:100%; width:340vw;
@@ -54,7 +54,7 @@
   #vignette.on { opacity:1; }
 
   /* ---------- BIRD (SVG, skinnable) ---------- */
-  #bird { position:absolute; left:0; top:0; width:48px; height:40px; margin:-20px 0 0 -24px; z-index:7; will-change:transform; }
+  #bird { position:absolute; left:0; top:0; width:48px; height:40px; margin:-20px 0 0 -24px; z-index:7; }
   #birdSvg { display:block; overflow:visible; }
   #birdSvg .body  { fill:var(--bBody,#6c63ff); }
   #birdSvg .hl    { fill:var(--bGlow,#8b7bff); opacity:.5; }
@@ -192,7 +192,7 @@
 </style>
 </head>
 <body>
-  <div id="ver">V.1.25</div>
+  <div id="ver">V.1.26</div>
   <div id="scene">
     <div id="stars"></div>
     <div id="ground"><div id="groundStripes"></div></div>
@@ -264,7 +264,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.25</div>
+      <div class="verline">V.1.26</div>
     </div>
   </div>
 
@@ -342,7 +342,7 @@
   // SIZING
   // ===========================================================================
   let VW, VH, GROUNDY;
-  const GROUND_H=46, PIPE_W=64;
+  const GROUND_H=28, PIPE_W=64;
   let BIRD_X, BIRD_R=19;
   // Measure the world from real rendered geometry. GROUNDY = the ground's actual top edge on
   // screen (via getBoundingClientRect), so the landing line === the visible ground, whatever the
@@ -401,7 +401,7 @@
 
   const now=()=> (document.timeline && document.timeline.currentTime!=null ? document.timeline.currentTime : performance.now())/1000;
 
-  function setBirdTransform(y,rot){ birdEl.style.transform="translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+(rot||0)+"rad)"; }
+  function setBirdTransform(y,rot){ birdEl.style.transform="translate("+BIRD_X+"px,"+y+"px) rotate("+(rot||0)+"rad)"; }
 
   function idleBob(){
     const cy=VH*0.45; setBirdTransform(cy,0);
@@ -521,7 +521,6 @@
 
   function flap(){
     bird.vy=mode.flap;
-    bird.rot=-0.45; setBirdTransform(bird.y, bird.rot);   // instant nose-up feedback at the tap
     flapWing();
     sndFlap();
   }
