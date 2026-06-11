@@ -260,7 +260,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.21</div>
+      <div class="verline">V.1.22</div>
     </div>
   </div>
 
@@ -392,19 +392,14 @@
   let gameState="menu";   // "menu" | "playing" | "dead"
   let mode=MODES[state.mode];
   let pipes=[], score=0, spawnAcc=0, lastT=0, startedAt=0, curSpeed=0;
-  const bst={ y0:0, vy0:0, t0:0, g:2100, rot0:0 };   // bird analytic state
-  let birdAnim=null, bobAnim=null, raf=0;
+  const bird={ y:0, vy:0, rot:0 };   // bird live state (per-frame physics)
+  let bobAnim=null, raf=0;
 
-  // Use the ANIMATION timeline as the clock (document.timeline), so the bird's analytic position
-  // is in the exact same time domain as the compositor animations → no 1-frame desync, no flash.
   const now=()=> (document.timeline && document.timeline.currentTime!=null ? document.timeline.currentTime : performance.now())/1000;
-  const birdYAt=t=> bst.y0 + bst.vy0*(t-bst.t0) + 0.5*bst.g*(t-bst.t0)*(t-bst.t0);
-  const birdVyAt=t=> bst.vy0 + bst.g*(t-bst.t0);
 
   function setBirdTransform(y,rot){ birdEl.style.transform="translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+(rot||0)+"rad)"; }
 
   function idleBob(){
-    if(birdAnim){ birdAnim.cancel(); birdAnim=null; }
     const cy=VH*0.45; setBirdTransform(cy,0);
     if(bobAnim) bobAnim.cancel();
     bobAnim=birdEl.animate(
@@ -415,29 +410,6 @@
 
   // gentler pitch: tilt up on flap, only a mild nose-down on the way down
   function physRot(vy){ return vy<0 ? Math.max(-0.5, vy/680) : Math.min(0.72, vy/1100); }
-  function animateBirdArc(){
-    const g=bst.g, y0=bst.y0, v=bst.vy0, target=GROUNDY-BIRD_R;
-    const disc=v*v-2*g*(y0-target);
-    let T=disc>0 ? (-v+Math.sqrt(disc))/g : 1.5;
-    T=Math.min(Math.max(T,.3),6);
-    const N=Math.max(8,Math.ceil(T/0.018)), frames=[];
-    const step=T/N, k=Math.min(1, step*10);   // rotation easing per sample → no snap at the flap
-    let r=bst.rot0;
-    for(let i=0;i<=N;i++){
-      const t=step*i; let y=y0+v*t+0.5*g*t*t;
-      if(y<BIRD_R) y=BIRD_R; if(y>target) y=target;
-      frames.push({transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+r+"rad)", offset:i/N});
-      r += (physRot(v+g*t) - r) * k;
-    }
-    // Kill the old animation FIRST so it can't paint one extra frame of the old trajectory
-    // (the "ghost" the player saw), pin the current position inline so there's no gap/flash,
-    // THEN start the new arc from exactly there.
-    if(birdAnim) birdAnim.cancel();
-    birdEl.style.transform="translate3d("+BIRD_X+"px,"+y0+"px,0) rotate("+bst.rot0+"rad)";
-    birdAnim=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
-    // Lock the animation's start to the SAME timeline instant used by bst.t0 → perfect sync.
-    try{ birdAnim.startTime=bst.t0*1000; }catch(e){}
-  }
   function flapWing(){
     if(state.reduce) return;
     wingEl.animate([{transform:"rotate(40deg)"},{transform:"rotate(-12deg)"},{transform:"rotate(0deg)"}],
@@ -492,8 +464,15 @@
     if(gameState!=="playing") return;
 
     if(mode.accelerate){ curSpeed=mode.speed+Math.min(150,(t-startedAt)*7); }
-    const by=birdYAt(t);
-    if(by+BIRD_R>=GROUNDY) return die();
+
+    // bird physics — per frame on the main thread: the flap is applied on the very next frame,
+    // with NO compositor animation to replace → no 1-frame "ghost". Decor stays on the compositor.
+    bird.vy += mode.gravity*dt;
+    bird.y  += bird.vy*dt;
+    if(bird.y<BIRD_R){ bird.y=BIRD_R; bird.vy=0; }
+    const tgt=physRot(bird.vy); bird.rot += (tgt-bird.rot)*Math.min(1,dt*12);
+    if(bird.y+BIRD_R>=GROUNDY){ bird.y=GROUNDY-BIRD_R; setBirdTransform(bird.y,bird.rot); return die(); }
+    setBirdTransform(bird.y, bird.rot);
 
     spawnAcc+=dt;
     const every = mode.spawn * (mode.accelerate ? mode.speed/curSpeed : 1);
@@ -504,7 +483,7 @@
       if(!p.passed && x+PIPE_W<BIRD_X){ p.passed=true; score++; scoreEl.textContent=score; sndScore(); }
       if(BIRD_X+BIRD_R>x && BIRD_X-BIRD_R<x+PIPE_W){
         const c=pipeCenter(p,t);
-        if(by-BIRD_R<c-p.half || by+BIRD_R>c+p.half) return die();
+        if(bird.y-BIRD_R<c-p.half || bird.y+BIRD_R>c+p.half) return die();
       }
     }
   }
@@ -525,12 +504,11 @@
     menu.classList.add("hide"); scrimTop.classList.remove("on"); scrimBot.classList.remove("on");
     clearPipes(); score=0; scoreEl.textContent="0"; spawnAcc=0; lastT=0;
     gameState="playing"; startedAt=now(); curSpeed=mode.speed;
-    bst.g=mode.gravity;
     applyTheme(mode.theme); vignette.classList.toggle("on", THEMES[mode.theme].vignette);
     startGround(mode.speed);
     if(bobAnim){ bobAnim.cancel(); bobAnim=null; }
-    bst.rot0=0; bst.y0=VH*0.45; bst.vy0=mode.flap; bst.t0=now();
-    animateBirdArc();
+    bird.y=VH*0.45; bird.vy=mode.flap; bird.rot=0;   // first flap on launch
+    setBirdTransform(bird.y, bird.rot);
     flapWing();
     hud.classList.add("on");
     sndFlap();
@@ -538,10 +516,7 @@
   }
 
   function flap(){
-    const t=now();
-    bst.rot0=physRot(birdVyAt(t)); bst.y0=birdYAt(t);   // current state, in the timeline clock
-    bst.vy0=mode.flap; bst.t0=t; bst.g=mode.gravity;
-    animateBirdArc();
+    bird.vy=mode.flap;   // instant impulse, applied on the very next frame → no ghost
     flapWing();
     sndFlap();
   }
@@ -549,7 +524,6 @@
   function die(){
     if(gameState!=="playing") return;
     gameState="dead";
-    if(birdAnim) birdAnim.pause();
     pipes.forEach(p=>p.anim.pause());
     if(groundAnim) groundAnim.pause();
     sndHit();
