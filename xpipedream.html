@@ -93,7 +93,20 @@
       user-select: none;
       -webkit-touch-callout: none;     /* kill iOS long-press copy/callout hitch */
       -webkit-tap-highlight-color: transparent;
+      transform: translateZ(0);        /* own GPU layer: isolate from touch hit-test repaint */
+      will-change: transform;
+      backface-visibility: hidden;
     }
+
+    /* Tiny always-running compositor animation: keeps ProMotion (120Hz) displays pinned at
+       their max refresh rate so a touch can't trigger a refresh-rate ramp (the per-tap hitch). */
+    #refreshPin {
+      position: fixed; top: 0; left: 0; width: 2px; height: 2px;
+      opacity: 0.012; pointer-events: none; z-index: 0;
+      background: #fff; will-change: transform;
+      animation: refreshPinSpin 1s linear infinite;
+    }
+    @keyframes refreshPinSpin { from { transform: translateZ(0) rotate(0deg); } to { transform: translateZ(0) rotate(360deg); } }
 
     /* ===== HUD ===== */
     .hud {
@@ -322,6 +335,7 @@
   </style>
 </head>
 <body>
+  <div id="refreshPin"></div>
   <div id="stage">
     <div id="wrap">
       <canvas id="game"></canvas>
@@ -373,7 +387,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v12</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v13</span></div>
       </div>
 
       <!-- GAME OVER -->
