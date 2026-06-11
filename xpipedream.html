@@ -21,7 +21,7 @@
     background:#0a0c12; font-family:-apple-system, BlinkMacSystemFont, system-ui, sans-serif; color:#fff; }
 
   /* ---------- WORLD (live, compositor-driven) ---------- */
-  #scene { position:fixed; left:0; top:0; width:100vw; height:100vh; height:100dvh; overflow:hidden;
+  #scene { position:fixed; inset:0; overflow:hidden;
     background:linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 100%); transition:background .6s ease; }
 
   #stars { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity .6s; }
@@ -257,7 +257,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v18</div>
+      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v19</div>
     </div>
   </div>
 
@@ -336,12 +336,11 @@
   let VW, VH, GROUNDY;
   const GROUND_H=72, PIPE_W=64;
   let BIRD_X, BIRD_R=19;
-  // Pin the world to the *exact* visible area in px (most reliable on iOS Safari, where vh/dvh
-  // misbehave when the toolbar shows/hides). The ground (bottom:0 of #scene) then always sits
-  // flush with the bottom of what you actually see.
+  // Measure the world from the scene's REAL rendered size (it fills the fixed viewport via
+  // inset:0). The ground (bottom:0 of #scene) is then flush with the true bottom of the screen.
   function measure(){
-    VW=window.innerWidth; VH=window.innerHeight;
-    scene.style.width=VW+"px"; scene.style.height=VH+"px";
+    const r=scene.getBoundingClientRect();
+    VW=Math.round(r.width)||window.innerWidth; VH=Math.round(r.height)||window.innerHeight;
     GROUNDY=VH-GROUND_H; BIRD_X=Math.round(VW*0.28);
   }
   measure();
@@ -431,11 +430,11 @@
       frames.push({transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+r+"rad)", offset:i/N});
       r += (physRot(v+g*t) - r) * k;
     }
-    // Hold the current position as the element's base style, THEN swap animations — prevents
-    // the 1-frame flicker that a bare cancel() would cause (revert to no-transform).
-    birdEl.style.transform="translate3d("+BIRD_X+"px,"+y0+"px,0) rotate("+bst.rot0+"rad)";
+    // Create the new animation FIRST (it immediately wins the cascade), THEN cancel the old one.
+    // This avoids the 1-frame "ghost"/double-bird that create-after-cancel can produce on iOS.
+    const a=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
     if(birdAnim) birdAnim.cancel();
-    birdAnim=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
+    birdAnim=a;
   }
 
   // pipe with optional vertical drift (chaos)
