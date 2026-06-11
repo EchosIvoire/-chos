@@ -372,7 +372,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v7</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v8</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -515,6 +515,7 @@
       mode: m,
       x: VW * 0.28,
       y: VH * 0.45,
+      prevY: VH * 0.45,
       vy: 0,
       rot: 0,
       pipes: [],
@@ -596,6 +597,8 @@
     if (!game) return;
     const m = game.mode;
 
+    game.prevY = game.y;   // remember last physics position so render can interpolate (kills jitter)
+
     // particles always update
     for (const p of particles) {
       p.x += p.vx * dt; p.y += p.vy * dt;
@@ -628,7 +631,9 @@
     // bird physics
     game.vy += m.gravity * dt;
     game.y += game.vy * dt;
-    game.rot = Math.max(-0.5, Math.min(1.4, game.vy / 600));
+    // ease rotation toward target instead of snapping — removes the per-flap "jerk"
+    const targetRot = Math.max(-0.5, Math.min(1.4, game.vy / 600));
+    game.rot += (targetRot - game.rot) * Math.min(1, dt * 11);
 
     // ground & ceiling
     const groundY = VH - 90;
@@ -811,8 +816,13 @@
       belly = `hsl(${rainbowHue},90%,82%)`;
     }
 
+    // interpolate between the last two physics positions so the bird never jitters
+    const by = (game.prevY === undefined || game.dead)
+      ? game.y
+      : game.prevY + (game.y - game.prevY) * renderAlpha;
+
     ctx.save();
-    ctx.translate(game.x, game.y);
+    ctx.translate(game.x, by);
     ctx.rotate(game.rot);
 
     // body — cached radial gradient per skin (rainbow rebuilds each frame).
@@ -877,7 +887,7 @@
   let fpsSmoothed = 0;
   let fpsAccTime = 0, fpsFrames = 0, fpsDisplay = 0;
   let nextFrameAllowed = 0;
-  let frameMaxMs = 0;   // worst frame gap in the current display window (diagnostic)
+  let renderAlpha = 0;   // 0..1 leftover physics time, for smooth render interpolation
 
   function frame(now) {
     rafId = requestAnimationFrame(frame);
@@ -892,8 +902,6 @@
       if (now - nextFrameAllowed > interval) nextFrameAllowed = now + interval;
     }
 
-    const gapMs = now - last;                       // raw frame gap (a freeze shows up here)
-    if (gapMs > frameMaxMs) frameMaxMs = gapMs;
     let dt = (now - last) / 1000;
     last = now;
     if (dt > 0.1) dt = 0.1; // clamp big gaps (tab switch)
@@ -903,9 +911,7 @@
     if (fpsAccTime >= 0.4) {
       fpsDisplay = Math.round(fpsFrames / fpsAccTime);
       fpsAccTime = 0; fpsFrames = 0;
-      // diagnostic: show fps AND worst frame gap (ms) so a real stall is visible on screen
-      if (hudVisible) fpsEl.querySelector("b").textContent = fpsDisplay + "·" + Math.round(frameMaxMs) + "ms";
-      frameMaxMs = 0;
+      if (hudVisible) fpsEl.querySelector("b").textContent = fpsDisplay;
     }
 
     // fixed-step physics
@@ -914,6 +920,7 @@
       let safety = 0;
       while (acc >= FIXED && safety < 8) { step(FIXED); acc -= FIXED; safety++; }
       if (safety >= 8) acc = 0; // bail if we fell way behind
+      renderAlpha = acc / FIXED; // fraction toward the next step → smooth interpolation
     }
 
     render();
