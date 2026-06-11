@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>TAP TEST 4 — canvas vs CSS</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html, body { width:100%; height:100%; background:#0d0f14; overflow:hidden;
+    -webkit-tap-highlight-color:transparent; touch-action:none; overscroll-behavior:none; }
+
+  .label { position:absolute; left:10px; font:bold 15px -apple-system,system-ui,sans-serif;
+    color:#fff; background:rgba(0,0,0,.55); padding:6px 10px; border-radius:8px; z-index:5; pointer-events:none; }
+
+  /* TOP: canvas (main-thread render) */
+  #c { position:absolute; top:0; left:0; width:100vw; height:50vh; display:block; }
+  #lc { top:8px; }
+
+  /* BOTTOM: pure CSS compositor animation */
+  #cssZone { position:absolute; bottom:0; left:0; width:100vw; height:50vh; overflow:hidden; background:#12161f; }
+  #cssStrip {
+    position:absolute; top:0; left:0; height:100%; width:200%;
+    background: repeating-linear-gradient(90deg, #27406a 0 40px, #12161f 40px 80px);
+    will-change: transform;
+    animation: scrollX 1.2s linear infinite;
+  }
+  @keyframes scrollX { from { transform: translate3d(0,0,0); } to { transform: translate3d(-80px,0,0); } }
+  #lcss { bottom:8px; }
+  .mid { position:absolute; top:50vh; left:0; width:100vw; height:2px; background:#000; z-index:6; }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div class="label" id="lc">HAUT = CANVAS</div>
+  <div class="mid"></div>
+  <div id="cssZone"><div id="cssStrip"></div></div>
+  <div class="label" id="lcss">BAS = CSS (compositeur)</div>
+
+<script>
+(function () {
+  var c = document.getElementById("c");
+  var ctx = c.getContext("2d", { alpha:false });
+  var DPR = Math.min(devicePixelRatio||1, 2.5), W=0, H=0;
+  function resize(){ W=innerWidth; H=Math.round(innerHeight*0.5); c.width=Math.round(W*DPR); c.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
+  resize(); addEventListener("resize", resize);
+  function loop(now){
+    requestAnimationFrame(loop);
+    ctx.fillStyle="#12161f"; ctx.fillRect(0,0,W,H);
+    var off=(now*0.0667)%80;  // ~80px / 1.2s, same speed as the CSS strip
+    ctx.fillStyle="#27406a";
+    for(var x=-off; x<W; x+=80) ctx.fillRect(x,0,40,H);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
