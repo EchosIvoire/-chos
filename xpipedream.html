@@ -30,7 +30,7 @@
     animation:twinkle 3s ease-in-out infinite; }
   @keyframes twinkle { 0%,100%{opacity:.25} 50%{opacity:.9} }
 
-  #ground { position:absolute; left:0; bottom:0; width:100vw; height:90px; z-index:5; overflow:hidden;
+  #ground { position:absolute; left:0; bottom:0; width:100vw; height:72px; z-index:5; overflow:hidden;
     background:var(--ground); border-top:3px solid var(--groundTop); transition:background .6s, border-color .6s; }
   #groundStripes { position:absolute; left:0; top:0; height:100%; width:340vw;
     background:repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 22px, transparent 22px 44px); will-change:transform; }
@@ -257,7 +257,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v15</div>
+      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v16</div>
     </div>
   </div>
 
@@ -334,9 +334,10 @@
   // SIZING
   // ===========================================================================
   let VW, VH, GROUNDY;
-  const GROUND_H=90, PIPE_W=64;
+  const GROUND_H=72, PIPE_W=64;
   let BIRD_X, BIRD_R=19;
-  function measure(){ VW=window.innerWidth; VH=window.innerHeight; GROUNDY=VH-GROUND_H; BIRD_X=Math.round(VW*0.28); }
+  // VH from the actual rendered scene height so the *physics* ground === the *visual* ground.
+  function measure(){ VW=window.innerWidth; VH=scene.clientHeight||window.innerHeight; GROUNDY=VH-GROUND_H; BIRD_X=Math.round(VW*0.28); }
   measure();
   window.addEventListener("resize", ()=>{ measure(); buildStars(); });
 
@@ -378,7 +379,7 @@
   let gameState="menu";   // "menu" | "playing" | "dead"
   let mode=MODES[state.mode];
   let pipes=[], score=0, spawnAcc=0, lastT=0, startedAt=0, curSpeed=0;
-  const bst={ y0:0, vy0:0, t0:0, g:2100 };   // bird analytic state
+  const bst={ y0:0, vy0:0, t0:0, g:2100, rot0:0 };   // bird analytic state
   let birdAnim=null, bobAnim=null, raf=0;
 
   const now=()=> performance.now()/1000;
@@ -397,19 +398,21 @@
       {duration:1100,easing:"ease-in-out",direction:"alternate",iterations:Infinity});
   }
 
+  // gentler pitch: tilt up on flap, only a mild nose-down on the way down
+  function physRot(vy){ return vy<0 ? Math.max(-0.5, vy/680) : Math.min(0.72, vy/1100); }
   function animateBirdArc(){
     const g=bst.g, y0=bst.y0, v=bst.vy0, target=GROUNDY-BIRD_R;
     const disc=v*v-2*g*(y0-target);
     let T=disc>0 ? (-v+Math.sqrt(disc))/g : 1.5;
     T=Math.min(Math.max(T,.3),6);
     const N=Math.max(8,Math.ceil(T/0.018)), frames=[];
+    const step=T/N, k=Math.min(1, step*10);   // rotation easing per sample → no snap at the flap
+    let r=bst.rot0;
     for(let i=0;i<=N;i++){
-      const t=T*i/N; let y=y0+v*t+0.5*g*t*t;
+      const t=step*i; let y=y0+v*t+0.5*g*t*t;
       if(y<BIRD_R) y=BIRD_R; if(y>target) y=target;
-      // gentler pitch: tilt up on flap, only a mild nose-down on the way down
-      const vy=v+g*t;
-      const rot = vy<0 ? Math.max(-0.5, vy/680) : Math.min(0.72, vy/1100);
-      frames.push({transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+rot+"rad)", offset:i/N});
+      r += (physRot(v+g*t) - r) * k;
+      frames.push({transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+r+"rad)", offset:i/N});
     }
     if(birdAnim) birdAnim.cancel();
     birdAnim=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
@@ -500,7 +503,7 @@
     applyTheme(mode.theme); vignette.classList.toggle("on", THEMES[mode.theme].vignette);
     startGround(mode.speed);
     if(bobAnim){ bobAnim.cancel(); bobAnim=null; }
-    bst.y0=VH*0.45; bst.vy0=mode.flap; bst.t0=now();
+    bst.rot0=0; bst.y0=VH*0.45; bst.vy0=mode.flap; bst.t0=now();
     animateBirdArc();
     birdEl.classList.remove("flap"); void birdEl.offsetWidth; birdEl.classList.add("flap");
     hud.classList.add("on");
@@ -510,6 +513,7 @@
 
   function flap(){
     const t=now();
+    bst.rot0=physRot(birdVyAt(t));   // start the new arc's rotation from the current one (no snap)
     bst.y0=birdYAt(t); bst.vy0=mode.flap; bst.t0=t; bst.g=mode.gravity;
     animateBirdArc();
     birdEl.classList.remove("flap"); void birdEl.offsetWidth; birdEl.classList.add("flap");
@@ -660,8 +664,13 @@
   refreshStats();
   scrimTop.classList.add("on"); scrimBot.classList.add("on");
   idleBob();
-  // center the selected mode card without smooth jump
-  requestAnimationFrame(()=>{ const card=carousel.querySelector('[data-id="'+state.mode+'"]'); if(card) carousel.scrollLeft=card.offsetLeft+card.offsetWidth/2-carousel.clientWidth/2; updateDots(); });
+  // re-measure after first layout (scene.clientHeight is reliable now) + center the mode card
+  requestAnimationFrame(()=>{
+    measure(); if(gameState==="menu") idleBob();
+    const card=carousel.querySelector('[data-id="'+state.mode+'"]');
+    if(card) carousel.scrollLeft=card.offsetLeft+card.offsetWidth/2-carousel.clientWidth/2;
+    updateDots();
+  });
   raf=requestAnimationFrame(loop);
 })();
 </script>
