@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="description" content="XPIPEDREAM — un Flappy arcade fluide, plusieurs modes et skins. Par TheBenchLab." />
   <meta name="theme-color" content="#0d0f14" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -688,6 +689,8 @@
   // ===========================================================================
   // BOOT
   // ===========================================================================
+  // Service worker: makes the home-screen app always load the freshest version (no more stale cache).
+  if ("serviceWorker" in navigator) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }
   buildCarousel();
   selectMode(state.mode);
   applySkin();
