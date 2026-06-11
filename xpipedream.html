@@ -21,8 +21,9 @@
   html, body { width:100%; height:100%; overflow:hidden; touch-action:none; overscroll-behavior:none;
     background:var(--ground,#0a0c12); transition:background .6s ease;
     font-family:-apple-system, BlinkMacSystemFont, system-ui, sans-serif; color:#fff; }
-  #ver { position:fixed; left:7px; bottom:calc(env(safe-area-inset-bottom,0px) + 3px); z-index:9999;
-    font:700 9px -apple-system, system-ui, sans-serif; color:rgba(255,255,255,.4); letter-spacing:.5px; pointer-events:none; }
+  #ver { position:fixed; left:8px; bottom:calc(env(safe-area-inset-bottom,0px) + 6px); z-index:9999;
+    font:800 12px -apple-system, system-ui, sans-serif; color:#fff; background:rgba(0,0,0,.55);
+    padding:3px 8px; border-radius:8px; letter-spacing:.5px; pointer-events:none; }
 
   /* ---------- WORLD (live, compositor-driven) ---------- */
   #scene { position:fixed; inset:0; overflow:hidden;
@@ -54,7 +55,7 @@
 
   /* ---------- BIRD (SVG, skinnable) ---------- */
   #bird { position:absolute; left:0; top:0; width:48px; height:40px; margin:-20px 0 0 -24px; z-index:7; will-change:transform; }
-  #birdSvg { display:block; overflow:visible; filter:drop-shadow(0 4px 7px rgba(0,0,0,.38)); }
+  #birdSvg { display:block; overflow:visible; }
   #birdSvg .body  { fill:var(--bBody,#6c63ff); }
   #birdSvg .hl    { fill:var(--bGlow,#8b7bff); opacity:.5; }
   #birdSvg .belly { fill:var(--bBelly,#b3aaff); opacity:.92; }
@@ -64,7 +65,7 @@
   #bird.flap .wing { animation:wingFlap .28s ease-out; }
   @keyframes wingFlap { 0%{transform:rotate(38deg)} 60%{transform:rotate(-14deg)} 100%{transform:rotate(0deg)} }
   #bird.rainbow #birdSvg { animation:hue 3.2s linear infinite; }
-  @keyframes hue { from{filter:hue-rotate(0) drop-shadow(0 4px 7px rgba(0,0,0,.38))} to{filter:hue-rotate(360deg) drop-shadow(0 4px 7px rgba(0,0,0,.38))} }
+  @keyframes hue { from{filter:hue-rotate(0)} to{filter:hue-rotate(360deg)} }
 
   /* ---------- HUD (in game) ---------- */
   #hud { position:absolute; top:calc(env(safe-area-inset-top,0px) + 16px); left:0; width:100vw; text-align:center;
@@ -191,7 +192,7 @@
 </style>
 </head>
 <body>
-  <div id="ver">V.1.24</div>
+  <div id="ver">V.1.25</div>
   <div id="scene">
     <div id="stars"></div>
     <div id="ground"><div id="groundStripes"></div></div>
@@ -263,7 +264,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.24</div>
+      <div class="verline">V.1.25</div>
     </div>
   </div>
 
