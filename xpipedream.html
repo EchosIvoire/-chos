@@ -30,8 +30,9 @@
     animation:twinkle 3s ease-in-out infinite; }
   @keyframes twinkle { 0%,100%{opacity:.25} 50%{opacity:.9} }
 
-  #ground { position:absolute; left:0; bottom:0; width:100vw; height:72px; z-index:5; overflow:hidden;
-    background:var(--ground); border-top:3px solid var(--groundTop); transition:background .6s, border-color .6s; }
+  #ground { position:absolute; left:0; right:0; bottom:0; height:calc(72px + env(safe-area-inset-bottom,0px));
+    z-index:5; overflow:hidden; background:var(--ground); border-top:3px solid var(--groundTop);
+    transition:background .6s, border-color .6s; }
   #groundStripes { position:absolute; left:0; top:0; height:100%; width:340vw;
     background:repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 22px, transparent 22px 44px); will-change:transform; }
 
@@ -257,7 +258,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v19</div>
+      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v20</div>
     </div>
   </div>
 
@@ -315,7 +316,8 @@
   // DOM
   // ===========================================================================
   const $ = id => document.getElementById(id);
-  const scene=$("scene"), birdEl=$("bird"), ground=$("ground"), stripes=$("groundStripes"),
+  const scene=$("scene"), birdEl=$("bird"), wingEl=$("bird").querySelector(".wing"),
+        ground=$("ground"), stripes=$("groundStripes"),
         stars=$("stars"), vignette=$("vignette"), hud=$("hud"), scoreEl=$("score"),
         menu=$("menu"), over=$("over"), toast=$("toast"),
         scrimTop=$("scrimTop"), scrimBot=$("scrimBot"), sheetScrim=$("sheetScrim");
@@ -336,12 +338,15 @@
   let VW, VH, GROUNDY;
   const GROUND_H=72, PIPE_W=64;
   let BIRD_X, BIRD_R=19;
-  // Measure the world from the scene's REAL rendered size (it fills the fixed viewport via
-  // inset:0). The ground (bottom:0 of #scene) is then flush with the true bottom of the screen.
+  // Measure the world from real rendered geometry. GROUNDY = the ground's actual top edge on
+  // screen (via getBoundingClientRect), so the landing line === the visible ground, whatever the
+  // device safe-areas do. The ground itself extends down past the home indicator (no black gap).
   function measure(){
     const r=scene.getBoundingClientRect();
     VW=Math.round(r.width)||window.innerWidth; VH=Math.round(r.height)||window.innerHeight;
-    GROUNDY=VH-GROUND_H; BIRD_X=Math.round(VW*0.28);
+    const g=ground.getBoundingClientRect();
+    GROUNDY = g.height>0 ? Math.round(g.top - r.top) : VH-GROUND_H;
+    BIRD_X=Math.round(VW*0.28);
   }
   measure();
   window.addEventListener("resize", ()=>{ measure(); buildStars(); });
@@ -430,11 +435,17 @@
       frames.push({transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+r+"rad)", offset:i/N});
       r += (physRot(v+g*t) - r) * k;
     }
-    // Create the new animation FIRST (it immediately wins the cascade), THEN cancel the old one.
-    // This avoids the 1-frame "ghost"/double-bird that create-after-cancel can produce on iOS.
-    const a=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
+    // Kill the old animation FIRST so it can't paint one extra frame of the old trajectory
+    // (the "ghost" the player saw), pin the current position inline so there's no gap/flash,
+    // THEN start the new arc from exactly there.
     if(birdAnim) birdAnim.cancel();
-    birdAnim=a;
+    birdEl.style.transform="translate3d("+BIRD_X+"px,"+y0+"px,0) rotate("+bst.rot0+"rad)";
+    birdAnim=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
+  }
+  function flapWing(){
+    if(state.reduce) return;
+    wingEl.animate([{transform:"rotate(40deg)"},{transform:"rotate(-12deg)"},{transform:"rotate(0deg)"}],
+      {duration:280, easing:"ease-out"});
   }
 
   // pipe with optional vertical drift (chaos)
@@ -524,7 +535,7 @@
     if(bobAnim){ bobAnim.cancel(); bobAnim=null; }
     bst.rot0=0; bst.y0=VH*0.45; bst.vy0=mode.flap; bst.t0=now();
     animateBirdArc();
-    birdEl.classList.remove("flap"); void birdEl.offsetWidth; birdEl.classList.add("flap");
+    flapWing();
     hud.classList.add("on");
     sndFlap();
     if(navigator.vibrate && state.sfx){ try{ navigator.vibrate(8); }catch(e){} }
@@ -535,7 +546,7 @@
     const b=birdNow();               // exact current rendered position/rotation → seamless
     bst.rot0=b.rot; bst.y0=b.y; bst.vy0=mode.flap; bst.t0=t; bst.g=mode.gravity;
     animateBirdArc();
-    birdEl.classList.remove("flap"); void birdEl.offsetWidth; birdEl.classList.add("flap");
+    flapWing();
     sndFlap();
   }
 
