@@ -257,7 +257,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v16</div>
+      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v17</div>
     </div>
   </div>
 
@@ -400,6 +400,16 @@
 
   // gentler pitch: tilt up on flap, only a mild nose-down on the way down
   function physRot(vy){ return vy<0 ? Math.max(-0.5, vy/680) : Math.min(0.72, vy/1100); }
+  // Read the bird's ACTUAL rendered position/rotation (from the running compositor animation),
+  // so a new flap starts exactly where the bird visually is → zero jump, perfectly fluid.
+  function birdNow(){
+    const tr=getComputedStyle(birdEl).transform;
+    let m=tr&&tr.match(/matrix3d\((.+)\)/);
+    if(m){ const p=m[1].split(",").map(parseFloat); return {y:p[13], rot:Math.atan2(p[1],p[0])}; }
+    m=tr&&tr.match(/matrix\((.+)\)/);
+    if(m){ const p=m[1].split(",").map(parseFloat); return {y:p[5], rot:Math.atan2(p[1],p[0])}; }
+    return {y:bst.y0, rot:bst.rot0};
+  }
   function animateBirdArc(){
     const g=bst.g, y0=bst.y0, v=bst.vy0, target=GROUNDY-BIRD_R;
     const disc=v*v-2*g*(y0-target);
@@ -411,9 +421,12 @@
     for(let i=0;i<=N;i++){
       const t=step*i; let y=y0+v*t+0.5*g*t*t;
       if(y<BIRD_R) y=BIRD_R; if(y>target) y=target;
-      r += (physRot(v+g*t) - r) * k;
       frames.push({transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+r+"rad)", offset:i/N});
+      r += (physRot(v+g*t) - r) * k;
     }
+    // Hold the current position as the element's base style, THEN swap animations — prevents
+    // the 1-frame flicker that a bare cancel() would cause (revert to no-transform).
+    birdEl.style.transform="translate3d("+BIRD_X+"px,"+y0+"px,0) rotate("+bst.rot0+"rad)";
     if(birdAnim) birdAnim.cancel();
     birdAnim=birdEl.animate(frames,{duration:T*1000,easing:"linear",fill:"forwards"});
   }
@@ -513,8 +526,8 @@
 
   function flap(){
     const t=now();
-    bst.rot0=physRot(birdVyAt(t));   // start the new arc's rotation from the current one (no snap)
-    bst.y0=birdYAt(t); bst.vy0=mode.flap; bst.t0=t; bst.g=mode.gravity;
+    const b=birdNow();               // exact current rendered position/rotation → seamless
+    bst.rot0=b.rot; bst.y0=b.y; bst.vy0=mode.flap; bst.t0=t; bst.g=mode.gravity;
     animateBirdArc();
     birdEl.classList.remove("flap"); void birdEl.offsetWidth; birdEl.classList.add("flap");
     sndFlap();
