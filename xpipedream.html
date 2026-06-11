@@ -440,6 +440,7 @@
   const ctx = canvas.getContext("2d", { alpha: false });
 
   let VW = 0, VH = 0, DPR = 1;   // logical CSS px size of the playfield
+  let _skyCache = {};            // cached sky/vignette gradients (declared early: resize() touches it)
   function resize() {
     const r = wrap.getBoundingClientRect();
     VW = Math.max(1, r.width);
@@ -654,7 +655,7 @@
   };
 
   // Cached gradients (rebuilt on resize / first use) — avoids per-frame allocations
-  let _skyCache = {};
+  // (_skyCache is declared earlier, near VW/VH, because resize() resets it)
   function skyGradient(th, key) {
     if (_skyCache[key]) return _skyCache[key];
     const g = ctx.createLinearGradient(0, 0, 0, VH);
