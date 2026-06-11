@@ -372,7 +372,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v8</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v9</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -516,6 +516,7 @@
       x: VW * 0.28,
       y: VH * 0.45,
       prevY: VH * 0.45,
+      prevTime: 0,
       vy: 0,
       rot: 0,
       pipes: [],
@@ -543,6 +544,7 @@
     const center = minC + Math.random() * Math.max(10, (maxC - minC));
     game.pipes.push({
       x: atX,
+      prevX: atX,
       center,
       gap,
       passed: false,
@@ -597,7 +599,8 @@
     if (!game) return;
     const m = game.mode;
 
-    game.prevY = game.y;   // remember last physics position so render can interpolate (kills jitter)
+    game.prevY = game.y;        // remember last physics positions so render can
+    game.prevTime = game.time;  // interpolate everything (bird, pipes, ground) → no jitter
 
     // particles always update
     for (const p of particles) {
@@ -647,6 +650,7 @@
 
     // move pipes + chaos drift + collision + scoring
     for (const p of game.pipes) {
+      p.prevX = p.x;
       p.x -= game.speed * dt;
       if (m.gapDrift) {
         p.driftPhase += dt * 1.4;
@@ -745,10 +749,12 @@
     ctx.fillRect(0, groundY, VW, 6);
     ctx.fillStyle = th.ground;
     ctx.fillRect(0, groundY + 6, VW, 90);
-    // ground stripes (motion)
+    // ground stripes (motion) — use interpolated time so scrolling never jitters
     if (!state.reduce) {
       ctx.fillStyle = "rgba(255,255,255,.04)";
-      const off = (game.time * game.speed) % 40;
+      const rtime = (game.prevTime === undefined) ? game.time
+        : game.prevTime + (game.time - game.prevTime) * renderAlpha;
+      const off = (rtime * game.speed) % 40;
       for (let x = -off; x < VW; x += 40) ctx.fillRect(x, groundY + 6, 20, 84);
     }
 
@@ -789,9 +795,11 @@
     const botY = p.center + half;
     const lip = 18, lipW = 10;
 
-    // Draw in pipe-local coords so the cached gradient can be reused
+    // Draw in pipe-local coords so the cached gradient can be reused.
+    // Use the interpolated x so the scrolling decor stays perfectly smooth.
+    const rx = (p.prevX === undefined) ? p.x : p.prevX + (p.x - p.prevX) * renderAlpha;
     ctx.save();
-    ctx.translate(p.x, 0);
+    ctx.translate(rx, 0);
     ctx.fillStyle = pipeGradient(th, themeKey);
     // top pipe
     ctx.fillRect(0, 0, PIPE_W, topH - lip);
