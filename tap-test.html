@@ -17,14 +17,22 @@
   }
   #big { font-size:34px; color:#6cf; }
   .warn { color:#ff5a5a !important; }
+  #sndBtn {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    font:bold 22px -apple-system, system-ui, sans-serif; color:#fff;
+    background:#2a8; padding:18px 34px; border:none; border-radius:14px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  #sndBtn.off { background:#a33; }
 </style>
 </head>
 <body>
   <canvas id="c"></canvas>
   <div id="hud"><span id="big">lag max: -- ms</span>
 fps: --   taps: 0
-Tape l'écran. Si "lag max" saute à ~500
-au moment du tap = le gel est confirmé.</div>
+Tape l'ecran. Compare lag avec SON ON
+puis SON OFF (bouton en bas).</div>
+  <button id="sndBtn">SON : ON</button>
 
 <script>
 (function () {
@@ -86,13 +94,44 @@ au moment du tap = le gel est confirmé.</div>
   }
   requestAnimationFrame(loop);
 
+  // --- EXACT same audio code as the game ---
+  var sfx = true, actx = null;
+  function audio() {
+    if (!sfx) return null;
+    if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+    if (actx.state === "suspended") actx.resume();
+    return actx;
+  }
+  function beep(freq, dur, type, vol) {
+    var a = audio(); if (!a) return;
+    var o = a.createOscillator(), g = a.createGain();
+    o.type = type || "square"; o.frequency.value = freq;
+    g.gain.value = (vol || 0.06);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + dur);
+    o.connect(g); g.connect(a.destination);
+    o.start(); o.stop(a.currentTime + dur);
+  }
+  function sndFlap() { beep(620, 0.09, "square", 0.05); }
+
   function tap(e) {
     e.preventDefault();
     vy = -560; taps++;
+    sndFlap();              // <-- the ONLY thing the game does extra per tap
   }
   // ONE listener only, the same kind the game uses
   c.addEventListener("touchstart", tap, { passive: false });
   c.addEventListener("mousedown", tap, { passive: false });
+
+  var sndBtn = document.getElementById("sndBtn");
+  function toggleSnd(e) {
+    e.preventDefault(); e.stopPropagation();
+    sfx = !sfx;
+    sndBtn.textContent = "SON : " + (sfx ? "ON" : "OFF");
+    sndBtn.className = sfx ? "" : "off";
+    lagMax = 0;             // reset so the comparison is clean
+  }
+  sndBtn.addEventListener("touchstart", toggleSnd, { passive: false });
+  sndBtn.addEventListener("mousedown", toggleSnd, { passive: false });
 
   // reset lag max with a double-tap on the HUD area is overkill; auto-clear instead:
   setInterval(function () { lagMax = 0; }, 6000);
