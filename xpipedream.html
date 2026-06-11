@@ -154,6 +154,7 @@
       background: linear-gradient(180deg, rgba(10,12,18,.94), rgba(10,12,18,.985));
       gap: 14px;
       overflow-y: auto;
+      touch-action: pan-y;   /* keep the settings panel finger-scrollable (body is touch-action:none) */
     }
     .panel.hidden { display: none; }
 
@@ -372,7 +373,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v9</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v10</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -1104,9 +1105,11 @@
     if (e.code === "Escape" && game && !isMenuOpen()) showMenu();
   });
 
-  // Prevent iOS double-tap zoom / scroll on the game area
+  // Prevent iOS pinch-zoom (2-finger only — does NOT fire on a tap, so it can't cause jank).
+  // NB: scrolling is already blocked by CSS `touch-action:none` + `overscroll-behavior:none`.
+  // We deliberately do NOT add a non-passive `touchmove` listener: on iOS that forces the main
+  // thread to sync on every touch and drops a frame exactly at each tap (the "saccade au clic").
   document.addEventListener("gesturestart", (e) => e.preventDefault());
-  document.addEventListener("touchmove", (e) => { if (!isMenuOpen()) e.preventDefault(); }, { passive: false });
 
   // Pause physics clock when tab hidden (avoid huge dt)
   document.addEventListener("visibilitychange", () => {
