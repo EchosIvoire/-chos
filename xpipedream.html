@@ -373,7 +373,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v10</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v11</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -896,6 +896,7 @@
   let fpsSmoothed = 0;
   let fpsAccTime = 0, fpsFrames = 0, fpsDisplay = 0;
   let nextFrameAllowed = 0;
+  let lastRender = -1e9;  // timestamp of last rendered frame (jitter-tolerant fps throttle)
   let renderAlpha = 0;   // 0..1 leftover physics time, for smooth render interpolation
 
   function frame(now) {
@@ -903,12 +904,13 @@
 
     const cap = (FPS_MODES.find(f => f.id === state.fps) || FPS_MODES[1]).cap;
     if (cap > 0) {
-      // throttle to target fps
-      if (now < nextFrameAllowed) return;
+      // Throttle to target fps, but with a tolerance so we NEVER drop a frame for a few µs
+      // of rAF jitter. The old strict gate (`now < nextFrameAllowed`) skipped a frame the
+      // instant a tick arrived a hair early — and a touch reliably nudges the timing, so it
+      // dropped a frame *exactly at each tap* on 120Hz ProMotion screens → the "saccade au clic".
       const interval = 1000 / cap;
-      // schedule next allowed frame, guarding against drift
-      nextFrameAllowed = Math.max(now, nextFrameAllowed + interval);
-      if (now - nextFrameAllowed > interval) nextFrameAllowed = now + interval;
+      if (now - lastRender < interval * 0.75) return;
+      lastRender = now;
     }
 
     let dt = (now - last) / 1000;
@@ -938,7 +940,7 @@
       liveScoreEl.textContent = game.score;
     }
   }
-  requestAnimationFrame((t) => { last = t; nextFrameAllowed = t; frame(t); });
+  requestAnimationFrame((t) => { last = t; frame(t); });
 
   // ---------------------------------------------------------------------------
   // UI WIRING
