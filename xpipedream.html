@@ -113,16 +113,16 @@
       text-transform: uppercase;
       padding: .3rem .55rem;
       border-radius: 8px;
-      background: rgba(18,21,31,.7);
+      background: rgba(18,21,31,.92);
       border: 1px solid var(--border);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       color: var(--muted);
       cursor: pointer;
       user-select: none;
     }
     .pill b { color: var(--accent2); }
     .pill.fps b { color: var(--accent3); }
+    /* best pill is just a readout — don't let it swallow taps meant to flap */
+    #bestPill { pointer-events: none; }
 
     /* ===== OVERLAYS / PANELS ===== */
     .panel {
@@ -448,6 +448,7 @@
     canvas.width = Math.round(VW * DPR);
     canvas.height = Math.round(VH * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    _skyCache = {};   // sky gradients depend on VH → rebuild after resize
   }
   window.addEventListener("resize", resize, { passive: true });
   window.addEventListener("orientationchange", () => setTimeout(resize, 100), { passive: true });
@@ -652,6 +653,28 @@
     dusk:  { sky1: "#2a1d3a", sky2: "#161024", pipe: "#c46bd0", pipeDark: "#8e3fa0", ground: "#1a1426", groundTop: "#281d38" },
   };
 
+  // Cached gradients (rebuilt on resize / first use) — avoids per-frame allocations
+  let _skyCache = {};
+  function skyGradient(th, key) {
+    if (_skyCache[key]) return _skyCache[key];
+    const g = ctx.createLinearGradient(0, 0, 0, VH);
+    g.addColorStop(0, th.sky1); g.addColorStop(1, th.sky2);
+    _skyCache[key] = g;
+    return g;
+  }
+  const _birdGrad = {};   // cached bird body gradient per skin id
+  const _pipeCache = {};
+  function pipeGradient(th, key) {
+    if (_pipeCache[key]) return _pipeCache[key];
+    // gradient in pipe-local coords [0 .. PIPE_W]; drawPipe translates to p.x
+    const g = ctx.createLinearGradient(0, 0, PIPE_W, 0);
+    g.addColorStop(0, th.pipeDark);
+    g.addColorStop(0.5, th.pipe);
+    g.addColorStop(1, th.pipeDark);
+    _pipeCache[key] = g;
+    return g;
+  }
+
   // static star field for night/dusk
   const stars = [];
   for (let i = 0; i < 60; i++) stars.push({ x: Math.random(), y: Math.random() * 0.7, r: Math.random() * 1.4 + 0.3, t: Math.random() * 6 });
@@ -659,7 +682,8 @@
   let rainbowHue = 0;
 
   function render() {
-    const th = game ? THEMES[game.mode.theme] : THEMES.day;
+    const themeKey = game ? game.mode.theme : "day";
+    const th = THEMES[themeKey] || THEMES.day;
 
     ctx.save();
     if (game && game.shake > 0 && !state.reduce) {
@@ -667,10 +691,8 @@
       ctx.translate((Math.random() - 0.5) * s, (Math.random() - 0.5) * s);
     }
 
-    // sky
-    const sky = ctx.createLinearGradient(0, 0, 0, VH);
-    sky.addColorStop(0, th.sky1); sky.addColorStop(1, th.sky2);
-    ctx.fillStyle = sky;
+    // sky (cached gradient per theme)
+    ctx.fillStyle = skyGradient(th, themeKey);
     ctx.fillRect(-20, -20, VW + 40, VH + 40);
 
     // stars (night/dusk)
@@ -688,7 +710,7 @@
 
     // pipes
     for (const p of game.pipes) {
-      drawPipe(p, th);
+      drawPipe(p, th, themeKey);
     }
 
     // ground
@@ -704,13 +726,21 @@
       for (let x = -off; x < VW; x += 40) ctx.fillRect(x, groundY + 6, 20, 84);
     }
 
-    // night vignette / spotlight around bird
-    if (game.mode.theme === "night") {
-      const vg = ctx.createRadialGradient(game.x, game.y, 60, game.x, game.y, Math.max(VW, VH) * 0.55);
-      vg.addColorStop(0, "rgba(0,0,0,0)");
-      vg.addColorStop(1, "rgba(0,0,0,.82)");
+    // night vignette / spotlight around bird (cached gradient, just translated)
+    if (themeKey === "night") {
+      let vg = _skyCache._vignette;
+      if (!vg) {
+        const R = Math.max(VW, VH) * 0.55;
+        vg = ctx.createRadialGradient(0, 0, 60, 0, 0, R);
+        vg.addColorStop(0, "rgba(0,0,0,0)");
+        vg.addColorStop(1, "rgba(0,0,0,.82)");
+        _skyCache._vignette = vg;
+      }
+      ctx.save();
+      ctx.translate(game.x, game.y);
       ctx.fillStyle = vg;
-      ctx.fillRect(0, 0, VW, VH);
+      ctx.fillRect(-game.x, -game.y, VW, VH);
+      ctx.restore();
     }
 
     // particles
@@ -727,28 +757,27 @@
     ctx.restore();
   }
 
-  function drawPipe(p, th) {
+  function drawPipe(p, th, themeKey) {
     const half = p.gap / 2;
     const topH = p.center - half;
     const botY = p.center + half;
-    const grad = ctx.createLinearGradient(p.x, 0, p.x + PIPE_W, 0);
-    grad.addColorStop(0, th.pipeDark);
-    grad.addColorStop(0.5, th.pipe);
-    grad.addColorStop(1, th.pipeDark);
-    ctx.fillStyle = grad;
-
     const lip = 18, lipW = 10;
-    // top pipe
-    ctx.fillRect(p.x, 0, PIPE_W, topH - lip);
-    ctx.fillRect(p.x - lipW / 2, topH - lip, PIPE_W + lipW, lip);
-    // bottom pipe
-    ctx.fillRect(p.x, botY + lip, PIPE_W, VH - botY);
-    ctx.fillRect(p.x - lipW / 2, botY, PIPE_W + lipW, lip);
 
+    // Draw in pipe-local coords so the cached gradient can be reused
+    ctx.save();
+    ctx.translate(p.x, 0);
+    ctx.fillStyle = pipeGradient(th, themeKey);
+    // top pipe
+    ctx.fillRect(0, 0, PIPE_W, topH - lip);
+    ctx.fillRect(-lipW / 2, topH - lip, PIPE_W + lipW, lip);
+    // bottom pipe
+    ctx.fillRect(0, botY + lip, PIPE_W, VH - botY);
+    ctx.fillRect(-lipW / 2, botY, PIPE_W + lipW, lip);
     // highlight
     ctx.fillStyle = "rgba(255,255,255,.12)";
-    ctx.fillRect(p.x + 8, 0, 6, topH - lip);
-    ctx.fillRect(p.x + 8, botY + lip, 6, VH - botY);
+    ctx.fillRect(8, 0, 6, topH - lip);
+    ctx.fillRect(8, botY + lip, 6, VH - botY);
+    ctx.restore();
   }
 
   function drawBird() {
@@ -765,22 +794,24 @@
     ctx.translate(game.x, game.y);
     ctx.rotate(game.rot);
 
-    // glow
-    if (!state.reduce) {
-      ctx.shadowColor = glow;
-      ctx.shadowBlur = 18;
+    // body — cached radial gradient per skin (rainbow rebuilds each frame).
+    // NB: no shadowBlur here — it's the single biggest perf killer on iOS Safari.
+    let bg;
+    if (skin.body === "rainbow") {
+      bg = ctx.createRadialGradient(-4, -5, 3, 0, 0, BIRD_R + 2);
+      bg.addColorStop(0, glow); bg.addColorStop(0.6, body); bg.addColorStop(1, body);
+    } else {
+      bg = _birdGrad[skin.id];
+      if (!bg) {
+        bg = ctx.createRadialGradient(-4, -5, 3, 0, 0, BIRD_R + 2);
+        bg.addColorStop(0, glow); bg.addColorStop(0.6, body); bg.addColorStop(1, body);
+        _birdGrad[skin.id] = bg;
+      }
     }
-
-    // body
-    const bg = ctx.createRadialGradient(-4, -5, 3, 0, 0, BIRD_R + 2);
-    bg.addColorStop(0, glow);
-    bg.addColorStop(0.6, body);
-    bg.addColorStop(1, body);
     ctx.fillStyle = bg;
     ctx.beginPath();
     ctx.arc(0, 0, BIRD_R, 0, Math.PI * 2);
     ctx.fill();
-    ctx.shadowBlur = 0;
 
     // belly
     ctx.fillStyle = belly;
