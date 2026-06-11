@@ -257,7 +257,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v17</div>
+      <div class="verline"><a href="/">← Retour TheBenchLab</a> · build v18</div>
     </div>
   </div>
 
@@ -336,10 +336,17 @@
   let VW, VH, GROUNDY;
   const GROUND_H=72, PIPE_W=64;
   let BIRD_X, BIRD_R=19;
-  // VH from the actual rendered scene height so the *physics* ground === the *visual* ground.
-  function measure(){ VW=window.innerWidth; VH=scene.clientHeight||window.innerHeight; GROUNDY=VH-GROUND_H; BIRD_X=Math.round(VW*0.28); }
+  // Pin the world to the *exact* visible area in px (most reliable on iOS Safari, where vh/dvh
+  // misbehave when the toolbar shows/hides). The ground (bottom:0 of #scene) then always sits
+  // flush with the bottom of what you actually see.
+  function measure(){
+    VW=window.innerWidth; VH=window.innerHeight;
+    scene.style.width=VW+"px"; scene.style.height=VH+"px";
+    GROUNDY=VH-GROUND_H; BIRD_X=Math.round(VW*0.28);
+  }
   measure();
   window.addEventListener("resize", ()=>{ measure(); buildStars(); });
+  if(window.visualViewport){ window.visualViewport.addEventListener("resize", measure); }
 
   // ground scroll (compositor, continuous)
   let groundAnim=null;
