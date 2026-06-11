@@ -373,7 +373,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v11</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v12</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -925,13 +925,14 @@
       if (hudVisible) fpsEl.querySelector("b").textContent = fpsDisplay;
     }
 
-    // fixed-step physics
+    // Variable-timestep physics: integrate with the frame's REAL dt so every position is
+    // locked to the display clock (`now`). This is what the smooth reference test page does.
+    // The old fixed-step accumulator reconstructed time and made the decor jump one frame at
+    // each tap (a touch nudges frame timing → the reconstruction skips). dt is clamped above,
+    // and pipes move < their width per frame, so collision stays safe.
     if (game) {
-      acc += dt;
-      let safety = 0;
-      while (acc >= FIXED && safety < 8) { step(FIXED); acc -= FIXED; safety++; }
-      if (safety >= 8) acc = 0; // bail if we fell way behind
-      renderAlpha = acc / FIXED; // fraction toward the next step → smooth interpolation
+      step(dt);
+      renderAlpha = 1; // interpolation reads now resolve to the exact current position
     }
 
     render();
