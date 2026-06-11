@@ -372,7 +372,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v6</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v7</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -877,6 +877,7 @@
   let fpsSmoothed = 0;
   let fpsAccTime = 0, fpsFrames = 0, fpsDisplay = 0;
   let nextFrameAllowed = 0;
+  let frameMaxMs = 0;   // worst frame gap in the current display window (diagnostic)
 
   function frame(now) {
     rafId = requestAnimationFrame(frame);
@@ -891,6 +892,8 @@
       if (now - nextFrameAllowed > interval) nextFrameAllowed = now + interval;
     }
 
+    const gapMs = now - last;                       // raw frame gap (a freeze shows up here)
+    if (gapMs > frameMaxMs) frameMaxMs = gapMs;
     let dt = (now - last) / 1000;
     last = now;
     if (dt > 0.1) dt = 0.1; // clamp big gaps (tab switch)
@@ -900,7 +903,9 @@
     if (fpsAccTime >= 0.4) {
       fpsDisplay = Math.round(fpsFrames / fpsAccTime);
       fpsAccTime = 0; fpsFrames = 0;
-      if (hudVisible) fpsEl.querySelector("b").textContent = fpsDisplay;
+      // diagnostic: show fps AND worst frame gap (ms) so a real stall is visible on screen
+      if (hudVisible) fpsEl.querySelector("b").textContent = fpsDisplay + "·" + Math.round(frameMaxMs) + "ms";
+      frameMaxMs = 0;
     }
 
     // fixed-step physics
