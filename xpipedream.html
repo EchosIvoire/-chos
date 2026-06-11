@@ -9,6 +9,12 @@
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0d0f14" />
   <meta name="author" content="TheBenchLab" />
+
+  <!-- Installable comme app iPhone (Ajouter à l'écran d'accueil → plein écran sans barre Safari) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="XPIPEDREAM" />
   <link rel="canonical" href="https://thebenchlab.fr/xpipedream.html" />
 
   <!-- OPEN GRAPH -->
@@ -366,7 +372,7 @@
           <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
           <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
         </div>
-        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v5</span></div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v6</span></div>
       </div>
 
       <!-- GAME OVER -->
@@ -451,11 +457,17 @@
   let _skyCache = {};            // cached sky/vignette gradients (declared early: resize() touches it)
   function resize() {
     const r = wrap.getBoundingClientRect();
-    VW = Math.max(1, r.width);
-    VH = Math.max(1, r.height);
-    DPR = Math.min(window.devicePixelRatio || 1, 2.5); // cap DPR for perf on mobile
-    canvas.width = Math.round(VW * DPR);
-    canvas.height = Math.round(VH * DPR);
+    const vw = Math.max(1, r.width);
+    const vh = Math.max(1, r.height);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.5); // cap DPR for perf on mobile
+    const w = Math.round(vw * dpr);
+    const h = Math.round(vh * dpr);
+    // iOS fires `resize` when the Safari toolbar nudges — bail out if nothing really
+    // changed, otherwise we reallocate the (costly) canvas backing store for nothing.
+    if (w === canvas.width && h === canvas.height && vw === VW && vh === VH) return;
+    VW = vw; VH = vh; DPR = dpr;
+    canvas.width = w;
+    canvas.height = h;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     _skyCache = {};   // sky gradients depend on VH → rebuild after resize
   }
@@ -560,7 +572,7 @@
     const isBest = game.score > prevBest;
     if (isBest) { state.best[state.mode] = game.score; LS.set("best", state.best); }
     if (game.score > state.topScore) { state.topScore = game.score; LS.set("topScore", state.topScore); }
-    setTimeout(() => showGameOver(isBest), 650);
+    setTimeout(() => showGameOver(isBest), 300);
   }
 
   function burst(x, y, skin) {
