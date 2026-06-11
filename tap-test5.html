@@ -4,39 +4,33 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>TAP TEST 5 — prototype CSS jouable</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>TAP TEST 5 — prototype CSS (v2)</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
   html, body { width:100%; height:100%; overflow:hidden; -webkit-tap-highlight-color:transparent;
-    touch-action:none; overscroll-behavior:none; font-family:-apple-system,system-ui,sans-serif; }
-  #scene { position:fixed; inset:0; overflow:hidden;
+    touch-action:none; overscroll-behavior:none; font-family:-apple-system,system-ui,sans-serif; background:#1b2a4a; }
+  #scene { position:fixed; left:0; top:0; width:100vw; height:100vh; overflow:hidden;
     background:linear-gradient(180deg,#1b2a4a 0%,#2a3f63 60%,#3a5070 100%); }
 
-  /* GROUND — CSS compositor animation (seamless loop) */
   #ground { position:absolute; left:0; bottom:0; width:100vw; height:90px; background:#2a2030; z-index:3; overflow:hidden; }
-  #groundStripes { position:absolute; left:0; top:6px; height:84px; width:300vw;
-    background:repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 20px, transparent 20px 40px);
-    will-change:transform; }
+  #groundStripes { position:absolute; left:0; top:6px; height:84px; width:320vw;
+    background:repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 20px, transparent 20px 40px); will-change:transform; }
 
-  /* PIPES — created in JS, scrolled via Web Animations API (compositor) */
   .pipe { position:absolute; top:0; left:0; width:64px; height:100%; will-change:transform; z-index:2; }
   .pipe .seg { position:absolute; left:0; width:64px; background:linear-gradient(90deg,#2f9c54,#3ec46d 30%,#2f9c54);
     box-shadow:inset -6px 0 rgba(0,0,0,.18), inset 6px 0 rgba(255,255,255,.12); border-radius:3px; }
-  .pipe .top { top:0; }
-  .pipe .bot { bottom:0; }
+  .pipe .top { top:0; } .pipe .bot { bottom:0; }
 
-  /* BIRD — JS-driven transform */
-  #bird { position:absolute; left:0; top:0; width:34px; height:34px; margin:-17px 0 0 -17px;
-    z-index:4; will-change:transform; }
+  #bird { position:absolute; left:0; top:0; width:34px; height:34px; margin:-17px 0 0 -17px; z-index:4; will-change:transform; }
   #bird .body { width:34px; height:34px; border-radius:50%;
     background:radial-gradient(circle at 38% 35%, #ffe27a, #ffd23f 60%, #f0b400); box-shadow:inset -3px -4px rgba(0,0,0,.15); }
 
-  #hud { position:absolute; top:env(safe-area-inset-top,12px); left:0; width:100vw; text-align:center;
-    z-index:6; color:#fff; font-weight:800; font-size:42px; text-shadow:0 3px 8px rgba(0,0,0,.5); pointer-events:none; }
+  #hud { position:absolute; top:calc(env(safe-area-inset-top,0px) + 14px); left:0; width:100vw; text-align:center;
+    z-index:6; color:#fff; font-weight:800; font-size:44px; text-shadow:0 3px 8px rgba(0,0,0,.5); pointer-events:none; }
   #msg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;
-    z-index:7; color:#fff; text-align:center; gap:8px; }
-  #msg .big { font-size:26px; font-weight:800; }
-  #msg .sm { font-size:16px; opacity:.85; }
+    z-index:7; color:#fff; text-align:center; gap:8px; padding:20px; }
+  #msg .big { font-size:26px; font-weight:800; } #msg .sm { font-size:16px; opacity:.85; }
 </style>
 </head>
 <body>
@@ -44,115 +38,119 @@
     <div id="hud">0</div>
     <div id="bird"><div class="body"></div></div>
     <div id="ground"><div id="groundStripes"></div></div>
-    <div id="msg"><div class="big">PROTOTYPE CSS</div><div class="sm">Tape pour voler · le décor saccade-t-il au clic ?</div></div>
+    <div id="msg"><div class="big">PROTOTYPE CSS v2</div><div class="sm">Tape pour voler · oiseau + décor sur compositeur</div></div>
   </div>
 
 <script>
 (function () {
   "use strict";
-  var scene = document.getElementById("scene");
-  var birdEl = document.getElementById("bird");
-  var hud = document.getElementById("hud");
-  var msg = document.getElementById("msg");
-  var stripes = document.getElementById("groundStripes");
+  var scene = document.getElementById("scene"), birdEl = document.getElementById("bird");
+  var hud = document.getElementById("hud"), msg = document.getElementById("msg"), stripes = document.getElementById("groundStripes");
 
-  var VW = innerWidth, VH = innerHeight;
-  var GROUND = 90, GROUNDY = VH - GROUND;
-  var BIRD_X = VW * 0.28, BIRD_R = 17;
-  var SPEED = 200, GAP = 200, PIPE_W = 64, SPAWN = 1.6;
+  var VW, VH, GROUND = 90, GROUNDY, BIRD_X, BIRD_R = 17;
+  var SPEED = 200, GAP = 200, PIPE_W = 64, SPAWN = 1.6, G = 1500, FLAP = -480;
+  function measure(){ VW = innerWidth; VH = innerHeight; GROUNDY = VH - GROUND; BIRD_X = VW*0.28; }
+  measure(); addEventListener("resize", measure);
 
-  addEventListener("resize", function(){ VW=innerWidth; VH=innerHeight; GROUNDY=VH-GROUND; BIRD_X=VW*0.28; });
+  // GROUND scroll on the compositor
+  stripes.animate([{transform:"translateX(0)"},{transform:"translateX(-40px)"}],
+    {duration: 40/SPEED*1000, easing:"linear", iterations:Infinity});
 
-  // Ground scroll via compositor (loops every 40px of pattern)
-  stripes.animate(
-    [{transform:"translateX(0)"},{transform:"translateX(-40px)"}],
-    {duration: 40/SPEED*1000, easing:"linear", iterations:Infinity}
-  );
+  var pipes, running, dead, score, spawnT, lastT, raf;
+  var st = { y0:0, vy0:0, t0:0 };      // bird analytic state
+  var birdAnim = null, bobAnim = null;
 
-  var bird, pipes, running, dead, score, lastT, spawnT, raf;
+  function now(){ return performance.now()/1000; }
+  function birdYAt(t){ var d = t - st.t0; var y = st.y0 + st.vy0*d + 0.5*G*d*d; return y; }
+  function birdVyAt(t){ return st.vy0 + G*(t - st.t0); }
 
-  function reset() {
-    // clear pipes
-    if (pipes) pipes.forEach(function(p){ if(p.el.parentNode) p.el.parentNode.removeChild(p.el); });
-    pipes = [];
-    bird = { y: VH*0.45, vy: 0, rot: 0 };
-    running = false; dead = false; score = 0; spawnT = 0;
+  // Build the bird's whole fall arc as a compositor animation (regenerated on each flap)
+  function animateBirdArc(){
+    var target = GROUNDY - BIRD_R, y0 = st.y0, v = st.vy0;
+    var disc = v*v - 2*G*(y0 - target);
+    var T = disc > 0 ? (-v + Math.sqrt(disc)) / G : 1.5;
+    T = Math.min(Math.max(T, 0.3), 5);
+    var N = Math.max(8, Math.ceil(T/0.02)), frames = [];
+    for (var i=0;i<=N;i++){
+      var t = T*i/N, y = y0 + v*t + 0.5*G*t*t;
+      if (y < BIRD_R) y = BIRD_R;
+      if (y > target) y = target;
+      var rot = Math.max(-0.5, Math.min(1.4, (v + G*t)/600));
+      frames.push({ transform:"translate3d("+BIRD_X+"px,"+y+"px,0) rotate("+rot+"rad)", offset:i/N });
+    }
+    if (birdAnim) birdAnim.cancel();
+    birdAnim = birdEl.animate(frames, {duration:T*1000, easing:"linear", fill:"forwards"});
+  }
+
+  function idleBob(){
+    if (birdAnim){ birdAnim.cancel(); birdAnim = null; }
+    birdEl.style.transform = "translate3d("+BIRD_X+"px,"+(VH*0.45)+"px,0)";
+    bobAnim = birdEl.animate(
+      [{transform:"translate3d("+BIRD_X+"px,"+(VH*0.45-10)+"px,0)"},
+       {transform:"translate3d("+BIRD_X+"px,"+(VH*0.45+10)+"px,0)"}],
+      {duration:900, easing:"ease-in-out", direction:"alternate", iterations:Infinity});
+  }
+
+  function reset(){
+    if (pipes) pipes.forEach(function(p){ p.anim.cancel(); if(p.el.parentNode) p.el.parentNode.removeChild(p.el); });
+    pipes = []; running = false; dead = false; score = 0; spawnT = 0; lastT = 0;
     hud.textContent = "0";
     msg.style.display = "flex";
-    msg.querySelector(".big").textContent = "PROTOTYPE CSS";
-    msg.querySelector(".sm").textContent = "Tape pour voler · le décor saccade-t-il au clic ?";
-    drawBird();
+    msg.querySelector(".big").textContent = "PROTOTYPE CSS v2";
+    msg.querySelector(".sm").textContent = "Tape pour voler · oiseau + décor sur compositeur";
+    idleBob();
   }
 
-  function spawnPipe() {
+  function spawnPipe(){
     var minC = 90 + GAP/2, maxC = GROUNDY - 70 - GAP/2;
     var center = minC + Math.random() * Math.max(20, maxC - minC);
-    var el = document.createElement("div");
-    el.className = "pipe";
-    var top = document.createElement("div"); top.className = "seg top"; top.style.height = (center - GAP/2) + "px";
-    var bot = document.createElement("div"); bot.className = "seg bot"; bot.style.height = (GROUNDY - (center + GAP/2)) + "px";
-    el.appendChild(top); el.appendChild(bot);
-    scene.appendChild(el);
-    // compositor scroll across the whole screen
-    var dist = VW + PIPE_W;
-    var dur = dist / SPEED * 1000;
-    var anim = el.animate(
-      [{transform:"translateX(" + VW + "px)"},{transform:"translateX(" + (-PIPE_W) + "px)"}],
-      {duration: dur, easing:"linear", fill:"forwards"}
-    );
-    pipes.push({ el:el, anim:anim, center:center, t0: performance.now()/1000, passed:false });
+    var el = document.createElement("div"); el.className = "pipe";
+    var top = document.createElement("div"); top.className = "seg top"; top.style.height = (center - GAP/2)+"px";
+    var bot = document.createElement("div"); bot.className = "seg bot"; bot.style.height = (GROUNDY - (center + GAP/2))+"px";
+    el.appendChild(top); el.appendChild(bot); scene.appendChild(el);
+    var dur = (VW + PIPE_W) / SPEED * 1000;
+    var anim = el.animate([{transform:"translateX("+VW+"px)"},{transform:"translateX("+(-PIPE_W)+"px)"}],
+      {duration:dur, easing:"linear", fill:"forwards"});
+    pipes.push({ el:el, anim:anim, center:center, t0:now(), passed:false });
   }
+  function pipeX(p, t){ return VW - SPEED*(t - p.t0); }
 
-  function pipeX(p, nowSec) { return VW - SPEED * (nowSec - p.t0); }
-
-  function drawBird() {
-    birdEl.style.transform = "translate3d(" + BIRD_X + "px," + bird.y + "px,0) rotate(" + bird.rot + "rad)";
-  }
-
-  function loop(now) {
+  function loop(){
     raf = requestAnimationFrame(loop);
-    var nowSec = now/1000;
-    var dt = lastT ? Math.min(0.05, nowSec - lastT) : 0; lastT = nowSec;
-
-    if (running && !dead) {
-      bird.vy += 1500 * dt; bird.y += bird.vy * dt;
-      var tr = Math.max(-0.5, Math.min(1.4, bird.vy/600));
-      bird.rot += (tr - bird.rot) * Math.min(1, dt*11);
-
-      if (bird.y + BIRD_R >= GROUNDY) { bird.y = GROUNDY - BIRD_R; return die(); }
-      if (bird.y - BIRD_R <= 0) { bird.y = BIRD_R; bird.vy = 0; }
-
-      spawnT += dt;
-      if (spawnT >= SPAWN) { spawnT = 0; spawnPipe(); }
-
-      for (var i = pipes.length - 1; i >= 0; i--) {
-        var p = pipes[i];
-        var x = pipeX(p, nowSec);
-        if (!p.passed && x + PIPE_W < BIRD_X) { p.passed = true; score++; hud.textContent = score; }
-        if (BIRD_X + BIRD_R > x && BIRD_X - BIRD_R < x + PIPE_W) {
-          if (bird.y - BIRD_R < p.center - GAP/2 || bird.y + BIRD_R > p.center + GAP/2) return die();
-        }
-        if (x < -PIPE_W - 20) { if (p.el.parentNode) p.el.parentNode.removeChild(p.el); pipes.splice(i,1); }
+    if (!running || dead) return;
+    var t = now();
+    var by = birdYAt(t);
+    if (by + BIRD_R >= GROUNDY) return die();
+    spawnT += lastT ? (t - lastT) : 0; lastT = t;
+    if (spawnT >= SPAWN){ spawnT = 0; spawnPipe(); }
+    for (var i=pipes.length-1;i>=0;i--){
+      var p = pipes[i], x = pipeX(p, t);
+      if (!p.passed && x + PIPE_W < BIRD_X){ p.passed = true; score++; hud.textContent = score; }
+      if (BIRD_X + BIRD_R > x && BIRD_X - BIRD_R < x + PIPE_W){
+        if (by - BIRD_R < p.center - GAP/2 || by + BIRD_R > p.center + GAP/2) return die();
       }
+      if (x < -PIPE_W - 40){ p.anim.cancel(); if(p.el.parentNode) p.el.parentNode.removeChild(p.el); pipes.splice(i,1); }
     }
-    drawBird();
   }
 
-  function die() {
+  function die(){
     dead = true;
+    if (birdAnim) birdAnim.pause();
     pipes.forEach(function(p){ p.anim.pause(); });
     msg.style.display = "flex";
     msg.querySelector(".big").textContent = "Perdu — score " + score;
     msg.querySelector(".sm").textContent = "Tape pour rejouer";
-    drawBird();
   }
 
-  function tap() {
-    if (dead) { reset(); return; }
-    if (!running) { running = true; msg.style.display = "none"; }
-    bird.vy = -480;
+  function flap(){
+    if (dead){ reset(); return; }
+    var t = now();
+    if (!running){ running = true; lastT = 0; spawnT = 0; if (bobAnim){ bobAnim.cancel(); bobAnim = null; } st.y0 = VH*0.45; msg.style.display = "none"; }
+    else { st.y0 = birdYAt(t); }
+    st.vy0 = FLAP; st.t0 = t;
+    animateBirdArc();
   }
-  function onTap(e) { e.preventDefault(); tap(); }
+  function onTap(e){ e.preventDefault(); flap(); }
   scene.addEventListener("touchstart", onTap, { passive:false });
   scene.addEventListener("mousedown", onTap, { passive:false });
 
