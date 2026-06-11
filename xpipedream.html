@@ -26,10 +26,10 @@
     padding:3px 8px; border-radius:8px; letter-spacing:.5px; pointer-events:none; }
 
   /* ---------- WORLD (live, compositor-driven) ---------- */
-  #scene { position:fixed; inset:0; overflow:hidden;
+  #scene { position:fixed; inset:0; overflow:hidden; z-index:1;
     background:linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 100%); transition:background .6s ease; }
   /* fills the very bottom (home-indicator zone) the scene may not cover: dark in menu, ground colour in game */
-  #floorFill { position:fixed; left:0; right:0; bottom:0; height:120px; z-index:-1; background:#0a0c12; transition:background .3s; }
+  #floorFill { position:fixed; left:0; right:0; bottom:0; height:120px; z-index:0; background:#0a0c12; transition:background .3s; }
   #floorFill.playing { background:var(--ground); }
 
   #stars { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity .6s; }
@@ -197,7 +197,7 @@
 </head>
 <body>
   <div id="floorFill"></div>
-  <div id="ver">V.1.29</div>
+  <div id="ver">V.1.30</div>
   <div id="scene">
     <div id="stars"></div>
     <div id="ground"><div id="groundStripes"></div></div>
@@ -269,7 +269,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.29</div>
+      <div class="verline">V.1.30</div>
     </div>
   </div>
 
