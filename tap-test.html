@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>TAP TEST — diagnostic</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html, body { width:100%; height:100%; background:#0d0f14; overflow:hidden; -webkit-tap-highlight-color:transparent; touch-action:none; }
+  #c { display:block; width:100vw; height:100vh; }
+  #hud {
+    position:fixed; top:12px; left:12px; right:12px;
+    font:bold 18px -apple-system, system-ui, sans-serif; color:#fff;
+    background:rgba(0,0,0,.55); padding:12px 14px; border-radius:12px;
+    line-height:1.6; pointer-events:none; white-space:pre;
+  }
+  #big { font-size:34px; color:#6cf; }
+  .warn { color:#ff5a5a !important; }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="hud"><span id="big">lag max: -- ms</span>
+fps: --   taps: 0
+Tape l'écran. Si "lag max" saute à ~500
+au moment du tap = le gel est confirmé.</div>
+
+<script>
+(function () {
+  "use strict";
+  var c = document.getElementById("c");
+  var ctx = c.getContext("2d", { alpha: false });
+  var big = document.getElementById("big");
+  var hud = document.getElementById("hud");
+
+  var DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+  var W = 0, H = 0;
+  function resize() {
+    W = window.innerWidth; H = window.innerHeight;
+    c.width = Math.round(W * DPR); c.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  var x = 60, y = H / 2, vy = 0, taps = 0;
+  var last = performance.now();
+  var lagMax = 0, lagWindow = 0, lagWindowMax = 0;
+  var fpsAcc = 0, fpsN = 0, fps = 0;
+
+  function loop(now) {
+    requestAnimationFrame(loop);
+    var dt = (now - last) / 1000;
+    last = now;
+
+    // measure the worst frame gap (this IS the freeze, in ms)
+    var ms = dt * 1000;
+    if (ms > lagWindowMax) lagWindowMax = ms;
+    if (ms > lagMax) lagMax = ms;
+
+    fpsAcc += dt; fpsN++;
+    if (fpsAcc >= 0.5) {
+      fps = Math.round(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0;
+      big.textContent = "lag max: " + Math.round(lagMax) + " ms";
+      big.className = lagMax > 120 ? "warn" : "";
+      hud.childNodes[1].textContent = "\nfps: " + fps + "   taps: " + taps +
+        "   (gel max 0.5s: " + Math.round(lagWindowMax) + "ms)\nTape l'écran. Si \"lag max\" saute fort\nau moment du tap = gel confirmé.";
+      lagWindowMax = 0;
+    }
+
+    if (dt > 0.1) dt = 0.1;
+    vy += 1400 * dt; y += vy * dt;
+    if (y > H - 40) { y = H - 40; vy = 0; }
+    if (y < 40) { y = 40; vy = 0; }
+    x += 90 * dt; if (x > W + 40) x = -40;
+
+    ctx.fillStyle = "#11141c"; ctx.fillRect(0, 0, W, H);
+    // moving reference bars so any freeze is visible
+    ctx.fillStyle = "#1e2430";
+    var off = (now / 12) % 60;
+    for (var bx = -off; bx < W; bx += 60) ctx.fillRect(bx, 0, 30, H);
+    // the ball
+    ctx.fillStyle = "#6cf";
+    ctx.beginPath(); ctx.arc(x, y, 26, 0, Math.PI * 2); ctx.fill();
+  }
+  requestAnimationFrame(loop);
+
+  function tap(e) {
+    e.preventDefault();
+    vy = -560; taps++;
+  }
+  // ONE listener only, the same kind the game uses
+  c.addEventListener("touchstart", tap, { passive: false });
+  c.addEventListener("mousedown", tap, { passive: false });
+
+  // reset lag max with a double-tap on the HUD area is overkill; auto-clear instead:
+  setInterval(function () { lagMax = 0; }, 6000);
+})();
+</script>
+</body>
+</html>
