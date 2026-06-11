@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>TAP TEST 3 — le toucher lui-même</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html, body { width:100%; height:100%; background:#0d0f14; overflow:hidden;
+    -webkit-tap-highlight-color:transparent; touch-action:none; overscroll-behavior:none; }
+  #c { display:block; width:100vw; height:100vh; }
+  #hud {
+    position:fixed; top:12px; left:12px; right:12px;
+    font:bold 15px -apple-system, system-ui, sans-serif; color:#fff;
+    background:rgba(0,0,0,.5); padding:10px 12px; border-radius:10px;
+    line-height:1.5; pointer-events:none; white-space:pre;
+  }
+  .btn {
+    position:fixed; left:50%; transform:translateX(-50%);
+    font:bold 18px -apple-system, system-ui, sans-serif; color:#fff;
+    padding:16px 22px; border:none; border-radius:12px; -webkit-tap-highlight-color:transparent;
+    width:86%; max-width:420px; text-align:center;
+  }
+  #b1 { bottom:150px; background:#2a8; }
+  #b1.off { background:#a33; }
+  #b2 { bottom:86px; background:#36c; }
+  #b3 { bottom:22px; background:#852; }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="hud">Scene calee sur l'horloge = TOUJOURS fluide.
+Taper ne change RIEN a l'image.
+Si ca saccade quand meme au tap = c'est Safari.
+Teste chaque combinaison de boutons.</div>
+  <button id="b1" class="btn">preventDefault : ON</button>
+  <button id="b2" class="btn">ecouteur : touchstart</button>
+  <button id="b3" class="btn">handler : present</button>
+
+<script>
+(function () {
+  "use strict";
+  var c = document.getElementById("c");
+  var ctx = c.getContext("2d", { alpha: false });
+  var DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+  var VW = 0, VH = 0;
+  function resize() { VW = innerWidth; VH = innerHeight; c.width = Math.round(VW*DPR); c.height = Math.round(VH*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
+  resize(); addEventListener("resize", resize);
+
+  // Scene driven PURELY by `now` → mathematically smooth, taps cannot affect it.
+  function loop(now) {
+    requestAnimationFrame(loop);
+    ctx.fillStyle = "#12161f"; ctx.fillRect(0,0,VW,VH);
+    var off = (now * 0.20) % 80;            // horizontal scroll, pure function of now
+    ctx.fillStyle = "#27406a";
+    for (var x = -off; x < VW; x += 80) ctx.fillRect(x, 0, 40, VH);
+    // a smooth bobbing marker
+    ctx.fillStyle = "#ffd23f";
+    var y = VH*0.5 + Math.sin(now*0.004) * VH*0.3;
+    ctx.beginPath(); ctx.arc(VW*0.3, y, 24, 0, 7); ctx.fill();
+  }
+  requestAnimationFrame(loop);
+
+  // --- configurable tap handling (does NOTHING visual) ---
+  var usePD = true;       // call preventDefault?
+  var useTouch = true;    // touchstart vs pointerdown
+  var handlerOn = true;   // attach a handler at all?
+
+  function handler(e) { if (usePD) e.preventDefault(); }
+
+  function reattach() {
+    c.removeEventListener("touchstart", handler);
+    c.removeEventListener("pointerdown", handler);
+    if (handlerOn) {
+      var ev = useTouch ? "touchstart" : "pointerdown";
+      c.addEventListener(ev, handler, { passive: !usePD });
+    }
+  }
+  reattach();
+
+  var b1 = document.getElementById("b1"), b2 = document.getElementById("b2"), b3 = document.getElementById("b3");
+  function stop(e){ e.stopPropagation(); }
+  b1.addEventListener("click", function(e){ stop(e); usePD = !usePD; b1.textContent = "preventDefault : " + (usePD?"ON":"OFF"); b1.className = "btn" + (usePD?"":" off"); reattach(); });
+  b2.addEventListener("click", function(e){ stop(e); useTouch = !useTouch; b2.textContent = "ecouteur : " + (useTouch?"touchstart":"pointerdown"); reattach(); });
+  b3.addEventListener("click", function(e){ stop(e); handlerOn = !handlerOn; b3.textContent = "handler : " + (handlerOn?"present":"AUCUN"); reattach(); });
+})();
+</script>
+</body>
+</html>
