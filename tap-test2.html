@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>TAP TEST 2 — mini-réplique du jeu</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html, body { width:100%; height:100%; background:#0d0f14; overflow:hidden;
+    -webkit-tap-highlight-color:transparent; touch-action:none; overscroll-behavior:none; }
+  #c { display:block; width:100vw; height:100vh; }
+  #hud {
+    position:fixed; top:12px; left:12px; right:12px;
+    font:bold 16px -apple-system, system-ui, sans-serif; color:#fff;
+    background:rgba(0,0,0,.5); padding:10px 12px; border-radius:10px;
+    line-height:1.5; pointer-events:none; white-space:pre;
+  }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="hud">mini-réplique du jeu (DOM minimal)
+Tape pour faire voler. Le décor saccade-t-il
+au clic, comme dans le vrai jeu ?</div>
+
+<script>
+(function () {
+  "use strict";
+  var c = document.getElementById("c");
+  var ctx = c.getContext("2d", { alpha: false });
+
+  var DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+  var VW = 0, VH = 0;
+  function resize() {
+    VW = window.innerWidth; VH = window.innerHeight;
+    c.width = Math.round(VW * DPR); c.height = Math.round(VH * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  // --- same architecture as the game ---
+  var BIRD_R = 15, PIPE_W = 64, SPEED = 200, GAP = 170;
+  var game = null;
+  function newGame() {
+    game = { x: VW * 0.28, y: VH * 0.45, prevY: VH * 0.45, vy: 0, rot: 0,
+             time: 0, prevTime: 0, pipes: [], spawnT: 0, started: false };
+    spawnPipe(VW + 40);
+  }
+  function spawnPipe(atX) {
+    var center = 120 + Math.random() * Math.max(10, VH - 360);
+    game.pipes.push({ x: atX, prevX: atX, center: center });
+  }
+  newGame();
+
+  var FIXED = 1 / 120, acc = 0, renderAlpha = 0;
+  function step(dt) {
+    if (!game) return;
+    game.prevY = game.y; game.prevTime = game.time;
+    if (!game.started) { game.time += dt; game.y = VH * 0.45 + Math.sin(game.time * 3) * 10; return; }
+    game.time += dt;
+    game.vy += 1500 * dt; game.y += game.vy * dt;
+    var tr = Math.max(-0.5, Math.min(1.4, game.vy / 600));
+    game.rot += (tr - game.rot) * Math.min(1, dt * 11);
+    if (game.y > VH - 90 - BIRD_R) { game.y = VH - 90 - BIRD_R; game.vy = 0; }
+    if (game.y < BIRD_R) { game.y = BIRD_R; game.vy = 0; }
+    game.spawnT += dt;
+    if (game.spawnT >= 1.5) { game.spawnT = 0; spawnPipe(VW + 40); }
+    for (var i = 0; i < game.pipes.length; i++) {
+      var p = game.pipes[i]; p.prevX = p.x; p.x -= SPEED * dt;
+    }
+    game.pipes = game.pipes.filter(function (p) { return p.x + PIPE_W > -10; });
+  }
+
+  var last = performance.now(), lastRender = -1e9;
+  function frame(now) {
+    requestAnimationFrame(frame);
+    // jitter-tolerant 120fps cap (same as game v11)
+    var interval = 1000 / 120;
+    if (now - lastRender < interval * 0.75) return;
+    lastRender = now;
+
+    var dt = (now - last) / 1000; last = now;
+    if (dt > 0.1) dt = 0.1;
+    acc += dt; var n = 0;
+    while (acc >= FIXED && n < 8) { step(FIXED); acc -= FIXED; n++; }
+    if (n >= 8) acc = 0;
+    renderAlpha = acc / FIXED;
+
+    render();
+  }
+
+  function render() {
+    ctx.fillStyle = "#1a2740"; ctx.fillRect(0, 0, VW, VH);
+    var groundY = VH - 90;
+    // pipes (interpolated x)
+    ctx.fillStyle = "#3ec46d";
+    for (var i = 0; i < game.pipes.length; i++) {
+      var p = game.pipes[i];
+      var rx = p.prevX + (p.x - p.prevX) * renderAlpha;
+      var half = GAP / 2;
+      ctx.fillRect(rx, 0, PIPE_W, p.center - half);
+      ctx.fillRect(rx, p.center + half, PIPE_W, groundY - (p.center + half));
+    }
+    // ground + stripes (interpolated time)
+    ctx.fillStyle = "#2a2030"; ctx.fillRect(0, groundY, VW, 90);
+    ctx.fillStyle = "rgba(255,255,255,.05)";
+    var rtime = game.prevTime + (game.time - game.prevTime) * renderAlpha;
+    var off = (rtime * SPEED) % 40;
+    for (var x = -off; x < VW; x += 40) ctx.fillRect(x, groundY + 6, 20, 84);
+    // bird (interpolated y)
+    var by = game.prevY + (game.y - game.prevY) * renderAlpha;
+    ctx.save(); ctx.translate(game.x, by); ctx.rotate(game.rot);
+    ctx.fillStyle = "#ffd23f";
+    ctx.beginPath(); ctx.arc(0, 0, BIRD_R, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  requestAnimationFrame(function (t) { last = t; frame(t); });
+
+  function tap(e) {
+    e.preventDefault();
+    if (!game.started) game.started = true;
+    game.vy = -480;
+  }
+  c.addEventListener("touchstart", tap, { passive: false });
+  c.addEventListener("mousedown", tap, { passive: false });
+})();
+</script>
+</body>
+</html>
