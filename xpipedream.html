@@ -37,7 +37,8 @@
 
   #ground { position:absolute; left:0; right:0; bottom:0; height:calc(28px + env(safe-area-inset-bottom,0px));
     z-index:5; overflow:hidden; background:var(--ground); border-top:3px solid var(--groundTop);
-    transition:background .6s, border-color .6s; }
+    transition:opacity .3s, background .6s, border-color .6s; }
+  #ground.hideGround { opacity:0; }
   #groundStripes { position:absolute; left:0; top:0; height:100%; width:340vw;
     background:repeating-linear-gradient(90deg, rgba(255,255,255,.026) 0 26px, transparent 26px 52px); will-change:transform; }
 
@@ -192,7 +193,7 @@
 </style>
 </head>
 <body>
-  <div id="ver">V.1.26</div>
+  <div id="ver">V.1.27</div>
   <div id="scene">
     <div id="stars"></div>
     <div id="ground"><div id="groundStripes"></div></div>
@@ -264,7 +265,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.26</div>
+      <div class="verline">V.1.27</div>
     </div>
   </div>
 
@@ -506,6 +507,7 @@
   function startGame(){
     over.classList.remove("on");
     menu.classList.add("hide"); scrimTop.classList.remove("on"); scrimBot.classList.remove("on");
+    ground.classList.remove("hideGround");   // ground only shows during play
     clearPipes(); score=0; scoreEl.textContent="0"; spawnAcc=0; lastT=0;
     gameState="playing"; startedAt=now(); curSpeed=mode.speed;
     applyTheme(mode.theme); vignette.classList.toggle("on", THEMES[mode.theme].vignette);
@@ -552,6 +554,7 @@
     applyTheme(mode.theme); vignette.classList.remove("on");
     startGround(mode.speed*0.7);
     idleBob();
+    ground.classList.add("hideGround");   // hide the ground band behind the menu
     menu.classList.remove("hide"); scrimTop.classList.add("on"); scrimBot.classList.add("on");
     refreshStats();
   }
@@ -668,6 +671,7 @@
   selectMode(state.mode);
   applySkin();
   refreshStats();
+  ground.classList.add("hideGround");   // start in the menu → no ground band
   scrimTop.classList.add("on"); scrimBot.classList.add("on");
   idleBob();
   // re-measure after first layout (scene.clientHeight is reliable now) + center the mode card
