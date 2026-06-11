@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>XPIPEDREAM — Flappy arcade fluide, multi-skins &amp; multi-modes</title>
+
+  <meta name="description" content="XPIPEDREAM : un flappy bird arcade ultra-fluide, optimisé mobile, modes 60/120 fps, plusieurs skins et plusieurs modes de jeu. Gratuit, sans installation." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0d0f14" />
+  <meta name="author" content="TheBenchLab" />
+
+  <!-- Installable comme app iPhone (Ajouter à l'écran d'accueil → plein écran sans barre Safari) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="XPIPEDREAM" />
+  <link rel="canonical" href="https://thebenchlab.fr/xpipedream.html" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:site_name" content="TheBenchLab" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thebenchlab.fr/xpipedream.html" />
+  <meta property="og:title" content="XPIPEDREAM — Flappy arcade fluide" />
+  <meta property="og:description" content="Flappy bird arcade ultra-fluide, optimisé mobile, modes 60/120 fps, plusieurs skins et modes de jeu." />
+  <meta property="og:locale" content="fr_FR" />
+
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #12151f;
+      --bg3: #1a1f2e;
+      --border: #252a3a;
+      --accent: #6c63ff;
+      --accent2: #00d9b5;
+      --accent3: #f5a623;
+      --text: #e8eaf0;
+      --muted: #6a7090;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      overscroll-behavior: none;
+    }
+
+    /* ===== STAGE ===== */
+    #stage {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(108,99,255,.10), transparent 60%),
+        var(--bg);
+    }
+
+    #wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 480px;
+      max-height: 900px;
+      box-shadow: 0 0 0 1px var(--border), 0 30px 80px rgba(0,0,0,.6);
+      overflow: hidden;
+      background: #0a0c12;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+    @media (min-width: 520px) {
+      #wrap { border-radius: 18px; }
+    }
+
+    canvas#game {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;     /* kill iOS long-press copy/callout hitch */
+      -webkit-tap-highlight-color: transparent;
+      transform: translateZ(0);        /* own GPU layer: isolate from touch hit-test repaint */
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    /* Tiny always-running compositor animation: keeps ProMotion (120Hz) displays pinned at
+       their max refresh rate so a touch can't trigger a refresh-rate ramp (the per-tap hitch). */
+    #refreshPin {
+      position: fixed; top: 0; left: 0; width: 2px; height: 2px;
+      opacity: 0.012; pointer-events: none; z-index: 0;
+      background: #fff; will-change: transform;
+      animation: refreshPinSpin 1s linear infinite;
+    }
+    @keyframes refreshPinSpin { from { transform: translateZ(0) rotate(0deg); } to { transform: translateZ(0) rotate(360deg); } }
+
+    /* ===== HUD ===== */
+    .hud {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      padding: max(14px, env(safe-area-inset-top)) 16px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 5;
+      font-variant-numeric: tabular-nums;
+    }
+    .hud-score {
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      line-height: 1;
+      text-shadow: 0 3px 16px rgba(0,0,0,.6);
+      color: #fff;
+    }
+    .hud-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .pill {
+      pointer-events: auto;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: .3rem .55rem;
+      border-radius: 8px;
+      background: rgba(18,21,31,.92);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
+    .pill b { color: var(--accent2); }
+    .pill.fps b { color: var(--accent3); }
+    /* best pill is just a readout — don't let it swallow taps meant to flap */
+    #bestPill { pointer-events: none; }
+
+    /* ===== OVERLAYS / PANELS ===== */
+    .panel {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(10,12,18,.94), rgba(10,12,18,.985));
+      gap: 14px;
+      overflow-y: auto;
+      touch-action: pan-y;   /* keep the settings panel finger-scrollable (body is touch-action:none) */
+    }
+    .panel.hidden { display: none; }
+
+    .logo {
+      font-size: clamp(2.1rem, 9vw, 3.1rem);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: .95;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 20px rgba(108,99,255,.35));
+    }
+    .logo small {
+      display: block;
+      -webkit-text-fill-color: var(--muted);
+      color: var(--muted);
+      font-size: .42em;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-top: .5rem;
+    }
+
+    .title-md {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: -.01em;
+    }
+    .sub { color: var(--muted); font-size: .88rem; max-width: 320px; line-height: 1.5; }
+
+    .row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .group { width: 100%; max-width: 340px; }
+    .group-label {
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .group-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    .seg { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .chip {
+      flex: 1 1 auto;
+      min-width: 64px;
+      padding: .55rem .5rem;
+      border-radius: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .1s;
+      user-select: none;
+    }
+    .chip small { display:block; font-weight:600; font-size:.66rem; color:var(--muted); margin-top:2px; }
+    .chip:hover { border-color: rgba(108,99,255,.4); }
+    .chip:active { transform: scale(.96); }
+    .chip.active {
+      border-color: var(--accent);
+      background: rgba(108,99,255,.16);
+      box-shadow: 0 0 0 1px rgba(108,99,255,.4) inset;
+    }
+    .chip.active small { color: var(--text); }
+
+    /* skin chips */
+    .skins { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    .skin {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      position: relative;
+      transition: transform .12s, border-color .15s;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .skin:active { transform: scale(.92); }
+    .skin.active { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.4); }
+    .skin .dot {
+      width: 26px; height: 26px; border-radius: 50%;
+      box-shadow: inset 0 -4px 6px rgba(0,0,0,.25);
+    }
+    .skin.locked { opacity: .45; cursor: not-allowed; }
+    .skin.locked::after {
+      content: '🔒';
+      position: absolute; bottom: -2px; right: -2px;
+      font-size: .7rem;
+    }
+    .skin-name { font-size:.72rem; color:var(--muted); min-height:1em; }
+
+    .btn {
+      pointer-events: auto;
+      padding: .9rem 1.6rem;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform .1s, opacity .15s, box-shadow .15s;
+      user-select: none;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(108,99,255,.35);
+    }
+    .btn-ghost {
+      background: var(--bg2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-size: .85rem;
+      padding: .6rem 1.1rem;
+      font-weight: 700;
+    }
+
+    .stats-line {
+      display: flex; gap: 22px; justify-content: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat .v { font-size: 1.8rem; font-weight: 900; color: var(--accent2); line-height:1; }
+    .stat .l { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing:.08em; margin-top:4px; }
+
+    .toggle-row { display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .switch {
+      display:flex; align-items:center; gap:8px;
+      font-size:.78rem; color:var(--muted); font-weight:600;
+      cursor:pointer; user-select:none;
+    }
+    .switch input { display:none; }
+    .switch .track {
+      width:38px; height:22px; border-radius:11px;
+      background:var(--bg3); border:1px solid var(--border);
+      position:relative; transition:background .15s;
+    }
+    .switch .track::after {
+      content:''; position:absolute; top:2px; left:2px;
+      width:16px; height:16px; border-radius:50%;
+      background:var(--muted); transition:transform .15s, background .15s;
+    }
+    .switch input:checked + .track { background:rgba(0,217,181,.25); border-color:var(--accent2); }
+    .switch input:checked + .track::after { transform:translateX(16px); background:var(--accent2); }
+
+    .new-best {
+      font-size:.78rem; font-weight:800; letter-spacing:.06em;
+      color:var(--accent3); text-transform:uppercase;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+
+    .footer-link { font-size:.72rem; color:var(--muted); margin-top:4px; }
+    .footer-link a { color:var(--accent2); text-decoration:none; }
+
+    .hint {
+      position:absolute; bottom: max(20px, env(safe-area-inset-bottom)); left:0; right:0;
+      text-align:center; color:rgba(255,255,255,.55); font-size:.82rem; font-weight:600;
+      pointer-events:none; z-index:5;
+    }
+  </style>
+</head>
+<body>
+  <div id="refreshPin"></div>
+  <div id="stage">
+    <div id="wrap">
+      <canvas id="game"></canvas>
+
+      <!-- HUD pendant le jeu -->
+      <div class="hud" id="hud" style="display:none">
+        <div class="hud-score" id="liveScore">0</div>
+        <div class="hud-right">
+          <div class="pill fps" id="fpsPill"><b>--</b> fps</div>
+          <div class="pill" id="bestPill">best <b id="bestMini">0</b></div>
+        </div>
+      </div>
+
+      <div class="hint" id="playHint" style="display:none">Tape l'écran pour voler</div>
+
+      <!-- MENU PRINCIPAL -->
+      <div class="panel" id="menu">
+        <div class="logo">XPIPEDREAM<small>Flappy arcade · 60 / 120 fps</small></div>
+
+        <div class="group">
+          <div class="group-label">Mode de jeu</div>
+          <div class="seg" id="modeSeg"></div>
+        </div>
+
+        <div class="group">
+          <div class="group-label">Skin</div>
+          <div class="skins" id="skinList"></div>
+          <div class="skin-name" id="skinName"></div>
+        </div>
+
+        <div class="group">
+          <div class="group-label">Fluidité</div>
+          <div class="seg" id="fpsSeg"></div>
+        </div>
+
+        <div class="toggle-row">
+          <label class="switch">
+            <input type="checkbox" id="sfxToggle" checked>
+            <span class="track"></span> Sons
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="reduceToggle">
+            <span class="track"></span> Effets réduits
+          </label>
+        </div>
+
+        <button class="btn btn-primary" id="playBtn">▶ Jouer</button>
+        <div class="stats-line">
+          <div class="stat"><div class="v" id="menuBest">0</div><div class="l">Record</div></div>
+          <div class="stat"><div class="v" id="menuGames">0</div><div class="l">Parties</div></div>
+        </div>
+        <div class="footer-link"><a href="/">← Retour TheBenchLab</a> · <span style="color:#6a7090">build v13</span></div>
+      </div>
+
+      <!-- GAME OVER -->
+      <div class="panel hidden" id="over">
+        <div id="newBest" class="new-best" style="display:none">★ Nouveau record ★</div>
+        <div class="title-md">Partie terminée</div>
+        <div class="stats-line">
+          <div class="stat"><div class="v" id="finalScore">0</div><div class="l">Score</div></div>
+          <div class="stat"><div class="v" id="finalBest">0</div><div class="l">Record</div></div>
+        </div>
+        <div class="sub" id="overMode"></div>
+        <button class="btn btn-primary" id="retryBtn">↻ Rejouer</button>
+        <button class="btn btn-ghost" id="menuBtn">Menu</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+"use strict";
+(function () {
+  // ---------------------------------------------------------------------------
+  // CONFIG : modes, skins, fps
+  // ---------------------------------------------------------------------------
+  const MODES = {
+    classic: { name: "Classique", desc: "L'original", gravity: 2100, flap: -560, speed: 165, gap: 180, spawn: 1.45, gapDrift: 0, theme: "day" },
+    hard:    { name: "Difficile", desc: "Vif & serré", gravity: 2500, flap: -600, speed: 230, gap: 150, spawn: 1.15, gapDrift: 0, theme: "day" },
+    night:   { name: "Nuit",      desc: "Visibilité réduite", gravity: 2100, flap: -560, speed: 175, gap: 175, spawn: 1.4,  gapDrift: 0, theme: "night" },
+    zen:     { name: "Zen",       desc: "Large & lent", gravity: 1500, flap: -460, speed: 120, gap: 240, spawn: 1.8,  gapDrift: 0, theme: "dusk" },
+    rush:    { name: "Rush",      desc: "Accélère sans fin", gravity: 2300, flap: -580, speed: 175, gap: 175, spawn: 1.3, gapDrift: 0, theme: "day", accelerate: true },
+    chaos:   { name: "Chaos",     desc: "Trous mouvants", gravity: 2200, flap: -580, speed: 195, gap: 185, spawn: 1.35, gapDrift: 55, theme: "dusk" },
+  };
+
+  const SKINS = [
+    { id: "neon",    name: "Néon",     body: "#6c63ff", glow: "#8b7bff", belly: "#b3aaff", unlock: 0 },
+    { id: "teal",    name: "Aqua",     body: "#00d9b5", glow: "#3ff0d4", belly: "#9bf5e6", unlock: 0 },
+    { id: "gold",    name: "Or",       body: "#f5a623", glow: "#ffc857", belly: "#ffe0a0", unlock: 0 },
+    { id: "classic", name: "Classic",  body: "#f7d51d", glow: "#fff06a", belly: "#fff5b0", unlock: 5 },
+    { id: "crimson", name: "Crimson",  body: "#ff4d6d", glow: "#ff7d97", belly: "#ffc0cc", unlock: 15 },
+    { id: "ghost",   name: "Spectre",  body: "#cfd6ff", glow: "#ffffff", belly: "#eef1ff", unlock: 30 },
+    { id: "matrix",  name: "Matrix",   body: "#39ff14", glow: "#8cff7a", belly: "#c6ffba", unlock: 50 },
+    { id: "rainbow", name: "Prisme",   body: "rainbow", glow: "#ffffff", belly: "#ffffff", unlock: 80 },
+  ];
+
+  const FPS_MODES = [
+    { id: "60",  name: "60",  cap: 60,  desc: "Éco batterie" },
+    { id: "120", name: "120", cap: 120, desc: "Ultra fluide" },
+    { id: "max", name: "MAX", cap: 0,   desc: "Sans limite" },
+  ];
+
+  // ---------------------------------------------------------------------------
+  // PERSISTENCE
+  // ---------------------------------------------------------------------------
+  const LS = {
+    get(k, d) { try { const v = localStorage.getItem("xpd_" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem("xpd_" + k, JSON.stringify(v)); } catch (e) {} },
+  };
+
+  const state = {
+    mode: LS.get("mode", "classic"),
+    skin: LS.get("skin", "neon"),
+    fps: LS.get("fps", "120"),
+    sfx: LS.get("sfx", true),
+    reduce: LS.get("reduce", false),
+    best: LS.get("best", {}),          // best score per mode
+    games: LS.get("games", 0),
+    topScore: LS.get("topScore", 0),   // for skin unlocks
+  };
+  if (!MODES[state.mode]) state.mode = "classic";
+  if (!SKINS.find(s => s.id === state.skin)) state.skin = "neon";
+
+  function bestFor(mode) { return state.best[mode] || 0; }
+  function skinUnlocked(s) { return state.topScore >= s.unlock; }
+
+  // ---------------------------------------------------------------------------
+  // CANVAS / RENDERER SETUP
+  // ---------------------------------------------------------------------------
+  const wrap = document.getElementById("wrap");
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d", { alpha: false });
+
+  let VW = 0, VH = 0, DPR = 1;   // logical CSS px size of the playfield
+  let _skyCache = {};            // cached sky/vignette gradients (declared early: resize() touches it)
+  function resize() {
+    const r = wrap.getBoundingClientRect();
+    const vw = Math.max(1, r.width);
+    const vh = Math.max(1, r.height);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.5); // cap DPR for perf on mobile
+    const w = Math.round(vw * dpr);
+    const h = Math.round(vh * dpr);
+    // iOS fires `resize` when the Safari toolbar nudges — bail out if nothing really
+    // changed, otherwise we reallocate the (costly) canvas backing store for nothing.
+    if (w === canvas.width && h === canvas.height && vw === VW && vh === VH) return;
+    VW = vw; VH = vh; DPR = dpr;
+    canvas.width = w;
+    canvas.height = h;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    _skyCache = {};   // sky gradients depend on VH → rebuild after resize
+  }
+  window.addEventListener("resize", resize, { passive: true });
+  window.addEventListener("orientationchange", () => setTimeout(resize, 100), { passive: true });
+  resize();
+
+  // ---------------------------------------------------------------------------
+  // AUDIO (WebAudio, no assets)
+  // ---------------------------------------------------------------------------
+  let actx = null;
+  function audio() {
+    if (!state.sfx) return null;
+    if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+    if (actx.state === "suspended") actx.resume();
+    return actx;
+  }
+  function beep(freq, dur, type, vol) {
+    const a = audio(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type || "square"; o.frequency.value = freq;
+    g.gain.value = (vol || 0.06);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + dur);
+    o.connect(g); g.connect(a.destination);
+    o.start(); o.stop(a.currentTime + dur);
+  }
+  const sndFlap  = () => beep(620, 0.09, "square", 0.05);
+  const sndScore = () => { beep(880, 0.08, "triangle", 0.06); setTimeout(() => beep(1170, 0.09, "triangle", 0.05), 60); };
+  const sndHit   = () => { beep(180, 0.18, "sawtooth", 0.08); setTimeout(() => beep(90, 0.25, "sawtooth", 0.07), 70); };
+
+  // ---------------------------------------------------------------------------
+  // GAME WORLD
+  // ---------------------------------------------------------------------------
+  const BIRD_R = 15;
+  const PIPE_W = 64;
+
+  let game = null;     // active game object or null
+  let particles = [];
+
+  function currentSkin() { return SKINS.find(s => s.id === state.skin) || SKINS[0]; }
+
+  function newGame() {
+    const m = MODES[state.mode];
+    game = {
+      mode: m,
+      x: VW * 0.28,
+      y: VH * 0.45,
+      prevY: VH * 0.45,
+      prevTime: 0,
+      vy: 0,
+      rot: 0,
+      pipes: [],
+      score: 0,
+      time: 0,
+      spawnT: 0,
+      speed: m.speed,
+      gap: m.gap,
+      started: false,   // waiting for first tap
+      dead: false,
+      shake: 0,
+      flapAnim: 0,
+    };
+    particles = [];
+    // pre-place first pipe a bit ahead
+    spawnPipe(VW + 40);
+  }
+
+  function spawnPipe(atX) {
+    const m = game.mode;
+    const margin = 70;
+    const gap = game.gap;
+    const minC = margin + gap / 2;
+    const maxC = VH - margin - gap / 2 - 90; // keep above ground
+    const center = minC + Math.random() * Math.max(10, (maxC - minC));
+    game.pipes.push({
+      x: atX,
+      prevX: atX,
+      center,
+      gap,
+      passed: false,
+      // chaos drift
+      driftPhase: Math.random() * Math.PI * 2,
+      baseCenter: center,
+    });
+  }
+
+  function flap() {
+    if (!game || game.dead) return;
+    if (!game.started) { game.started = true; hidePlayHint(); }
+    game.vy = game.mode.flap;
+    game.flapAnim = 1;
+    sndFlap();
+  }
+
+  function die() {
+    if (game.dead) return;
+    game.dead = true;
+    game.shake = 1;
+    sndHit();
+    burst(game.x, game.y, currentSkin());
+    if (navigator.vibrate && state.sfx) try { navigator.vibrate(30); } catch (e) {}
+    // record
+    state.games += 1; LS.set("games", state.games);
+    const prevBest = bestFor(state.mode);
+    const isBest = game.score > prevBest;
+    if (isBest) { state.best[state.mode] = game.score; LS.set("best", state.best); }
+    if (game.score > state.topScore) { state.topScore = game.score; LS.set("topScore", state.topScore); }
+    setTimeout(() => showGameOver(isBest), 300);
+  }
+
+  function burst(x, y, skin) {
+    if (state.reduce) return;
+    const n = 22;
+    const col = skin.body === "rainbow" ? "#ffffff" : skin.body;
+    for (let i = 0; i < n; i++) {
+      const a = (Math.PI * 2 * i) / n + Math.random();
+      const sp = 60 + Math.random() * 220;
+      particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, col, r: 2 + Math.random() * 3 });
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // FIXED-TIMESTEP UPDATE (frame-rate independent physics)
+  // ---------------------------------------------------------------------------
+  const FIXED = 1 / 120;   // physics tick
+  let acc = 0;
+
+  function step(dt) {
+    if (!game) return;
+    const m = game.mode;
+
+    game.prevY = game.y;        // remember last physics positions so render can
+    game.prevTime = game.time;  // interpolate everything (bird, pipes, ground) → no jitter
+
+    // particles always update
+    for (const p of particles) {
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      p.vy += 600 * dt; p.life -= dt * 1.6;
+    }
+    particles = particles.filter(p => p.life > 0);
+
+    if (game.shake > 0) game.shake = Math.max(0, game.shake - dt * 3);
+
+    if (game.dead) return;
+
+    if (game.flapAnim > 0) game.flapAnim = Math.max(0, game.flapAnim - dt * 6);
+
+    // Idle bobbing before first tap
+    if (!game.started) {
+      game.time += dt;
+      game.y = VH * 0.45 + Math.sin(game.time * 3) * 10;
+      game.rot = Math.sin(game.time * 3) * 0.08;
+      return;
+    }
+
+    game.time += dt;
+
+    // Rush mode accelerates over time
+    if (m.accelerate) {
+      game.speed = m.speed + Math.min(160, game.time * 6);
+      game.gap = Math.max(135, m.gap - game.time * 1.2);
+    }
+
+    // bird physics
+    game.vy += m.gravity * dt;
+    game.y += game.vy * dt;
+    // ease rotation toward target instead of snapping — removes the per-flap "jerk"
+    const targetRot = Math.max(-0.5, Math.min(1.4, game.vy / 600));
+    game.rot += (targetRot - game.rot) * Math.min(1, dt * 11);
+
+    // ground & ceiling
+    const groundY = VH - 90;
+    if (game.y + BIRD_R >= groundY) { game.y = groundY - BIRD_R; return die(); }
+    if (game.y - BIRD_R <= 0) { game.y = BIRD_R; game.vy = 0; }
+
+    // spawn pipes
+    game.spawnT += dt;
+    const spawnEvery = m.spawn * (m.speed / game.speed); // keep spacing as speed grows
+    if (game.spawnT >= spawnEvery) { game.spawnT = 0; spawnPipe(VW + 40); }
+
+    // move pipes + chaos drift + collision + scoring
+    for (const p of game.pipes) {
+      p.prevX = p.x;
+      p.x -= game.speed * dt;
+      if (m.gapDrift) {
+        p.driftPhase += dt * 1.4;
+        p.center = p.baseCenter + Math.sin(p.driftPhase) * m.gapDrift;
+        const half = p.gap / 2;
+        p.center = Math.max(70 + half, Math.min(VH - 160 - half, p.center));
+      }
+      // scoring
+      if (!p.passed && p.x + PIPE_W < game.x) {
+        p.passed = true; game.score += 1; sndScore();
+      }
+      // collision
+      const half = p.gap / 2;
+      const inX = game.x + BIRD_R > p.x && game.x - BIRD_R < p.x + PIPE_W;
+      if (inX) {
+        const topEdge = p.center - half;
+        const botEdge = p.center + half;
+        if (game.y - BIRD_R < topEdge || game.y + BIRD_R > botEdge) return die();
+      }
+    }
+    game.pipes = game.pipes.filter(p => p.x + PIPE_W > -10);
+  }
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+  const THEMES = {
+    day:   { sky1: "#1a2740", sky2: "#0f1626", pipe: "#3ad29f", pipeDark: "#21a075", ground: "#161b29", groundTop: "#222a3d" },
+    night: { sky1: "#0a0d18", sky2: "#05060c", pipe: "#3a4d8f", pipeDark: "#243066", ground: "#0a0c14", groundTop: "#161a28" },
+    dusk:  { sky1: "#2a1d3a", sky2: "#161024", pipe: "#c46bd0", pipeDark: "#8e3fa0", ground: "#1a1426", groundTop: "#281d38" },
+  };
+
+  // Cached gradients (rebuilt on resize / first use) — avoids per-frame allocations
+  // (_skyCache is declared earlier, near VW/VH, because resize() resets it)
+  function skyGradient(th, key) {
+    if (_skyCache[key]) return _skyCache[key];
+    const g = ctx.createLinearGradient(0, 0, 0, VH);
+    g.addColorStop(0, th.sky1); g.addColorStop(1, th.sky2);
+    _skyCache[key] = g;
+    return g;
+  }
+  const _birdGrad = {};   // cached bird body gradient per skin id
+  const _pipeCache = {};
+  function pipeGradient(th, key) {
+    if (_pipeCache[key]) return _pipeCache[key];
+    // gradient in pipe-local coords [0 .. PIPE_W]; drawPipe translates to p.x
+    const g = ctx.createLinearGradient(0, 0, PIPE_W, 0);
+    g.addColorStop(0, th.pipeDark);
+    g.addColorStop(0.5, th.pipe);
+    g.addColorStop(1, th.pipeDark);
+    _pipeCache[key] = g;
+    return g;
+  }
+
+  // static star field for night/dusk
+  const stars = [];
+  for (let i = 0; i < 60; i++) stars.push({ x: Math.random(), y: Math.random() * 0.7, r: Math.random() * 1.4 + 0.3, t: Math.random() * 6 });
+
+  let rainbowHue = 0;
+
+  function render() {
+    const themeKey = game ? game.mode.theme : "day";
+    const th = THEMES[themeKey] || THEMES.day;
+
+    ctx.save();
+    if (game && game.shake > 0 && !state.reduce) {
+      const s = game.shake * 8;
+      ctx.translate((Math.random() - 0.5) * s, (Math.random() - 0.5) * s);
+    }
+
+    // sky (cached gradient per theme)
+    ctx.fillStyle = skyGradient(th, themeKey);
+    ctx.fillRect(-20, -20, VW + 40, VH + 40);
+
+    // stars (night/dusk)
+    if (game && game.mode.theme !== "day") {
+      for (const st of stars) {
+        const tw = 0.5 + 0.5 * Math.sin((game ? game.time : 0) * 2 + st.t);
+        ctx.globalAlpha = 0.25 + tw * 0.5;
+        ctx.fillStyle = "#cfe0ff";
+        ctx.beginPath(); ctx.arc(st.x * VW, st.y * VH, st.r, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    if (!game) { ctx.restore(); return; }
+
+    // pipes
+    for (const p of game.pipes) {
+      drawPipe(p, th, themeKey);
+    }
+
+    // ground
+    const groundY = VH - 90;
+    ctx.fillStyle = th.groundTop;
+    ctx.fillRect(0, groundY, VW, 6);
+    ctx.fillStyle = th.ground;
+    ctx.fillRect(0, groundY + 6, VW, 90);
+    // ground stripes (motion) — use interpolated time so scrolling never jitters
+    if (!state.reduce) {
+      ctx.fillStyle = "rgba(255,255,255,.04)";
+      const rtime = (game.prevTime === undefined) ? game.time
+        : game.prevTime + (game.time - game.prevTime) * renderAlpha;
+      const off = (rtime * game.speed) % 40;
+      for (let x = -off; x < VW; x += 40) ctx.fillRect(x, groundY + 6, 20, 84);
+    }
+
+    // night vignette / spotlight around bird (cached gradient, just translated)
+    if (themeKey === "night") {
+      let vg = _skyCache._vignette;
+      if (!vg) {
+        const R = Math.max(VW, VH) * 0.55;
+        vg = ctx.createRadialGradient(0, 0, 60, 0, 0, R);
+        vg.addColorStop(0, "rgba(0,0,0,0)");
+        vg.addColorStop(1, "rgba(0,0,0,.82)");
+        _skyCache._vignette = vg;
+      }
+      ctx.save();
+      ctx.translate(game.x, game.y);
+      ctx.fillStyle = vg;
+      ctx.fillRect(-game.x, -game.y, VW, VH);
+      ctx.restore();
+    }
+
+    // particles
+    for (const pt of particles) {
+      ctx.globalAlpha = Math.max(0, pt.life);
+      ctx.fillStyle = pt.col;
+      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // bird
+    if (!game.dead || particles.length === 0) drawBird();
+
+    ctx.restore();
+  }
+
+  function drawPipe(p, th, themeKey) {
+    const half = p.gap / 2;
+    const topH = p.center - half;
+    const botY = p.center + half;
+    const lip = 18, lipW = 10;
+
+    // Draw in pipe-local coords so the cached gradient can be reused.
+    // Use the interpolated x so the scrolling decor stays perfectly smooth.
+    const rx = (p.prevX === undefined) ? p.x : p.prevX + (p.x - p.prevX) * renderAlpha;
+    ctx.save();
+    ctx.translate(rx, 0);
+    ctx.fillStyle = pipeGradient(th, themeKey);
+    // top pipe
+    ctx.fillRect(0, 0, PIPE_W, topH - lip);
+    ctx.fillRect(-lipW / 2, topH - lip, PIPE_W + lipW, lip);
+    // bottom pipe
+    ctx.fillRect(0, botY + lip, PIPE_W, VH - botY);
+    ctx.fillRect(-lipW / 2, botY, PIPE_W + lipW, lip);
+    // highlight
+    ctx.fillStyle = "rgba(255,255,255,.12)";
+    ctx.fillRect(8, 0, 6, topH - lip);
+    ctx.fillRect(8, botY + lip, 6, VH - botY);
+    ctx.restore();
+  }
+
+  function drawBird() {
+    const skin = currentSkin();
+    let body = skin.body, glow = skin.glow, belly = skin.belly;
+    if (body === "rainbow") {
+      rainbowHue = (rainbowHue + 1.5) % 360;
+      body = `hsl(${rainbowHue},90%,60%)`;
+      glow = `hsl(${rainbowHue},90%,72%)`;
+      belly = `hsl(${rainbowHue},90%,82%)`;
+    }
+
+    // interpolate between the last two physics positions so the bird never jitters
+    const by = (game.prevY === undefined || game.dead)
+      ? game.y
+      : game.prevY + (game.y - game.prevY) * renderAlpha;
+
+    ctx.save();
+    ctx.translate(game.x, by);
+    ctx.rotate(game.rot);
+
+    // body — cached radial gradient per skin (rainbow rebuilds each frame).
+    // NB: no shadowBlur here — it's the single biggest perf killer on iOS Safari.
+    let bg;
+    if (skin.body === "rainbow") {
+      bg = ctx.createRadialGradient(-4, -5, 3, 0, 0, BIRD_R + 2);
+      bg.addColorStop(0, glow); bg.addColorStop(0.6, body); bg.addColorStop(1, body);
+    } else {
+      bg = _birdGrad[skin.id];
+      if (!bg) {
+        bg = ctx.createRadialGradient(-4, -5, 3, 0, 0, BIRD_R + 2);
+        bg.addColorStop(0, glow); bg.addColorStop(0.6, body); bg.addColorStop(1, body);
+        _birdGrad[skin.id] = bg;
+      }
+    }
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.arc(0, 0, BIRD_R, 0, Math.PI * 2);
+    ctx.fill();
+
+    // belly
+    ctx.fillStyle = belly;
+    ctx.beginPath();
+    ctx.ellipse(2, 5, BIRD_R * 0.62, BIRD_R * 0.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // wing (flaps)
+    const wf = game.flapAnim;
+    ctx.fillStyle = body;
+    ctx.save();
+    ctx.translate(-3, 1);
+    ctx.rotate(-0.5 + wf * 1.0);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, BIRD_R * 0.8, BIRD_R * 0.42, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // eye
+    ctx.fillStyle = "#fff";
+    ctx.beginPath(); ctx.arc(7, -5, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#1a1f2e";
+    ctx.beginPath(); ctx.arc(9, -5, 2.4, 0, Math.PI * 2); ctx.fill();
+
+    // beak
+    ctx.fillStyle = "#f5a623";
+    ctx.beginPath();
+    ctx.moveTo(BIRD_R - 2, -2);
+    ctx.lineTo(BIRD_R + 9, 1);
+    ctx.lineTo(BIRD_R - 2, 5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  // ---------------------------------------------------------------------------
+  // MAIN LOOP — frame-rate independent, with optional FPS cap
+  // ---------------------------------------------------------------------------
+  let last = performance.now();
+  let rafId = 0;
+  let fpsSmoothed = 0;
+  let fpsAccTime = 0, fpsFrames = 0, fpsDisplay = 0;
+  let nextFrameAllowed = 0;
+  let lastRender = -1e9;  // timestamp of last rendered frame (jitter-tolerant fps throttle)
+  let renderAlpha = 0;   // 0..1 leftover physics time, for smooth render interpolation
+
+  function frame(now) {
+    rafId = requestAnimationFrame(frame);
+
+    const cap = (FPS_MODES.find(f => f.id === state.fps) || FPS_MODES[1]).cap;
+    if (cap > 0) {
+      // Throttle to target fps, but with a tolerance so we NEVER drop a frame for a few µs
+      // of rAF jitter. The old strict gate (`now < nextFrameAllowed`) skipped a frame the
+      // instant a tick arrived a hair early — and a touch reliably nudges the timing, so it
+      // dropped a frame *exactly at each tap* on 120Hz ProMotion screens → the "saccade au clic".
+      const interval = 1000 / cap;
+      if (now - lastRender < interval * 0.75) return;
+      lastRender = now;
+    }
+
+    let dt = (now - last) / 1000;
+    last = now;
+    if (dt > 0.1) dt = 0.1; // clamp big gaps (tab switch)
+
+    // fps meter
+    fpsAccTime += dt; fpsFrames++;
+    if (fpsAccTime >= 0.4) {
+      fpsDisplay = Math.round(fpsFrames / fpsAccTime);
+      fpsAccTime = 0; fpsFrames = 0;
+      if (hudVisible) fpsEl.querySelector("b").textContent = fpsDisplay;
+    }
+
+    // Variable-timestep physics: integrate with the frame's REAL dt so every position is
+    // locked to the display clock (`now`). This is what the smooth reference test page does.
+    // The old fixed-step accumulator reconstructed time and made the decor jump one frame at
+    // each tap (a touch nudges frame timing → the reconstruction skips). dt is clamped above,
+    // and pipes move < their width per frame, so collision stays safe.
+    if (game) {
+      step(dt);
+      renderAlpha = 1; // interpolation reads now resolve to the exact current position
+    }
+
+    render();
+
+    if (game && hudVisible && !game.dead) {
+      liveScoreEl.textContent = game.score;
+    }
+  }
+  requestAnimationFrame((t) => { last = t; frame(t); });
+
+  // ---------------------------------------------------------------------------
+  // UI WIRING
+  // ---------------------------------------------------------------------------
+  const menu = document.getElementById("menu");
+  const over = document.getElementById("over");
+  const hud = document.getElementById("hud");
+  const playHint = document.getElementById("playHint");
+  const liveScoreEl = document.getElementById("liveScore");
+  const fpsEl = document.getElementById("fpsPill");
+  const bestMiniEl = document.getElementById("bestMini");
+  let hudVisible = false;
+
+  function hidePlayHint() { playHint.style.display = "none"; }
+
+  // Build mode chips
+  const modeSeg = document.getElementById("modeSeg");
+  for (const key of Object.keys(MODES)) {
+    const m = MODES[key];
+    const c = document.createElement("div");
+    c.className = "chip" + (state.mode === key ? " active" : "");
+    c.dataset.mode = key;
+    c.innerHTML = `${m.name}<small>${m.desc}</small>`;
+    c.addEventListener("click", () => {
+      state.mode = key; LS.set("mode", key);
+      [...modeSeg.children].forEach(x => x.classList.toggle("active", x.dataset.mode === key));
+    });
+    modeSeg.appendChild(c);
+  }
+
+  // Build fps chips
+  const fpsSeg = document.getElementById("fpsSeg");
+  for (const f of FPS_MODES) {
+    const c = document.createElement("div");
+    c.className = "chip" + (state.fps === f.id ? " active" : "");
+    c.dataset.fps = f.id;
+    c.innerHTML = `${f.name} fps<small>${f.desc}</small>`;
+    c.addEventListener("click", () => {
+      state.fps = f.id; LS.set("fps", f.id);
+      [...fpsSeg.children].forEach(x => x.classList.toggle("active", x.dataset.fps === f.id));
+    });
+    fpsSeg.appendChild(c);
+  }
+
+  // Build skins
+  const skinList = document.getElementById("skinList");
+  const skinName = document.getElementById("skinName");
+  function renderSkins() {
+    skinList.innerHTML = "";
+    for (const s of SKINS) {
+      const unlocked = skinUnlocked(s);
+      const el = document.createElement("div");
+      el.className = "skin" + (state.skin === s.id ? " active" : "") + (unlocked ? "" : " locked");
+      const dot = document.createElement("div");
+      dot.className = "dot";
+      if (s.body === "rainbow") {
+        dot.style.background = "conic-gradient(red,orange,yellow,lime,cyan,blue,magenta,red)";
+      } else {
+        dot.style.background = `radial-gradient(circle at 35% 30%, ${s.glow}, ${s.body})`;
+      }
+      el.appendChild(dot);
+      el.title = unlocked ? s.name : `${s.name} — débloqué à ${s.unlock} pts`;
+      el.addEventListener("click", () => {
+        if (!skinUnlocked(s)) { skinName.textContent = `🔒 ${s.name} — atteins ${s.unlock} pts`; return; }
+        state.skin = s.id; LS.set("skin", s.id);
+        renderSkins();
+      });
+      skinList.appendChild(el);
+    }
+    const cs = currentSkin();
+    skinName.textContent = cs.name + (cs.unlock ? ` · débloqué` : "");
+  }
+  renderSkins();
+
+  // Toggles
+  const sfxToggle = document.getElementById("sfxToggle");
+  const reduceToggle = document.getElementById("reduceToggle");
+  sfxToggle.checked = state.sfx;
+  reduceToggle.checked = state.reduce;
+  sfxToggle.addEventListener("change", () => { state.sfx = sfxToggle.checked; LS.set("sfx", state.sfx); if (state.sfx) audio(); });
+  reduceToggle.addEventListener("change", () => { state.reduce = reduceToggle.checked; LS.set("reduce", state.reduce); });
+
+  // Menu stats
+  function refreshMenuStats() {
+    document.getElementById("menuBest").textContent = bestFor(state.mode);
+    document.getElementById("menuGames").textContent = state.games;
+  }
+
+  // FPS pill toggles fps mode in-game
+  fpsEl.addEventListener("click", () => {
+    const idx = FPS_MODES.findIndex(f => f.id === state.fps);
+    const next = FPS_MODES[(idx + 1) % FPS_MODES.length];
+    state.fps = next.id; LS.set("fps", state.fps);
+    [...fpsSeg.children].forEach(x => x.classList.toggle("active", x.dataset.fps === next.id));
+  });
+
+  // Screens
+  function showMenu() {
+    game = null; hudVisible = false;
+    hud.style.display = "none";
+    playHint.style.display = "none";
+    over.classList.add("hidden");
+    menu.classList.remove("hidden");
+    refreshMenuStats();
+    renderSkins();
+  }
+  function startGame() {
+    audio();
+    menu.classList.add("hidden");
+    over.classList.add("hidden");
+    hud.style.display = "flex";
+    hudVisible = true;
+    playHint.style.display = "block";
+    bestMiniEl.textContent = bestFor(state.mode);
+    liveScoreEl.textContent = "0";
+    [...fpsSeg.children].forEach(x => x.classList.toggle("active", x.dataset.fps === state.fps));
+    newGame();
+  }
+  function showGameOver(isBest) {
+    hudVisible = false;
+    hud.style.display = "none";
+    document.getElementById("finalScore").textContent = game ? game.score : 0;
+    document.getElementById("finalBest").textContent = bestFor(state.mode);
+    document.getElementById("overMode").textContent =
+      `Mode ${MODES[state.mode].name} · ${state.games} parties jouées`;
+    document.getElementById("newBest").style.display = isBest ? "block" : "none";
+    over.classList.remove("hidden");
+  }
+
+  document.getElementById("playBtn").addEventListener("click", startGame);
+  document.getElementById("retryBtn").addEventListener("click", startGame);
+  document.getElementById("menuBtn").addEventListener("click", showMenu);
+
+  // ---------------------------------------------------------------------------
+  // INPUT
+  // ---------------------------------------------------------------------------
+  function isMenuOpen() { return !menu.classList.contains("hidden") || !over.classList.contains("hidden"); }
+
+  function onTap(e) {
+    if (isMenuOpen()) return;     // let menu / game-over buttons work normally
+    if (!game || game.dead) return;
+    e.preventDefault();           // suppress iOS long-press selection/callout (the freeze) + scroll
+    flap();
+  }
+  // Touch (iOS/Android): touchstart is the ONLY event that reliably suppresses the
+  // long-press text-selection / magnifier that stalls Safari's main thread (~0.5s freeze).
+  // pointerdown's preventDefault does NOT stop it on iOS.
+  canvas.addEventListener("touchstart", onTap, { passive: false });
+  // Mouse (desktop): touchstart's preventDefault blocks synthesized mouse events,
+  // so this won't double-fire on touch devices.
+  canvas.addEventListener("mousedown", onTap, { passive: false });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space" || e.code === "ArrowUp") {
+      if (isMenuOpen()) {
+        // Space on menu = play / retry
+        if (!menu.classList.contains("hidden")) { e.preventDefault(); startGame(); }
+        else if (!over.classList.contains("hidden")) { e.preventDefault(); startGame(); }
+        return;
+      }
+      e.preventDefault();
+      flap();
+    }
+    if (e.code === "Escape" && game && !isMenuOpen()) showMenu();
+  });
+
+  // Prevent iOS pinch-zoom (2-finger only — does NOT fire on a tap, so it can't cause jank).
+  // NB: scrolling is already blocked by CSS `touch-action:none` + `overscroll-behavior:none`.
+  // We deliberately do NOT add a non-passive `touchmove` listener: on iOS that forces the main
+  // thread to sync on every touch and drops a frame exactly at each tap (the "saccade au clic").
+  document.addEventListener("gesturestart", (e) => e.preventDefault());
+
+  // Pause physics clock when tab hidden (avoid huge dt)
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) { last = performance.now(); nextFrameAllowed = last; acc = 0; }
+  });
+
+  // Initial screen
+  showMenu();
+})();
+</script>
+</body>
+</html>
