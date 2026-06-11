@@ -43,6 +43,9 @@
       overflow: hidden;
       touch-action: none;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
       overscroll-behavior: none;
     }
 
@@ -67,6 +70,9 @@
       box-shadow: 0 0 0 1px var(--border), 0 30px 80px rgba(0,0,0,.6);
       overflow: hidden;
       background: #0a0c12;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
     }
     @media (min-width: 520px) {
       #wrap { border-radius: 18px; }
@@ -77,6 +83,10 @@
       width: 100%;
       height: 100%;
       touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;     /* kill iOS long-press copy/callout hitch */
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* ===== HUD ===== */
