@@ -10,7 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="FLIT" />
-  <title>FLIT — Flappy arcade</title>
+  <title>FLIT</title>
 <style>
   :root {
     --sky1:#4aa8ee; --sky2:#bfe8fb; --pipe:#5bc46a; --pipeDark:#3f9e4e;
@@ -167,6 +167,11 @@
   #sheetScrim.on { opacity:1; pointer-events:auto; }
 
   .skinGrid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .shopSection { font-size:12px; font-weight:800; letter-spacing:1.2px; color:#9aa6d6; text-transform:uppercase;
+    margin:16px 2px 9px; display:flex; align-items:center; gap:8px; }
+  .shopSection::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.08); }
+  .shopSection:first-child { margin-top:2px; }
+  .shopEmpty { font-size:13px; color:#6a7090; padding:6px 4px 2px; }
   .skinCell { aspect-ratio:1; border-radius:18px; background:rgba(255,255,255,.05); border:2px solid transparent;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; position:relative; padding:6px; }
   .skinCell.sel { border-color:#fff; background:rgba(255,255,255,.12); }
@@ -286,7 +291,7 @@
     <div id="menu">
       <button id="dailyBtn">🎁<span class="badge"></span></button>
       <div id="menuCoins">🪙 0</div>
-      <div class="brand"><h1>FLIT</h1><p>Flappy arcade</p></div>
+      <div class="brand"><h1>FLIT</h1></div>
       <div class="carousel" id="carousel"></div>
       <div class="dots" id="dots"></div>
       <button class="play" id="playBtn">▶ JOUER</button>
@@ -334,7 +339,7 @@
     <div class="sheet" id="skinSheet">
       <div class="sheetGrip"></div>
       <div class="sheetHead"><h2>Skins</h2><button class="x" data-close>✕</button></div>
-      <div class="skinGrid" id="skinGrid"></div>
+      <div id="skinGrid"></div>
       <div class="verline">Débloque des skins : score, parties, temps de jeu, modes…</div>
     </div>
     <div class="sheet" id="decorSheet">
@@ -354,7 +359,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.37</div>
+      <div class="verline">V.1.38</div>
     </div>
   </div>
 
@@ -849,22 +854,40 @@
     return '<div class="lk">🔒<span>'+unlockLabel(u)+'</span>'+
            '<button class="buy'+(can?'':' no')+'" data-buy>🪙 '+price+'</button></div>';
   }
+  // free = aucune condition · unlock = se gagne en jouant · paid = boutique (achat, plus tard)
+  function tierOf(s){ return s.tier || ((!s.unlock||s.unlock.t==="free") ? "free" : "unlock"); }
+  function skinCell(s){
+    const avail=isAvailable(s,"skin"), cell=document.createElement("div");
+    cell.className="skinCell"+(s.id===state.skin?" sel":"")+(avail?"":" lock");
+    const grad = s.id==="rainbow"
+      ? "conic-gradient(from 0deg, #ff5db1,#ffd23f,#39ff14,#00d9b5,#6c63ff,#ff5db1)"
+      : "radial-gradient(circle at 36% 32%, "+s.glow+", "+s.body+" 62%, "+s.dark+")";
+    const badge = s.acc ? '<span class="accBadge">'+(ACC_EMOJI[s.acc]||"")+'</span>' : "";
+    let lock="";
+    if(!avail){
+      lock = tierOf(s)==="paid" ? lockHTML(s.unlock)   // boutique : bouton d'achat
+           : '<div class="lk">🔒<span>'+unlockLabel(s.unlock)+'</span></div>';  // à débloquer : se gagne
+    }
+    cell.innerHTML='<div class="sw" style="background:'+grad+'">'+badge+'</div><div class="nm">'+s.name+'</div>'+lock;
+    cell.addEventListener("click",(e)=>{
+      if(!avail){ if(tierOf(s)==="paid" && e.target.closest("[data-buy]") && buyItem("skin",s)) buildSkins(); return; }
+      state.skin=s.id; LS.set("skin",s.id); applySkin(); buildSkins();
+    });
+    return cell;
+  }
   function buildSkins(){
     skinGrid.innerHTML="";
-    SKINS.forEach(s=>{
-      const avail=isAvailable(s,"skin"), cell=document.createElement("div");
-      cell.className="skinCell"+(s.id===state.skin?" sel":"")+(avail?"":" lock");
-      const grad = s.id==="rainbow"
-        ? "conic-gradient(from 0deg, #ff5db1,#ffd23f,#39ff14,#00d9b5,#6c63ff,#ff5db1)"
-        : "radial-gradient(circle at 36% 32%, "+s.glow+", "+s.body+" 62%, "+s.dark+")";
-      const badge = s.acc ? '<span class="accBadge">'+(ACC_EMOJI[s.acc]||"")+'</span>' : "";
-      cell.innerHTML='<div class="sw" style="background:'+grad+'">'+badge+'</div><div class="nm">'+s.name+'</div>'+
-        (avail?"":lockHTML(s.unlock));
-      cell.addEventListener("click",(e)=>{
-        if(!avail){ if(e.target.closest("[data-buy]") && buyItem("skin",s)){ buildSkins(); } return; }
-        state.skin=s.id; LS.set("skin",s.id); applySkin(); buildSkins();
-      });
-      skinGrid.appendChild(cell);
+    const groups=[
+      {t:"Gratuits",     items:SKINS.filter(s=>tierOf(s)==="free")},
+      {t:"À débloquer",  items:SKINS.filter(s=>tierOf(s)==="unlock")},
+      {t:"Boutique",     items:SKINS.filter(s=>tierOf(s)==="paid"), empty:"Skins premium bientôt disponibles 🔜"},
+    ];
+    groups.forEach(g=>{
+      const h=document.createElement("div"); h.className="shopSection"; h.textContent=g.t; skinGrid.appendChild(h);
+      if(!g.items.length){ const e=document.createElement("div"); e.className="shopEmpty"; e.textContent=g.empty||"—"; skinGrid.appendChild(e); return; }
+      const grid=document.createElement("div"); grid.className="skinGrid";
+      g.items.forEach(s=>grid.appendChild(skinCell(s)));
+      skinGrid.appendChild(grid);
     });
   }
   function buildDecors(){
