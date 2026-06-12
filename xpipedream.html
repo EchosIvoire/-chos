@@ -229,6 +229,19 @@
   #dailyStreak { font-size:13px; color:#9aa6d6; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
   #dailyAmount { font-size:34px; font-weight:900; color:#ffe27a; margin:10px 0 18px; }
 
+  /* revive / continue modal */
+  #reviveModal { position:absolute; inset:0; z-index:24; display:flex; align-items:center; justify-content:center; padding:28px;
+    background:rgba(6,8,14,.72); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+    opacity:0; pointer-events:none; transition:opacity .25s; }
+  #reviveModal.on { opacity:1; pointer-events:auto; }
+  .reviveCard { background:linear-gradient(180deg, rgba(30,34,52,.96), rgba(18,21,31,.98)); border:1px solid rgba(255,255,255,.12);
+    border-radius:26px; padding:24px; text-align:center; width:100%; max-width:320px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  .reviveTitle { font-size:24px; font-weight:900; margin-bottom:14px; }
+  .reviveRing { width:84px; height:84px; margin:0 auto 18px; border-radius:50%; display:grid; place-items:center;
+    font-size:40px; font-weight:900; color:#fff; background:rgba(108,99,255,.16); border:4px solid var(--accent);
+    box-shadow:0 0 24px rgba(108,99,255,.4); }
+  .reviveCard .play { margin-bottom:10px; }
+
   .setRow { display:flex; align-items:center; justify-content:space-between; padding:14px 4px; border-bottom:1px solid rgba(255,255,255,.07); }
   .setRow .lbl b { font-size:16px; font-weight:700; display:block; }
   .setRow .lbl span { font-size:12px; color:#9aa6d6; }
@@ -349,6 +362,16 @@
       </div>
     </div>
 
+    <!-- REVIVE / CONTINUE -->
+    <div id="reviveModal">
+      <div class="reviveCard">
+        <div class="reviveTitle">Continuer&nbsp;?</div>
+        <div class="reviveRing"><span id="reviveCount">4</span></div>
+        <button class="play" id="reviveBtn">CONTINUER · <span id="reviveCost">50</span> 🪙</button>
+        <button class="btn-ghost" id="reviveNo">Abandonner</button>
+      </div>
+    </div>
+
     <!-- SHEETS -->
     <div id="sheetScrim"></div>
     <div class="sheet" id="skinSheet">
@@ -374,7 +397,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.40</div>
+      <div class="verline">V.1.41</div>
     </div>
     <div class="sheet" id="lbSheet">
       <div class="sheetGrip"></div>
@@ -719,7 +742,7 @@
       {duration:850, easing:"ease-out", fill:"forwards"});
     an.onfinish=()=>el.remove();
   }
-  function addRunCoins(n){ runCoins+=n; coinHudEl.textContent="🪙 "+runCoins; }
+  function addRunCoins(n){ runCoins+=n; state.coins+=n; coinHudEl.textContent="🪙 "+runCoins; }
 
   // ---- main loop (handles attract spawning + gameplay collision) ----
   function loop(){
@@ -791,7 +814,7 @@
     over.classList.remove("on");
     menu.classList.add("hide"); scrimTop.classList.remove("on"); scrimBot.classList.remove("on");
     floorFill.classList.add("playing");   // no ground band; floorFill blends the bottom with the sky
-    clearPipes(); score=0; scoreEl.textContent="0"; spawnAcc=0; lastT=0;
+    clearPipes(); score=0; scoreEl.textContent="0"; spawnAcc=0; lastT=0; reviveCount=0;
     runCoins=0; coinHudEl.textContent="🪙 0"; coinHudEl.classList.add("on");
     gameState="playing"; startedAt=now(); curSpeed=mode.speed;
     applyDecor(); vignette.classList.toggle("on", curDecor().vignette);
@@ -811,6 +834,31 @@
     sndFlap();
   }
 
+  // ----- revive (continue) -----
+  const reviveModal=$("reviveModal");
+  let reviveCount=0, reviveTimer=0;
+  const reviveCostNow = () => 50*(reviveCount+1);
+  const canRevive = () => score>0 && reviveCount<5 && state.coins>=reviveCostNow();
+  function clearReviveTimer(){ if(reviveTimer){ clearInterval(reviveTimer); reviveTimer=0; } }
+  function showRevive(){
+    $("reviveCost").textContent = reviveCostNow();
+    reviveModal.classList.add("on");
+    let n=4; $("reviveCount").textContent=n;
+    clearReviveTimer();
+    reviveTimer=setInterval(()=>{ n--; $("reviveCount").textContent=Math.max(0,n); if(n<=0) declineRevive(); },1000);
+  }
+  function declineRevive(){ clearReviveTimer(); reviveModal.classList.remove("on"); finalizeGameOver(); }
+  function doRevive(){
+    if(state.coins<reviveCostNow()){ declineRevive(); return; }
+    clearReviveTimer(); reviveModal.classList.remove("on");
+    state.coins-=reviveCostNow(); LS.set("coins",state.coins); reviveCount++;
+    clearPipes(); spawnAcc=0; lastT=0;
+    bird.y=VH*0.45; bird.vy=mode.flap; bird.rot=0; setBirdTransform(bird.y,bird.rot); flapWing();
+    gameState="playing"; startGround(mode.speed);
+    hud.classList.add("on"); coinHudEl.classList.add("on");
+    sndFlap();
+  }
+
   function die(){
     if(gameState!=="playing") return;
     gameState="dead";
@@ -820,11 +868,13 @@
     if(navigator.vibrate && state.sfx){ try{ navigator.vibrate(30); }catch(e){} }
     hud.classList.remove("on"); coinHudEl.classList.remove("on");
     spawnParticles(BIRD_X, bird.y, curSkin().body, 12);   // death puff
-
+    if(canRevive()) setTimeout(showRevive, 480);          // offer a continue first
+    else finalizeGameOver();
+  }
+  function finalizeGameOver(){
     const before = unlockedIds();             // snapshot before committing this run's stats
     state.games++;
     state.playTime += Math.max(0, Math.min(3600, Math.round(now()-startedAt)));
-    state.coins += runCoins;
     const isBest = score>bestFor(state.mode);
     if(isBest) state.best[state.mode]=score;
     const wasNewTop = score>state.topScore;
@@ -1066,6 +1116,8 @@
   $("playBtn").addEventListener("click",startGame);
   $("retryBtn").addEventListener("click",startGame);
   $("toMenuBtn").addEventListener("click",toMenu);
+  $("reviveBtn").addEventListener("click",doRevive);
+  $("reviveNo").addEventListener("click",declineRevive);
 
   // ===========================================================================
   // INPUT (tap to flap during play)
