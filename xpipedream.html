@@ -175,6 +175,10 @@
   .lbRow { display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:14px;
     background:rgba(255,255,255,.05); margin-bottom:7px; }
   .lbRow.top { background:rgba(255,210,63,.1); border:1px solid rgba(255,210,63,.25); }
+  .lbRow.me { background:rgba(108,99,255,.18); border:1px solid var(--accent); }
+  #lbName { width:100%; box-sizing:border-box; margin-bottom:12px; padding:12px 14px; border-radius:14px;
+    border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:#fff; font-size:15px; font-weight:600; }
+  #lbName::placeholder { color:#6a7090; }
   .lbRank { width:30px; font-weight:800; font-size:16px; text-align:center; }
   .lbScore { font-weight:900; font-size:22px; min-width:46px; }
   .lbMode { flex:1; font-size:13px; color:#aeb6da; font-weight:600; }
@@ -370,16 +374,47 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.39</div>
+      <div class="verline">V.1.40</div>
     </div>
     <div class="sheet" id="lbSheet">
       <div class="sheetGrip"></div>
-      <div class="sheetHead"><h2>🏆 Meilleurs scores</h2><button class="x" data-close>✕</button></div>
+      <div class="sheetHead"><h2>🌍 Classement mondial</h2><button class="x" data-close>✕</button></div>
+      <input id="lbName" maxlength="20" placeholder="Ton pseudo (visible par tous)" />
       <div id="lbGrid"></div>
-      <button class="btn-ghost" id="lbShareBtn" style="margin-top:14px">📤 Partager mon record</button>
-      <div class="verline">Classement mondial en ligne : bientôt 🔜</div>
+      <button class="btn-ghost" id="lbShareBtn" style="margin-top:12px">📤 Partager mon record</button>
     </div>
   </div>
+
+<!-- Firebase global leaderboard (loaded as a module; exposes window.FLITlb to the game) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getFirestore, doc, setDoc, collection, query, orderBy, limit, getDocs, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  try {
+    const app = initializeApp({
+      apiKey: "AIzaSyBEmbD3K44H2WVowY3wkahxOi_6mqQRPH8",
+      authDomain: "flit-b0455.firebaseapp.com",
+      projectId: "flit-b0455",
+      storageBucket: "flit-b0455.firebasestorage.app",
+      messagingSenderId: "866967978939",
+      appId: "1:866967978939:web:d93fc4d68bda803f5f3a9e"
+    });
+    const db = getFirestore(app);
+    window.FLITlb = {
+      async submit(uid, name, score, mode){
+        try { await setDoc(doc(db,"leaderboard",uid), { uid, name, score, mode, ts: serverTimestamp() }); }
+        catch(e){ console.warn("lb submit", e); }
+      },
+      async top(n){
+        try {
+          const snap = await getDocs(query(collection(db,"leaderboard"), orderBy("score","desc"), limit(n||50)));
+          return snap.docs.map(d=>d.data());
+        } catch(e){ console.warn("lb top", e); return null; }
+      }
+    };
+    window.dispatchEvent(new Event("flit-lb-ready"));
+  } catch(e){ console.warn("firebase init", e); }
+</script>
 
 <script>
 "use strict";
@@ -451,10 +486,11 @@
     sfx: LS.get("sfx",true), reduce: LS.get("reduce",false),
     best: LS.get("best",{}), games: LS.get("games",0), topScore: LS.get("topScore",0), playTime: LS.get("playTime",0),
     coins: LS.get("coins",0), owned: LS.get("owned",[]), lastClaim: LS.get("lastClaim",""), streak: LS.get("streak",0),
-    scores: LS.get("scores",[]),
+    scores: LS.get("scores",[]), uid: LS.get("uid",""), name: LS.get("name",""),
   };
   if (!Array.isArray(state.owned)) state.owned = [];
   if (!Array.isArray(state.scores)) state.scores = [];
+  if (!state.uid){ state.uid = "u"+Math.random().toString(36).slice(2,10)+Date.now().toString(36); LS.set("uid",state.uid); }
   if (!MODES[state.mode]) state.mode = "classic";
   if (!SKINS.find(s=>s.id===state.skin)) state.skin = "neon";
   if (!DECORS.find(d=>d.id===state.decor)) state.decor = "sunny";
@@ -791,7 +827,9 @@
     state.coins += runCoins;
     const isBest = score>bestFor(state.mode);
     if(isBest) state.best[state.mode]=score;
+    const wasNewTop = score>state.topScore;
     if(score>state.topScore) state.topScore=score;
+    if(wasNewTop) submitScore();
     if(score>0){ state.scores.push({s:score,m:state.mode,t:Date.now()});
       state.scores.sort((a,b)=>b.s-a.s); state.scores=state.scores.slice(0,25); LS.set("scores",state.scores); }
     LS.set("games",state.games); LS.set("playTime",state.playTime); LS.set("coins",state.coins);
@@ -945,16 +983,37 @@
     if(d<172800) return "hier";
     return "il y a "+Math.floor(d/86400)+" j";
   }
-  const lbGrid=$("lbGrid");
-  function buildLeaderboard(){
-    lbGrid.innerHTML="";
-    if(!state.scores.length){ lbGrid.innerHTML='<div class="shopEmpty">Aucun score pour l\'instant — lance une partie ! 🐤</div>'; return; }
+  function submitScore(){
+    if(window.FLITlb && state.topScore>0)
+      window.FLITlb.submit(state.uid, (state.name||"Anonyme").slice(0,20), state.topScore, state.mode);
+  }
+  const lbGrid=$("lbGrid"), lbNameEl=$("lbName");
+  function rowHTML(rank,score,modeName,extra){
+    const medal = rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":rank+".";
+    return '<span class="lbRank">'+medal+'</span><span class="lbScore">'+score+'</span>'+
+           '<span class="lbMode">'+modeName+'</span><span class="lbWhen">'+(extra||"")+'</span>';
+  }
+  function renderLocal(note){
+    lbGrid.innerHTML = note ? '<div class="shopEmpty">'+note+'</div>' : "";
+    if(!state.scores.length){ lbGrid.innerHTML += '<div class="shopEmpty">Lance une partie ! 🐤</div>'; return; }
     state.scores.slice(0,10).forEach((r,i)=>{
       const row=document.createElement("div"); row.className="lbRow"+(i<3?" top":"");
-      const medal = i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1)+".";
-      const mn = MODES[r.m]?MODES[r.m].name:r.m;
-      row.innerHTML='<span class="lbRank">'+medal+'</span><span class="lbScore">'+r.s+'</span>'+
-        '<span class="lbMode">'+mn+'</span><span class="lbWhen">'+relTime(r.t)+'</span>';
+      row.innerHTML=rowHTML(i+1, r.s, MODES[r.m]?MODES[r.m].name:r.m, relTime(r.t));
+      lbGrid.appendChild(row);
+    });
+  }
+  async function buildLeaderboard(){
+    if(lbNameEl) lbNameEl.value = state.name;
+    lbGrid.innerHTML='<div class="shopEmpty">Chargement du classement mondial… ⏳</div>';
+    const rows = window.FLITlb ? await window.FLITlb.top(50) : null;
+    if(!Array.isArray(rows)){ renderLocal("Hors-ligne — voici tes meilleurs scores 📴"); return; }
+    if(!rows.length){ lbGrid.innerHTML='<div class="shopEmpty">Sois le premier au classement mondial ! 🌍</div>'; return; }
+    lbGrid.innerHTML="";
+    rows.forEach((r,i)=>{
+      const me = r.uid===state.uid;
+      const row=document.createElement("div"); row.className="lbRow"+(i<3?" top":"")+(me?" me":"");
+      const nm = (r.name||"Anonyme")+(me?" (toi)":"");
+      row.innerHTML=rowHTML(i+1, r.score, nm);
       lbGrid.appendChild(row);
     });
   }
@@ -978,6 +1037,11 @@
   $("setBtn").addEventListener("click",()=>{ $("setSheet").classList.add("open"); sheetScrim.classList.add("on"); });
   $("lbShareBtn").addEventListener("click",()=>shareScore(state.topScore));
   $("shareBtn").addEventListener("click",()=>shareScore(score));
+  lbNameEl.addEventListener("change",()=>{
+    state.name = lbNameEl.value.trim().slice(0,20); LS.set("name",state.name);
+    submitScore();                 // update the player's global entry with the new pseudo
+    setTimeout(buildLeaderboard, 400);
+  });
   sheetScrim.addEventListener("click",closeSheets);
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeSheets));
 
