@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="description" content="XPIPEDREAM — un Flappy arcade fluide, plusieurs modes et skins. Par TheBenchLab." />
+  <meta name="description" content="FLIT — un Flappy arcade fluide, plusieurs modes et skins. Par TheBenchLab." />
   <meta name="theme-color" content="#0d0f14" />
   <meta http-equiv="Cache-Control" content="no-cache" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="XPIPEDREAM" />
-  <title>XPIPEDREAM — Flappy arcade</title>
+  <meta name="apple-mobile-web-app-title" content="FLIT" />
+  <title>FLIT — Flappy arcade</title>
 <style>
   :root {
     --sky1:#4aa8ee; --sky2:#bfe8fb; --pipe:#5bc46a; --pipeDark:#3f9e4e;
@@ -190,6 +190,28 @@
   .decorCell .lk { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap:3px; background:rgba(10,12,18,.62); font-size:20px; }
   .decorCell .lk span { font-size:11px; font-weight:700; color:#ffd27a; }
+  .buy { margin-top:5px; border:none; border-radius:10px; padding:5px 10px; font-weight:800; font-size:11px; color:#fff;
+    background:linear-gradient(135deg,#2fb46a,#1f9c5a); box-shadow:0 3px 8px rgba(0,0,0,.3); }
+  .buy.no { background:rgba(255,255,255,.14); color:#9aa6d6; box-shadow:none; }
+
+  /* daily reward modal */
+  #dailyBtn { position:absolute; top:calc(env(safe-area-inset-top,0px) + 12px); left:14px; z-index:13;
+    width:40px; height:40px; border-radius:50%; border:1px solid rgba(255,255,255,.14); background:rgba(20,24,38,.6);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); font-size:20px; }
+  #dailyBtn .badge { position:absolute; top:-3px; right:-3px; width:12px; height:12px; border-radius:50%;
+    background:#ff4d6d; border:2px solid #11141c; display:none; }
+  #dailyBtn.avail .badge { display:block; }
+  #dailyModal { position:absolute; inset:0; z-index:25; display:flex; align-items:center; justify-content:center; padding:28px;
+    background:rgba(6,8,14,.72); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+    opacity:0; pointer-events:none; transition:opacity .3s; }
+  #dailyModal.on { opacity:1; pointer-events:auto; }
+  .dailyCard { background:linear-gradient(180deg, rgba(30,34,52,.96), rgba(18,21,31,.98)); border:1px solid rgba(255,255,255,.12);
+    border-radius:26px; padding:26px 24px; text-align:center; width:100%; max-width:330px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  .dailyCard .gift { font-size:54px; animation:giftPop .6s ease; }
+  @keyframes giftPop { 0%{transform:scale(.4) rotate(-12deg)} 60%{transform:scale(1.15) rotate(6deg)} 100%{transform:scale(1)} }
+  .dailyCard h2 { font-size:22px; font-weight:900; margin:6px 0; }
+  #dailyStreak { font-size:13px; color:#9aa6d6; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+  #dailyAmount { font-size:34px; font-weight:900; color:#ffe27a; margin:10px 0 18px; }
 
   .setRow { display:flex; align-items:center; justify-content:space-between; padding:14px 4px; border-bottom:1px solid rgba(255,255,255,.07); }
   .setRow .lbl b { font-size:16px; font-weight:700; display:block; }
@@ -262,8 +284,9 @@
 
     <!-- MENU -->
     <div id="menu">
+      <button id="dailyBtn">🎁<span class="badge"></span></button>
       <div id="menuCoins">🪙 0</div>
-      <div class="brand"><h1>XPIPEDREAM</h1><p>Flappy arcade</p></div>
+      <div class="brand"><h1>FLIT</h1><p>Flappy arcade</p></div>
       <div class="carousel" id="carousel"></div>
       <div class="dots" id="dots"></div>
       <button class="play" id="playBtn">▶ JOUER</button>
@@ -295,6 +318,17 @@
 
     <div id="toast"></div>
 
+    <!-- DAILY REWARD -->
+    <div id="dailyModal">
+      <div class="dailyCard">
+        <div class="gift">🎁</div>
+        <h2>Récompense du jour</h2>
+        <div id="dailyStreak">Jour 1</div>
+        <div id="dailyAmount">+30 🪙</div>
+        <button class="play" id="dailyClaim">RÉCUPÉRER</button>
+      </div>
+    </div>
+
     <!-- SHEETS -->
     <div id="sheetScrim"></div>
     <div class="sheet" id="skinSheet">
@@ -320,7 +354,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.36</div>
+      <div class="verline">V.1.37</div>
     </div>
   </div>
 
@@ -393,8 +427,9 @@
     mode: LS.get("mode","classic"), skin: LS.get("skin","neon"), decor: LS.get("decor","sunny"), fps: LS.get("fps","120"),
     sfx: LS.get("sfx",true), reduce: LS.get("reduce",false),
     best: LS.get("best",{}), games: LS.get("games",0), topScore: LS.get("topScore",0), playTime: LS.get("playTime",0),
-    coins: LS.get("coins",0),
+    coins: LS.get("coins",0), owned: LS.get("owned",[]), lastClaim: LS.get("lastClaim",""), streak: LS.get("streak",0),
   };
+  if (!Array.isArray(state.owned)) state.owned = [];
   if (!MODES[state.mode]) state.mode = "classic";
   if (!SKINS.find(s=>s.id===state.skin)) state.skin = "neon";
   if (!DECORS.find(d=>d.id===state.decor)) state.decor = "sunny";
@@ -417,6 +452,42 @@
   }
   const curSkin  = () => SKINS.find(s=>s.id===state.skin) || SKINS[0];
   const curDecor = () => DECORS.find(d=>d.id===state.decor) || DECORS[0];
+
+  // ----- shop: an item is usable if earned (unlock) OR bought (owned). Price derives from its unlock. -----
+  function priceOf(u){
+    if(!u || u.t==="free") return 0;
+    if(u.t==="score") return u.v*10;
+    if(u.t==="games") return u.v*8;
+    if(u.t==="time")  return Math.round(u.v/60)*20;
+    if(u.t==="mode")  return 300;
+    return 250;
+  }
+  function isAvailable(item, kind){ return isUnlocked(item.unlock) || state.owned.indexOf(kind+"_"+item.id)>=0; }
+  function buyItem(kind, item){
+    if(isAvailable(item,kind)) return false;
+    const price=priceOf(item.unlock);
+    if(state.coins<price){ showToast("Pas assez de pièces 🪙 ("+price+")"); return false; }
+    state.coins-=price; state.owned.push(kind+"_"+item.id);
+    LS.set("coins",state.coins); LS.set("owned",state.owned);
+    refreshStats(); showToast("✅ Acheté : "+item.name);
+    return true;
+  }
+
+  // ----- daily reward (streak) -----
+  function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+  function ystrStr(){ const d=new Date(Date.now()-864e5); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+  function dailyAvailable(){ return state.lastClaim !== todayStr(); }
+  function dailyNextStreak(){ return (state.lastClaim===ystrStr()) ? state.streak+1 : 1; }
+  function dailyReward(){ return 20 + Math.min(dailyNextStreak(),7)*10; }   // day1=30 … day7+ =90
+  function claimDaily(){
+    if(!dailyAvailable()) return 0;
+    state.streak = dailyNextStreak();
+    const reward = 20 + Math.min(state.streak,7)*10;
+    state.coins += reward; state.lastClaim = todayStr();
+    LS.set("streak",state.streak); LS.set("lastClaim",state.lastClaim); LS.set("coins",state.coins);
+    refreshStats();
+    return reward;
+  }
 
   // ===========================================================================
   // DOM
@@ -773,31 +844,42 @@
   // ----- skins sheet -----
   const skinGrid=$("skinGrid"), decorGrid=$("decorGrid");
   const ACC_EMOJI = { shades:"🕶️", cap:"🧢", bow:"🎀", crown:"👑", halo:"😇", party:"🎉" };
+  function lockHTML(u){
+    const price=priceOf(u), can=state.coins>=price;
+    return '<div class="lk">🔒<span>'+unlockLabel(u)+'</span>'+
+           '<button class="buy'+(can?'':' no')+'" data-buy>🪙 '+price+'</button></div>';
+  }
   function buildSkins(){
     skinGrid.innerHTML="";
     SKINS.forEach(s=>{
-      const unlocked=isUnlocked(s.unlock), cell=document.createElement("div");
-      cell.className="skinCell"+(s.id===state.skin?" sel":"")+(unlocked?"":" lock");
+      const avail=isAvailable(s,"skin"), cell=document.createElement("div");
+      cell.className="skinCell"+(s.id===state.skin?" sel":"")+(avail?"":" lock");
       const grad = s.id==="rainbow"
         ? "conic-gradient(from 0deg, #ff5db1,#ffd23f,#39ff14,#00d9b5,#6c63ff,#ff5db1)"
         : "radial-gradient(circle at 36% 32%, "+s.glow+", "+s.body+" 62%, "+s.dark+")";
       const badge = s.acc ? '<span class="accBadge">'+(ACC_EMOJI[s.acc]||"")+'</span>' : "";
       cell.innerHTML='<div class="sw" style="background:'+grad+'">'+badge+'</div><div class="nm">'+s.name+'</div>'+
-        (unlocked?"":'<div class="lk">🔒<span>'+unlockLabel(s.unlock)+'</span></div>');
-      if(unlocked) cell.addEventListener("click",()=>{ state.skin=s.id; LS.set("skin",s.id); applySkin(); buildSkins(); });
+        (avail?"":lockHTML(s.unlock));
+      cell.addEventListener("click",(e)=>{
+        if(!avail){ if(e.target.closest("[data-buy]") && buyItem("skin",s)){ buildSkins(); } return; }
+        state.skin=s.id; LS.set("skin",s.id); applySkin(); buildSkins();
+      });
       skinGrid.appendChild(cell);
     });
   }
   function buildDecors(){
     decorGrid.innerHTML="";
     DECORS.forEach(d=>{
-      const unlocked=isUnlocked(d.unlock), cell=document.createElement("div");
-      cell.className="decorCell"+(d.id===state.decor?" sel":"")+(unlocked?"":" lock");
+      const avail=isAvailable(d,"decor"), cell=document.createElement("div");
+      cell.className="decorCell"+(d.id===state.decor?" sel":"")+(avail?"":" lock");
       cell.innerHTML='<div class="dsw" style="background:linear-gradient(180deg,'+d.sky1+','+d.sky2+')">'+
           '<i style="background:'+d.pipe+'"></i><i style="background:'+d.pipe+'"></i></div>'+
         '<div class="nm">'+d.emoji+' '+d.name+'</div>'+
-        (unlocked?"":'<div class="lk">🔒<span>'+unlockLabel(d.unlock)+'</span></div>');
-      if(unlocked) cell.addEventListener("click",()=>{ state.decor=d.id; LS.set("decor",d.id); applyDecor(); buildDecors(); });
+        (avail?"":lockHTML(d.unlock));
+      cell.addEventListener("click",(e)=>{
+        if(!avail){ if(e.target.closest("[data-buy]") && buyItem("decor",d)){ buildDecors(); } return; }
+        state.decor=d.id; LS.set("decor",d.id); applyDecor(); buildDecors();
+      });
       decorGrid.appendChild(cell);
     });
   }
@@ -820,6 +902,23 @@
   $("setBtn").addEventListener("click",()=>{ $("setSheet").classList.add("open"); sheetScrim.classList.add("on"); });
   sheetScrim.addEventListener("click",closeSheets);
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeSheets));
+
+  // ----- daily reward -----
+  const dailyModal=$("dailyModal"), dailyBtn=$("dailyBtn");
+  function refreshDailyBtn(){ dailyBtn.classList.toggle("avail", dailyAvailable()); }
+  function openDaily(){
+    const avail=dailyAvailable();
+    $("dailyStreak").textContent = avail ? ("Jour "+dailyNextStreak()+" · série") : "Déjà récupéré";
+    $("dailyAmount").textContent = avail ? ("+"+dailyReward()+" 🪙") : "Reviens demain !";
+    $("dailyClaim").textContent  = avail ? "RÉCUPÉRER" : "FERMER";
+    dailyModal.classList.add("on");
+  }
+  dailyBtn.addEventListener("click", openDaily);
+  $("dailyClaim").addEventListener("click", ()=>{
+    if(dailyAvailable()){ const r=claimDaily(); showToast("🎁 +"+r+" pièces !"); refreshDailyBtn(); }
+    dailyModal.classList.remove("on");
+  });
+  dailyModal.addEventListener("click", e=>{ if(e.target===dailyModal) dailyModal.classList.remove("on"); });
 
   // ----- buttons -----
   $("playBtn").addEventListener("click",startGame);
@@ -853,6 +952,8 @@
   selectMode(state.mode);
   applySkin();
   refreshStats();
+  refreshDailyBtn();
+  if(dailyAvailable()) setTimeout(openDaily, 650);   // greet returning players with their reward
   ground.classList.add("hideGround"); floorFill.classList.remove("playing");   // start in the menu → no ground band
   scrimTop.classList.add("on"); scrimBot.classList.add("on");
   idleBob();
