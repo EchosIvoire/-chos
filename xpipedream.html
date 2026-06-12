@@ -143,7 +143,7 @@
   .play:active { transform:scale(.97); }
 
   .actions { display:flex; gap:10px; align-items:stretch; }
-  .icobtn { flex:0 0 auto; width:52px; height:52px; border-radius:16px; border:1px solid rgba(255,255,255,.12);
+  .icobtn { flex:0 0 auto; width:46px; height:46px; border-radius:14px; border:1px solid rgba(255,255,255,.12);
     background:rgba(20,24,38,.6); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); font-size:22px;
     display:grid; place-items:center; transition:transform .1s, border-color .2s; }
   .icobtn:active { transform:scale(.93); }
@@ -172,6 +172,13 @@
   .shopSection::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.08); }
   .shopSection:first-child { margin-top:2px; }
   .shopEmpty { font-size:13px; color:#6a7090; padding:6px 4px 2px; }
+  .lbRow { display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:14px;
+    background:rgba(255,255,255,.05); margin-bottom:7px; }
+  .lbRow.top { background:rgba(255,210,63,.1); border:1px solid rgba(255,210,63,.25); }
+  .lbRank { width:30px; font-weight:800; font-size:16px; text-align:center; }
+  .lbScore { font-weight:900; font-size:22px; min-width:46px; }
+  .lbMode { flex:1; font-size:13px; color:#aeb6da; font-weight:600; }
+  .lbWhen { font-size:11px; color:#6a7090; }
   .skinCell { aspect-ratio:1; border-radius:18px; background:rgba(255,255,255,.05); border:2px solid transparent;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; position:relative; padding:6px; }
   .skinCell.sel { border-color:#fff; background:rgba(255,255,255,.12); }
@@ -298,6 +305,7 @@
       <div class="actions">
         <button class="icobtn" id="skinsBtn">🎨</button>
         <button class="icobtn" id="decorBtn">🌅</button>
+        <button class="icobtn" id="lbBtn">🏆</button>
         <button class="icobtn" id="setBtn">⚙️</button>
         <div class="statchips">
           <div class="chip"><b id="cBest">0</b><span>RECORD</span></div>
@@ -317,7 +325,10 @@
       <div id="oCoins">🪙 +0</div>
       <div class="obtns">
         <button class="play" id="retryBtn">↻ REJOUER</button>
-        <button class="btn-ghost" id="toMenuBtn">Menu</button>
+        <div style="display:flex; gap:10px; width:100%;">
+          <button class="btn-ghost" id="shareBtn" style="flex:1">📤 Partager</button>
+          <button class="btn-ghost" id="toMenuBtn" style="flex:1">Menu</button>
+        </div>
       </div>
     </div>
 
@@ -359,7 +370,14 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.38</div>
+      <div class="verline">V.1.39</div>
+    </div>
+    <div class="sheet" id="lbSheet">
+      <div class="sheetGrip"></div>
+      <div class="sheetHead"><h2>🏆 Meilleurs scores</h2><button class="x" data-close>✕</button></div>
+      <div id="lbGrid"></div>
+      <button class="btn-ghost" id="lbShareBtn" style="margin-top:14px">📤 Partager mon record</button>
+      <div class="verline">Classement mondial en ligne : bientôt 🔜</div>
     </div>
   </div>
 
@@ -433,8 +451,10 @@
     sfx: LS.get("sfx",true), reduce: LS.get("reduce",false),
     best: LS.get("best",{}), games: LS.get("games",0), topScore: LS.get("topScore",0), playTime: LS.get("playTime",0),
     coins: LS.get("coins",0), owned: LS.get("owned",[]), lastClaim: LS.get("lastClaim",""), streak: LS.get("streak",0),
+    scores: LS.get("scores",[]),
   };
   if (!Array.isArray(state.owned)) state.owned = [];
+  if (!Array.isArray(state.scores)) state.scores = [];
   if (!MODES[state.mode]) state.mode = "classic";
   if (!SKINS.find(s=>s.id===state.skin)) state.skin = "neon";
   if (!DECORS.find(d=>d.id===state.decor)) state.decor = "sunny";
@@ -772,6 +792,8 @@
     const isBest = score>bestFor(state.mode);
     if(isBest) state.best[state.mode]=score;
     if(score>state.topScore) state.topScore=score;
+    if(score>0){ state.scores.push({s:score,m:state.mode,t:Date.now()});
+      state.scores.sort((a,b)=>b.s-a.s); state.scores=state.scores.slice(0,25); LS.set("scores",state.scores); }
     LS.set("games",state.games); LS.set("playTime",state.playTime); LS.set("coins",state.coins);
     LS.set("best",state.best);   LS.set("topScore",state.topScore);
     notifyUnlocks(before);
@@ -907,6 +929,36 @@
     });
   }
 
+  // ----- share + leaderboard -----
+  const GAME_URL = (typeof location!=="undefined" && location.href) ? location.href.split("?")[0].split("#")[0] : "";
+  function shareScore(s){
+    const txt = "🐤 J'ai fait "+s+" sur FLIT ! Tu peux faire mieux ?";
+    if(navigator.share){ navigator.share({title:"FLIT", text:txt, url:GAME_URL}).catch(()=>{}); }
+    else { try{ navigator.clipboard.writeText(txt+" "+GAME_URL); showToast("Score copié 📋"); }
+           catch(e){ showToast("Partage indisponible ici"); } }
+  }
+  function relTime(ts){
+    const d=Math.floor((Date.now()-ts)/1000);
+    if(d<60) return "à l'instant";
+    if(d<3600) return "il y a "+Math.floor(d/60)+" min";
+    if(d<86400) return "il y a "+Math.floor(d/3600)+" h";
+    if(d<172800) return "hier";
+    return "il y a "+Math.floor(d/86400)+" j";
+  }
+  const lbGrid=$("lbGrid");
+  function buildLeaderboard(){
+    lbGrid.innerHTML="";
+    if(!state.scores.length){ lbGrid.innerHTML='<div class="shopEmpty">Aucun score pour l\'instant — lance une partie ! 🐤</div>'; return; }
+    state.scores.slice(0,10).forEach((r,i)=>{
+      const row=document.createElement("div"); row.className="lbRow"+(i<3?" top":"");
+      const medal = i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1)+".";
+      const mn = MODES[r.m]?MODES[r.m].name:r.m;
+      row.innerHTML='<span class="lbRank">'+medal+'</span><span class="lbScore">'+r.s+'</span>'+
+        '<span class="lbMode">'+mn+'</span><span class="lbWhen">'+relTime(r.t)+'</span>';
+      lbGrid.appendChild(row);
+    });
+  }
+
   // ----- settings -----
   $("sfxToggle").checked=state.sfx;
   $("reduceToggle").checked=state.reduce;
@@ -919,10 +971,13 @@
       [...fpsSeg.children].forEach(x=>x.classList.toggle("on",x.dataset.fps===f.id)); }); fpsSeg.appendChild(b); });
 
   // ----- sheets open/close -----
-  function closeSheets(){ $("skinSheet").classList.remove("open"); $("decorSheet").classList.remove("open"); $("setSheet").classList.remove("open"); sheetScrim.classList.remove("on"); }
+  function closeSheets(){ ["skinSheet","decorSheet","setSheet","lbSheet"].forEach(id=>$(id).classList.remove("open")); sheetScrim.classList.remove("on"); }
   $("skinsBtn").addEventListener("click",()=>{ buildSkins(); $("skinSheet").classList.add("open"); sheetScrim.classList.add("on"); });
   $("decorBtn").addEventListener("click",()=>{ buildDecors(); $("decorSheet").classList.add("open"); sheetScrim.classList.add("on"); });
+  $("lbBtn").addEventListener("click",()=>{ buildLeaderboard(); $("lbSheet").classList.add("open"); sheetScrim.classList.add("on"); });
   $("setBtn").addEventListener("click",()=>{ $("setSheet").classList.add("open"); sheetScrim.classList.add("on"); });
+  $("lbShareBtn").addEventListener("click",()=>shareScore(state.topScore));
+  $("shareBtn").addEventListener("click",()=>shareScore(score));
   sheetScrim.addEventListener("click",closeSheets);
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeSheets));
 
