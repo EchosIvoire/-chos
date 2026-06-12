@@ -297,7 +297,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.34</div>
+      <div class="verline">V.1.35</div>
     </div>
   </div>
 
@@ -310,12 +310,11 @@
   const MODES = {
     classic: { name:"Classique", desc:"L'original",        gravity:2100, flap:-560, speed:165, gap:185, spawn:1.45, drift:0,  theme:"day",   ic:"🐤", mc1:"#5b8cff", mc2:"#6c63ff", accent:"#6c63ff", accent2:"#8b5cf6" },
     hard:    { name:"Difficile", desc:"Vif & serré",       gravity:2500, flap:-600, speed:230, gap:155, spawn:1.15, drift:0,  theme:"day",   ic:"🔥", mc1:"#ff6a3d", mc2:"#ff3d6d", accent:"#ff4d6d", accent2:"#ff7d3d" },
-    night:   { name:"Nuit",      desc:"Visibilité réduite", gravity:2100, flap:-560, speed:178, gap:180, spawn:1.4,  drift:0,  theme:"night", ic:"🌙", mc1:"#3a4d8f", mc2:"#5b3f9f", accent:"#7b8cff", accent2:"#5b3f9f" },
     zen:     { name:"Zen",       desc:"Large & lent",       gravity:1500, flap:-460, speed:122, gap:245, spawn:1.8,  drift:0,  theme:"dusk",  ic:"🍃", mc1:"#00d9b5", mc2:"#2aa37a", accent:"#00d9b5", accent2:"#2aa37a" },
-    rush:    { name:"Rush",      desc:"Accélère sans fin",  gravity:2300, flap:-580, speed:178, gap:178, spawn:1.3,  drift:0,  theme:"day",   ic:"⚡", mc1:"#ffb43a", mc2:"#ff6a3d", accent:"#ffb43a", accent2:"#ff6a3d", accelerate:true },
+    rush:    { name:"Rush",      desc:"Accélère en douceur", gravity:2000, flap:-550, speed:155, gap:200, spawn:1.5, drift:0,  theme:"day",   ic:"⚡", mc1:"#ffb43a", mc2:"#ff6a3d", accent:"#ffb43a", accent2:"#ff6a3d", accelerate:true, accelRate:4, accelMax:95 },
     chaos:   { name:"Chaos",     desc:"Trous mouvants",     gravity:2200, flap:-580, speed:198, gap:190, spawn:1.35, drift:58, theme:"dusk",  ic:"🌀", mc1:"#c46bd0", mc2:"#7b3fe4", accent:"#c46bd0", accent2:"#7b3fe4" },
   };
-  const MODE_IDS = ["classic","hard","night","zen","rush","chaos"];
+  const MODE_IDS = ["classic","hard","zen","rush","chaos"];
 
   // unlock: {t:"free"} | {t:"score",v} | {t:"games",v} | {t:"time",v(sec)} | {t:"mode",v,m}
   const SKINS = [
@@ -546,7 +545,7 @@
     }
     if(gameState!=="playing") return;
 
-    if(mode.accelerate){ curSpeed=mode.speed+Math.min(150,(t-startedAt)*7); }
+    if(mode.accelerate){ curSpeed=mode.speed+Math.min(mode.accelMax||110,(t-startedAt)*(mode.accelRate||5)); }
 
     // bird physics — per frame on the main thread: the flap is applied on the very next frame,
     // with NO compositor animation to replace → no 1-frame "ghost". Decor stays on the compositor.
