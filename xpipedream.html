@@ -67,6 +67,10 @@
   @keyframes wingFlap { 0%{transform:rotate(38deg)} 60%{transform:rotate(-14deg)} 100%{transform:rotate(0deg)} }
   #bird.rainbow #birdSvg { animation:hue 3.2s linear infinite; }
   @keyframes hue { from{filter:hue-rotate(0)} to{filter:hue-rotate(360deg)} }
+  /* accessories — hidden unless the active skin enables one */
+  #birdSvg .acc { display:none; }
+  #bird.acc-shades .acc-shades, #bird.acc-cap .acc-cap, #bird.acc-crown .acc-crown,
+  #bird.acc-halo .acc-halo, #bird.acc-party .acc-party, #bird.acc-bow .acc-bow { display:block; }
 
   /* ---------- HUD (in game) ---------- */
   #hud { position:absolute; top:calc(env(safe-area-inset-top,0px) + 16px); left:0; width:100vw; text-align:center;
@@ -119,12 +123,12 @@
     box-shadow:0 14px 36px -6px var(--accent), 0 4px 12px rgba(0,0,0,.35); transition:transform .1s; }
   .play:active { transform:scale(.97); }
 
-  .actions { display:flex; gap:12px; align-items:stretch; }
-  .icobtn { flex:0 0 auto; width:58px; height:58px; border-radius:18px; border:1px solid rgba(255,255,255,.12);
-    background:rgba(20,24,38,.6); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); font-size:24px;
+  .actions { display:flex; gap:10px; align-items:stretch; }
+  .icobtn { flex:0 0 auto; width:52px; height:52px; border-radius:16px; border:1px solid rgba(255,255,255,.12);
+    background:rgba(20,24,38,.6); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); font-size:22px;
     display:grid; place-items:center; transition:transform .1s, border-color .2s; }
   .icobtn:active { transform:scale(.93); }
-  .statchips { flex:1; display:flex; gap:10px; }
+  .statchips { flex:1; display:flex; gap:8px; min-width:0; }
   .chip { flex:1; border-radius:16px; background:rgba(20,24,38,.5); border:1px solid rgba(255,255,255,.08);
     display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px 4px; }
   .chip b { font-size:20px; font-weight:800; }
@@ -150,9 +154,23 @@
   .skinCell .sw { width:42px; height:42px; border-radius:50%; box-shadow:inset -3px -4px rgba(0,0,0,.2); }
   .skinCell .nm { font-size:10.5px; color:#cdd4f0; font-weight:600; }
   .skinCell.lock { opacity:.55; }
+  .skinCell .sw { position:relative; }
+  .skinCell .accBadge { position:absolute; right:-6px; top:-6px; font-size:14px; filter:drop-shadow(0 1px 2px rgba(0,0,0,.5)); }
   .skinCell .lk { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:2px; background:rgba(10,12,18,.55); border-radius:16px; font-size:18px; }
-  .skinCell .lk span { font-size:10px; font-weight:700; color:#ffd27a; }
+    gap:2px; background:rgba(10,12,18,.6); border-radius:16px; font-size:18px; padding:4px; text-align:center; }
+  .skinCell .lk span { font-size:9.5px; font-weight:700; color:#ffd27a; line-height:1.1; }
+
+  /* decor picker */
+  #decorGrid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .decorCell { border-radius:16px; overflow:hidden; border:2px solid transparent; background:rgba(255,255,255,.05); position:relative; }
+  .decorCell.sel { border-color:#fff; }
+  .decorCell.lock { opacity:.55; }
+  .decorCell .dsw { height:78px; display:flex; align-items:flex-end; justify-content:center; gap:16px; }
+  .decorCell .dsw i { width:13px; height:46px; border-radius:3px 3px 0 0; display:block; box-shadow:inset -2px 0 rgba(0,0,0,.2); }
+  .decorCell .nm { font-size:12px; color:#dfe5f8; font-weight:700; text-align:center; padding:7px 4px; }
+  .decorCell .lk { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:3px; background:rgba(10,12,18,.62); font-size:20px; }
+  .decorCell .lk span { font-size:11px; font-weight:700; color:#ffd27a; }
 
   .setRow { display:flex; align-items:center; justify-content:space-between; padding:14px 4px; border-bottom:1px solid rgba(255,255,255,.07); }
   .setRow .lbl b { font-size:16px; font-weight:700; display:block; }
@@ -207,6 +225,13 @@
         <circle  class="eyeW"  cx="34" cy="15" r="6.5"/>
         <circle  class="eyeP"  cx="36" cy="15" r="3.2"/>
         <polygon class="beak"  points="40,17 51,21 40,25"/>
+        <!-- accessories (shown per skin) -->
+        <g class="acc acc-shades"><rect x="28" y="10.5" width="16.5" height="8" rx="3" fill="#15171f"/><rect x="29.6" y="12" width="5.5" height="5" rx="2" fill="#33405e"/><line x1="28.5" y1="12.6" x2="23.5" y2="13.6" stroke="#15171f" stroke-width="1.6"/></g>
+        <g class="acc acc-cap"><path d="M8.5,14 A15,15 0 0 1 36,11.5 L36,14 Z" fill="#1f9c72"/><rect x="7.5" y="13.4" width="30" height="3" rx="1.5" fill="#177a59"/><rect x="35.5" y="12.4" width="12.5" height="3.4" rx="1.7" fill="#177a59"/><circle cx="22" cy="3.6" r="1.7" fill="#bff5e4"/></g>
+        <g class="acc acc-crown"><path d="M11,11 L15,3.5 L19.5,8.5 L23,2 L26.5,8.5 L31,3.5 L35,11 Z" fill="#ffd23f" stroke="#caa20e" stroke-width="0.6" stroke-linejoin="round"/><circle cx="23" cy="5" r="1.2" fill="#ff5db1"/></g>
+        <g class="acc acc-halo"><ellipse cx="23" cy="2.5" rx="12.5" ry="3.3" fill="none" stroke="#ffe27a" stroke-width="2.6"/></g>
+        <g class="acc acc-party"><path d="M23,-7 L15.5,9 L30.5,9 Z" fill="#ff5db1"/><path d="M16.5,5.5 h13 M15.5,8.8 h15" stroke="#fff" stroke-width="1.1" opacity="0.55"/><circle cx="23" cy="-7" r="2.1" fill="#ffe27a"/></g>
+        <g class="acc acc-bow"><path d="M18,30 L24,33 L18,36 Z" fill="#ff4d6d"/><path d="M30,30 L24,33 L30,36 Z" fill="#ff4d6d"/><rect x="22.4" y="31.4" width="3.2" height="3.2" rx="0.9" fill="#c41f43"/></g>
       </svg>
     </div>
     <div id="hud"><div id="score">0</div></div>
@@ -222,6 +247,7 @@
       <button class="play" id="playBtn">▶ JOUER</button>
       <div class="actions">
         <button class="icobtn" id="skinsBtn">🎨</button>
+        <button class="icobtn" id="decorBtn">🌅</button>
         <button class="icobtn" id="setBtn">⚙️</button>
         <div class="statchips">
           <div class="chip"><b id="cBest">0</b><span>RECORD</span></div>
@@ -252,7 +278,13 @@
       <div class="sheetGrip"></div>
       <div class="sheetHead"><h2>Skins</h2><button class="x" data-close>✕</button></div>
       <div class="skinGrid" id="skinGrid"></div>
-      <div class="verline">Débloque des skins en battant ton meilleur score.</div>
+      <div class="verline">Débloque des skins : score, parties, temps de jeu, modes…</div>
+    </div>
+    <div class="sheet" id="decorSheet">
+      <div class="sheetGrip"></div>
+      <div class="sheetHead"><h2>Décors</h2><button class="x" data-close>✕</button></div>
+      <div id="decorGrid"></div>
+      <div class="verline">Le décor (ciel + tuyaux) s'applique à tous les modes.</div>
     </div>
     <div class="sheet" id="setSheet">
       <div class="sheetGrip"></div>
@@ -265,7 +297,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.33</div>
+      <div class="verline">V.1.34</div>
     </div>
   </div>
 
@@ -285,15 +317,30 @@
   };
   const MODE_IDS = ["classic","hard","night","zen","rush","chaos"];
 
+  // unlock: {t:"free"} | {t:"score",v} | {t:"games",v} | {t:"time",v(sec)} | {t:"mode",v,m}
   const SKINS = [
-    { id:"neon",    name:"Néon",    body:"#6c63ff", glow:"#8b7bff", belly:"#b3aaff", dark:"#4a42c9", unlock:0 },
-    { id:"teal",    name:"Aqua",    body:"#00d9b5", glow:"#3ff0d4", belly:"#9bf5e6", dark:"#069c84", unlock:0 },
-    { id:"gold",    name:"Or",      body:"#f5a623", glow:"#ffc857", belly:"#ffe0a0", dark:"#c47e0e", unlock:0 },
-    { id:"classic", name:"Classic", body:"#f7d51d", glow:"#fff06a", belly:"#fff5b0", dark:"#c9a800", unlock:5 },
-    { id:"crimson", name:"Crimson", body:"#ff4d6d", glow:"#ff7d97", belly:"#ffc0cc", dark:"#c41f43", unlock:15 },
-    { id:"ghost",   name:"Spectre", body:"#cfd6ff", glow:"#ffffff", belly:"#eef1ff", dark:"#9aa6d6", unlock:30 },
-    { id:"matrix",  name:"Matrix",  body:"#39ff14", glow:"#8cff7a", belly:"#c6ffba", dark:"#1faf0a", unlock:50 },
-    { id:"rainbow", name:"Prisme",  body:"#ff5db1", glow:"#ffffff", belly:"#ffffff", dark:"#c43d8e", unlock:80 },
+    { id:"neon",    name:"Néon",     body:"#6c63ff", glow:"#8b7bff", belly:"#b3aaff", dark:"#4a42c9", unlock:{t:"free"} },
+    { id:"teal",    name:"Aqua",     body:"#00d9b5", glow:"#3ff0d4", belly:"#9bf5e6", dark:"#069c84", unlock:{t:"free"} },
+    { id:"gold",    name:"Or",       body:"#f5a623", glow:"#ffc857", belly:"#ffe0a0", dark:"#c47e0e", unlock:{t:"free"} },
+    { id:"classic", name:"Classic",  body:"#f7d51d", glow:"#fff06a", belly:"#fff5b0", dark:"#c9a800", unlock:{t:"score",v:5} },
+    { id:"crimson", name:"Crimson",  body:"#ff4d6d", glow:"#ff7d97", belly:"#ffc0cc", dark:"#c41f43", unlock:{t:"score",v:15} },
+    { id:"cool",    name:"Cool",     body:"#ffcf3a", glow:"#ffe27a", belly:"#fff0b8", dark:"#c79a10", acc:"shades", unlock:{t:"score",v:20} },
+    { id:"ocean",   name:"Océan",    body:"#2e8bff", glow:"#7ab8ff", belly:"#bcdcff", dark:"#1b5fb8", unlock:{t:"score",v:25} },
+    { id:"dapper",  name:"Chic",     body:"#e8eefc", glow:"#ffffff", belly:"#ffffff", dark:"#aab4cc", acc:"bow", unlock:{t:"score",v:35} },
+    { id:"ghost",   name:"Spectre",  body:"#cfd6ff", glow:"#ffffff", belly:"#eef1ff", dark:"#9aa6d6", unlock:{t:"score",v:40} },
+    { id:"matrix",  name:"Matrix",   body:"#39ff14", glow:"#8cff7a", belly:"#c6ffba", dark:"#1faf0a", unlock:{t:"score",v:55} },
+    { id:"king",    name:"Roi",      body:"#ffd23f", glow:"#fff2a8", belly:"#fff6cf", dark:"#caa20e", acc:"crown", unlock:{t:"score",v:65} },
+    { id:"shadow",  name:"Ombre",    body:"#2b2f3a", glow:"#555b6e", belly:"#3a3f4d", dark:"#15171e", unlock:{t:"score",v:80} },
+    { id:"rainbow", name:"Prisme",   body:"#ff5db1", glow:"#ffffff", belly:"#ffffff", dark:"#c43d8e", unlock:{t:"score",v:110} },
+    { id:"mint",    name:"Menthe",   body:"#5ef2c0", glow:"#aef7e1", belly:"#d6fff2", dark:"#2ab98c", unlock:{t:"games",v:10} },
+    { id:"cap",     name:"Casquette",body:"#3ad29f", glow:"#7eebc6", belly:"#bff5e4", dark:"#1f9c72", acc:"cap", unlock:{t:"games",v:25} },
+    { id:"rose",    name:"Rose",     body:"#ff7eb6", glow:"#ffb3d6", belly:"#ffd9ec", dark:"#d44e8a", unlock:{t:"games",v:50} },
+    { id:"party",   name:"Fiesta",   body:"#ff5db1", glow:"#ffa8d6", belly:"#ffd2ea", dark:"#c43d8e", acc:"party", unlock:{t:"games",v:100} },
+    { id:"sunsetB", name:"Coucher",  body:"#ff8a3d", glow:"#ffc07a", belly:"#ffe0bf", dark:"#d45f1e", unlock:{t:"time",v:600} },
+    { id:"angel",   name:"Ange",     body:"#eaf3ff", glow:"#ffffff", belly:"#ffffff", dark:"#b9c9e6", acc:"halo", unlock:{t:"time",v:1800} },
+    { id:"cosmos",  name:"Cosmos",   body:"#7b5bff", glow:"#b9a3ff", belly:"#ddd2ff", dark:"#4a32c9", unlock:{t:"time",v:3600} },
+    { id:"flame",   name:"Flamme",   body:"#ff5a3c", glow:"#ff9a6a", belly:"#ffd0bf", dark:"#c4321a", unlock:{t:"mode",v:15,m:"rush"} },
+    { id:"chaosX",  name:"Chaos",    body:"#c46bd0", glow:"#e3a3ff", belly:"#f0d6ff", dark:"#7b3fe4", unlock:{t:"mode",v:15,m:"chaos"} },
   ];
 
   const THEMES = {
@@ -302,6 +349,18 @@
     dusk:  { sky1:"#2a1d3a", sky2:"#161024", pipe:"#c46bd0", pipeDark:"#8e3fa0", ground:"#1a1426", groundTop:"#281d38", stars:true,  vignette:false },
   };
 
+  // Selectable environments (sky + pipes). Chosen globally; overrides the look of every mode.
+  const DECORS = [
+    { id:"sunny",   name:"Ensoleillé", emoji:"☀️", sky1:"#4aa8ee", sky2:"#bfe8fb", pipe:"#5bc46a", pipeDark:"#3f9e4e", stars:false, vignette:false, unlock:{t:"free"} },
+    { id:"meadow",  name:"Prairie",    emoji:"🌳", sky1:"#7ec8f0", sky2:"#d8f3c0", pipe:"#6fb33e", pipeDark:"#4d8a26", stars:false, vignette:false, unlock:{t:"score",v:10} },
+    { id:"sunset",  name:"Coucher",    emoji:"🌇", sky1:"#ff8a5c", sky2:"#ffd9a0", pipe:"#9c5bd0", pipeDark:"#6e3fa0", stars:false, vignette:false, unlock:{t:"score",v:25} },
+    { id:"dusk",    name:"Crépuscule", emoji:"🌆", sky1:"#2a1d3a", sky2:"#6a3f7a", pipe:"#c46bd0", pipeDark:"#8e3fa0", stars:true,  vignette:false, unlock:{t:"games",v:20} },
+    { id:"night",   name:"Nuit",       emoji:"🌙", sky1:"#0a0d18", sky2:"#1a2547", pipe:"#3a4d8f", pipeDark:"#243066", stars:true,  vignette:true,  unlock:{t:"score",v:50} },
+    { id:"aurora",  name:"Aurore",     emoji:"🌌", sky1:"#06283d", sky2:"#1b6b5a", pipe:"#37e0c0", pipeDark:"#1f9c84", stars:true,  vignette:false, unlock:{t:"score",v:75} },
+    { id:"volcano", name:"Volcan",     emoji:"🌋", sky1:"#2a0f0f", sky2:"#7a2a16", pipe:"#3a3f4d", pipeDark:"#1f2128", stars:false, vignette:true,  unlock:{t:"games",v:75} },
+    { id:"galaxy",  name:"Galaxie",    emoji:"🪐", sky1:"#0b0420", sky2:"#3a1d6e", pipe:"#7b5bff", pipeDark:"#4a32c9", stars:true,  vignette:true,  unlock:{t:"time",v:1800} },
+  ];
+
   const FPS_MODES = [ {id:"60",cap:60}, {id:"120",cap:120}, {id:"max",cap:0} ];
 
   const LS = {
@@ -309,15 +368,32 @@
     set(k,v){ try{ localStorage.setItem("xpd_"+k, JSON.stringify(v)); }catch(e){} },
   };
   const state = {
-    mode: LS.get("mode","classic"), skin: LS.get("skin","neon"), fps: LS.get("fps","120"),
+    mode: LS.get("mode","classic"), skin: LS.get("skin","neon"), decor: LS.get("decor","sunny"), fps: LS.get("fps","120"),
     sfx: LS.get("sfx",true), reduce: LS.get("reduce",false),
-    best: LS.get("best",{}), games: LS.get("games",0), topScore: LS.get("topScore",0),
+    best: LS.get("best",{}), games: LS.get("games",0), topScore: LS.get("topScore",0), playTime: LS.get("playTime",0),
   };
   if (!MODES[state.mode]) state.mode = "classic";
   if (!SKINS.find(s=>s.id===state.skin)) state.skin = "neon";
+  if (!DECORS.find(d=>d.id===state.decor)) state.decor = "sunny";
   const bestFor = m => state.best[m] || 0;
-  const skinUnlocked = s => state.topScore >= s.unlock;
-  const curSkin = () => SKINS.find(s=>s.id===state.skin) || SKINS[0];
+  function isUnlocked(u){
+    if(!u || u.t==="free") return true;
+    if(u.t==="score") return state.topScore >= u.v;
+    if(u.t==="games") return state.games   >= u.v;
+    if(u.t==="time")  return state.playTime>= u.v;
+    if(u.t==="mode")  return bestFor(u.m)  >= u.v;
+    return true;
+  }
+  function unlockLabel(u){
+    if(!u || u.t==="free") return "";
+    if(u.t==="score") return "Score "+u.v;
+    if(u.t==="games") return u.v+" parties";
+    if(u.t==="time")  return Math.round(u.v/60)+" min de jeu";
+    if(u.t==="mode")  return u.v+" en "+(MODES[u.m]?MODES[u.m].name:u.m);
+    return "";
+  }
+  const curSkin  = () => SKINS.find(s=>s.id===state.skin) || SKINS[0];
+  const curDecor = () => DECORS.find(d=>d.id===state.decor) || DECORS[0];
 
   // ===========================================================================
   // DOM
@@ -365,18 +441,21 @@
   // ===========================================================================
   // THEME + SKIN
   // ===========================================================================
-  function applyTheme(themeKey){
-    const t=THEMES[themeKey]||THEMES.day, r=document.documentElement.style;
-    r.setProperty("--sky1",t.sky1); r.setProperty("--sky2",t.sky2);
-    r.setProperty("--pipe",t.pipe); r.setProperty("--pipeDark",t.pipeDark);
-    r.setProperty("--ground",t.ground); r.setProperty("--groundTop",t.groundTop);
-    stars.classList.toggle("on", t.stars); vignette.classList.toggle("on", t.vignette && gameState==="playing");
+  // The chosen DECOR (global) drives the sky + pipe colours + stars/vignette for every mode.
+  function applyDecor(){
+    const d=curDecor(), r=document.documentElement.style;
+    r.setProperty("--sky1",d.sky1); r.setProperty("--sky2",d.sky2);
+    r.setProperty("--pipe",d.pipe); r.setProperty("--pipeDark",d.pipeDark);
+    stars.classList.toggle("on", d.stars);
+    vignette.classList.toggle("on", d.vignette && gameState==="playing");
   }
   function applyAccent(m){ const r=document.documentElement.style; r.setProperty("--accent",m.accent); r.setProperty("--accent2",m.accent2||m.accent); }
+  const ACC_LIST = ["shades","cap","bow","crown","halo","party"];
   function applySkin(){
     const s=curSkin(), r=document.documentElement.style;
     r.setProperty("--bBody",s.body); r.setProperty("--bGlow",s.glow); r.setProperty("--bBelly",s.belly); r.setProperty("--bDark",s.dark);
     birdEl.classList.toggle("rainbow", s.id==="rainbow");
+    ACC_LIST.forEach(a=>birdEl.classList.toggle("acc-"+a, s.acc===a));
   }
   function buildStars(){
     if(stars.dataset.built && stars.childElementCount) { /* reposition */ }
@@ -498,7 +577,7 @@
   function selectMode(id){
     if(!MODES[id]) return;
     state.mode=id; LS.set("mode",id); mode=MODES[id];
-    applyTheme(mode.theme); applyAccent(mode);
+    applyDecor(); applyAccent(mode);
     if(gameState==="menu"){ startGround(mode.speed*0.7); }
     updateDots();
   }
@@ -509,7 +588,7 @@
     floorFill.classList.add("playing");   // no ground band; floorFill blends the bottom with the sky
     clearPipes(); score=0; scoreEl.textContent="0"; spawnAcc=0; lastT=0;
     gameState="playing"; startedAt=now(); curSpeed=mode.speed;
-    applyTheme(mode.theme); vignette.classList.toggle("on", THEMES[mode.theme].vignette);
+    applyDecor(); vignette.classList.toggle("on", curDecor().vignette);
     startGround(mode.speed);
     if(bobAnim){ bobAnim.cancel(); bobAnim=null; }
     bird.y=VH*0.45; bird.vy=mode.flap; bird.rot=0;   // first flap on launch
@@ -535,12 +614,15 @@
     if(navigator.vibrate && state.sfx){ try{ navigator.vibrate(30); }catch(e){} }
     hud.classList.remove("on");
 
-    state.games++; LS.set("games",state.games);
-    const prevBest=bestFor(state.mode), isBest=score>prevBest;
-    if(isBest){ state.best[state.mode]=score; LS.set("best",state.best); }
-    const prevTop=state.topScore;
-    if(score>state.topScore){ state.topScore=score; LS.set("topScore",state.topScore); }
-    checkUnlocks(prevTop, state.topScore);
+    const before = unlockedIds();             // snapshot before committing this run's stats
+    state.games++;
+    state.playTime += Math.max(0, Math.min(3600, Math.round(now()-startedAt)));
+    const isBest = score>bestFor(state.mode);
+    if(isBest) state.best[state.mode]=score;
+    if(score>state.topScore) state.topScore=score;
+    LS.set("games",state.games); LS.set("playTime",state.playTime);
+    LS.set("best",state.best);   LS.set("topScore",state.topScore);
+    notifyUnlocks(before);
 
     $("oScore").textContent=score; $("oBest").textContent=bestFor(state.mode);
     $("newBest").style.display=isBest?"block":"none";
@@ -550,7 +632,7 @@
   function toMenu(){
     over.classList.remove("on"); gameState="menu";
     clearPipes(); spawnAcc=0; lastT=0;
-    applyTheme(mode.theme); vignette.classList.remove("on");
+    applyDecor(); vignette.classList.remove("on");
     startGround(mode.speed*0.7);
     idleBob();
     ground.classList.add("hideGround"); floorFill.classList.remove("playing");   // hide the ground band behind the menu
@@ -558,9 +640,17 @@
     refreshStats();
   }
 
-  function checkUnlocks(prev,nowTop){
-    const just=SKINS.filter(s=>s.unlock>prev && s.unlock<=nowTop);
-    if(just.length){ showToast("🎉 Skin débloqué : "+just[just.length-1].name+" !"); }
+  function unlockedIds(){
+    const set=new Set();
+    SKINS.forEach(x=>{ if(isUnlocked(x.unlock)) set.add("s_"+x.id); });
+    DECORS.forEach(x=>{ if(isUnlocked(x.unlock)) set.add("d_"+x.id); });
+    return set;
+  }
+  function notifyUnlocks(before){
+    const names=[];
+    SKINS.forEach(x=>{ if(isUnlocked(x.unlock) && !before.has("s_"+x.id)) names.push("Skin "+x.name); });
+    DECORS.forEach(x=>{ if(isUnlocked(x.unlock) && !before.has("d_"+x.id)) names.push("Décor "+x.name); });
+    if(names.length) showToast("🎉 Débloqué : "+names.join(" · "));
   }
   let toastT=0;
   function showToast(msg){ toast.textContent=msg; toast.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove("on"),2600); }
@@ -603,19 +693,34 @@
     [...carousel.children].forEach(c=>{ const em=c.querySelector("em"); if(em) em.textContent="Record : "+bestFor(c.dataset.id); }); }
 
   // ----- skins sheet -----
-  const skinGrid=$("skinGrid");
+  const skinGrid=$("skinGrid"), decorGrid=$("decorGrid");
+  const ACC_EMOJI = { shades:"🕶️", cap:"🧢", bow:"🎀", crown:"👑", halo:"😇", party:"🎉" };
   function buildSkins(){
     skinGrid.innerHTML="";
     SKINS.forEach(s=>{
-      const unlocked=skinUnlocked(s), cell=document.createElement("div");
+      const unlocked=isUnlocked(s.unlock), cell=document.createElement("div");
       cell.className="skinCell"+(s.id===state.skin?" sel":"")+(unlocked?"":" lock");
       const grad = s.id==="rainbow"
         ? "conic-gradient(from 0deg, #ff5db1,#ffd23f,#39ff14,#00d9b5,#6c63ff,#ff5db1)"
         : "radial-gradient(circle at 36% 32%, "+s.glow+", "+s.body+" 62%, "+s.dark+")";
-      cell.innerHTML='<div class="sw" style="background:'+grad+'"></div><div class="nm">'+s.name+'</div>'+
-        (unlocked?"":'<div class="lk">🔒<span>'+s.unlock+' pts</span></div>');
+      const badge = s.acc ? '<span class="accBadge">'+(ACC_EMOJI[s.acc]||"")+'</span>' : "";
+      cell.innerHTML='<div class="sw" style="background:'+grad+'">'+badge+'</div><div class="nm">'+s.name+'</div>'+
+        (unlocked?"":'<div class="lk">🔒<span>'+unlockLabel(s.unlock)+'</span></div>');
       if(unlocked) cell.addEventListener("click",()=>{ state.skin=s.id; LS.set("skin",s.id); applySkin(); buildSkins(); });
       skinGrid.appendChild(cell);
+    });
+  }
+  function buildDecors(){
+    decorGrid.innerHTML="";
+    DECORS.forEach(d=>{
+      const unlocked=isUnlocked(d.unlock), cell=document.createElement("div");
+      cell.className="decorCell"+(d.id===state.decor?" sel":"")+(unlocked?"":" lock");
+      cell.innerHTML='<div class="dsw" style="background:linear-gradient(180deg,'+d.sky1+','+d.sky2+')">'+
+          '<i style="background:'+d.pipe+'"></i><i style="background:'+d.pipe+'"></i></div>'+
+        '<div class="nm">'+d.emoji+' '+d.name+'</div>'+
+        (unlocked?"":'<div class="lk">🔒<span>'+unlockLabel(d.unlock)+'</span></div>');
+      if(unlocked) cell.addEventListener("click",()=>{ state.decor=d.id; LS.set("decor",d.id); applyDecor(); buildDecors(); });
+      decorGrid.appendChild(cell);
     });
   }
 
@@ -631,9 +736,9 @@
       [...fpsSeg.children].forEach(x=>x.classList.toggle("on",x.dataset.fps===f.id)); }); fpsSeg.appendChild(b); });
 
   // ----- sheets open/close -----
-  function openSheet(el){ buildSkins(); el.classList.add("open"); sheetScrim.classList.add("on"); }
-  function closeSheets(){ $("skinSheet").classList.remove("open"); $("setSheet").classList.remove("open"); sheetScrim.classList.remove("on"); }
+  function closeSheets(){ $("skinSheet").classList.remove("open"); $("decorSheet").classList.remove("open"); $("setSheet").classList.remove("open"); sheetScrim.classList.remove("on"); }
   $("skinsBtn").addEventListener("click",()=>{ buildSkins(); $("skinSheet").classList.add("open"); sheetScrim.classList.add("on"); });
+  $("decorBtn").addEventListener("click",()=>{ buildDecors(); $("decorSheet").classList.add("open"); sheetScrim.classList.add("on"); });
   $("setBtn").addEventListener("click",()=>{ $("setSheet").classList.add("open"); sheetScrim.classList.add("on"); });
   sheetScrim.addEventListener("click",closeSheets);
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeSheets));
