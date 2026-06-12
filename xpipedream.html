@@ -54,6 +54,25 @@
     background:radial-gradient(60% 55% at var(--bx,28%) var(--by,45%), transparent 0%, rgba(0,0,0,.0) 30%, rgba(0,0,0,.78) 100%); }
   #vignette.on { opacity:1; }
 
+  /* ---------- COINS / PARTICLES / POPUPS (juice) ---------- */
+  .coin { position:absolute; width:24px; height:24px; margin:-12px 0 0 -12px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff6c0, #ffd23f 55%, #e0a400); border:2px solid #ffe680;
+    box-shadow:0 0 9px rgba(255,210,63,.65), inset -2px -3px rgba(0,0,0,.22); z-index:4;
+    display:flex; align-items:center; justify-content:center; transition:transform .16s, opacity .16s; }
+  .coin::after { content:'★'; font-size:11px; color:#b8860b; }
+  .coin.taken { transform:scale(2); opacity:0; }
+  .particle { position:absolute; width:8px; height:8px; border-radius:50%; pointer-events:none; z-index:7; will-change:transform; }
+  .popup { position:absolute; z-index:9; font-weight:900; pointer-events:none; white-space:nowrap;
+    text-shadow:0 2px 8px rgba(0,0,0,.55); will-change:transform; }
+  #coinHud { position:absolute; top:calc(env(safe-area-inset-top,0px) + 22px); right:16px; z-index:8;
+    font-weight:800; font-size:20px; color:#ffe27a; text-shadow:0 2px 8px rgba(0,0,0,.55);
+    opacity:0; transition:opacity .25s; }
+  #coinHud.on { opacity:1; }
+  #menuCoins { position:absolute; top:calc(env(safe-area-inset-top,0px) + 14px); right:14px; z-index:13;
+    font-weight:800; font-size:15px; color:#ffe27a; background:rgba(20,24,38,.6);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); padding:6px 11px; border-radius:20px;
+    border:1px solid rgba(255,210,63,.3); }
+
   /* ---------- BIRD (SVG, skinnable) ---------- */
   #bird { position:absolute; left:0; top:0; width:48px; height:40px; margin:-20px 0 0 -24px; z-index:7; }
   #birdSvg { display:block; overflow:visible; }
@@ -195,6 +214,7 @@
   #over.on { opacity:1; pointer-events:auto; }
   #over .newbest { font-size:15px; font-weight:800; color:#ffd27a; letter-spacing:1px; }
   #over h2 { font-size:30px; font-weight:900; }
+  #oCoins { font-size:18px; font-weight:800; color:#ffe27a; }
   #over .ostats { display:flex; gap:14px; }
   #over .ostat { background:rgba(255,255,255,.07); border-radius:18px; padding:16px 26px; text-align:center; min-width:110px; }
   #over .ostat b { font-size:34px; font-weight:900; display:block; }
@@ -235,12 +255,14 @@
       </svg>
     </div>
     <div id="hud"><div id="score">0</div></div>
+    <div id="coinHud">🪙 0</div>
 
     <div class="scrim" id="scrimTop"></div>
     <div class="scrim" id="scrimBot"></div>
 
     <!-- MENU -->
     <div id="menu">
+      <div id="menuCoins">🪙 0</div>
       <div class="brand"><h1>XPIPEDREAM</h1><p>Flappy arcade</p></div>
       <div class="carousel" id="carousel"></div>
       <div class="dots" id="dots"></div>
@@ -264,6 +286,7 @@
         <div class="ostat"><b id="oScore">0</b><span>SCORE</span></div>
         <div class="ostat"><b id="oBest">0</b><span>RECORD</span></div>
       </div>
+      <div id="oCoins">🪙 +0</div>
       <div class="obtns">
         <button class="play" id="retryBtn">↻ REJOUER</button>
         <button class="btn-ghost" id="toMenuBtn">Menu</button>
@@ -297,7 +320,7 @@
         <div class="lbl" style="margin-bottom:10px;"><b>Fluidité</b><span>Limite d'images par seconde</span></div>
         <div class="seg" id="fpsSeg"></div>
       </div>
-      <div class="verline">V.1.35</div>
+      <div class="verline">V.1.36</div>
     </div>
   </div>
 
@@ -370,6 +393,7 @@
     mode: LS.get("mode","classic"), skin: LS.get("skin","neon"), decor: LS.get("decor","sunny"), fps: LS.get("fps","120"),
     sfx: LS.get("sfx",true), reduce: LS.get("reduce",false),
     best: LS.get("best",{}), games: LS.get("games",0), topScore: LS.get("topScore",0), playTime: LS.get("playTime",0),
+    coins: LS.get("coins",0),
   };
   if (!MODES[state.mode]) state.mode = "classic";
   if (!SKINS.find(s=>s.id===state.skin)) state.skin = "neon";
@@ -402,6 +426,7 @@
         ground=$("ground"), stripes=$("groundStripes"), floorFill=$("floorFill"),
         stars=$("stars"), vignette=$("vignette"), hud=$("hud"), scoreEl=$("score"),
         menu=$("menu"), over=$("over"), toast=$("toast"),
+        coinHudEl=$("coinHud"), menuCoinsEl=$("menuCoins"), oCoinsEl=$("oCoins"),
         scrimTop=$("scrimTop"), scrimBot=$("scrimBot"), sheetScrim=$("sheetScrim");
 
   // ===========================================================================
@@ -413,13 +438,15 @@
   const sndFlap =()=>beep(620,.09,"square",.05);
   const sndScore=()=>{ beep(880,.08,"triangle",.06); setTimeout(()=>beep(1170,.09,"triangle",.05),60); };
   const sndHit  =()=>{ beep(180,.18,"sawtooth",.08); setTimeout(()=>beep(90,.25,"sawtooth",.07),70); };
+  const sndCoin =()=>{ beep(1320,.06,"triangle",.05); setTimeout(()=>beep(1760,.07,"triangle",.045),45); };
+  const sndNear =()=>{ beep(880,.05,"square",.05); setTimeout(()=>beep(1500,.11,"square",.05),55); };
 
   // ===========================================================================
   // SIZING
   // ===========================================================================
   let VW, VH, GROUNDY;
-  const GROUND_H=28, PIPE_W=64;
-  let BIRD_X, BIRD_R=19;
+  const GROUND_H=28, PIPE_W=64, COIN_R=13;
+  let BIRD_X, BIRD_R=19, runCoins=0;
   // Measure the world from real rendered geometry. GROUNDY = the ground's actual top edge on
   // screen (via getBoundingClientRect), so the landing line === the visible ground, whatever the
   // device safe-areas do. The ground itself extends down past the home indicator (no black gap).
@@ -511,13 +538,17 @@
     const bot=document.createElement("div"); bot.className="seg"; bot.style.top=(base+half)+"px"; bot.style.height=(VH-(base+half)+240)+"px";
     const bl=document.createElement("div"); bl.className="lip"; bl.style.top=(base+half)+"px";
     inner.appendChild(top); inner.appendChild(bot); inner.appendChild(tl); inner.appendChild(bl);
+    let coinEl=null;
+    if(forGame){ coinEl=document.createElement("div"); coinEl.className="coin";
+      coinEl.style.left=(PIPE_W/2)+"px"; coinEl.style.top=base+"px"; inner.appendChild(coinEl); }
     wrap.appendChild(inner); scene.appendChild(wrap);
 
     const speed = mode.accelerate ? curSpeed : mode.speed;
     const dur=(VW+PIPE_W)/speed*1000;
     const anim=wrap.animate([{transform:"translateX("+VW+"px)"},{transform:"translateX("+(-PIPE_W)+"px)"}],
       {duration:dur,easing:"linear",fill:"forwards"});
-    const p={ el:wrap, anim, base, half, speed, t0:now(), passed:false, drift:0, driftPeriod:0, phase:0 };
+    const p={ el:wrap, anim, base, half, speed, t0:now(), passed:false, drift:0, driftPeriod:0, phase:0,
+              coinEl, coinTaken:false, minClear:Infinity };
     if(drift>0){
       const period=2.4, ph=Math.random()*Math.PI*2; p.drift=drift; p.driftPeriod=period; p.phase=ph;
       const kf=[]; const M=24;
@@ -531,6 +562,32 @@
   function pipeCenter(p,t){ return p.drift>0 ? p.base + p.drift*Math.sin((t-p.t0)*2*Math.PI/p.driftPeriod+p.phase) : p.base; }
   function removePipe(p){ const i=pipes.indexOf(p); if(i>=0) pipes.splice(i,1); if(p.el.parentNode) p.el.parentNode.removeChild(p.el); }
   function clearPipes(){ pipes.forEach(p=>{ p.anim.cancel(); if(p.el.parentNode) p.el.parentNode.removeChild(p.el); }); pipes=[]; }
+
+  // ---- juice: particles, floating popups, coin pickups (DOM/compositor, not canvas) ----
+  function spawnParticles(x,y,color,n){
+    if(state.reduce) return;
+    for(let i=0;i<n;i++){
+      const el=document.createElement("div"); el.className="particle"; el.style.background=color;
+      el.style.left=x+"px"; el.style.top=y+"px"; scene.appendChild(el);
+      const a=Math.random()*Math.PI*2, d=22+Math.random()*46, dx=Math.cos(a)*d, dy=Math.sin(a)*d;
+      const an=el.animate(
+        [{transform:"translate(0,0) scale(1)",opacity:1},{transform:"translate("+dx+"px,"+(dy+34)+"px) scale(0)",opacity:0}],
+        {duration:480+Math.random()*260, easing:"cubic-bezier(.2,.6,.3,1)", fill:"forwards"});
+      an.onfinish=()=>el.remove();
+    }
+  }
+  function popup(text,x,y,color){
+    const el=document.createElement("div"); el.className="popup"; el.textContent=text;
+    el.style.left=x+"px"; el.style.top=y+"px"; el.style.color=color||"#fff"; el.style.fontSize="22px";
+    scene.appendChild(el);
+    const an=el.animate(
+      [{transform:"translate(-50%,-50%) scale(.6)",opacity:0},
+       {transform:"translate(-50%,-130%) scale(1.1)",opacity:1,offset:.3},
+       {transform:"translate(-50%,-240%) scale(1)",opacity:0}],
+      {duration:850, easing:"ease-out", fill:"forwards"});
+    an.onfinish=()=>el.remove();
+  }
+  function addRunCoins(n){ runCoins+=n; coinHudEl.textContent="🪙 "+runCoins; }
 
   // ---- main loop (handles attract spawning + gameplay collision) ----
   function loop(){
@@ -561,11 +618,28 @@
     if(spawnAcc>=every){ spawnAcc=0; spawnPipe(true); }
 
     for(let i=pipes.length-1;i>=0;i--){
-      const p=pipes[i], x=pipeX(p,t);
-      if(!p.passed && x+PIPE_W<BIRD_X){ p.passed=true; score++; scoreEl.textContent=score; sndScore(); }
+      const p=pipes[i], x=pipeX(p,t), c=pipeCenter(p,t);
+      // coin pickup (coin sits at the gap centre)
+      if(p.coinEl && !p.coinTaken){
+        const cx=x+PIPE_W/2;
+        if(Math.abs(BIRD_X-cx) < BIRD_R+COIN_R && Math.abs(bird.y-c) < BIRD_R+COIN_R+4){
+          p.coinTaken=true; p.coinEl.classList.add("taken");
+          addRunCoins(1); spawnParticles(cx, c, "#ffd23f", 7); sndCoin();
+        }
+      }
+      // while overlapping horizontally: track nearest clearance + check collision
       if(BIRD_X+BIRD_R>x && BIRD_X-BIRD_R<x+PIPE_W){
-        const c=pipeCenter(p,t);
+        const clear = Math.min(bird.y-(c-p.half), (c+p.half)-bird.y) - BIRD_R;
+        if(clear < p.minClear) p.minClear = clear;
         if(bird.y-BIRD_R<c-p.half || bird.y+BIRD_R>c+p.half) return die();
+      }
+      // scoring (+ near-miss bonus)
+      if(!p.passed && x+PIPE_W<BIRD_X){
+        p.passed=true; score++; scoreEl.textContent=score; sndScore();
+        if(p.minClear>=0 && p.minClear<13){
+          addRunCoins(2); sndNear(); popup("SUPER ! +2", BIRD_X, bird.y-30, "#ffe27a");
+          spawnParticles(BIRD_X+24, bird.y, "#ffe27a", 6);
+        }
       }
     }
   }
@@ -586,6 +660,7 @@
     menu.classList.add("hide"); scrimTop.classList.remove("on"); scrimBot.classList.remove("on");
     floorFill.classList.add("playing");   // no ground band; floorFill blends the bottom with the sky
     clearPipes(); score=0; scoreEl.textContent="0"; spawnAcc=0; lastT=0;
+    runCoins=0; coinHudEl.textContent="🪙 0"; coinHudEl.classList.add("on");
     gameState="playing"; startedAt=now(); curSpeed=mode.speed;
     applyDecor(); vignette.classList.toggle("on", curDecor().vignette);
     startGround(mode.speed);
@@ -611,19 +686,22 @@
     if(groundAnim) groundAnim.pause();
     sndHit();
     if(navigator.vibrate && state.sfx){ try{ navigator.vibrate(30); }catch(e){} }
-    hud.classList.remove("on");
+    hud.classList.remove("on"); coinHudEl.classList.remove("on");
+    spawnParticles(BIRD_X, bird.y, curSkin().body, 12);   // death puff
 
     const before = unlockedIds();             // snapshot before committing this run's stats
     state.games++;
     state.playTime += Math.max(0, Math.min(3600, Math.round(now()-startedAt)));
+    state.coins += runCoins;
     const isBest = score>bestFor(state.mode);
     if(isBest) state.best[state.mode]=score;
     if(score>state.topScore) state.topScore=score;
-    LS.set("games",state.games); LS.set("playTime",state.playTime);
+    LS.set("games",state.games); LS.set("playTime",state.playTime); LS.set("coins",state.coins);
     LS.set("best",state.best);   LS.set("topScore",state.topScore);
     notifyUnlocks(before);
 
     $("oScore").textContent=score; $("oBest").textContent=bestFor(state.mode);
+    oCoinsEl.textContent="🪙 +"+runCoins+"   (total "+state.coins+")";
     $("newBest").style.display=isBest?"block":"none";
     setTimeout(()=>over.classList.add("on"), 420);
   }
@@ -689,6 +767,7 @@
   },{passive:true});
 
   function refreshStats(){ $("cBest").textContent=bestFor(state.mode); $("cGames").textContent=state.games;
+    menuCoinsEl.textContent="🪙 "+state.coins;
     [...carousel.children].forEach(c=>{ const em=c.querySelector("em"); if(em) em.textContent="Record : "+bestFor(c.dataset.id); }); }
 
   // ----- skins sheet -----
