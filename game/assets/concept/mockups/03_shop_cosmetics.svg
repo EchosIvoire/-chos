@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <linearGradient id="sbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#241a14"/><stop offset="100%" stop-color="#120d09"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#sbg)"/>
+
+  <!-- header -->
+  <rect x="0" y="0" width="1280" height="72" fill="#15100c"/>
+  <text x="32" y="46" fill="#f2c14e" font-size="30" font-weight="800">BOUTIQUE</text>
+  <text x="200" y="46" fill="#9a8a78" font-size="16">Cosmétiques uniquement · zéro pay-to-win</text>
+  <!-- currencies -->
+  <g transform="translate(980,20)">
+    <rect width="130" height="34" rx="17" fill="#2b1d16"/>
+    <circle cx="22" cy="17" r="11" fill="#f2c14e" stroke="#15100c" stroke-width="2"/>
+    <text x="40" y="23" fill="#e8d6b3" font-size="15" font-weight="700">1 250</text>
+    <text x="100" y="22" fill="#9a8a78" font-size="10">Lumes</text>
+  </g>
+  <g transform="translate(1124,20)">
+    <rect width="130" height="34" rx="17" fill="#2b1d16"/>
+    <circle cx="22" cy="17" r="11" fill="#33b3a6" stroke="#15100c" stroke-width="2"/>
+    <text x="40" y="23" fill="#e8d6b3" font-size="15" font-weight="700">40</text>
+    <text x="78" y="22" fill="#9a8a78" font-size="10">Éclats (€)</text>
+  </g>
+
+  <!-- tabs -->
+  <g transform="translate(32,92)" font-size="15" font-weight="700">
+    <rect width="110" height="36" rx="18" fill="#c8643c"/><text x="55" y="24" fill="#15100c" text-anchor="middle">Skins</text>
+    <rect x="122" width="120" height="36" rx="18" fill="#2b1d16"/><text x="182" y="24" fill="#e8d6b3" text-anchor="middle">Familiers</text>
+    <rect x="254" width="110" height="36" rx="18" fill="#2b1d16"/><text x="309" y="24" fill="#e8d6b3" text-anchor="middle">Effets</text>
+    <rect x="376" width="110" height="36" rx="18" fill="#2b1d16"/><text x="431" y="24" fill="#e8d6b3" text-anchor="middle">Bundles</text>
+  </g>
+
+  <!-- ===== PREVIEW PANEL (left) ===== -->
+  <g transform="translate(32,150)">
+    <rect width="420" height="500" rx="18" fill="#1c140f" stroke="#2b1d16" stroke-width="2"/>
+    <text x="24" y="40" fill="#e8d6b3" font-size="20" font-weight="700">Aperçu</text>
+    <!-- pedestal -->
+    <ellipse cx="210" cy="380" rx="120" ry="30" fill="#000" opacity="0.3"/>
+    <ellipse cx="210" cy="372" rx="118" ry="26" fill="#2b1d16"/>
+    <!-- big character (selected skin: Or fauve) -->
+    <g transform="translate(210,150)">
+      <path d="M-58 120 Q-58 56 0 50 Q58 56 58 120 L66 220 Q0 244 -66 220 Z" fill="#f2c14e" stroke="#2b1d16" stroke-width="6"/>
+      <path d="M0 52 Q58 58 58 120 L66 220 Q33 232 0 232 Z" fill="#000" opacity="0.12"/>
+      <rect x="-60" y="150" width="120" height="20" rx="8" fill="#c8643c" stroke="#2b1d16" stroke-width="5"/>
+      <circle cx="-66" cy="118" r="20" fill="#d8a83e" stroke="#2b1d16" stroke-width="6"/>
+      <circle cx="66" cy="118" r="20" fill="#d8a83e" stroke="#2b1d16" stroke-width="6"/>
+      <circle cx="0" cy="20" r="56" fill="#9c6a44" stroke="#2b1d16" stroke-width="6"/>
+      <path d="M-56 12 Q-54 -38 0 -42 Q54 -38 56 12 Q28 -18 0 -18 Q-28 -18 -56 12 Z" fill="#3a2a18"/>
+      <circle cx="-18" cy="22" r="5" fill="#15100c"/><circle cx="18" cy="22" r="5" fill="#15100c"/>
+      <!-- gold sparkle FX -->
+      <text x="80" y="-10" font-size="22" fill="#f2c14e">✦</text>
+      <text x="-92" y="40" font-size="16" fill="#f2c14e">✦</text>
+    </g>
+    <!-- rotate hint -->
+    <text x="210" y="430" fill="#9a8a78" font-size="13" text-anchor="middle">↺ glisser pour tourner · 8 directions</text>
+    <text x="24" y="478" fill="#e8d6b3" font-size="22" font-weight="800">"Or fauve"</text>
+    <text x="280" y="478" fill="#9a8a78" font-size="13">Skin · Rare</text>
+  </g>
+
+  <!-- buy panel -->
+  <g transform="translate(32,664)">
+    <rect width="420" height="44" rx="22" fill="#33b3a6"/>
+    <text x="210" y="29" fill="#0c2421" font-size="17" font-weight="800" text-anchor="middle">Acheter · 12 Éclats</text>
+  </g>
+
+  <!-- ===== GRID (right) ===== -->
+  <g transform="translate(480,150)" font-size="13">
+    <!-- helper to draw a card -->
+    <!-- card 1 selected -->
+    <g transform="translate(0,0)">
+      <rect width="232" height="160" rx="14" fill="#241a14" stroke="#f2c14e" stroke-width="3"/>
+      <g transform="translate(116,78)"><ellipse cx="0" cy="48" rx="30" ry="8" fill="#000" opacity="0.3"/><path d="M-22 0 Q-22 -22 0 -24 Q22 -22 22 0 L26 44 Q0 52 -26 44 Z" fill="#f2c14e" stroke="#2b1d16" stroke-width="4"/><circle cx="0" cy="-30" r="22" fill="#9c6a44" stroke="#2b1d16" stroke-width="4"/><path d="M-22 -34 Q-20 -56 0 -58 Q20 -56 22 -34 Q8 -46 0 -46 Q-8 -46 -22 -34 Z" fill="#3a2a18"/></g>
+      <rect x="0" y="128" width="232" height="32" rx="0" fill="#15100c" opacity="0.5"/>
+      <text x="12" y="149" fill="#e8d6b3" font-weight="700">Or fauve</text>
+      <text x="220" y="149" fill="#33b3a6" text-anchor="end" font-weight="700">12 ◆</text>
+      <rect x="6" y="6" width="58" height="20" rx="10" fill="#3b4a8c"/><text x="35" y="20" fill="#fff" font-size="11" text-anchor="middle">RARE</text>
+    </g>
+    <!-- card 2 owned -->
+    <g transform="translate(252,0)">
+      <rect width="232" height="160" rx="14" fill="#241a14" stroke="#2b1d16" stroke-width="2"/>
+      <g transform="translate(116,78)"><ellipse cx="0" cy="48" rx="30" ry="8" fill="#000" opacity="0.3"/><path d="M-22 0 Q-22 -22 0 -24 Q22 -22 22 0 L26 44 Q0 52 -26 44 Z" fill="#2f9e92" stroke="#2b1d16" stroke-width="4"/><circle cx="0" cy="-30" r="22" fill="#8a5a3c" stroke="#2b1d16" stroke-width="4"/><path d="M-22 -34 Q-20 -56 0 -58 Q20 -56 22 -34 Q8 -46 0 -46 Q-8 -46 -22 -34 Z" fill="#2b1d16"/></g>
+      <rect x="0" y="128" width="232" height="32" fill="#15100c" opacity="0.5"/>
+      <text x="12" y="149" fill="#e8d6b3" font-weight="700">Lagune</text>
+      <text x="220" y="149" fill="#6a8d4f" text-anchor="end" font-weight="700">POSSÉDÉ ✓</text>
+    </g>
+    <!-- card 3 pet -->
+    <g transform="translate(504,0)">
+      <rect width="232" height="160" rx="14" fill="#241a14" stroke="#2b1d16" stroke-width="2"/>
+      <g transform="translate(116,86)"><ellipse cx="0" cy="34" rx="24" ry="7" fill="#000" opacity="0.3"/><circle cx="0" cy="0" r="26" fill="#d99a4e" stroke="#2b1d16" stroke-width="4"/><circle cx="-10" cy="-4" r="4" fill="#15100c"/><circle cx="10" cy="-4" r="4" fill="#15100c"/><path d="M-20 -22 L-10 -34 M20 -22 L10 -34" stroke="#2b1d16" stroke-width="4" stroke-linecap="round"/></g>
+      <rect x="0" y="128" width="232" height="32" fill="#15100c" opacity="0.5"/>
+      <text x="12" y="149" fill="#e8d6b3" font-weight="700">Fennec familier</text>
+      <text x="220" y="149" fill="#33b3a6" text-anchor="end" font-weight="700">20 ◆</text>
+      <rect x="6" y="6" width="74" height="20" rx="10" fill="#c8643c"/><text x="43" y="20" fill="#15100c" font-size="11" text-anchor="middle">ÉPIQUE</text>
+    </g>
+    <!-- row 2 -->
+    <g transform="translate(0,184)">
+      <rect width="232" height="160" rx="14" fill="#241a14" stroke="#2b1d16" stroke-width="2"/>
+      <g transform="translate(116,78)"><ellipse cx="0" cy="48" rx="30" ry="8" fill="#000" opacity="0.3"/><path d="M-22 0 Q-22 -22 0 -24 Q22 -22 22 0 L26 44 Q0 52 -26 44 Z" fill="#3b4a8c" stroke="#2b1d16" stroke-width="4"/><circle cx="0" cy="-30" r="22" fill="#6b4226" stroke="#2b1d16" stroke-width="4"/><path d="M-22 -34 Q-20 -56 0 -58 Q20 -56 22 -34 Q8 -46 0 -46 Q-8 -46 -22 -34 Z" fill="#1a1024"/></g>
+      <rect x="0" y="128" width="232" height="32" fill="#15100c" opacity="0.5"/>
+      <text x="12" y="149" fill="#e8d6b3" font-weight="700">Nuit indigo</text>
+      <text x="220" y="149" fill="#f2c14e" text-anchor="end" font-weight="700">800 ⬤</text>
+    </g>
+    <g transform="translate(252,184)">
+      <rect width="232" height="160" rx="14" fill="#241a14" stroke="#2b1d16" stroke-width="2"/>
+      <g transform="translate(116,84)"><path d="M-30 20 Q0 -40 30 20" fill="none" stroke="#33b3a6" stroke-width="6"/><path d="M-18 28 Q0 -16 18 28" fill="none" stroke="#f2c14e" stroke-width="5"/><circle cx="0" cy="34" r="8" fill="#c8643c" stroke="#2b1d16" stroke-width="3"/></g>
+      <rect x="0" y="128" width="232" height="32" fill="#15100c" opacity="0.5"/>
+      <text x="12" y="149" fill="#e8d6b3" font-weight="700">Sillage turquoise</text>
+      <text x="220" y="149" fill="#33b3a6" text-anchor="end" font-weight="700">8 ◆</text>
+    </g>
+    <g transform="translate(504,184)">
+      <rect width="232" height="160" rx="14" fill="#241a14" stroke="#2b1d16" stroke-width="2" opacity="0.55"/>
+      <text x="116" y="84" fill="#9a8a78" font-size="40" text-anchor="middle">+</text>
+      <text x="116" y="120" fill="#9a8a78" font-size="13" text-anchor="middle">Bientôt</text>
+    </g>
+  </g>
+
+  <!-- footer note -->
+  <text x="480" y="690" fill="#9a8a78" font-size="12">◆ Éclats = monnaie premium (achat €) · ⬤ Lumes = monnaie de jeu. Aucun des deux n'altère les stats. Droit d'usage vérifié serveur.</text>
+</svg>
