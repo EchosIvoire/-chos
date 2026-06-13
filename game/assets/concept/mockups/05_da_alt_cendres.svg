@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="780" viewBox="0 0 1280 780" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <radialGradient id="bgB" cx="50%" cy="28%" r="85%">
+      <stop offset="0%" stop-color="#241c2e"/><stop offset="100%" stop-color="#0e0b14"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="780" fill="url(#bgB)"/>
+
+  <text x="48" y="60" fill="#ef6c3a" font-size="38" font-weight="800">ALT B — "CENDRES &amp; NÉON"</text>
+  <text x="48" y="90" fill="#d9d3c4" font-size="17">Dark fantasy contrasté · obsidienne &amp; braise · magie néon · pensé pour FAIRE BRILLER les skins en arène PvP</text>
+  <line x1="48" y1="106" x2="1232" y2="106" stroke="#120e18" stroke-width="2"/>
+
+  <!-- palette -->
+  <text x="48" y="146" fill="#d9d3c4" font-size="20" font-weight="700">Palette</text>
+  <g transform="translate(48,162)" font-size="12" font-weight="700" text-anchor="middle">
+    <g><rect width="118" height="80" rx="10" fill="#2a2433" stroke="#4a4358" stroke-width="3"/><text x="59" y="44" fill="#d9d3c4">OBSIDIENNE</text><text x="59" y="62" fill="#d9d3c4">#2a2433</text></g>
+    <g transform="translate(132,0)"><rect width="118" height="80" rx="10" fill="#ef6c3a" stroke="#120e18" stroke-width="3"/><text x="59" y="44" fill="#120e18">BRAISE</text><text x="59" y="62" fill="#120e18">#ef6c3a</text></g>
+    <g transform="translate(264,0)"><rect width="118" height="80" rx="10" fill="#d13b3b" stroke="#120e18" stroke-width="3"/><text x="59" y="44" fill="#fff">FEU</text><text x="59" y="62" fill="#fff">#d13b3b</text></g>
+    <g transform="translate(396,0)"><rect width="118" height="80" rx="10" fill="#8a4fff" stroke="#120e18" stroke-width="3"/><text x="59" y="44" fill="#fff">MAGIE</text><text x="59" y="62" fill="#fff">#8a4fff</text></g>
+    <g transform="translate(528,0)"><rect width="118" height="80" rx="10" fill="#34d6e0" stroke="#120e18" stroke-width="3"/><text x="59" y="44" fill="#120e18">NÉON</text><text x="59" y="62" fill="#120e18">#34d6e0</text></g>
+    <g transform="translate(660,0)"><rect width="118" height="80" rx="10" fill="#f2b33e" stroke="#120e18" stroke-width="3"/><text x="59" y="44" fill="#120e18">OR/LOOT</text><text x="59" y="62" fill="#120e18">#f2b33e</text></g>
+    <g transform="translate(792,0)"><rect width="118" height="80" rx="10" fill="#d9d3c4" stroke="#120e18" stroke-width="3"/><text x="59" y="44" fill="#120e18">OS/CENDRE</text><text x="59" y="62" fill="#120e18">#d9d3c4</text></g>
+    <g transform="translate(924,0)"><rect width="118" height="80" rx="10" fill="#120e18" stroke="#4a4358" stroke-width="3"/><text x="59" y="44" fill="#d9d3c4">OUTLINE</text><text x="59" y="62" fill="#d9d3c4">#120e18</text></g>
+  </g>
+  <text x="48" y="272" fill="#9a93a8" font-size="13">Fonds sombres = les couleurs vives "popent". Braise/feu = perso &amp; danger. Violet/cyan néon = magie &amp; skins premium ultra-lisibles en arène.</text>
+
+  <!-- base char -->
+  <text x="48" y="318" fill="#d9d3c4" font-size="20" font-weight="700">Perso — base</text>
+  <g transform="translate(120,344)">
+    <ellipse cx="60" cy="232" rx="50" ry="15" fill="#000" opacity="0.4"/>
+    <path d="M22 150 Q22 120 60 116 Q98 120 98 150 L104 224 Q60 236 16 224 Z" fill="#3a3346" stroke="#120e18" stroke-width="4"/>
+    <path d="M60 118 Q98 122 98 150 L104 224 Q82 230 60 230 Z" fill="#000" opacity="0.18"/>
+    <!-- ember trim -->
+    <path d="M22 150 Q22 120 60 116 Q98 120 98 150 L98 162 Q60 156 22 162 Z" fill="#ef6c3a"/>
+    <rect x="20" y="178" width="80" height="14" rx="6" fill="#34d6e0" stroke="#120e18" stroke-width="3"/>
+    <circle cx="14" cy="170" r="14" fill="#322c40" stroke="#120e18" stroke-width="4"/>
+    <circle cx="106" cy="170" r="14" fill="#322c40" stroke="#120e18" stroke-width="4"/>
+    <circle cx="60" cy="92" r="40" fill="#b59078" stroke="#120e18" stroke-width="4"/>
+    <path d="M22 86 Q24 50 60 48 Q96 50 98 86 Q80 64 60 64 Q40 64 22 86 Z" fill="#1a1422"/>
+    <!-- ember eyes -->
+    <circle cx="48" cy="96" r="4.5" fill="#ef6c3a"/><circle cx="72" cy="96" r="4.5" fill="#ef6c3a"/>
+    <text x="100" y="78" font-size="16" fill="#8a4fff">✦</text>
+  </g>
+  <g font-size="13" fill="#9a93a8">
+    <text x="280" y="372" fill="#d9d3c4" font-weight="700" font-size="14">Pourquoi cette DA</text>
+    <text x="280" y="396">· Contraste max → c'est la vitrine PvP : un skin rare se VOIT à l'autre bout de l'arène</text>
+    <text x="280" y="418">· Néon violet/cyan = effets premium (auras, armes incandescentes) très désirables</text>
+    <text x="280" y="440">· Identité "edgy" qui attire le public compétitif / streamable</text>
+    <text x="280" y="462" fill="#ef6c3a">· Risque : fatigue visuelle sur longues sessions de farm → calmer les fonds hors-arène</text>
+    <text x="280" y="484">· Risque : déjà très exploité (dark fantasy néon) → moins distinctif que "Terres Fauves"</text>
+    <text x="280" y="506">· Réfs d'ambiance : Hades-like, contraste fort, sans pixel</text>
+  </g>
+
+  <!-- skins -->
+  <text x="48" y="556" fill="#d9d3c4" font-size="20" font-weight="700">Skins (palette-swap + glow)</text>
+  <g transform="translate(120,576)">
+    <ellipse cx="50" cy="174" rx="42" ry="12" fill="#000" opacity="0.4"/>
+    <path d="M18 116 Q18 92 50 89 Q82 92 82 116 L87 172 Q50 182 13 172 Z" fill="#3a3346" stroke="#120e18" stroke-width="4"/>
+    <path d="M18 116 Q18 92 50 89 Q82 92 82 116 L82 126 Q50 121 18 126 Z" fill="#ef6c3a"/>
+    <rect x="16" y="138" width="68" height="12" rx="5" fill="#34d6e0" stroke="#120e18" stroke-width="3"/>
+    <circle cx="50" cy="70" r="32" fill="#b59078" stroke="#120e18" stroke-width="4"/>
+    <path d="M18 66 Q20 36 50 34 Q80 36 82 66 Q66 48 50 48 Q34 48 18 66 Z" fill="#1a1422"/>
+    <text x="50" y="204" fill="#d9d3c4" font-size="13" text-anchor="middle">"Braise" (base)</text>
+  </g>
+  <g transform="translate(320,576)">
+    <ellipse cx="50" cy="174" rx="42" ry="12" fill="#000" opacity="0.4"/>
+    <circle cx="50" cy="120" r="60" fill="#8a4fff" opacity="0.18"/>
+    <path d="M18 116 Q18 92 50 89 Q82 92 82 116 L87 172 Q50 182 13 172 Z" fill="#4a2f7a" stroke="#8a4fff" stroke-width="4"/>
+    <rect x="16" y="138" width="68" height="12" rx="5" fill="#34d6e0" stroke="#120e18" stroke-width="3"/>
+    <circle cx="50" cy="70" r="32" fill="#c8b0e0" stroke="#8a4fff" stroke-width="4"/>
+    <path d="M18 66 Q20 36 50 34 Q80 36 82 66 Q66 48 50 48 Q34 48 18 66 Z" fill="#2a1f44"/>
+    <text x="88" y="44" font-size="16" fill="#8a4fff">✦</text>
+    <text x="50" y="204" fill="#8a4fff" font-size="13" text-anchor="middle" font-weight="700">"Spectre" (glow)</text>
+  </g>
+  <g transform="translate(520,576)">
+    <ellipse cx="50" cy="174" rx="42" ry="12" fill="#000" opacity="0.4"/>
+    <circle cx="50" cy="120" r="60" fill="#34d6e0" opacity="0.16"/>
+    <path d="M18 116 Q18 92 50 89 Q82 92 82 116 L87 172 Q50 182 13 172 Z" fill="#155e63" stroke="#34d6e0" stroke-width="4"/>
+    <rect x="16" y="138" width="68" height="12" rx="5" fill="#f2b33e" stroke="#120e18" stroke-width="3"/>
+    <circle cx="50" cy="70" r="32" fill="#bfeef2" stroke="#34d6e0" stroke-width="4"/>
+    <path d="M18 66 Q20 36 50 34 Q80 36 82 66 Q66 48 50 48 Q34 48 18 66 Z" fill="#0d3438"/>
+    <text x="50" y="204" fill="#34d6e0" font-size="13" text-anchor="middle" font-weight="700">"Givre néon"</text>
+  </g>
+  <g transform="translate(720,576)">
+    <ellipse cx="50" cy="174" rx="42" ry="12" fill="#000" opacity="0.4"/>
+    <circle cx="50" cy="120" r="60" fill="#d13b3b" opacity="0.2"/>
+    <path d="M18 116 Q18 92 50 89 Q82 92 82 116 L87 172 Q50 182 13 172 Z" fill="#7a1f1f" stroke="#ef6c3a" stroke-width="4"/>
+    <rect x="16" y="138" width="68" height="12" rx="5" fill="#f2b33e" stroke="#120e18" stroke-width="3"/>
+    <circle cx="50" cy="70" r="32" fill="#e0b59a" stroke="#ef6c3a" stroke-width="4"/>
+    <path d="M18 66 Q20 36 50 34 Q80 36 82 66 Q66 48 50 48 Q34 48 18 66 Z" fill="#2a0e0e"/>
+    <text x="86" y="48" font-size="16" fill="#ef6c3a">✦</text><text x="2" y="92" font-size="14" fill="#d13b3b">✦</text>
+    <text x="50" y="204" fill="#ef6c3a" font-size="13" text-anchor="middle" font-weight="700">"Forge" (glow)</text>
+  </g>
+  <text x="940" y="660" fill="#9a93a8" font-size="13" text-anchor="middle">Mockup vectoriel —</text>
+  <text x="940" y="680" fill="#9a93a8" font-size="13" text-anchor="middle">direction, pas l'art final.</text>
+</svg>
