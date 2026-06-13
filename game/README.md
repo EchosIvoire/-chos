@@ -33,17 +33,34 @@ Puis relancer `docker compose up` : Nakama charge le module et expose le RPC `he
 
 ### 3. Client Godot
 Ouvrir `client/` dans **Godot 4.6** et lancer (F5).
-→ Attendu : fenêtre 1152×648, fond sombre, **perso placeholder** (cercle terracotta).
+→ Attendu : zone greybox, perso terracotta jouable, 4 mobs factices.
+- Déplacement : **ZQSD / WASD / flèches**
+- Attaque (cône) : **clic gauche / J**
+- Esquive (dash + i-frames) : **Espace**
+- Compétence AoE : **K**
+
+### 4. Tests (logique pure, sans Godot graphique)
+```bash
+cd client
+godot --headless --path . -s res://tests/test_combat.gd   # code 0 = OK
+```
 
 ## Docs
 - `docs/ARCHITECTURE.md` — shards/instances, serveur autoritatif, netcode.
 - `docs/DATA_SCHEMA.md` — données persistantes + cosmétiques/entitlements (anti-P2W).
 - `docs/ART_DIRECTION.md` — direction "Terres Fauves".
 
-## État : Phase 0 — Fondations
-- [x] Projet Godot 4.6 (2D) + scène perso placeholder
-- [x] docker-compose Nakama + Postgres
-- [x] Squelette runtime serveur TypeScript (RPC `healthcheck`)
-- [x] Arbo assets (`concept/` vs `sprites/`)
-- [x] Schéma données + cosmétiques sur papier
-- [ ] **Phase 1** — cœur du fun offline (déplacement, caméra, combat de base)
+## État
+**Phase 0 — Fondations** ✅
+- [x] Projet Godot 4.6 (2D) · docker-compose Nakama+Postgres · runtime TS (RPC `healthcheck`)
+- [x] Arbo assets · schéma données + cosmétiques · DA "Terres Fauves" figée
+
+**Phase 1 — Cœur du fun (offline)** ✅ *(à valider manette/clavier en main)*
+- [x] Controller top-down 8 dir + accel/friction, caméra de suivi lissée
+- [x] Combat : attaque en cône, esquive (dash + i-frames), 1 skill AoE
+- [x] Game feel : knockback, hit-stop, screen shake, hit-flash, chiffres de dégâts, crits
+- [x] Zone greybox + collisions + 4 mobs factices
+- [x] Logique de combat pure isolée (`scripts/core/combat.gd`) + tests headless
+- [x] Input via InputMap (rebindable, prêt tactile) — physique ZQSD/WASD
+
+**Phase 2** — perso persistant + 1 skin + boutique factice *(prochaine)*

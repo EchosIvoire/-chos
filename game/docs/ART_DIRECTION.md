@@ -1,4 +1,9 @@
-# Direction Artistique — "Terres Fauves" (proposition à figer)
+# Direction Artistique — "Terres Fauves" ✅ FIGÉE (2026-06-13)
+
+> Validée contre 2 alternatives ("Brume d'Émeraude", "Cendres & Néon", voir
+> `assets/concept/mockups/`). Retenue car seule direction à la fois distinctive
+> sur le store ET chaleureuse en farm, lisible en arène. On garde le *langage
+> d'effets néon* d'Alt B comme réserve d'idées pour les skins premium.
 
 ## Style
 Cartoon illustré : **outline net + ombrage doux** (cel-shade 2D), lisible en petit
@@ -28,5 +33,5 @@ Greybox (formes simples) → concept (Higgsfield) → génération locale
 (ComfyUI / Flux-class, RTX 4090) → **finition main** (marquée `__HAND__`).
 
 ---
-**À valider :** si "Terres Fauves" ne convient pas, 2 alternatives de direction
-seront proposées avant de figer quoi que ce soit.
+**Statut :** figée. Toute évolution part de cette base (palette + silhouette +
+langage de skins ci-dessus).
