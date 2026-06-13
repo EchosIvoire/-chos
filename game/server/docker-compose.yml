@@ -1,4 +1,4 @@
-# Terres Fauves — backend autoritatif (Nakama + PostgreSQL), self-host local.
+# Aurendel — backend autoritatif (Nakama + PostgreSQL), self-host local.
 # Lancer depuis game/server/ :  docker compose up
 #
 # Ports exposes :
@@ -14,13 +14,13 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: tf_postgres
+    container_name: au_postgres
     environment:
       - POSTGRES_DB=nakama
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=localdev
     volumes:
-      - tf_pgdata:/var/lib/postgresql/data
+      - au_pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres", "-d", "nakama"]
       interval: 3s
@@ -31,7 +31,7 @@ services:
 
   nakama:
     image: heroiclabs/nakama:3.22.0
-    container_name: tf_nakama
+    container_name: au_nakama
     depends_on:
       postgres:
         condition: service_healthy
@@ -58,4 +58,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  tf_pgdata:
+  au_pgdata:

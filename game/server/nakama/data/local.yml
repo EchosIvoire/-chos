@@ -1,7 +1,7 @@
 # Configuration Nakama — environnement LOCAL de dev uniquement.
 # NE PAS utiliser ces secrets en production.
 
-name: nakama-terres-fauves
+name: nakama-aurendel
 data_dir: "/nakama/data"
 
 logger:
@@ -14,7 +14,7 @@ console:
 
 # Cle de signature des sessions — a remplacer en prod par un secret robuste.
 session:
-  encryption_key: "terres-fauves-local-dev-key-change-me"
+  encryption_key: "aurendel-local-dev-key-change-me"
   token_expiry_sec: 7200
 
 # Le runtime JS/TS est charge automatiquement depuis data/modules/.
@@ -23,4 +23,4 @@ runtime:
   path: "/nakama/data/modules"
 
 socket:
-  server_key: "terres-fauves-server-key-change-me"
+  server_key: "aurendel-server-key-change-me"

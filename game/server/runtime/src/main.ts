@@ -1,5 +1,5 @@
 /**
- * Terres Fauves — runtime serveur Nakama (TypeScript).
+ * Aurendel — runtime serveur Nakama (TypeScript).
  *
  * PRINCIPE NON NEGOCIABLE : logique AUTORITATIVE serveur.
  * Le client n'est jamais cru. Progression, loot, economie, metiers et
@@ -21,7 +21,7 @@ function rpcHealthcheck(
   nk: nkruntime.Nakama,
   payload: string
 ): string {
-  return JSON.stringify({ ok: true, service: "terres-fauves", ts: Date.now() });
+  return JSON.stringify({ ok: true, service: "aurendel", ts: Date.now() });
 }
 
 /** Point d'entree appele par Nakama au demarrage. */
@@ -32,7 +32,7 @@ function InitModule(
   initializer: nkruntime.Initializer
 ): void {
   initializer.registerRpc(RPC_HEALTHCHECK, rpcHealthcheck);
-  logger.info("[Terres Fauves] runtime autoritatif initialise — Phase 0.");
+  logger.info("[Aurendel] runtime autoritatif initialise — Phase 0.");
 }
 
 // Empeche esbuild de supprimer InitModule au tree-shaking.

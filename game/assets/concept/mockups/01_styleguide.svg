@@ -8,7 +8,7 @@
   <rect width="1280" height="900" fill="url(#bg)"/>
 
   <!-- Title -->
-  <text x="48" y="64" fill="#f2c14e" font-size="40" font-weight="700">TERRES FAUVES — Style Guide</text>
+  <text x="48" y="64" fill="#f2c14e" font-size="40" font-weight="700">AURENDEL — Style Guide</text>
   <text x="48" y="94" fill="#e8d6b3" font-size="18">Cartoon illustré · outline net + ombrage doux · top-down 3/4 · ouest-africain stylisé fantasy</text>
   <line x1="48" y1="112" x2="1232" y2="112" stroke="#2b1d16" stroke-width="2"/>
 

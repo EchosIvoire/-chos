@@ -1,4 +1,4 @@
-# Architecture — Terres Fauves
+# Architecture — Aurendel
 
 ## Principes non négociables
 

@@ -1,11 +1,11 @@
-; Terres Fauves — projet Godot 4.6 (2D top-down).
+; Aurendel — projet Godot 4.6 (2D top-down).
 ; Renderer GL Compatibility pour la portabilite mobile (Android milieu de gamme).
 
 config_version=5
 
 [application]
 
-config/name="Terres Fauves"
+config/name="Aurendel"
 config/description="RPG 2D top-down coop — client Godot."
 run/main_scene="res://scenes/World.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")

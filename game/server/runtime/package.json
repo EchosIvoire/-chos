@@ -1,8 +1,8 @@
 {
-  "name": "terres-fauves-runtime",
+  "name": "aurendel-runtime",
   "version": "0.0.1",
   "private": true,
-  "description": "Logique serveur autoritative Nakama (TypeScript) pour Terres Fauves.",
+  "description": "Logique serveur autoritative Nakama (TypeScript) pour Aurendel.",
   "scripts": {
     "build": "esbuild src/main.ts --bundle --target=es2017 --format=iife --outfile=../nakama/data/modules/index.js",
     "typecheck": "tsc --noEmit"

@@ -1,11 +1,11 @@
-# Terres Fauves
+# Aurendel
 
 RPG 2D top-down (vue 3/4) multijoueur coopératif : combat/bashing, progression long
 terme, **métiers & craft façon Dofus**, quêtes, co-op en instance, **arènes PvP**, et
 **boutique de cosmétiques** (zéro pay-to-win).
 
 > ℹ️ Ce dossier `game/` est un **pont temporaire** dans le repo `-chos` (qui héberge un
-> site web). Il sera extrait vers un repo dédié `terres-fauves` via
+> site web). Il sera extrait vers un repo dédié `aurendel` via
 > `git subtree split` une fois ce dernier créé — historique préservé.
 
 ## Stack
@@ -48,12 +48,12 @@ godot --headless --path . -s res://tests/test_combat.gd   # code 0 = OK
 ## Docs
 - `docs/ARCHITECTURE.md` — shards/instances, serveur autoritatif, netcode.
 - `docs/DATA_SCHEMA.md` — données persistantes + cosmétiques/entitlements (anti-P2W).
-- `docs/ART_DIRECTION.md` — direction "Terres Fauves".
+- `docs/ART_DIRECTION.md` — direction "Aurendel".
 
 ## État
 **Phase 0 — Fondations** ✅
 - [x] Projet Godot 4.6 (2D) · docker-compose Nakama+Postgres · runtime TS (RPC `healthcheck`)
-- [x] Arbo assets · schéma données + cosmétiques · DA "Terres Fauves" figée
+- [x] Arbo assets · schéma données + cosmétiques · DA "Aurendel" figée
 
 **Phase 1 — Cœur du fun (offline)** ✅ *(à valider manette/clavier en main)*
 - [x] Controller top-down 8 dir + accel/friction, caméra de suivi lissée

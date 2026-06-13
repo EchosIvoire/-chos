@@ -30,7 +30,7 @@ const CRIT_MULT := 1.6
 
 @export var atk: int = 12
 
-# Couleurs DA "Terres Fauves".
+# Couleurs DA "Aurendel".
 const FILL := Color("c8643c")
 const OUTLINE := Color("2b1d16")
 const ACCENT := Color("33b3a6")
@@ -151,7 +151,7 @@ func _hitstop(duration: float) -> void:
 	Engine.time_scale = 1.0
 	_stopping = false
 
-# --- Rendu placeholder (DA "Terres Fauves") ---
+# --- Rendu placeholder (DA "Aurendel") ---
 
 func _draw() -> void:
 	var alpha := 0.45 if _invulnerable else 1.0

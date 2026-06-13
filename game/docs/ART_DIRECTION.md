@@ -1,4 +1,4 @@
-# Direction Artistique — "Terres Fauves" ✅ FIGÉE (2026-06-13)
+# Direction Artistique — "Aurendel" ✅ FIGÉE (2026-06-13)
 
 > Validée contre 2 alternatives ("Brume d'Émeraude", "Cendres & Néon", voir
 > `assets/concept/mockups/`). Retenue car seule direction à la fois distinctive
