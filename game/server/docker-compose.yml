@@ -1,0 +1,61 @@
+# Terres Fauves — backend autoritatif (Nakama + PostgreSQL), self-host local.
+# Lancer depuis game/server/ :  docker compose up
+#
+# Ports exposes :
+#   7350 -> API HTTP/realtime   (le client Godot se connecte ici)
+#   7349 -> API gRPC
+#   7351 -> console d'admin Nakama (http://127.0.0.1:7351)
+#   5432 -> PostgreSQL (debug local)
+#
+# La logique serveur (TypeScript) est dans ./runtime ; une fois buildee
+# (npm run build), elle est montee dans /nakama/data/modules et chargee
+# automatiquement. Nakama demarre meme sans module (DoD Phase 0).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tf_postgres
+    environment:
+      - POSTGRES_DB=nakama
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=localdev
+    volumes:
+      - tf_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "nakama"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    ports:
+      - "5432:5432"
+
+  nakama:
+    image: heroiclabs/nakama:3.22.0
+    container_name: tf_nakama
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint:
+      - "/bin/sh"
+      - "-ecx"
+      - >
+        /nakama/nakama migrate up
+        --database.address postgres:localdev@postgres:5432/nakama &&
+        exec /nakama/nakama
+        --config /nakama/data/local.yml
+        --database.address postgres:localdev@postgres:5432/nakama
+    volumes:
+      - ./nakama/data:/nakama/data
+    ports:
+      - "7349:7349"
+      - "7350:7350"
+      - "7351:7351"
+    healthcheck:
+      test: ["CMD", "/nakama/nakama", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  tf_pgdata:

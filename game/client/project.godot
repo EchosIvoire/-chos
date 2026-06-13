@@ -1,0 +1,26 @@
+; Terres Fauves — projet Godot 4.6 (2D top-down).
+; Phase 0 : ouvre le projet, affiche un perso placeholder.
+; Le renderer GL Compatibility est choisi pour la portabilite mobile (Android milieu de gamme).
+
+config_version=5
+
+[application]
+
+config/name="Terres Fauves"
+config/description="RPG 2D top-down coop — client Godot."
+run/main_scene="res://scenes/Main.tscn"
+config/features=PackedStringArray("4.6", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1152
+window/size/viewport_height=648
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.12, 0.1, 0.09, 1)

@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8fauvephase0a"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_player"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(576, 324)
+script = ExtResource("1_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="UI"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 600.0
+offset_bottom = 40.0
+text = "Terres Fauves — Phase 0 (perso placeholder)"

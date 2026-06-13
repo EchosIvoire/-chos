@@ -1,0 +1,22 @@
+# --- Godot (client) ---
+client/.godot/
+client/.import/
+client/export_presets.cfg
+client/android/
+*.translation
+
+# --- Exports / builds Godot ---
+client/build/
+client/export/
+*.apk
+*.aab
+
+# --- Runtime Nakama (TypeScript) ---
+server/runtime/node_modules/
+server/runtime/package-lock.json
+# artefact build genere, charge par Nakama au runtime :
+server/nakama/data/modules/
+
+# --- Divers ---
+.DS_Store
+*.log
