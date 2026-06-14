@@ -30,6 +30,30 @@ game/
 - Nakama : `authoritative match handler` pour les instances de jeu ; on exploite
   les briques natives (auth, matchmaking, parties, storage) avant de réinventer.
 
+## Structure du monde — grande map multi-biomes (décidé 2026-06-14)
+
+Vision : **un grand monde à plusieurs biomes/zones** (zone de départ forêt verte
+cozy façon la réf du joueur, puis savane chaude = identité signature, puis autres).
+
+Comment, sans tomber dans le piège MMO :
+- Le monde = un **graphe de zones reliées**, chaque zone = une **instance Nakama**
+  bornée (cible 20–60 joueurs). Une zone peut être **grande** : le plafond porte
+  sur le nombre de joueurs simultanés dans la même boucle serveur, PAS sur la
+  taille de la map.
+- Transition au passage d'une frontière (court chargement, façon Dofus/Diablo).
+  Scale horizontal gratuit : trop de monde dans une zone → Nakama lance une copie.
+- **PAS de monde seamless multi-serveurs** (handoff transparent entre process =
+  coût pluri-annuel réservé à un éventuel succès, hors scope tant qu'on n'y est pas).
+- **Rendu cozy unifié** sur tous les biomes (outline doux, feuillage dense en
+  couches, ombres douces, HUD minimal) = cohérence visuelle malgré la variété.
+
+Garde-fou production (solo) : **finir UNE zone à fond** (forêt cozy de départ)
+avant d'en ajouter. Pas de carte du monde entière dessinée avant qu'une zone soit
+fun à parcourir.
+
+À trancher plus tard : transitions visibles (sortie de zone) vs apparence continue
+(zones collées, chargement masqué) — les deux tiennent dans ce modèle.
+
 ## Risque majeur tracké : la POPULATION
 
 Arène PvP "peuplée" et économie de skins ne valent rien sans joueurs.
