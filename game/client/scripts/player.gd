@@ -28,6 +28,8 @@ const SKILL_RADIUS := 140.0
 const CRIT_CHANCE := 0.2
 const CRIT_MULT := 1.6
 
+const MAX_HP := 100
+
 @export var atk: int = 12
 
 # Couleurs DA "Aurendel".
@@ -47,7 +49,15 @@ var _skill_fx := 0.0       # avancement du flash de skill (1 -> 0)
 var _shake_amt := 0.0
 var _stopping := false     # garde-fou contre les hit-stops imbriqués
 
+var hp := MAX_HP
+var _hit_flash := 0.0      # flash blanc quand le joueur encaisse (1 -> 0)
+var _spawn_pos := Vector2.ZERO
+
 @onready var camera: Camera2D = $Camera2D
+
+func _ready() -> void:
+	add_to_group("player")     # les mobs nous trouvent via ce groupe
+	_spawn_pos = global_position
 
 func _physics_process(delta: float) -> void:
 	_tick_timers(delta)
@@ -86,6 +96,9 @@ func _process(delta: float) -> void:
 		queue_redraw()
 	if _skill_fx > 0.0:
 		_skill_fx = move_toward(_skill_fx, 0.0, delta / 0.3)
+		queue_redraw()
+	if _hit_flash > 0.0:
+		_hit_flash = move_toward(_hit_flash, 0.0, delta * 4.0)
 		queue_redraw()
 
 func _tick_timers(delta: float) -> void:
@@ -151,6 +164,27 @@ func _hitstop(duration: float) -> void:
 	Engine.time_scale = 1.0
 	_stopping = false
 
+# --- PV / dégâts subis ---
+
+func take_damage(amount: int, from_dir: Vector2) -> void:
+	# L'esquive donne de vraies i-frames : pendant le dash, on encaisse zéro.
+	if _invulnerable or _dodge_timer > 0.0:
+		return
+	hp = Combat.apply_damage(hp, amount, MAX_HP)
+	_hit_flash = 1.0
+	_shake_amt = maxf(_shake_amt, 6.0)
+	velocity += from_dir.normalized() * 200.0
+	queue_redraw()
+	if Combat.is_dead(hp):
+		_die()
+
+func _die() -> void:
+	# Respawn simple pour garder le test fluide (mort/respawn propre = plus tard).
+	hp = MAX_HP
+	global_position = _spawn_pos
+	velocity = Vector2.ZERO
+	_hit_flash = 1.0
+
 # --- Rendu placeholder (DA "Aurendel") ---
 
 func _draw() -> void:
@@ -159,8 +193,9 @@ func _draw() -> void:
 	if _skill_fx > 0.0:
 		draw_circle(Vector2.ZERO, SKILL_RADIUS * (1.0 - _skill_fx * 0.15), Color(ACCENT, 0.18 * _skill_fx))
 		draw_arc(Vector2.ZERO, SKILL_RADIUS, 0.0, TAU, 48, Color(ACCENT, _skill_fx), 4.0, true)
-	# corps
-	draw_circle(Vector2.ZERO, 22.0, Color(FILL, alpha))
+	# corps (flash blanc quand on encaisse)
+	var body_col := Color(FILL, alpha).lerp(Color.WHITE, _hit_flash * 0.6)
+	draw_circle(Vector2.ZERO, 22.0, body_col)
 	draw_arc(Vector2.ZERO, 22.0, 0.0, TAU, 40, Color(OUTLINE, alpha), 4.0, true)
 	# ceinture-accent (repère DA)
 	draw_line(Vector2(-16, 6), Vector2(16, 6), Color(ACCENT, alpha), 5.0)
@@ -172,3 +207,8 @@ func _draw() -> void:
 		var base := _facing.angle()
 		var half := ATTACK_ARC * 0.5
 		draw_arc(Vector2.ZERO, ATTACK_RANGE, base - half, base + half, 24, Color("f2c14e", _swing), 6.0, true)
+	# barre de vie du joueur (verte, au-dessus de la tête)
+	var w := 52.0
+	var ratio := float(hp) / float(MAX_HP)
+	draw_rect(Rect2(-w * 0.5, -42.0, w, 7.0), Color(OUTLINE, alpha))
+	draw_rect(Rect2(-w * 0.5 + 1.0, -41.0, (w - 2.0) * ratio, 5.0), Color("6a8d4f"))
