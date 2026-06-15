@@ -15,6 +15,7 @@ const TELEGRAPH := 0.45        # durée du windup visible avant le coup
 const ATTACK_DAMAGE := 8
 const ATTACK_COOLDOWN := 1.1
 const STUN_TIME := 0.18        # immobilisation à la réception d'un coup
+const XP_REWARD := 30          # XP donnée au joueur à la mort
 
 const BODY := Color("7a4a2e")
 const OUTLINE := Color("2b1d16")
@@ -94,6 +95,8 @@ func take_damage(amount: int, dir: Vector2, is_crit: bool) -> void:
 		_die()
 
 func _die() -> void:
+	if is_instance_valid(_player) and _player.has_method("gain_xp"):
+		_player.gain_xp(XP_REWARD)
 	remove_from_group("mobs")
 	set_physics_process(false)
 	$CollisionShape2D.set_deferred("disabled", true)

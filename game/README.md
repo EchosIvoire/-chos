@@ -66,4 +66,13 @@ godot --headless --path . -s res://tests/test_combat.gd   # code 0 = OK
 - [x] Logique de combat pure isolée (`scripts/core/combat.gd`) + tests headless
 - [x] Input via InputMap (rebindable, prêt tactile) — physique ZQSD/WASD
 
-**Phase 2** — perso persistant + 1 skin + boutique factice *(prochaine)*
+**Phase 2 — Perso persistant + Voie + cosmétiques** ✅ *(à valider en jeu)*
+- [x] Niveau / XP / stats persistants (sauvegarde locale `user://save.json`, autoload `Save`)
+- [x] Jauge de **Souffle** (ressource L'Échine : se remplit en frappant, dépensée par la compétence)
+- [x] Voie du **Brasier** ancrée (compétence Tourbillon à coût de Souffle)
+- [x] Système d'habillage cosmétique **découplé des stats** + 1 skin alternatif
+- [x] **Boutique factice** (touche B) : acheter/équiper, droits via `Save`
+- [x] HUD (niveau, PV, Souffle, XP) ; XP gagnée en tuant des mobs
+- [x] Logique pure testée (`scripts/core/progression.gd`) + tests headless
+
+**Phase 3** — co-op autoritatif Nakama (2 joueurs dans une instance) *(prochaine)*

@@ -1,12 +1,12 @@
 extends CharacterBody2D
-## Controller top-down — Phase 1 (offline).
+## Controller du joueur — Phase 2 (offline, persistance locale).
 ##
-## Périmètre minimal jouable : déplacement 8 directions, esquive (dash + i-frames),
-## attaque mêlée en cône, 1 compétence AoE. Tout l'input passe par des actions
-## (InputMap) => rebindable et prêt pour le tactile (joystick virtuel, Phase 8).
+## Hérite du cœur de combat Phase 1 (déplacement 8 dir, esquive/i-frames, attaque
+## en cône, compétence, game feel) et ajoute : niveau/XP/stats persistants, jauge
+## de SOUFFLE (ressource L'Échine), et application d'un SKIN cosmétique (visuel pur).
 ##
-## Le game feel (knockback/hit-stop/shake/flash/chiffres) est l'enjeu n°1 de cette
-## phase : si taper du mob n'est pas satisfaisant ici, on corrige avant tout le reste.
+## Voie incarnée pour l'instant : le BRASIER (compétence = Tourbillon, AoE).
+## Les stats viennent du NIVEAU (Progression) ; le skin ne touche jamais aux stats.
 
 const SPEED := 240.0
 const ACCEL := 2000.0
@@ -21,22 +21,32 @@ const ATTACK_RANGE := 64.0
 const ATTACK_ARC := deg_to_rad(110.0)
 const ATTACK_POWER := 1.0
 
-const SKILL_COOLDOWN := 2.5
+const SKILL_COOLDOWN := 2.5         # Tourbillon (Voie du Brasier)
 const SKILL_POWER := 2.2
 const SKILL_RADIUS := 140.0
+const SKILL_SOUFFLE_COST := 40
 
 const CRIT_CHANCE := 0.2
 const CRIT_MULT := 1.6
 
-const MAX_HP := 100
+const MAX_SOUFFLE := 100
+const SOUFFLE_PER_HIT := 12
 
-@export var atk: int = 12
-
-# Couleurs DA "Aurendel".
-const FILL := Color("c8643c")
 const OUTLINE := Color("2b1d16")
-const ACCENT := Color("33b3a6")
-const HAIR := Color("2b1d16")
+
+# --- Progression (persistée via l'autoload Save) ---
+var level := 1
+var xp := 0
+var max_hp := 100
+var atk := 12
+var hp := 100
+var souffle := 0
+var max_souffle := MAX_SOUFFLE
+
+# --- Couleurs du skin équipé (visuel pur, voir Cosmetics) ---
+var _fill := Color("c8643c")
+var _accent := Color("33b3a6")
+var _trail := Color("f2c14e")
 
 var _facing := Vector2.DOWN
 var _dodge_timer := 0.0
@@ -44,25 +54,30 @@ var _dodge_cd := 0.0
 var _attack_cd := 0.0
 var _skill_cd := 0.0
 var _invulnerable := false
-var _swing := 0.0          # avancement de l'anim de coup (1 -> 0)
-var _skill_fx := 0.0       # avancement du flash de skill (1 -> 0)
+var _swing := 0.0
+var _skill_fx := 0.0
 var _shake_amt := 0.0
-var _stopping := false     # garde-fou contre les hit-stops imbriqués
-
-var hp := MAX_HP
-var _hit_flash := 0.0      # flash blanc quand le joueur encaisse (1 -> 0)
+var _stopping := false
+var _hit_flash := 0.0
 var _spawn_pos := Vector2.ZERO
 
 @onready var camera: Camera2D = $Camera2D
 
 func _ready() -> void:
-	add_to_group("player")     # les mobs nous trouvent via ce groupe
+	add_to_group("player")
 	_spawn_pos = global_position
+	# Charge la progression sauvegardée et en dérive les stats.
+	level = int(Save.data.get("level", 1))
+	xp = int(Save.data.get("xp", 0))
+	max_hp = Progression.max_hp(level)
+	atk = Progression.attack(level)
+	hp = max_hp
+	souffle = 0
+	refresh_skin()
 
 func _physics_process(delta: float) -> void:
 	_tick_timers(delta)
 
-	# Pendant l'esquive, on conserve l'élan du dash (i-frames actives).
 	if _dodge_timer > 0.0:
 		move_and_slide()
 		return
@@ -85,7 +100,6 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 func _process(delta: float) -> void:
-	# Screen shake : décroissance + offset aléatoire appliqué à la caméra.
 	if _shake_amt > 0.05:
 		camera.offset = Vector2(randf_range(-_shake_amt, _shake_amt), randf_range(-_shake_amt, _shake_amt))
 		_shake_amt = move_toward(_shake_amt, 0.0, 40.0 * delta)
@@ -130,11 +144,15 @@ func _attack() -> void:
 		var to_m: Vector2 = m.global_position - global_position
 		if to_m.length() <= ATTACK_RANGE + 22.0 and absf(_facing.angle_to(to_m)) <= ATTACK_ARC * 0.5:
 			m.take_damage(dmg, to_m.normalized(), is_crit)
+			_gain_souffle()
 			hit_any = true
 	if hit_any:
 		_hit_feedback(1.2 if is_crit else 1.0)
 
 func _skill() -> void:
+	if souffle < SKILL_SOUFFLE_COST:
+		return                       # pas assez de Souffle
+	souffle -= SKILL_SOUFFLE_COST
 	_skill_cd = SKILL_COOLDOWN
 	_skill_fx = 1.0
 	var hit_any := false
@@ -148,6 +166,55 @@ func _skill() -> void:
 			hit_any = true
 	_hit_feedback(2.0 if hit_any else 1.0)
 
+func _gain_souffle() -> void:
+	souffle = clampi(souffle + SOUFFLE_PER_HIT, 0, max_souffle)
+
+# --- Progression ---
+
+func gain_xp(amount: int) -> void:
+	var r := Progression.add_xp(level, xp, amount)
+	level = int(r["level"])
+	xp = int(r["xp"])
+	if int(r["leveled"]) > 0:
+		_on_level_up()
+	Save.data["level"] = level
+	Save.data["xp"] = xp
+	Save.save_game()
+
+func _on_level_up() -> void:
+	max_hp = Progression.max_hp(level)
+	atk = Progression.attack(level)
+	hp = max_hp            # soin complet à la montée de niveau
+	_skill_fx = 1.0        # petit fx de feedback
+
+# --- Cosmétique (visuel pur) ---
+
+func refresh_skin() -> void:
+	var s := Cosmetics.get_skin(String(Save.data.get("equipped_skin", Cosmetics.DEFAULT_SKIN)))
+	_fill = Color(String(s["fill"]))
+	_accent = Color(String(s["accent"]))
+	_trail = Color(String(s["trail"]))
+	queue_redraw()
+
+# --- PV / dégâts subis ---
+
+func take_damage(amount: int, from_dir: Vector2) -> void:
+	if _invulnerable or _dodge_timer > 0.0:
+		return     # i-frames de l'esquive
+	hp = Combat.apply_damage(hp, amount, max_hp)
+	_hit_flash = 1.0
+	_shake_amt = maxf(_shake_amt, 6.0)
+	velocity += from_dir.normalized() * 200.0
+	queue_redraw()
+	if Combat.is_dead(hp):
+		_die()
+
+func _die() -> void:
+	hp = max_hp
+	global_position = _spawn_pos
+	velocity = Vector2.ZERO
+	_hit_flash = 1.0
+
 # --- Game feel ---
 
 func _hit_feedback(strength: float) -> void:
@@ -159,56 +226,29 @@ func _hitstop(duration: float) -> void:
 		return
 	_stopping = true
 	Engine.time_scale = 0.05
-	# ignore_time_scale = true => le timer s'écoule en temps réel malgré le ralenti.
 	await get_tree().create_timer(duration, true, false, true).timeout
 	Engine.time_scale = 1.0
 	_stopping = false
 
-# --- PV / dégâts subis ---
-
-func take_damage(amount: int, from_dir: Vector2) -> void:
-	# L'esquive donne de vraies i-frames : pendant le dash, on encaisse zéro.
-	if _invulnerable or _dodge_timer > 0.0:
-		return
-	hp = Combat.apply_damage(hp, amount, MAX_HP)
-	_hit_flash = 1.0
-	_shake_amt = maxf(_shake_amt, 6.0)
-	velocity += from_dir.normalized() * 200.0
-	queue_redraw()
-	if Combat.is_dead(hp):
-		_die()
-
-func _die() -> void:
-	# Respawn simple pour garder le test fluide (mort/respawn propre = plus tard).
-	hp = MAX_HP
-	global_position = _spawn_pos
-	velocity = Vector2.ZERO
-	_hit_flash = 1.0
-
-# --- Rendu placeholder (DA "Aurendel") ---
+# --- Rendu placeholder (greybox, couleurs = skin équipé) ---
 
 func _draw() -> void:
 	var alpha := 0.45 if _invulnerable else 1.0
-	# zone de skill
 	if _skill_fx > 0.0:
-		draw_circle(Vector2.ZERO, SKILL_RADIUS * (1.0 - _skill_fx * 0.15), Color(ACCENT, 0.18 * _skill_fx))
-		draw_arc(Vector2.ZERO, SKILL_RADIUS, 0.0, TAU, 48, Color(ACCENT, _skill_fx), 4.0, true)
-	# corps (flash blanc quand on encaisse)
-	var body_col := Color(FILL, alpha).lerp(Color.WHITE, _hit_flash * 0.6)
+		draw_circle(Vector2.ZERO, SKILL_RADIUS * (1.0 - _skill_fx * 0.15), Color(_trail, 0.18 * _skill_fx))
+		draw_arc(Vector2.ZERO, SKILL_RADIUS, 0.0, TAU, 48, Color(_trail, _skill_fx), 4.0, true)
+	var body_col := Color(_fill, alpha).lerp(Color.WHITE, _hit_flash * 0.6)
 	draw_circle(Vector2.ZERO, 22.0, body_col)
 	draw_arc(Vector2.ZERO, 22.0, 0.0, TAU, 40, Color(OUTLINE, alpha), 4.0, true)
-	# ceinture-accent (repère DA)
-	draw_line(Vector2(-16, 6), Vector2(16, 6), Color(ACCENT, alpha), 5.0)
-	# indicateur de direction
+	draw_line(Vector2(-16, 6), Vector2(16, 6), Color(_accent, alpha), 5.0)
 	var tip := _facing * 26.0
 	draw_line(tip * 0.4, tip, Color(OUTLINE, alpha), 4.0)
-	# arc de coup
 	if _swing > 0.0:
 		var base := _facing.angle()
 		var half := ATTACK_ARC * 0.5
-		draw_arc(Vector2.ZERO, ATTACK_RANGE, base - half, base + half, 24, Color("f2c14e", _swing), 6.0, true)
-	# barre de vie du joueur (verte, au-dessus de la tête)
+		draw_arc(Vector2.ZERO, ATTACK_RANGE, base - half, base + half, 24, Color(_trail, _swing), 6.0, true)
+	# barre de vie du joueur (au-dessus de la tête)
 	var w := 52.0
-	var ratio := float(hp) / float(MAX_HP)
+	var ratio := float(hp) / float(max_hp)
 	draw_rect(Rect2(-w * 0.5, -42.0, w, 7.0), Color(OUTLINE, alpha))
 	draw_rect(Rect2(-w * 0.5 + 1.0, -41.0, (w - 2.0) * ratio, 5.0), Color("6a8d4f"))
