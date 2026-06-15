@@ -1,8 +1,9 @@
 # Aurendel
 
-RPG 2D top-down (vue 3/4) multijoueur coopératif : combat/bashing, progression long
-terme, **métiers & craft façon Dofus**, quêtes, co-op en instance, **arènes PvP**, et
-**boutique de cosmétiques** (zéro pay-to-win).
+ARPG 2D top-down multijoueur dans l'univers de **L'Échine** : un monde qui est en
+réalité le dos d'une bête colossale agonisante. Combat temps réel par **Voies**
+(classes), co-op en instance, métiers/craft, **arènes PvP**, **boutique de
+cosmétiques** (zéro pay-to-win), campagne narrative. Univers complet : `docs/GAME_BIBLE.md`.
 
 > ℹ️ Ce dossier `game/` est un **pont temporaire** dans le repo `-chos` (qui héberge un
 > site web). Il sera extrait vers un repo dédié `aurendel` via
@@ -46,9 +47,11 @@ godot --headless --path . -s res://tests/test_combat.gd   # code 0 = OK
 ```
 
 ## Docs
-- `docs/ARCHITECTURE.md` — shards/instances, serveur autoritatif, netcode.
+- `docs/GAME_BIBLE.md` — **univers & design L'Échine** (lore, Voies, trame, mécaniques).
+- `docs/VISION.md` — vision consolidée : L'Échine × archi coop/économie + roadmap fusionnée.
+- `docs/ARCHITECTURE.md` — shards/instances, serveur autoritatif, netcode, monde multi-biomes.
 - `docs/DATA_SCHEMA.md` — données persistantes + cosmétiques/entitlements (anti-P2W).
-- `docs/ART_DIRECTION.md` — direction "Aurendel".
+- `docs/ART_DIRECTION.md` — direction artistique L'Échine.
 
 ## État
 **Phase 0 — Fondations** ✅
