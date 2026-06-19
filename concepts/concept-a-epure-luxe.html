@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BELLIA — Concept A · Épuré & Luxe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --cream: #FAFAF8;
+      --stone-50: #F5F2EC;
+      --stone-100: #EBE5D8;
+      --stone-300: #BFA98E;
+      --stone-500: #7A6A56;
+      --ink: #111110;
+      --muted: #777772;
+    }
+    * { box-sizing: border-box; }
+    body { background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; margin: 0; }
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+    .phone-glow { box-shadow: 0 32px 96px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.06); }
+    @keyframes up { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .appear { animation: up .7s ease forwards; }
+    .appear-2 { animation: up .7s .15s ease both; }
+    .appear-3 { animation: up .7s .3s ease both; }
+    .btn-primary { background: var(--ink); color: var(--cream); display:inline-block; padding: 14px 32px; font-size: 14px; font-weight: 500; letter-spacing: .02em; transition: background .2s; cursor:pointer; text-decoration:none; }
+    .btn-primary:hover { background: #2A2A28; }
+    .btn-ghost { border: 1px solid var(--stone-100); color: var(--ink); display:inline-block; padding: 14px 32px; font-size: 14px; font-weight: 500; transition: border-color .2s; cursor:pointer; text-decoration:none; }
+    .btn-ghost:hover { border-color: var(--stone-300); }
+    .divider { width: 40px; height: 1px; background: var(--stone-300); display:block; }
+    hr.thin { border: none; border-top: 1px solid var(--stone-100); }
+    .feature-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 400; color: var(--stone-100); line-height: 1; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(250,250,248,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--stone-100);">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+    <span class="serif" style="font-size:20px;font-weight:600;letter-spacing:.04em;">BELLIA</span>
+    <div style="display:flex;align-items:center;gap:32px;">
+      <a href="#features" style="font-size:14px;color:var(--muted);text-decoration:none;">Fonctionnalités</a>
+      <a href="#prix" style="font-size:14px;color:var(--muted);text-decoration:none;">Tarifs</a>
+      <a href="#" class="btn-primary" style="padding:10px 24px;">Accès beta gratuit</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="padding: 120px 24px 100px; background: linear-gradient(160deg, var(--cream) 60%, var(--stone-50) 100%);">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+
+    <div>
+      <span class="appear" style="display:inline-block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:28px;">Beta ouverte · Gratuit 3 mois</span>
+      <h1 class="serif appear-2" style="font-size:clamp(44px,5vw,64px);line-height:1.12;font-weight:600;margin:0 0 24px;">
+        Gérez votre salon<br>
+        <em style="font-weight:400;color:var(--stone-500);">sans y penser.</em>
+      </h1>
+      <p class="appear-3" style="font-size:17px;line-height:1.75;color:var(--muted);max-width:440px;margin:0 0 40px;">
+        Agenda, clients, caisse, factures — tout en un seul endroit. Pensé pour les esthéticiennes indépendantes qui veulent se concentrer sur leur métier.
+      </p>
+      <div class="appear-3" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+        <a href="#" class="btn-primary">Commencer gratuitement</a>
+        <a href="#" class="btn-ghost">Voir la démo →</a>
+      </div>
+      <p style="font-size:13px;color:var(--muted);">Sans carte bancaire · Opérationnelle en 5 minutes</p>
+    </div>
+
+    <!-- APP MOCKUP -->
+    <div style="display:flex;justify-content:center;">
+      <div class="phone-glow" style="background:white;border-radius:20px;width:288px;overflow:hidden;border:1px solid var(--stone-100);">
+
+        <!-- Header app -->
+        <div style="background:var(--stone-50);padding:16px 20px 14px;border-bottom:1px solid var(--stone-100);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <span class="serif" style="font-size:14px;font-weight:600;">Bellia</span>
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--stone-300);"></div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin:0;">Mercredi 20 mai 2026</p>
+        </div>
+
+        <!-- Stats rapides -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--stone-100);">
+          <div style="padding:14px 18px;border-right:1px solid var(--stone-100);">
+            <p style="font-size:11px;color:var(--muted);margin:0 0 2px;">Aujourd'hui</p>
+            <p style="font-size:22px;font-weight:600;margin:0;font-family:'Playfair Display',serif;">4</p>
+            <p style="font-size:11px;color:var(--muted);margin:0;">rendez-vous</p>
+          </div>
+          <div style="padding:14px 18px;">
+            <p style="font-size:11px;color:var(--muted);margin:0 0 2px;">Ce mois</p>
+            <p style="font-size:22px;font-weight:600;margin:0;font-family:'Playfair Display',serif;">1 840€</p>
+            <p style="font-size:11px;color:var(--muted);margin:0;">encaissés</p>
+          </div>
+        </div>
+
+        <!-- Liste RDV -->
+        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px;">
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:var(--stone-50);">
+            <div style="width:3px;height:32px;border-radius:2px;background:var(--stone-300);flex-shrink:0;"></div>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:12px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Sophie Martin</p>
+              <p style="font-size:11px;color:var(--muted);margin:0;">14h00 · Soin visage · 60min</p>
+            </div>
+            <span style="font-size:12px;font-weight:500;color:var(--stone-500);flex-shrink:0;">55€</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;">
+            <div style="width:3px;height:32px;border-radius:2px;background:var(--stone-100);flex-shrink:0;"></div>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:12px;font-weight:500;margin:0;">Léa Dupont</p>
+              <p style="font-size:11px;color:var(--muted);margin:0;">15h30 · Manucure · 45min</p>
+            </div>
+            <span style="font-size:12px;font-weight:500;color:var(--muted);flex-shrink:0;">35€</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;">
+            <div style="width:3px;height:32px;border-radius:2px;background:var(--stone-100);flex-shrink:0;"></div>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:12px;font-weight:500;margin:0;">Marie Chen</p>
+              <p style="font-size:11px;color:var(--muted);margin:0;">17h00 · Épilation · 30min</p>
+            </div>
+            <span style="font-size:12px;font-weight:500;color:var(--muted);flex-shrink:0;">28€</span>
+          </div>
+
+          <button style="width:100%;margin-top:4px;padding:10px;border:1px dashed var(--stone-100);border-radius:8px;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;">+ Nouveau rendez-vous</button>
+        </div>
+
+        <!-- Bottom nav -->
+        <div style="border-top:1px solid var(--stone-100);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 4px;">
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--ink);">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span style="font-size:9px;margin-top:3px;font-weight:500;">Agenda</span>
+          </button>
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--muted);">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span style="font-size:9px;margin-top:3px;">Clients</span>
+          </button>
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--muted);">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span style="font-size:9px;margin-top:3px;">Caisse</span>
+          </button>
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;background:none;border:none;cursor:pointer;color:var(--muted);">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span style="font-size:9px;margin-top:3px;">Stats</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLÈME -->
+<section style="padding:80px 24px;border-top:1px solid var(--stone-100);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">Le constat</p>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.2;max-width:600px;margin:0 0 64px;">
+      Gérer un salon seule, c'est jongler avec trop d'outils.
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--stone-100);">
+      <div style="background:var(--cream);padding:40px 32px;">
+        <span class="feature-num">01</span>
+        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">Les no-shows vous coûtent cher</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Sans rappel automatique, 1 cliente sur 5 oublie son RDV. C'est du temps et de l'argent perdus.</p>
+      </div>
+      <div style="background:var(--cream);padding:40px 32px;">
+        <span class="feature-num">02</span>
+        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">La paperasse empiète sur votre temps</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Factures manuelles, suivi des paiements, notes dispersées — des heures perdues chaque semaine.</p>
+      </div>
+      <div style="background:var(--cream);padding:40px 32px;">
+        <span class="feature-num">03</span>
+        <h3 style="font-size:17px;font-weight:500;margin:16px 0 10px;">Vos clientes vont ailleurs</h3>
+        <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Sans suivi personnalisé ni rappel de rappel d'anniversaire, la fidélisation reste aléatoire.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="padding:80px 24px;background:var(--stone-50);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">La solution</p>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.2;max-width:600px;margin:0 0 64px;">
+      Tout ce dont vous avez besoin.<br>
+      <em style="font-weight:400;">Rien de superflu.</em>
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:32px;">
+
+      <div style="background:white;padding:40px;border-radius:4px;border:1px solid var(--stone-100);">
+        <div style="width:40px;height:40px;border-radius:4px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Agenda intelligent</h3>
+        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">Vos clientes réservent en ligne via votre lien personnel. Rappels SMS automatiques J-1. Fini les no-shows.</p>
+      </div>
+
+      <div style="background:white;padding:40px;border-radius:4px;border:1px solid var(--stone-100);">
+        <div style="width:40px;height:40px;border-radius:4px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Fiche cliente complète</h3>
+        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">Historique des soins, notes personnelles, préférences, allergies. Retrouvez tout en deux secondes.</p>
+      </div>
+
+      <div style="background:white;padding:40px;border-radius:4px;border:1px solid var(--stone-100);">
+        <div style="width:40px;height:40px;border-radius:4px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Caisse & paiement</h3>
+        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">Encaissement rapide, reçus instantanés, suivi des paiements en attente. Compatible CB, espèces, virement.</p>
+      </div>
+
+      <div style="background:white;padding:40px;border-radius:4px;border:1px solid var(--stone-100);">
+        <div style="width:40px;height:40px;border-radius:4px;background:var(--stone-50);border:1px solid var(--stone-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <svg width="18" height="18" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3 style="font-size:18px;font-weight:500;margin:0 0 12px;">Facturation automatique</h3>
+        <p style="font-size:14px;line-height:1.75;color:var(--muted);margin:0;">Devis et factures PDF générés automatiquement, numérotation conforme, envoi par email en un clic.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="prix" style="padding:80px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-300);margin-bottom:16px;">Tarifs</p>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.2;margin:0 0 16px;">Simple, transparent.</h2>
+    <p style="font-size:16px;color:var(--muted);margin:0 0 64px;">Pas de commissions, pas de surprises.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--stone-100);max-width:780px;">
+      <div style="background:var(--cream);padding:48px 40px;">
+        <p style="font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 24px;">Gratuit</p>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:32px;">
+          <span class="serif" style="font-size:48px;font-weight:600;">0€</span>
+          <span style="font-size:14px;color:var(--muted);">pour toujours</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0 0 40px;display:flex;flex-direction:column;gap:12px;">
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> 1 agenda</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> Jusqu'à 50 clientes</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> Prise de RDV en ligne</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">—</span> Caisse simple</li>
+        </ul>
+        <a href="#" class="btn-ghost" style="width:100%;text-align:center;display:block;">Commencer</a>
+      </div>
+
+      <div style="background:var(--ink);padding:48px 40px;color:var(--cream);">
+        <p style="font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--stone-300);margin:0 0 24px;">Solo</p>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:32px;">
+          <span class="serif" style="font-size:48px;font-weight:600;">19€</span>
+          <span style="font-size:14px;color:#999;"> / mois</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0 0 40px;display:flex;flex-direction:column;gap:12px;">
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Clients illimités</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> SMS de rappel inclus</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Facturation & devis PDF</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Dashboard & statistiques</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:10px;"><span style="color:var(--stone-300);">✓</span> Page de réservation brandée</li>
+        </ul>
+        <a href="#" class="btn-primary" style="width:100%;text-align:center;display:block;background:white;color:var(--ink);">Essayer 3 mois gratuit</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:80px 24px;background:var(--ink);">
+  <div style="max-width:600px;margin:0 auto;text-align:center;">
+    <h2 class="serif" style="font-size:clamp(36px,4vw,52px);font-weight:600;color:var(--cream);line-height:1.15;margin:0 0 24px;">
+      Prête à reprendre<br>le contrôle ?
+    </h2>
+    <p style="font-size:16px;line-height:1.7;color:#999;margin:0 0 40px;">Rejoins les premières esthéticiennes en beta. Accès prioritaire, tarif bloqué à vie.</p>
+    <a href="#" style="display:inline-block;background:var(--stone-300);color:var(--ink);padding:16px 40px;font-size:15px;font-weight:500;letter-spacing:.02em;transition:background .2s;">Demander mon accès beta</a>
+    <p style="font-size:13px;color:#666;margin-top:16px;">Sans engagement · Résiliable à tout moment</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:32px 24px;border-top:1px solid #222;background:var(--ink);">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+    <span class="serif" style="font-size:16px;color:#555;letter-spacing:.04em;">BELLIA</span>
+    <p style="font-size:12px;color:#444;margin:0;">© 2026 Bellia · Fait avec soin, en France</p>
+    <div style="display:flex;gap:24px;">
+      <a href="#" style="font-size:12px;color:#444;text-decoration:none;">Mentions légales</a>
+      <a href="#" style="font-size:12px;color:#444;text-decoration:none;">Confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

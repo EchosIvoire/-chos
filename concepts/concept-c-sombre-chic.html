@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BELLIA — Concept C · Sombre & Chic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C0C0A;
+      --surface: #161614;
+      --surface-2: #1E1E1C;
+      --gold: #C9A96E;
+      --gold-light: #E2C99E;
+      --gold-dim: #7A6440;
+      --text: #F5F0E8;
+      --muted: #888882;
+      --border: #2A2A26;
+      --border-gold: rgba(201,169,110,.2);
+    }
+    * { box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; margin: 0; }
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .gold { color: var(--gold); }
+    .card-glow { box-shadow: 0 0 0 1px var(--border-gold), 0 24px 80px rgba(0,0,0,.6), 0 8px 24px rgba(0,0,0,.3); }
+    .gold-line { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+    .btn-gold { display:inline-block; background:linear-gradient(135deg, var(--gold) 0%, #A8864A 100%); color:var(--bg); padding:15px 36px; font-size:13px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; transition:opacity .2s; }
+    .btn-gold:hover { opacity:.88; }
+    .btn-ghost-dark { display:inline-block; border:1px solid var(--border-gold); color:var(--gold); padding:14px 32px; font-size:13px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; transition:border-color .2s; }
+    .btn-ghost-dark:hover { border-color:var(--gold); }
+    @keyframes shimmer { 0%,100%{ opacity:.6; } 50%{ opacity:1; } }
+    .shimmer { animation: shimmer 3s ease-in-out infinite; }
+    @keyframes up { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .appear { animation: up .8s ease forwards; }
+    .appear-2 { animation: up .8s .2s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(12,12,10,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;">
+    <span class="serif" style="font-size:24px;font-weight:400;letter-spacing:.08em;color:var(--gold);">BELLIA</span>
+    <div style="display:flex;align-items:center;gap:40px;">
+      <a href="#features" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;font-weight:500;">Fonctionnalités</a>
+      <a href="#prix" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;font-weight:500;">Tarifs</a>
+      <a href="#" class="btn-gold" style="padding:12px 24px;">Accès prioritaire</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="min-height:100vh;padding:140px 24px 100px;display:flex;align-items:center;position:relative;overflow:hidden;">
+
+  <!-- Background texture -->
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,169,110,.06) 0%, transparent 70%);pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,169,110,.04) 0%, transparent 60%);pointer-events:none;"></div>
+
+  <div style="max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;">
+
+    <div class="appear">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;">
+        <div style="height:1px;width:40px;background:var(--gold);"></div>
+        <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;">Beta ouverte · Places limitées</span>
+      </div>
+
+      <h1 class="serif" style="font-size:clamp(52px,6vw,80px);line-height:1.05;font-weight:400;margin:0 0 24px;letter-spacing:-.01em;">
+        L'art de gérer<br>
+        votre salon,<br>
+        <em style="color:var(--gold);font-style:italic;font-weight:300;">simplement.</em>
+      </h1>
+
+      <p style="font-size:15px;line-height:1.85;color:var(--muted);max-width:420px;margin:0 0 48px;font-weight:300;letter-spacing:.01em;">
+        Agenda, clientes, caisse, facturation. Un seul outil, conçu pour les esthéticiennes qui refusent la médiocrité — dans leur métier comme dans leurs outils.
+      </p>
+
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:40px;">
+        <a href="#" class="btn-gold">Demander l'accès</a>
+        <a href="#" class="btn-ghost-dark">Voir la démo</a>
+      </div>
+
+      <p style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-dim);">Sans carte bancaire · Gratuit 3 mois</p>
+    </div>
+
+    <!-- APP MOCKUP dark -->
+    <div class="appear-2" style="display:flex;justify-content:center;">
+      <div class="card-glow" style="background:var(--surface);border-radius:20px;width:296px;overflow:hidden;">
+
+        <!-- Header app -->
+        <div style="padding:20px 20px 16px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <span class="serif" style="font-size:15px;color:var(--gold);letter-spacing:.06em;">BELLIA</span>
+            <div style="display:flex;gap:4px;">
+              <div style="width:8px;height:8px;border-radius:50%;background:#333;"></div>
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);"></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:var(--surface-2);border-radius:12px;padding:14px;border:1px solid var(--border);">
+              <p style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;">Aujourd'hui</p>
+              <p class="serif" style="font-size:26px;color:var(--text);margin:0;font-weight:400;line-height:1;">4</p>
+              <p style="font-size:10px;color:var(--muted);margin:4px 0 0;">rendez-vous</p>
+            </div>
+            <div style="background:var(--surface-2);border-radius:12px;padding:14px;border:1px solid var(--border-gold);">
+              <p style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;">Ce mois</p>
+              <p class="serif" style="font-size:22px;color:var(--gold);margin:0;font-weight:400;line-height:1;">1 840€</p>
+              <p style="font-size:10px;color:var(--muted);margin:4px 0 0;display:flex;align-items:center;gap:3px;">
+                <span style="color:#6DAB8A;">↑ +12%</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RDV list -->
+        <div style="padding:16px;">
+          <p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;">Planning du jour</p>
+
+          <div style="display:flex;flex-direction:column;gap:6px;">
+
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border-gold);">
+              <div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#A8864A);display:flex;align-items:center;justify-content:center;">
+                <span class="serif" style="font-size:13px;color:var(--bg);font-weight:500;">SM</span>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <p style="font-size:12px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Sophie Martin</p>
+                <p style="font-size:10px;color:var(--muted);margin:3px 0 0;">14h00 · Soin visage · 55€</p>
+              </div>
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;" class="shimmer"></div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);">
+              <div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#1E2A1E;display:flex;align-items:center;justify-content:center;">
+                <span class="serif" style="font-size:13px;color:#6DAB8A;font-weight:500;">LD</span>
+              </div>
+              <div style="flex:1;">
+                <p style="font-size:12px;font-weight:500;margin:0;">Léa Dupont</p>
+                <p style="font-size:10px;color:var(--muted);margin:3px 0 0;">15h30 · Manucure · 35€</p>
+              </div>
+              <span style="font-size:9px;color:#6DAB8A;letter-spacing:.06em;text-transform:uppercase;">SMS ✓</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);">
+              <div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#1E1A2E;display:flex;align-items:center;justify-content:center;">
+                <span class="serif" style="font-size:13px;color:#9E8AD4;font-weight:500;">MC</span>
+              </div>
+              <div style="flex:1;">
+                <p style="font-size:12px;font-weight:500;margin:0;">Marie Chen</p>
+                <p style="font-size:10px;color:var(--muted);margin:3px 0 0;">17h00 · Épilation · 28€</p>
+              </div>
+              <span style="font-size:9px;color:#6DAB8A;letter-spacing:.06em;text-transform:uppercase;">SMS ✓</span>
+            </div>
+
+          </div>
+
+          <button style="width:100%;margin-top:10px;padding:10px;border:1px solid var(--border-gold);border-radius:10px;background:none;font-size:12px;color:var(--gold);cursor:pointer;font-family:inherit;letter-spacing:.04em;">+ Nouveau rendez-vous</button>
+        </div>
+
+        <!-- Bottom nav -->
+        <div style="border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);padding:10px 4px;">
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px;background:none;border:none;cursor:pointer;color:var(--gold);">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span style="font-size:9px;margin-top:3px;letter-spacing:.04em;">Agenda</span>
+          </button>
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px;background:none;border:none;cursor:pointer;color:var(--muted);">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span style="font-size:9px;margin-top:3px;letter-spacing:.04em;">Clientes</span>
+          </button>
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px;background:none;border:none;cursor:pointer;color:var(--muted);">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span style="font-size:9px;margin-top:3px;letter-spacing:.04em;">Caisse</span>
+          </button>
+          <button style="display:flex;flex-direction:column;align-items:center;padding:6px;background:none;border:none;cursor:pointer;color:var(--muted);">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span style="font-size:9px;margin-top:3px;letter-spacing:.04em;">Stats</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GOLD DIVIDER -->
+<div class="gold-line" style="margin:0;"></div>
+
+<!-- STATS BAND -->
+<div style="background:var(--surface);padding:24px 24px;border-bottom:1px solid var(--border);">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;">
+    <div style="text-align:center;padding:0 40px;">
+      <p class="serif" style="font-size:32px;color:var(--gold);margin:0;">47</p>
+      <p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;">Esthéticiennes en beta</p>
+    </div>
+    <div style="height:40px;width:1px;background:var(--border);"></div>
+    <div style="text-align:center;padding:0 40px;">
+      <p class="serif" style="font-size:32px;color:var(--gold);margin:0;">5 min</p>
+      <p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;">Pour démarrer</p>
+    </div>
+    <div style="height:40px;width:1px;background:var(--border);"></div>
+    <div style="text-align:center;padding:0 40px;">
+      <p class="serif" style="font-size:32px;color:var(--gold);margin:0;">0%</p>
+      <p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;">De commissions</p>
+    </div>
+    <div style="height:40px;width:1px;background:var(--border);"></div>
+    <div style="text-align:center;padding:0 40px;">
+      <p class="serif" style="font-size:32px;color:var(--gold);margin:0;">3 mois</p>
+      <p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;">Offerts en beta</p>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features" style="padding:100px 24px;background:var(--bg);">
+  <div style="max-width:1100px;margin:0 auto;">
+
+    <div style="margin-bottom:72px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div style="height:1px;width:40px;background:var(--gold);"></div>
+        <span style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:500;">La solution</span>
+      </div>
+      <h2 class="serif" style="font-size:clamp(40px,5vw,64px);font-weight:400;line-height:1.1;margin:0;max-width:680px;">
+        Tout ce qu'il vous faut.<br>
+        <em style="color:var(--gold);font-weight:300;">Rien de superflu.</em>
+      </h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);">
+
+      <div style="background:var(--bg);padding:48px 40px;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border-gold);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span class="serif" style="font-size:20px;font-weight:400;color:var(--gold);">Agenda</span>
+        </div>
+        <p style="font-size:14px;line-height:1.85;color:var(--muted);margin:0;">Réservation en ligne 24h/24 via votre lien personnel. Rappels SMS automatiques. Gestion des créneaux en temps réel.</p>
+      </div>
+
+      <div style="background:var(--bg);padding:48px 40px;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border-gold);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <span class="serif" style="font-size:20px;font-weight:400;color:var(--gold);">Clientes</span>
+        </div>
+        <p style="font-size:14px;line-height:1.85;color:var(--muted);margin:0;">Fiche complète par cliente : historique des soins, notes personnelles, préférences, allergies. Une mémoire parfaite.</p>
+      </div>
+
+      <div style="background:var(--bg);padding:48px 40px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border-gold);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <span class="serif" style="font-size:20px;font-weight:400;color:var(--gold);">Caisse</span>
+        </div>
+        <p style="font-size:14px;line-height:1.85;color:var(--muted);margin:0;">Encaissement en deux secondes, reçu par SMS, suivi des paiements en attente. Compatible tous modes de paiement.</p>
+      </div>
+
+      <div style="background:var(--bg);padding:48px 40px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border-gold);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <span class="serif" style="font-size:20px;font-weight:400;color:var(--gold);">Facturation</span>
+        </div>
+        <p style="font-size:14px;line-height:1.85;color:var(--muted);margin:0;">Devis et factures PDF générés automatiquement. Numérotation conforme, envoi email, archivage automatique.</p>
+      </div>
+
+    </div>
+
+    <!-- Feature extra — personnalisation -->
+    <div style="margin-top:1px;background:var(--surface);padding:48px 40px;border:1px solid var(--border-gold);">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+        <div style="max-width:500px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--border-gold);display:flex;align-items:center;justify-content:center;">
+              <svg width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+            </div>
+            <span class="serif" style="font-size:20px;font-weight:400;color:var(--gold);">Votre identité, votre page</span>
+          </div>
+          <p style="font-size:14px;line-height:1.85;color:var(--muted);margin:0 0 16px;">Votre page de réservation est entièrement à vos couleurs — logo, palette, nom du salon. Vos clientes voient votre marque, pas la nôtre.</p>
+          <p style="font-size:13px;color:var(--gold-dim);">bellia.fr/<strong style="color:var(--gold);">votre-salon</strong></p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--border-gold);background:#D4877A;cursor:pointer;" title="Rose"></div>
+          <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--gold);background:var(--gold);cursor:pointer;" title="Or (actuel)"></div>
+          <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--border-gold);background:#7B9E87;cursor:pointer;" title="Sauge"></div>
+          <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--border-gold);background:#8B7AB0;cursor:pointer;" title="Violet"></div>
+          <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--border-gold);background:#4A8FAF;cursor:pointer;" title="Bleu"></div>
+          <span style="font-size:12px;color:var(--muted);margin-left:8px;">+ couleur libre</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="prix" style="padding:100px 24px;background:var(--surface);">
+  <div style="max-width:800px;margin:0 auto;">
+    <div style="margin-bottom:64px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div style="height:1px;width:40px;background:var(--gold);"></div>
+        <span style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:500;">Tarifs</span>
+      </div>
+      <h2 class="serif" style="font-size:clamp(40px,5vw,56px);font-weight:400;line-height:1.1;margin:0;">Simple et transparent.</h2>
+      <p style="font-size:15px;color:var(--muted);margin:12px 0 0;font-weight:300;">Pas de commissions. Pas de frais cachés.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
+
+      <div style="background:var(--bg);padding:48px 40px;">
+        <p style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 24px;">Gratuit</p>
+        <div style="margin-bottom:36px;">
+          <span class="serif" style="font-size:56px;font-weight:400;">0€</span>
+          <span style="font-size:14px;color:var(--muted);"> / à vie</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0 0 40px;display:flex;flex-direction:column;gap:14px;">
+          <li style="font-size:14px;color:var(--muted);display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold-dim);">—</span> 1 agenda</li>
+          <li style="font-size:14px;color:var(--muted);display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold-dim);">—</span> 50 clientes maximum</li>
+          <li style="font-size:14px;color:var(--muted);display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold-dim);">—</span> Réservation en ligne</li>
+          <li style="font-size:14px;color:var(--muted);display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold-dim);">—</span> Caisse simple</li>
+        </ul>
+        <a href="#" class="btn-ghost-dark" style="width:100%;text-align:center;display:block;">Commencer</a>
+      </div>
+
+      <div style="background:var(--bg);padding:48px 40px;border:1px solid var(--border-gold);position:relative;">
+        <div style="position:absolute;top:-1px;left:-1px;right:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);"></div>
+        <p style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 24px;">Solo</p>
+        <div style="margin-bottom:36px;">
+          <span class="serif" style="font-size:56px;font-weight:400;color:var(--gold);">19€</span>
+          <span style="font-size:14px;color:var(--muted);"> / mois</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0 0 40px;display:flex;flex-direction:column;gap:14px;">
+          <li style="font-size:14px;display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold);">✓</span> Clientes illimitées</li>
+          <li style="font-size:14px;display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold);">✓</span> SMS de rappel inclus</li>
+          <li style="font-size:14px;display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold);">✓</span> Facturation & devis PDF</li>
+          <li style="font-size:14px;display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold);">✓</span> Dashboard & statistiques</li>
+          <li style="font-size:14px;display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--gold);">✓</span> Page de réservation personnalisée</li>
+        </ul>
+        <a href="#" class="btn-gold" style="width:100%;text-align:center;display:block;">Essayer 3 mois gratuit</a>
+      </div>
+
+    </div>
+
+    <p style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-dim);margin-top:24px;text-align:center;">Sans engagement · Résiliable à tout moment · Hébergé en France</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:100px 24px;background:var(--bg);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,169,110,.05) 0%, transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:640px;margin:0 auto;text-align:center;position:relative;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:32px;">
+      <div style="height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--border-gold));max-width:120px;"></div>
+      <span class="serif" style="font-size:32px;color:var(--gold);">✦</span>
+      <div style="height:1px;flex:1;background:linear-gradient(90deg,var(--border-gold),transparent);max-width:120px;"></div>
+    </div>
+    <h2 class="serif" style="font-size:clamp(40px,5vw,60px);font-weight:400;line-height:1.1;margin:0 0 24px;">
+      Prête à élever<br>
+      <em style="color:var(--gold);font-weight:300;">votre salon ?</em>
+    </h2>
+    <p style="font-size:15px;line-height:1.85;color:var(--muted);margin:0 0 40px;font-weight:300;">Places limitées en beta. Rejoignez les premières esthéticiennes et bénéficiez d'un tarif préférentiel à vie.</p>
+    <a href="#" class="btn-gold" style="font-size:14px;padding:18px 48px;letter-spacing:.1em;">Demander mon accès</a>
+    <p style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-dim);margin-top:20px;">Sans carte bancaire · Sans engagement</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="gold-line"></div>
+<footer style="padding:32px 24px;background:var(--bg);">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <span class="serif" style="font-size:18px;color:var(--gold);letter-spacing:.08em;">BELLIA</span>
+    <p style="font-size:12px;color:var(--muted);margin:0;letter-spacing:.04em;">© 2026 Bellia · Conçu pour les indépendantes</p>
+    <div style="display:flex;gap:24px;">
+      <a href="#" style="font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.04em;">Mentions légales</a>
+      <a href="#" style="font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.04em;">Confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

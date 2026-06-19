@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Merci · SOLEA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FAFAF8;
+      --stone-50: #F5F2EC;
+      --stone-100: #EBE5D8;
+      --stone-300: #BFA98E;
+      --stone-500: #7A6A56;
+      --ink: #111110;
+      --muted: #777772;
+    }
+    * { box-sizing: border-box; }
+    body { background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+    nav { padding: 24px; border-bottom: 1px solid var(--stone-100); }
+    nav span { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; letter-spacing: .04em; }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 80px 24px; }
+    .container { max-width: 560px; text-align: center; }
+    .check { width: 64px; height: 64px; border-radius: 50%; background: var(--stone-50); border: 1px solid var(--stone-100); display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 600; line-height: 1.15; margin: 0 0 20px; }
+    p { font-size: 16px; line-height: 1.75; color: var(--muted); margin: 0 0 40px; }
+    .btn { display: inline-block; background: var(--ink); color: var(--cream); padding: 14px 32px; font-size: 14px; font-weight: 500; text-decoration: none; }
+    .footer { padding: 24px; border-top: 1px solid var(--stone-100); text-align: center; font-size: 12px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" style="text-decoration: none; color: inherit;"><span>SOLEA</span></a>
+  </nav>
+  <main>
+    <div class="container">
+      <div class="check">
+        <svg width="28" height="28" fill="none" stroke="var(--stone-500)" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h1>Vous êtes sur la liste.</h1>
+      <p>Merci ! On vous tient au courant dès que la beta ouvre, normalement dans les prochaines semaines. En attendant, partagez votre activité avec un proche indépendant — les premières places sont limitées.</p>
+      <a href="/" class="btn">Retour à l'accueil</a>
+    </div>
+  </main>
+  <div class="footer">© 2026 Solea · Fait avec soin, en France</div>
+</body>
+</html>
