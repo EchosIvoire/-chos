@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPECTRE — IA co-streameuse pour jeux d'horreur | TheBenchLab</title>
+
+  <meta name="description" content="SPECTRE : une IA co-streameuse 100 % locale pour vos streams de jeux d'horreur. Elle regarde l'écran, sursaute aux jumpscares, commente à voix haute et lit le chat Twitch. Sans serveur, sans compte, dans le navigateur." />
+  <meta name="author" content="TheBenchLab" />
+  <meta name="theme-color" content="#0d0f14" />
+  <link rel="canonical" href="https://thebenchlab.fr/spectre.html" />
+
+  <meta property="og:site_name" content="TheBenchLab" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thebenchlab.fr/spectre.html" />
+  <meta property="og:title" content="SPECTRE — IA co-streameuse pour jeux d'horreur" />
+  <meta property="og:description" content="Elle regarde ton écran, hurle aux jumpscares, commente en direct et lit ton chat Twitch. 100 % locale, 100 % navigateur. Optionnel : branche ton LLM Ollama." />
+  <meta property="og:locale" content="fr_FR" />
+
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #12151f;
+      --bg3: #1a1f2e;
+      --border: #252a3a;
+      --accent: #6c63ff;
+      --accent2: #00d9b5;
+      --warn: #f5a623;
+      --blood: #ff3b52;
+      --text: #e8eaf0;
+      --muted: #6a7090;
+      --calme: #00d9b5;
+      --tension: #f5a623;
+      --alerte: #ff7a3b;
+      --panique: #ff3b52;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+
+    .gradient-bar { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--blood) 100%); }
+
+    /* ── HEADER ── */
+    header.top {
+      position: sticky; top: 0; z-index: 90;
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 18px;
+      background: rgba(13,15,20,.95); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #2a2f45, #12151f 70%);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      transition: transform .15s;
+    }
+    body.mood-panique .avatar { animation: shake .28s infinite; border-color: var(--blood); }
+    body.mood-alerte  .avatar { border-color: var(--alerte); }
+    @keyframes shake {
+      0% { transform: translate(0,0) rotate(0); }
+      25% { transform: translate(-2px,1px) rotate(-4deg); }
+      50% { transform: translate(2px,-1px) rotate(3deg); }
+      75% { transform: translate(-1px,-2px) rotate(-2deg); }
+      100% { transform: translate(1px,2px) rotate(2deg); }
+    }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+    .head-info h1 { font-size: 16px; font-weight: 800; letter-spacing: .06em; }
+    .head-info h1 span { color: var(--accent); }
+    .head-info p { font-size: 11.5px; color: var(--muted); }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+      background: var(--muted); margin-right: 5px; vertical-align: middle;
+    }
+    .status-dot.on { background: var(--accent2); box-shadow: 0 0 6px var(--accent2); }
+    .head-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn {
+      padding: 7px 15px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+      cursor: pointer; border: 1px solid var(--border);
+      background: var(--bg3); color: var(--text); transition: all .18s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); }
+    .btn.primary:hover { filter: brightness(1.12); }
+    .btn.danger { background: transparent; border-color: var(--blood); color: var(--blood); }
+    .btn.danger:hover { background: var(--blood); color: #fff; }
+    .btn.small { padding: 5px 11px; font-size: 11.5px; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 18px 18px 60px; }
+    .grid { display: grid; grid-template-columns: minmax(0,1fr) 400px; gap: 16px; align-items: start; }
+    @media (max-width: 1020px) { .grid { grid-template-columns: 1fr; } }
+    .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px;
+    }
+    .card > h2 {
+      font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .12em; color: var(--muted); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card > h2 .right { margin-left: auto; display: flex; gap: 6px; align-items: center; text-transform: none; letter-spacing: 0; }
+
+    /* ── STAGE ── */
+    .stage {
+      position: relative; aspect-ratio: 16/9; background: #05060a;
+      border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
+    }
+    .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .stage .fearbar {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 5px;
+      background: rgba(255,255,255,.06);
+    }
+    .stage .fearbar i {
+      display: block; height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--accent2), var(--warn) 55%, var(--blood));
+      transition: width .3s;
+    }
+    .stage .badge {
+      position: absolute; top: 10px; left: 10px;
+      font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+      padding: 3px 10px; border-radius: 12px;
+      background: rgba(13,15,20,.75); border: 1px solid var(--border); color: var(--muted);
+    }
+    .stage .badge.live { color: var(--blood); border-color: var(--blood); }
+
+    .meters { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .meter { flex: 1; min-width: 90px; }
+    .meter label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; display: flex; justify-content: space-between; }
+    .meter .bar { height: 5px; background: var(--bg3); border-radius: 3px; margin-top: 4px; overflow: hidden; }
+    .meter .bar i { display: block; height: 100%; width: 0%; border-radius: 3px; transition: width .18s; }
+    #mLum  i { background: var(--warn); }
+    #mVol  i { background: var(--accent2); }
+    #mMot  i { background: var(--accent); }
+    #mRed  i { background: var(--blood); }
+
+    .controls { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 10px; }
+    .hint b { color: var(--text); font-weight: 600; }
+
+    /* ── ÉTAT ── */
+    .staterow { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .ring {
+      --p: 0; --moodc: var(--calme);
+      width: 96px; height: 96px; border-radius: 50%; flex-shrink: 0;
+      background: conic-gradient(var(--moodc) calc(var(--p)*1%), var(--bg3) 0);
+      display: flex; align-items: center; justify-content: center;
+      transition: --p .3s;
+    }
+    .ring > div {
+      width: 74px; height: 74px; border-radius: 50%; background: var(--bg2);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .ring b { font-size: 24px; line-height: 1; }
+    .ring span { font-size: 9.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 3px; }
+    .mood-pill {
+      font-size: 12px; font-weight: 700; letter-spacing: .1em;
+      padding: 5px 14px; border-radius: 14px; border: 1px solid var(--calme); color: var(--calme);
+      text-transform: uppercase;
+    }
+    .stats { display: flex; gap: 16px; margin-top: 4px; flex-wrap: wrap; }
+    .stat { font-size: 11.5px; color: var(--muted); }
+    .stat b { color: var(--accent2); font-size: 13px; display: block; }
+
+    /* ── SETTINGS ── */
+    details.settings summary {
+      cursor: pointer; list-style: none; font-size: 11.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .12em; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    details.settings summary::after { content: "▾"; margin-left: auto; transition: transform .2s; }
+    details.settings[open] summary::after { transform: rotate(180deg); }
+    .fields { margin-top: 14px; display: flex; flex-direction: column; gap: 13px; }
+    .field label { font-size: 11.5px; color: var(--muted); display: block; margin-bottom: 5px; }
+    .field input[type=text], .field select {
+      width: 100%; padding: 8px 11px; border-radius: 8px;
+      background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+      font-size: 13px; outline: none;
+    }
+    .field input:focus, .field select:focus { border-color: var(--accent); }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .chips { display: flex; gap: 7px; flex-wrap: wrap; }
+    .chips label {
+      cursor: pointer; padding: 6px 13px; border-radius: 16px; font-size: 12px;
+      background: var(--bg3); border: 1px solid var(--border); color: var(--muted);
+      transition: all .15s; margin: 0;
+    }
+    .chips input { display: none; }
+    .chips input:checked + span { color: inherit; }
+    .chips label:has(input:checked) { border-color: var(--accent); color: var(--text); background: rgba(108,99,255,.12); }
+    .switchrow { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .switchrow input { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
+    input[type=range] { width: 100%; accent-color: var(--accent); }
+    .pill { font-size: 11px; padding: 3px 10px; border-radius: 10px; border: 1px solid var(--border); color: var(--muted); }
+    .pill.ok { color: var(--accent2); border-color: var(--accent2); }
+    .pill.err { color: var(--blood); border-color: var(--blood); }
+    .pill.warn { color: var(--warn); border-color: var(--warn); }
+    .subnote { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+    .subnote code { background: var(--bg3); padding: 1px 6px; border-radius: 5px; font-size: 11px; }
+
+    /* ── FEED ── */
+    .feed { display: flex; flex-direction: column; gap: 10px; max-height: 430px; overflow-y: auto; padding-right: 4px; }
+    .msg {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 12px; padding: 10px 13px; font-size: 13.5px;
+      animation: pop .22s ease;
+    }
+    @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+    .msg .tag {
+      font-size: 9.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); display: flex; gap: 8px; margin-bottom: 3px;
+    }
+    .msg .tag .t { margin-left: auto; font-weight: 400; letter-spacing: 0; }
+    .msg.ev-JUMPSCARE .tag b { color: var(--blood); }
+    .msg.ev-TENSION_HAUTE .tag b, .msg.ev-NOIR .tag b, .msg.ev-SILENCE .tag b { color: var(--warn); }
+    .msg.ev-ACCALMIE .tag b { color: var(--accent2); }
+    .msg.ev-SANG .tag b, .msg.ev-BRUIT_FORT .tag b { color: var(--alerte); }
+    .msg.ev-CHAT_MENTION .tag b, .msg.ev-CHAT_HYPE .tag b { color: var(--accent); }
+    .empty { font-size: 12.5px; color: var(--muted); padding: 8px 2px; }
+
+    .log {
+      font-family: ui-monospace, "Cascadia Mono", Menlo, monospace;
+      font-size: 11px; color: var(--muted); max-height: 150px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .log .warnl { color: var(--warn); }
+    .log .alertl { color: var(--blood); }
+
+    .chatfeed { display: flex; flex-direction: column; gap: 5px; max-height: 180px; overflow-y: auto; font-size: 12.5px; }
+    .chatfeed .cu { color: var(--accent); font-weight: 700; }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    /* ── MODAL GUIDE ── */
+    .modal {
+      position: fixed; inset: 0; z-index: 200; display: none;
+      align-items: center; justify-content: center; padding: 20px;
+      background: rgba(5,6,10,.72); backdrop-filter: blur(4px);
+    }
+    .modal.open { display: flex; }
+    .modal-box {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+      max-width: 680px; width: 100%; max-height: 84vh; overflow-y: auto; padding: 24px;
+    }
+    .modal-box h3 { font-size: 18px; margin-bottom: 4px; }
+    .modal-box h4 { font-size: 14px; margin: 18px 0 6px; color: var(--accent2); }
+    .modal-box p, .modal-box li { font-size: 13.5px; color: #c6cad8; }
+    .modal-box ol, .modal-box ul { padding-left: 20px; display: flex; flex-direction: column; gap: 5px; margin-top: 5px; }
+    .modal-box code, .modal-box pre {
+      font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+      background: var(--bg3); border-radius: 6px;
+    }
+    .modal-box code { padding: 1px 6px; }
+    .modal-box pre { padding: 10px 12px; overflow-x: auto; margin: 6px 0; border: 1px solid var(--border); }
+    .modal-close { float: right; }
+
+    /* ── OVERLAY MODE ── */
+    #ovBox { display: none; }
+    body.overlay { background: #000; }
+    body.overlay[data-bg="green"] { background: #00ff00; }
+    body.overlay[data-bg="transparent"] { background: transparent; }
+    body.overlay header.top, body.overlay .wrap, body.overlay .gradient-bar, body.overlay footer { display: none; }
+    body.overlay #ovBox {
+      display: flex; position: fixed; inset: 0; z-index: 50;
+      flex-direction: column; align-items: flex-start; justify-content: flex-end;
+      padding: 4vh 4vw; gap: 14px;
+    }
+    .ov-row { display: flex; align-items: flex-end; gap: 18px; max-width: 82vw; }
+    #ovAvatar {
+      font-size: clamp(52px, 9vw, 96px); line-height: 1;
+      filter: drop-shadow(0 4px 18px rgba(0,0,0,.6));
+    }
+    body.overlay.mood-panique #ovAvatar { animation: shake .28s infinite; }
+    #ovBubble {
+      background: rgba(13,15,20,.88); border: 1px solid var(--border);
+      border-radius: 20px; padding: 16px 22px;
+      font-size: clamp(17px, 2.6vw, 28px); font-weight: 600; line-height: 1.4;
+      max-width: 64vw; color: #fff;
+      box-shadow: 0 8px 30px rgba(0,0,0,.5);
+    }
+    #ovBubble:empty { display: none; }
+    #ovMeter {
+      width: min(340px, 60vw); height: 8px; border-radius: 4px;
+      background: rgba(255,255,255,.12); overflow: hidden;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+    #ovMeter i {
+      display: block; height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--accent2), var(--warn) 55%, var(--blood));
+      transition: width .3s;
+    }
+    #ovExit {
+      position: fixed; top: 10px; right: 10px; z-index: 60; opacity: .25;
+    }
+    #ovExit:hover { opacity: 1; }
+    body:not(.overlay) #ovExit { display: none; }
+
+    footer {
+      max-width: 1240px; margin: 0 auto; padding: 18px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--muted);
+      display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+    }
+    footer a:hover { color: var(--text); }
+    footer .sep { opacity: .4; }
+  </style>
+</head>
+<body>
+  <div class="gradient-bar"></div>
+
+  <header class="top">
+    <div class="avatar" id="avatar">👻</div>
+    <div class="head-info">
+      <h1>SPECTRE <span>·</span> IA co-streameuse</h1>
+      <p><span class="status-dot" id="statusDot"></span><span id="statusTxt">en veille — lance une capture ou la démo</span></p>
+    </div>
+    <div class="head-actions">
+      <button class="btn small" id="btnGuide">📖 Guide</button>
+      <button class="btn small" id="btnOverlay">🖼️ Mode overlay</button>
+      <a class="btn small" href="index.html">← TheBenchLab</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+
+      <!-- ════ COLONNE GAUCHE ════ -->
+      <div class="col">
+
+        <div class="card">
+          <h2>🎥 Ce que SPECTRE regarde
+            <span class="right"><span class="pill" id="capPill">inactif</span></span>
+          </h2>
+          <div class="stage">
+            <canvas id="scene"></canvas>
+            <div class="badge" id="stageBadge">EN VEILLE</div>
+            <div class="fearbar"><i id="stageFear"></i></div>
+          </div>
+          <div class="meters">
+            <div class="meter" id="mLum"><label>Lumière <span>—</span></label><div class="bar"><i></i></div></div>
+            <div class="meter" id="mVol"><label>Volume <span>—</span></label><div class="bar"><i></i></div></div>
+            <div class="meter" id="mMot"><label>Mouvement <span>—</span></label><div class="bar"><i></i></div></div>
+            <div class="meter" id="mRed"><label>Rouge <span>—</span></label><div class="bar"><i></i></div></div>
+          </div>
+          <div class="controls">
+            <button class="btn primary" id="btnCap">🎬 Capturer l'écran du jeu</button>
+            <button class="btn" id="btnDemo">🧪 Mode démo</button>
+            <button class="btn danger" id="btnStop" style="display:none">⏹ Arrêter</button>
+          </div>
+          <p class="hint">Choisis la fenêtre du jeu (ou l'écran entier) et <b>coche « Partager l'audio »</b> : SPECTRE a besoin du son pour détecter les jumpscares. Tout est analysé <b>localement</b>, rien n'est envoyé nulle part.</p>
+        </div>
+
+        <div class="card">
+          <h2>💓 État émotionnel</h2>
+          <div class="staterow">
+            <div class="ring" id="ring"><div><b id="fearNum">0</b><span>peur</span></div></div>
+            <div>
+              <div class="mood-pill" id="moodPill">CALME</div>
+              <div class="stats">
+                <div class="stat"><b id="stComments">0</b>commentaires</div>
+                <div class="stat"><b id="stJumps">0</b>jumpscares</div>
+                <div class="stat"><b id="stEvents">0</b>événements</div>
+                <div class="stat"><b id="stUptime">00:00</b>session</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <details class="settings" open>
+            <summary>⚙️ Personnalité, voix &amp; cerveau</summary>
+            <div class="fields">
+
+              <div class="row2">
+                <div class="field">
+                  <label>Pseudo du streamer / de la streameuse</label>
+                  <input type="text" id="sStreamer" placeholder="ex : Ludo" maxlength="30" />
+                </div>
+                <div class="field">
+                  <label>Jeu en cours</label>
+                  <input type="text" id="sJeu" placeholder="ex : Resident Evil" maxlength="40" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Personnalité de SPECTRE</label>
+                <div class="chips" id="personaChips">
+                  <label><input type="radio" name="persona" value="frousse" checked /><span>😱 La Froussarde</span></label>
+                  <label><input type="radio" name="persona" value="sarcasme" /><span>😏 La Sarcastique</span></label>
+                  <label><input type="radio" name="persona" value="analyste" /><span>🧠 L'Analyste</span></label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Fréquence des commentaires d'ambiance : <b id="freqVal">18 s</b></label>
+                <input type="range" id="sFreq" min="8" max="60" step="1" value="18" />
+              </div>
+
+              <div class="field">
+                <div class="switchrow"><input type="checkbox" id="sVoiceOn" checked /> <span>🔊 Voix activée (synthèse vocale du navigateur)</span></div>
+              </div>
+              <div class="row2">
+                <div class="field">
+                  <label>Voix</label>
+                  <select id="sVoice"><option value="">(voix française auto)</option></select>
+                </div>
+                <div class="field">
+                  <label>Volume : <span id="volVal">80 %</span></label>
+                  <input type="range" id="sVol" min="0" max="100" step="5" value="80" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Moteur de commentaires</label>
+                <div class="chips">
+                  <label><input type="radio" name="engine" value="script" checked /><span>⚡ Scripté (zéro config)</span></label>
+                  <label><input type="radio" name="engine" value="ollama" /><span>🦙 LLM local (Ollama)</span></label>
+                </div>
+              </div>
+              <div id="ollamaFields" style="display:none">
+                <div class="row2">
+                  <div class="field">
+                    <label>URL Ollama</label>
+                    <input type="text" id="sOllamaUrl" value="http://localhost:11434" />
+                  </div>
+                  <div class="field">
+                    <label>Modèle</label>
+                    <input type="text" id="sOllamaModel" value="llama3.2:3b" placeholder="llama3.2:3b, qwen3:4b…" />
+                  </div>
+                </div>
+                <div class="controls" style="margin-top:8px">
+                  <button class="btn small" id="btnOllamaTest">Tester la connexion</button>
+                  <span class="pill" id="ollamaPill">non testé</span>
+                </div>
+                <p class="subnote" style="margin-top:8px">Prends un <b>petit modèle rapide</b> (3-4B) : la réactivité compte plus que la prose. Les sursauts (jumpscares) restent gérés par le moteur scripté pour réagir en 0 ms — le LLM commente le reste. Si Ollama ne répond pas, SPECTRE bascule tout seul sur le moteur scripté. Voir le <b>Guide</b> pour l'option <code>OLLAMA_ORIGINS</code>.</p>
+              </div>
+
+              <div class="field">
+                <label>Chat Twitch (lecture seule, sans compte)</label>
+                <div class="row2">
+                  <input type="text" id="sTwitch" placeholder="nom de la chaîne, ex : ludo_stream" />
+                  <div class="controls" style="margin:0">
+                    <button class="btn small" id="btnTwitch">Se connecter</button>
+                    <span class="pill" id="twPill">déconnecté</span>
+                  </div>
+                </div>
+                <p class="subnote" style="margin-top:6px">SPECTRE lit le chat en anonyme et répond <b>à voix haute</b> quand on l'interpelle (« spectre » ou <code>!ia</code> dans un message). Elle ne peut pas écrire dans le chat — sa voix passe dans le stream via ton micro/mixage.</p>
+              </div>
+
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- ════ COLONNE DROITE ════ -->
+      <div class="col">
+        <div class="card">
+          <h2>💬 SPECTRE dit…</h2>
+          <div class="feed" id="feed" aria-live="polite">
+            <div class="empty">Rien pour l'instant. Lance la <b>démo</b> pour voir SPECTRE réagir sans rien installer, ou capture direct l'écran de ton jeu.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📡 Journal des capteurs</h2>
+          <div class="log" id="log"></div>
+        </div>
+
+        <div class="card" id="chatCard" style="display:none">
+          <h2>💜 Chat Twitch <span class="right"><span class="pill" id="chatCount">0 msg</span></span></h2>
+          <div class="chatfeed" id="chatFeed"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ OVERLAY (OBS) ════ -->
+  <div id="ovBox">
+    <div class="ov-row">
+      <div id="ovAvatar">👻</div>
+      <div id="ovBubble"></div>
+    </div>
+    <div id="ovMeter"><i></i></div>
+  </div>
+  <button class="btn small" id="ovExit">✕ quitter l'overlay</button>
+
+  <!-- ════ GUIDE ════ -->
+  <div class="modal" id="guide">
+    <div class="modal-box">
+      <button class="btn small modal-close" id="btnGuideClose">✕ fermer</button>
+      <h3>👻 SPECTRE, mode d'emploi</h3>
+      <p>Une IA co-streameuse qui regarde ton jeu d'horreur, sursaute, commente à voix haute et lit ton chat. <b>Tout tourne dans ton navigateur</b> : aucune image, aucun son, aucun message ne part sur un serveur.</p>
+
+      <h4>Démarrage express</h4>
+      <ol>
+        <li>Lance ton jeu d'horreur (fenêtré ou plein écran fenêtré).</li>
+        <li>Clique <b>🎬 Capturer l'écran du jeu</b>, choisis la fenêtre du jeu et <b>coche « Partager l'audio »</b> (indispensable pour détecter les jumpscares — sur Firefox l'audio de fenêtre n'est pas partageable, préfère Chrome/Edge).</li>
+        <li>C'est tout. SPECTRE analyse lumière, volume, mouvement et dominante rouge, et commente selon sa personnalité.</li>
+      </ol>
+
+      <h4>L'afficher dans OBS</h4>
+      <ol>
+        <li>Clique <b>🖼️ Mode overlay</b> : la page ne montre plus que l'avatar, la bulle et la jauge de peur.</li>
+        <li>Dans OBS : <b>Capture de fenêtre</b> sur cet onglet, puis filtre <b>Chroma Key</b> si tu utilises le fond vert (<code>spectre.html?overlay=1&amp;bg=green</code>).</li>
+        <li>Astuce deux fenêtres : garde la page complète dans une fenêtre (analyse + réglages) et ouvre <code>spectre.html?overlay=1</code> dans une autre — l'overlay se synchronise tout seul (même navigateur).</li>
+      </ol>
+      <p class="subnote">⚠️ Une « source navigateur » OBS ne peut pas capturer l'écran elle-même (le navigateur exige un clic humain) : l'analyse doit tourner dans un vrai navigateur, OBS ne fait qu'afficher.</p>
+
+      <h4>Brancher un LLM local (optionnel)</h4>
+      <p>Par défaut, SPECTRE utilise son moteur scripté : zéro installation. Pour des commentaires générés par un vrai LLM local :</p>
+      <ol>
+        <li>Installe <a href="blog/ollama-vs-lm-studio-2026.html" style="color:var(--accent2)">Ollama</a> puis récupère un petit modèle : <code>ollama pull llama3.2:3b</code></li>
+        <li>Autorise le site à parler à Ollama (CORS) :</li>
+      </ol>
+      <pre># Windows (PowerShell, puis relancer Ollama)
+setx OLLAMA_ORIGINS "https://thebenchlab.fr"
+
+# macOS
+launchctl setenv OLLAMA_ORIGINS "https://thebenchlab.fr"
+
+# Linux (session en cours)
+OLLAMA_ORIGINS="https://thebenchlab.fr" ollama serve</pre>
+      <p class="subnote">Les jumpscares sont toujours commentés par le moteur scripté (réaction instantanée) ; le LLM prend le reste. En cas de panne, bascule automatique sur le scripté.</p>
+
+      <h4>Chat Twitch</h4>
+      <p>Entre juste le nom de la chaîne : SPECTRE se connecte en <b>lecture seule anonyme</b> au chat (connexion directe aux serveurs Twitch, sans compte ni token). Elle réagit quand un message contient « spectre » ou <code>!ia</code>, et remarque quand le chat s'emballe.</p>
+
+      <h4>Vie privée</h4>
+      <ul>
+        <li>Analyse vidéo/audio : 100 % locale, dans l'onglet. Rien n'est enregistré ni envoyé.</li>
+        <li>Réglages : sauvegardés dans ton navigateur (localStorage) uniquement.</li>
+        <li>Seules connexions sortantes possibles : ton Ollama local (si activé) et le chat Twitch (si activé).</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <span>👻 SPECTRE v1.0 — un projet <a href="index.html" style="color:var(--accent2)">TheBenchLab</a></span>
+    <span class="sep">·</span>
+    <span>100 % local, aucun serveur</span>
+    <span class="sep">·</span>
+    <a href="mentions-legales.html">Mentions légales</a>
+    <span class="sep">·</span>
+    <a href="politique-confidentialite.html">Confidentialité</a>
+  </footer>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════
+   SPECTRE — IA co-streameuse pour jeux d'horreur (TheBenchLab)
+   Pipeline : capture → capteurs → modèle de peur → événements
+              → moteur de commentaires (scripté / Ollama) → voix + overlay
+   ═══════════════════════════════════════════════════════════════ */
+
+const $ = (s) => document.querySelector(s);
+const clamp01 = (v) => Math.max(0, Math.min(1, v));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const pickRand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const nowS = () => performance.now() / 1000;
+const pad2 = (n) => String(n).padStart(2, "0");
+
+/* ── État global ─────────────────────────────────────────────── */
+const S = {
+  mode: "idle",            // idle | capture | demo
+  fear: 0,
+  mood: "calme",           // calme | tension | alerte | panique
+  metrics: { lum: 0.5, lumPrev: 0.5, lumDelta: 0, motion: 0, red: 0, rms: 0, rmsBase: 0, samples: 0 },
+  darkSince: 0, quietSince: 0,
+  lastFired: {},           // cooldowns par événement
+  lastCommentAt: -999,
+  counters: { comments: 0, jumps: 0, events: 0 },
+  startedAt: 0,
+  spokenRecent: [],        // anti-répétition (moteur scripté)
+  ollamaBusy: false,
+  crossed60: false, crossed28: true,
+  spikeArmed: true,        // le détecteur de pic doit "redescendre" avant de retirer
+};
+
+/* ── Réglages ────────────────────────────────────────────────── */
+const DEFAULTS = {
+  streamer: "", jeu: "", persona: "frousse", freq: 18,
+  voiceOn: true, voiceName: "", vol: 80,
+  engine: "script", ollamaUrl: "http://localhost:11434", ollamaModel: "llama3.2:3b",
+  twitch: "",
+};
+let CFG = { ...DEFAULTS };
+try { Object.assign(CFG, JSON.parse(localStorage.getItem("spectre_cfg_v1") || "{}")); } catch (e) {}
+function saveCfg() { try { localStorage.setItem("spectre_cfg_v1", JSON.stringify(CFG)); } catch (e) {} }
+
+/* ═══════════════════════════════════════════════════════════════
+   BANQUE DE RÉPLIQUES (moteur scripté)
+   {streamer} {jeu} {user} sont remplacés à la volée.
+   ═══════════════════════════════════════════════════════════════ */
+const PH = {
+  DEMARRAGE: {
+    frousse: [
+      "Ok. On est là. Pourquoi on est là, {streamer}, sérieux ?",
+      "Capture lancée… il est encore temps de lancer un jeu de ferme à la place.",
+      "Je sens qu'on va bien s'amuser. C'est faux. Je ne sens que la peur.",
+      "Bon. Je surveille l'écran. Si un truc bouge, je hurle, c'est mon rôle.",
+    ],
+    sarcasme: [
+      "Ah, {jeu}. Excellent choix pour dormir sereinement ce soir.",
+      "C'est parti. Je note déjà les futures erreurs de {streamer} dans un tableur.",
+      "Capture active. Le chat est prié de compter les cris.",
+      "Analyse lancée. Spoiler : ça va mal se passer, et ce sera drôle.",
+    ],
+    analyste: [
+      "Analyse démarrée. Luminosité, audio, mouvement : tout est sous surveillance.",
+      "Protocole horreur enclenché. Statistiquement, le premier jumpscare arrive vite.",
+      "Capteurs actifs. {jeu} utilise déjà le classique éclairage à douze lumens.",
+      "Systèmes nominaux. Courage à toi, {streamer} — les données, elles, ne mentent pas.",
+    ],
+  },
+  JUMPSCARE: {
+    frousse: [
+      "AAAAH ! NON NON NON !",
+      "C'ÉTAIT QUOI ÇA ?!",
+      "J'ai quitté mon corps. Littéralement plus de signal vital.",
+      "STOP. Pause. On respire. ON RESPIRE, {streamer} !",
+      "Mon cœur vient de se désabonner du stream.",
+      "JE LE SAVAIS. J'avais rien dit mais je le pensais TRÈS fort.",
+    ],
+    sarcasme: [
+      "Wouah. Un bruit fort. Quelle créativité débordante.",
+      "Clip ça, le chat. La dignité de {streamer} vient de partir en vacances.",
+      "Et voilà le jumpscare réglementaire. Merci de composter votre ticket.",
+      "Impressionnant. J'ai presque haussé un sourcil virtuel.",
+      "Le sound designer touche une prime à chaque cri, c'est confirmé.",
+    ],
+    analyste: [
+      "Pic audio à trois fois la référence. Jumpscare de manuel scolaire.",
+      "Flash lumineux plus pic sonore : combo classique, efficacité regrettable.",
+      "Fréquence cardiaque estimée de {streamer} : oui.",
+      "Silence, obscurité, puis saturation. Construction propre. Hélas.",
+    ],
+  },
+  BRUIT_FORT: {
+    frousse: [
+      "C'était quoi ce BRUIT ?",
+      "Un bruit. Derrière. C'est toujours derrière.",
+      "Dites-moi que c'était le frigo de {streamer}.",
+    ],
+    sarcasme: [
+      "Un grand bruit hors champ. Le budget effets spéciaux, sans doute.",
+      "Boum. Mystère. Suspense. Bâillement.",
+      "Le jeu tousse très fort pour rappeler qu'il existe.",
+    ],
+    analyste: [
+      "Pic audio isolé sans événement visuel. Diversion probable.",
+      "Bruit fort hors écran : technique de désorientation numéro quatre.",
+      "Signal sonore anormal, source non identifiée à l'image. Charmant.",
+    ],
+  },
+  TENSION_HAUTE: {
+    frousse: [
+      "J'aime pas ça. J'aime pas ça DU TOUT.",
+      "{streamer}, on fait demi-tour ? Dis-moi qu'on fait demi-tour.",
+      "Pourquoi tu avances ? La porte. FERME la porte.",
+      "Ce silence-là… c'est pas un bon silence. C'est un silence qui prépare un truc.",
+    ],
+    sarcasme: [
+      "Ambiance délicieuse. On se croirait dans une cave. Ah. On est dans une cave.",
+      "Je parie dix octets qu'il se passe un truc dans les trente secondes.",
+      "L'atmosphère s'épaissit et {streamer} avance quand même. Fascinant.",
+      "Tout va bien. C'est exactement ce que dirait quelqu'un à qui il reste dix secondes à vivre.",
+    ],
+    analyste: [
+      "Luminosité en chute, audio quasi nul : le jeu prépare quelque chose.",
+      "Le level design vous pousse vers l'unique couloir éclairé. Méfiance.",
+      "Indice de peur au-dessus de soixante. Recommandation : sauvegarder. Maintenant.",
+    ],
+  },
+  ACCALMIE: {
+    frousse: [
+      "Ok… ok. On respire. C'était chaud. On boit de l'eau.",
+      "Je crois que c'est passé. JE CROIS. Je ne m'engage sur rien.",
+      "Petite pause gentille. Le jeu recharge sa méchanceté, profitons-en.",
+    ],
+    sarcasme: [
+      "Moment de calme. Le temps pour {streamer} de simuler du courage.",
+      "Accalmie détectée. Parfait pour baisser sa garde comme un débutant.",
+      "Le jeu fait semblant d'être gentil. Adorable.",
+    ],
+    analyste: [
+      "Retour au calme : lumière stable, audio normal. Phase de récupération scriptée.",
+      "Baisse de tension mesurée. Fenêtre idéale pour explorer et tout ramasser.",
+      "Le cycle tension-détente repart de zéro. Chronométrons le prochain pic.",
+    ],
+  },
+  NOIR: {
+    frousse: [
+      "Je vois RIEN. Pourquoi on ne voit rien ? Allume QUELQUE CHOSE.",
+      "Le noir complet. Évidemment. Pourquoi payer des lampes.",
+      "Si ça bouge dans le noir, je désinstalle le navigateur.",
+    ],
+    sarcasme: [
+      "Écran noir. Soit le jeu est immersif, soit {streamer} a débranché l'écran.",
+      "Magnifique photographie. On distingue au moins trois nuances de rien.",
+      "La luminosité de {jeu} est sponsorisée par le néant.",
+    ],
+    analyste: [
+      "Luminance sous sept pour cent. L'œil ne distingue plus les menaces, et le jeu le sait.",
+      "Obscurité totale prolongée. Privation sensorielle, technique classique.",
+      "Zéro lumière. Les développeurs économisent le ray tracing, je respecte.",
+    ],
+  },
+  SANG: {
+    frousse: [
+      "C'est ROUGE. Pourquoi c'est rouge ?! J'ai pas signé pour le rouge !",
+      "Du sang. Super. On ne touche à rien et on s'en va.",
+      "Beurk. Beurk beurk beurk. Qui nettoie, dans ces jeux ?",
+    ],
+    sarcasme: [
+      "Tiens, du rouge partout. Quelqu'un a renversé son sirop de fraise, sûrement.",
+      "Décoration audacieuse. Très « scène de crime chic ».",
+      "Du sang sur les murs. L'agence immobilière va adorer.",
+    ],
+    analyste: [
+      "Dominante rouge en hausse brutale. Sang ou alarme : dans les deux cas, mauvais signe.",
+      "Saturation rouge détectée. Traditionnellement, l'histoire se corse ici.",
+      "Rouge vif sur une belle part de l'image. Message peu subtil.",
+    ],
+  },
+  SILENCE: {
+    frousse: [
+      "C'est trop calme. Le calme n'est JAMAIS gratuit dans ces jeux.",
+      "Personne ne parle. Rien ne bouge. J'adore pas du tout.",
+      "Ce silence me stresse plus que les cris, honnêtement.",
+    ],
+    sarcasme: [
+      "Silence total. Le compositeur est parti en pause café.",
+      "Aucun son. Même les monstres s'ennuient.",
+      "Ce silence est un placement : il va rapporter un cri avec intérêts.",
+    ],
+    analyste: [
+      "Longue période sous le seuil audio. Un contraste se prépare au montage.",
+      "Silence anormal détecté. Historiquement suivi d'un pic dans la majorité des cas.",
+      "Absence de signal sonore prolongée. Je hausse le niveau de vigilance.",
+    ],
+  },
+  IDLE_calme: {
+    frousse: [
+      "Bon. Tant que c'est éclairé, moi ça me va.",
+      "On explore tranquillement. J'apprécie chaque seconde sans monstre.",
+      "Rappel amical : les placards, on ne les ouvre PAS.",
+    ],
+    sarcasme: [
+      "Palpitant. Du couloir. Encore du couloir.",
+      "Le rythme est… contemplatif. Comme la file à la préfecture.",
+      "Toujours vivants. Le chat s'ennuie, mais toujours vivants.",
+    ],
+    analyste: [
+      "Phase d'exploration standard. Ramassez tout, ça finira par servir.",
+      "Aucune anomalie. Profitez-en pour lire les notes qui traînent : c'est du lore gratuit.",
+      "Situation nominale. Trop nominale, peut-être.",
+    ],
+  },
+  IDLE_tension: {
+    frousse: [
+      "Toujours ce petit stress de fond… c'est pas agréable, hein.",
+      "J'entends mon propre ventilateur, c'est dire le niveau de stress.",
+      "On peut retourner dans la pièce éclairée ? La jolie pièce ?",
+    ],
+    sarcasme: [
+      "L'ambiance se tend. {streamer} clique plus vite : signe scientifique de panique.",
+      "Notez comme la musique a disparu. Subtil comme un panneau clignotant.",
+      "Tension palpable. Quelqu'un veut un thé ?",
+    ],
+    analyste: [
+      "Tension stable au-dessus de la moyenne. Le jeu nous garde en apnée volontairement.",
+      "Courbe de peur en plateau haut. Économie de moyens efficace.",
+      "Stress prolongé détecté. Hydratez-vous, ça aide vraiment.",
+    ],
+  },
+  IDLE_panique: {
+    frousse: [
+      "JE NE SUIS PAS BIEN. Je dis ça, je ne dis rien. PAS BIEN.",
+      "Si je pouvais fermer les yeux, je le ferais. Je ne peux pas. C'est l'enfer.",
+      "On s'en sort. ON S'EN SORT. Je me le répète et j'y crois moyen.",
+    ],
+    sarcasme: [
+      "Tout est sous contrôle. Le contrôle de qui, mystère.",
+      "Je maintiens un calme exemplaire. Quelqu'un doit bien le faire ici.",
+      "Niveau panique atteint. J'envoie mon CV à un stream de cuisine.",
+    ],
+    analyste: [
+      "Niveau d'alerte maximal maintenu. Capacités cognitives de {streamer} en chute libre.",
+      "Les capteurs saturent. Je recommande officiellement la fuite.",
+      "Données alarmantes sur tous les canaux. Fascinant. Terrifiant, mais fascinant.",
+    ],
+  },
+  CHAT_MENTION: {
+    frousse: [
+      "{user} me parle ?! Pardon, je surveillais les ombres. Salut !",
+      "Oui, {user} ? Si c'est pour dire qu'un truc bouge derrière, je ne veux PAS savoir.",
+      "{user}, reste avec moi, ici c'est le far west.",
+    ],
+    sarcasme: [
+      "{user}, enfin quelqu'un d'intéressant sur ce stream.",
+      "Le chat s'adresse à moi. Normal : je suis la seule ici à garder mon sang-froid, {user}.",
+      "Oui, {user} ? Non, je ne peux pas jouer à la place de {streamer}. Hélas pour vous tous.",
+    ],
+    analyste: [
+      "Message de {user} reçu. Priorité : basse. Sympathie : élevée.",
+      "{user}, mes capteurs vous saluent. Restez pour les statistiques de cris.",
+      "Bien noté, {user}. Je consigne votre courage d'être encore là.",
+    ],
+  },
+  CHAT_HYPE: {
+    frousse: [
+      "Le chat s'excite ! Pourquoi le chat s'excite ?! Qu'est-ce que vous avez VU ?",
+      "Quand le chat spamme, c'est qu'un truc arrive. C'est TOUJOURS qu'un truc arrive.",
+    ],
+    sarcasme: [
+      "Le chat s'emballe. Vingt messages, zéro information utile. Magnifique.",
+      "Explosion de messages. L'intelligence collective à l'œuvre. Ou presque.",
+    ],
+    analyste: [
+      "Pic d'activité du chat détecté. Hype confirmée.",
+      "Le chat réagit avant moi. Latence humaine négative : intéressant.",
+    ],
+  },
+  FIN: {
+    frousse: ["Capture terminée. J'ai survécu. On a TOUS survécu. Câlin de groupe."],
+    sarcasme: ["Fin de session. Bilan : des cris, zéro dignité. Comme prévu."],
+    analyste: ["Analyse terminée. Les données de cette session serviront la science. Ou pas."],
+  },
+};
+
+const EVENT_LABEL = {
+  DEMARRAGE: "GO", JUMPSCARE: "JUMPSCARE", BRUIT_FORT: "BRUIT", TENSION_HAUTE: "TENSION",
+  ACCALMIE: "ACCALMIE", NOIR: "NOIR TOTAL", SANG: "ALERTE ROUGE", SILENCE: "SILENCE",
+  IDLE: "AMBIANCE", CHAT_MENTION: "CHAT", CHAT_HYPE: "HYPE", FIN: "FIN",
+};
+
+const EVENT_DESC = { // descriptions compactes pour le LLM
+  DEMARRAGE: "début de session, la capture démarre",
+  TENSION_HAUTE: "la tension monte fort (écran sombre, silence pesant)",
+  ACCALMIE: "retour au calme après un moment intense",
+  NOIR: "écran presque totalement noir depuis plusieurs secondes",
+  SANG: "beaucoup de rouge vient d'apparaître à l'écran (sang probable)",
+  SILENCE: "long silence anormal dans le jeu",
+  IDLE: "rien de spécial, commentaire d'ambiance",
+  CHAT_MENTION: "un spectateur t'interpelle dans le chat",
+  CHAT_HYPE: "le chat Twitch s'emballe d'un coup",
+  FIN: "fin de la session",
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   MOTEUR SCRIPTÉ — choix pondéré avec anti-répétition
+   ═══════════════════════════════════════════════════════════════ */
+function fillVars(t, extra) {
+  return t
+    .replace(/\{streamer\}/g, CFG.streamer.trim() || "streamer")
+    .replace(/\{jeu\}/g, CFG.jeu.trim() || "ce jeu")
+    .replace(/\{user\}/g, (extra && extra.user) || "toi");
+}
+function scriptLine(event, extra) {
+  let key = event;
+  if (event === "IDLE") {
+    key = S.mood === "calme" ? "IDLE_calme" : (S.mood === "tension" ? "IDLE_tension" : "IDLE_panique");
+  }
+  const bank = PH[key] && (PH[key][CFG.persona] || PH[key].frousse);
+  if (!bank || !bank.length) return null;
+  let candidates = bank.filter((t) => !S.spokenRecent.includes(t));
+  if (!candidates.length) candidates = bank;
+  const chosen = pickRand(candidates);
+  S.spokenRecent.push(chosen);
+  if (S.spokenRecent.length > 14) S.spokenRecent.shift();
+  return fillVars(chosen, extra);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOTEUR OLLAMA (LLM local, optionnel)
+   ═══════════════════════════════════════════════════════════════ */
+const PERSONA_DESC = {
+  frousse: "peureuse mais attachante : tu paniques facilement, tu supplies le streamer d'être prudent, humour involontaire",
+  sarcasme: "pince-sans-rire : tu te moques gentiment du jeu et du streamer, jamais méchante, culture Twitch",
+  analyste: "faussement scientifique : tu commentes les ficelles du jeu d'horreur avec détachement, mais tu craques sous la pression",
+};
+function ollamaBase() { return (CFG.ollamaUrl || "http://localhost:11434").replace(/\/+$/, ""); }
+
+async function ollamaLine(event, extra) {
+  if (S.ollamaBusy) throw new Error("busy");
+  S.ollamaBusy = true;
+  const ctrl = new AbortController();
+  const to = setTimeout(() => ctrl.abort(), 9000);
+  try {
+    const sys = "Tu es SPECTRE, une IA co-streameuse sur un stream Twitch de jeu d'horreur. Personnalité : "
+      + PERSONA_DESC[CFG.persona] + ". Réponds UNIQUEMENT par ta réplique parlée : une à deux phrases courtes (25 mots max), en français, ton oral de stream, sans guillemets, sans astérisques, sans didascalies, sans emojis.";
+    const m = S.metrics;
+    let ctx = "Peur actuelle : " + Math.round(S.fear) + "/100 (" + S.mood + "). Événement : "
+      + (EVENT_DESC[event] || event) + ". " + (m.lum < 0.15 ? "L'écran est très sombre. " : "")
+      + "Jeu : " + (CFG.jeu.trim() || "un jeu d'horreur") + ". Streamer : " + (CFG.streamer.trim() || "le streamer") + ".";
+    if (extra && extra.user) ctx += " Message du chat de " + extra.user + " : « " + (extra.msg || "") + " ».";
+    ctx += " Réagis.";
+    const r = await fetch(ollamaBase() + "/api/chat", {
+      method: "POST", signal: ctrl.signal,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: CFG.ollamaModel.trim() || "llama3.2:3b", stream: false,
+        messages: [{ role: "system", content: sys }, { role: "user", content: ctx }],
+        options: { temperature: 0.9, num_predict: 70 },
+      }),
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const j = await r.json();
+    let t = ((j.message && j.message.content) || "")
+      .replace(/<think>[\s\S]*?<\/think>/g, "")
+      .replace(/\*[^*]*\*/g, "")
+      .replace(/\s+/g, " ")
+      .replace(/^["'«\s]+|["'»\s]+$/g, "")
+      .trim();
+    if (!t) throw new Error("vide");
+    if (t.length > 200) t = t.slice(0, 197) + "…";
+    return t;
+  } finally {
+    clearTimeout(to);
+    S.ollamaBusy = false;
+  }
+}
+
+async function testOllama() {
+  const pill = $("#ollamaPill");
+  pill.className = "pill warn"; pill.textContent = "test…";
+  try {
+    const r = await fetch(ollamaBase() + "/api/tags", { signal: AbortSignal.timeout(6000) });
+    if (!r.ok) throw new Error();
+    const j = await r.json();
+    const names = (j.models || []).map((m) => m.name);
+    const has = names.some((n) => n.startsWith(CFG.ollamaModel.trim().split(":")[0]));
+    pill.className = "pill ok";
+    pill.textContent = "OK — " + names.length + " modèle(s)" + (has ? "" : " (modèle demandé absent !)");
+    logLine("Ollama joignable : " + (names.slice(0, 4).join(", ") || "aucun modèle"), "");
+  } catch (e) {
+    pill.className = "pill err"; pill.textContent = "injoignable";
+    logLine("Ollama injoignable — vérifie qu'il tourne et OLLAMA_ORIGINS (voir Guide)", "warnl");
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VOIX (Web Speech API)
+   ═══════════════════════════════════════════════════════════════ */
+const Voice = {
+  voices: [],
+  refresh() {
+    if (!("speechSynthesis" in window)) return;
+    this.voices = speechSynthesis.getVoices().filter((v) => v.lang && v.lang.toLowerCase().startsWith("fr"));
+    if (!this.voices.length) this.voices = speechSynthesis.getVoices();
+    const sel = $("#sVoice");
+    const cur = CFG.voiceName;
+    sel.innerHTML = '<option value="">(voix française auto)</option>';
+    this.voices.forEach((v) => {
+      const o = document.createElement("option");
+      o.value = v.name; o.textContent = v.name + " — " + v.lang;
+      if (v.name === cur) o.selected = true;
+      sel.appendChild(o);
+    });
+  },
+  pick() {
+    if (CFG.voiceName) {
+      const v = this.voices.find((x) => x.name === CFG.voiceName);
+      if (v) return v;
+    }
+    return this.voices.find((v) => v.lang.toLowerCase().startsWith("fr")) || this.voices[0] || null;
+  },
+  speak(text, priority) {
+    if (!CFG.voiceOn || !("speechSynthesis" in window)) return;
+    try {
+      if (priority) speechSynthesis.cancel();
+      else if (speechSynthesis.speaking) return; // on ne parle pas par-dessus soi-même
+      const u = new SpeechSynthesisUtterance(text);
+      const v = this.pick();
+      if (v) u.voice = v;
+      u.lang = (v && v.lang) || "fr-FR";
+      u.volume = clamp(CFG.vol / 100, 0, 1);
+      u.pitch = clamp(0.95 + S.fear / 220, 0.8, 1.6);
+      u.rate = clamp(1.0 + S.fear / 320, 0.8, 1.5);
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  },
+};
+if ("speechSynthesis" in window) {
+  Voice.refresh();
+  speechSynthesis.addEventListener("voiceschanged", () => Voice.refresh());
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMMENTAIRES — planification, moteurs, affichage
+   ═══════════════════════════════════════════════════════════════ */
+const PRIORITY_EVENTS = ["JUMPSCARE", "BRUIT_FORT"];
+
+async function comment(event, extra) {
+  extra = extra || {};
+  const t = nowS();
+  const priority = PRIORITY_EVENTS.includes(event);
+  const minGap = priority ? 2 : (event === "IDLE" ? CFG.freq : 7);
+  if (!extra.force && t - S.lastCommentAt < minGap) return;
+  S.lastCommentAt = t;
+
+  let text = null;
+  // Les événements prioritaires passent toujours par le scripté : latence zéro.
+  if (CFG.engine === "ollama" && !priority) {
+    try { text = await ollamaLine(event, extra); }
+    catch (e) {
+      if (e.message !== "busy") logLine("Ollama KO (" + e.message + ") → moteur scripté", "warnl");
+    }
+  }
+  if (!text) text = scriptLine(event, extra);
+  if (!text) return;
+
+  S.counters.comments++;
+  pushFeed(event, text);
+  Voice.speak(text, priority);
+  Live.post({ type: "say", text, event });
+}
+
+function pushFeed(event, text) {
+  const feed = $("#feed");
+  const empty = feed.querySelector(".empty");
+  if (empty) empty.remove();
+  const d = document.createElement("div");
+  d.className = "msg ev-" + event;
+  const now = new Date();
+  d.innerHTML = '<div class="tag"><b>' + (EVENT_LABEL[event] || event) + "</b><span class='t'>"
+    + pad2(now.getHours()) + ":" + pad2(now.getMinutes()) + ":" + pad2(now.getSeconds()) + "</span></div>";
+  const p = document.createElement("div");
+  p.textContent = text;
+  d.appendChild(p);
+  feed.prepend(d);
+  while (feed.children.length > 60) feed.lastChild.remove();
+  $("#ovBubble").textContent = text;
+  clearTimeout(pushFeed._to);
+  pushFeed._to = setTimeout(() => { $("#ovBubble").textContent = ""; }, 9000);
+}
+
+function logLine(txt, cls) {
+  const log = $("#log");
+  const d = document.createElement("div");
+  if (cls) d.className = cls;
+  const now = new Date();
+  d.textContent = "[" + pad2(now.getHours()) + ":" + pad2(now.getMinutes()) + ":" + pad2(now.getSeconds()) + "] " + txt;
+  log.prepend(d);
+  while (log.children.length > 80) log.lastChild.remove();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODÈLE DE PEUR + DÉTECTION D'ÉVÉNEMENTS
+   ═══════════════════════════════════════════════════════════════ */
+const COOLDOWN = {
+  JUMPSCARE: 6, BRUIT_FORT: 12, TENSION_HAUTE: 40, ACCALMIE: 40,
+  NOIR: 50, SANG: 30, SILENCE: 80, CHAT_HYPE: 60, CHAT_MENTION: 8,
+};
+function fireEvent(ev, extra) {
+  const t = nowS();
+  if (!(extra && extra.force) && t - (S.lastFired[ev] || -999) < (COOLDOWN[ev] || 10)) return false;
+  S.lastFired[ev] = t;
+  S.counters.events++;
+  if (ev === "JUMPSCARE") S.counters.jumps++;
+  logLine("événement : " + (EVENT_LABEL[ev] || ev), ev === "JUMPSCARE" ? "alertl" : (ev === "TENSION_HAUTE" || ev === "NOIR" ? "warnl" : ""));
+  comment(ev, Object.assign({ force: PRIORITY_EVENTS.includes(ev) || ev === "CHAT_MENTION" }, extra || {}));
+  return true;
+}
+
+function brainTick(dt) {
+  const m = S.metrics;
+  const t = nowS();
+
+  const dark = clamp01((0.32 - m.lum) / 0.32);
+  const baseReady = m.samples > 12 && m.rmsBase > 0.0015;
+  const quiet = baseReady ? clamp01(1 - m.rms / (m.rmsBase * 1.2 + 1e-6)) : 0;
+
+  // suivi durées noir / silence
+  if (m.lum < 0.07) { if (!S.darkSince) S.darkSince = t; } else S.darkSince = 0;
+  if (baseReady && quiet > 0.7 && dark > 0.15) { if (!S.quietSince) S.quietSince = t; } else S.quietSince = 0;
+
+  // ── montée d'ambiance
+  const creep = dark * 0.55 + quiet * 0.3 + (m.motion < 0.02 ? 0.15 : 0);
+  if (S.mode !== "idle") {
+    S.fear += creep * 7.2 * dt;
+    if (S.fear > 78 && creep > 0.2) S.fear = Math.max(78, S.fear - 3 * dt); // plafond d'ambiance
+    // décrue
+    if (creep < 0.2) S.fear -= (m.lum > 0.45 ? 4.5 : 1.2) * dt;
+    S.fear *= Math.pow(0.996, dt * 5);
+    S.fear = clamp(S.fear, 0, 100);
+  }
+
+  // ── détection de pics (avec réarmement : le signal doit retomber avant de re-tirer)
+  if (S.mode !== "idle" && baseReady) {
+    const spikeThresh = Math.max(0.045, m.rmsBase * 3.2);
+    const audioSpike = m.rms > spikeThresh;
+    const visualSpike = m.lumDelta > 0.28 || m.motion > 0.55;
+    if (!S.spikeArmed && m.rms < spikeThresh * 0.6) S.spikeArmed = true;
+    if (S.spikeArmed && audioSpike) {
+      S.spikeArmed = false;
+      if (visualSpike || dark > 0.3) {
+        if (fireEvent("JUMPSCARE")) S.fear = clamp(S.fear + 38 + dark * 12, 0, 100);
+      } else if (fireEvent("BRUIT_FORT")) S.fear = clamp(S.fear + 16, 0, 100);
+    }
+    if (m.red > 0.14 && m.redPrev < 0.08) {
+      if (fireEvent("SANG")) S.fear = clamp(S.fear + 10, 0, 100);
+    }
+  }
+  m.redPrev = m.redPrev === undefined ? m.red : lerp(m.redPrev, m.red, 0.06);
+
+  // ── événements de seuil
+  if (S.mode !== "idle") {
+    if (S.fear >= 60 && !S.crossed60) {
+      S.crossed60 = true; S.crossed28 = false;
+      // pas de "la tension monte" juste après un jumpscare : ce serait absurde
+      if (t - (S.lastFired.JUMPSCARE || -999) > 8) fireEvent("TENSION_HAUTE");
+    }
+    if (S.fear < 55) S.crossed60 = false;
+    if (S.fear <= 28 && !S.crossed28) { S.crossed28 = true; fireEvent("ACCALMIE"); }
+    if (S.fear > 40) S.crossed28 = false;
+    if (S.darkSince && t - S.darkSince > 4) fireEvent("NOIR");
+    if (S.quietSince && t - S.quietSince > 15) fireEvent("SILENCE");
+    // commentaire d'ambiance périodique
+    if (t - S.lastCommentAt > CFG.freq) comment("IDLE");
+  }
+
+  // ── humeur
+  const prevMood = S.mood;
+  S.mood = S.fear < 30 ? "calme" : S.fear < 60 ? "tension" : S.fear < 85 ? "alerte" : "panique";
+  if (S.mood !== prevMood) {
+    document.body.classList.remove("mood-calme", "mood-tension", "mood-alerte", "mood-panique");
+    document.body.classList.add("mood-" + S.mood);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CAPTEURS — échantillonnage vidéo + audio
+   ═══════════════════════════════════════════════════════════════ */
+const Sensors = {
+  video: document.createElement("video"),
+  san: document.createElement("canvas"),
+  prevGray: null,
+  audioCtx: null, analyser: null, audioBuf: null,
+
+  initSample() { this.san.width = 96; this.san.height = 54; this.prevGray = null; },
+
+  sampleVideo() {
+    if (S.mode !== "capture") return;
+    const v = this.video;
+    if (v.readyState < 2 || !v.videoWidth) return;
+    const cx = this.san.getContext("2d", { willReadFrequently: true });
+    cx.drawImage(v, 0, 0, this.san.width, this.san.height);
+    let data;
+    try { data = cx.getImageData(0, 0, this.san.width, this.san.height).data; } catch (e) { return; }
+    this.ingestFrame(data);
+  },
+
+  ingestFrame(data) {
+    const m = S.metrics;
+    const n = data.length / 4;
+    let sumL = 0, sumR = 0, diff = 0;
+    const gray = this.prevGray && this.prevGray.length === n ? null : new Float32Array(n);
+    const pg = this.prevGray;
+    for (let i = 0; i < n; i++) {
+      const r = data[i * 4], g = data[i * 4 + 1], b = data[i * 4 + 2];
+      const l = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+      sumL += l;
+      sumR += Math.max(0, r - (g + b) / 2) / 255;
+      if (pg && pg.length === n) {
+        diff += Math.abs(l - pg[i]);
+        pg[i] = l;
+      } else if (gray) gray[i] = l;
+    }
+    if (gray) this.prevGray = gray;
+    m.lumPrev = m.lum;
+    m.lum = sumL / n;
+    m.lumDelta = Math.abs(m.lum - m.lumPrev);
+    m.motion = pg && pg.length === n ? clamp01((diff / n) * 6) : 0;
+    m.red = sumR / n;
+    m.samples++;
+  },
+
+  sampleAudio() {
+    if (!this.analyser) return;
+    const buf = this.audioBuf;
+    this.analyser.getByteTimeDomainData(buf);
+    let sum = 0;
+    for (let i = 0; i < buf.length; i++) { const v = (buf[i] - 128) / 128; sum += v * v; }
+    this.setRms(Math.sqrt(sum / buf.length));
+  },
+
+  setRms(rms) {
+    const m = S.metrics;
+    m.rms = rms;
+    if (m.rmsBase === 0) m.rmsBase = rms;
+    else if (rms < m.rmsBase * 2.5) m.rmsBase = m.rmsBase * 0.99 + rms * 0.01;
+  },
+
+  async startCapture() {
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      video: { frameRate: 15 }, audio: true,
+    });
+    this.stream = stream;
+    this.initSample();
+    this.video.srcObject = stream;
+    this.video.muted = true;
+    await this.video.play().catch(() => {});
+    if (stream.getAudioTracks().length) {
+      this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const src = this.audioCtx.createMediaStreamSource(stream);
+      this.analyser = this.audioCtx.createAnalyser();
+      this.analyser.fftSize = 1024;
+      this.audioBuf = new Uint8Array(this.analyser.fftSize);
+      src.connect(this.analyser);
+      logLine("audio du jeu capturé — détection des jumpscares active");
+    } else {
+      this.analyser = null;
+      logLine("⚠ pas de piste audio partagée : coche « Partager l'audio » pour détecter les jumpscares", "warnl");
+    }
+    stream.getVideoTracks()[0].addEventListener("ended", () => stopAll(true));
+  },
+
+  stop() {
+    if (this.stream) { this.stream.getTracks().forEach((t) => t.stop()); this.stream = null; }
+    if (this.audioCtx) { this.audioCtx.close().catch(() => {}); this.audioCtx = null; }
+    this.analyser = null;
+    this.video.srcObject = null;
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   MODE DÉMO — scénario synthétique (aucune capture requise)
+   Keyframes : [t, lum, rms, motion, red, marqueur?]
+   ═══════════════════════════════════════════════════════════════ */
+const DEMO_KF = [
+  [0,   0.50, 0.030, 0.04, 0.02],
+  [6,   0.42, 0.022, 0.03, 0.02],
+  [14,  0.26, 0.012, 0.02, 0.02],
+  [20,  0.12, 0.006, 0.01, 0.02],
+  [27,  0.09, 0.004, 0.01, 0.02],
+  [31.5,0.08, 0.004, 0.01, 0.02],
+  [32,  0.85, 0.340, 0.85, 0.10, "J"],   // JUMPSCARE
+  [32.7,0.55, 0.280, 0.30, 0.08],
+  [33.4,0.30, 0.050, 0.15, 0.06],
+  [36,  0.30, 0.035, 0.05, 0.04],
+  [44,  0.48, 0.040, 0.06, 0.02],
+  [50,  0.40, 0.020, 0.04, 0.03],
+  [56,  0.18, 0.010, 0.02, 0.04],
+  [60,  0.14, 0.008, 0.02, 0.19],        // SANG
+  [64,  0.16, 0.008, 0.02, 0.08],
+  [67.5,0.36, 0.006, 0.01, 0.04],
+  [68,  0.36, 0.300, 0.10, 0.04, "B"],   // BRUIT_FORT
+  [68.7,0.35, 0.260, 0.08, 0.03],
+  [69.3,0.30, 0.020, 0.03, 0.03],
+  [74,  0.52, 0.045, 0.06, 0.02],
+  [86,  0.55, 0.040, 0.05, 0.02],
+  [90,  0.45, 0.030, 0.04, 0.02],
+];
+const DEMO_LEN = 90;
+
+const Demo = {
+  t0: 0, flash: 0,
+  start() { this.t0 = nowS(); },
+  tick() {
+    const t = (nowS() - this.t0) % DEMO_LEN;
+    let a = DEMO_KF[0], b = DEMO_KF[DEMO_KF.length - 1];
+    for (let i = 0; i < DEMO_KF.length - 1; i++) {
+      if (t >= DEMO_KF[i][0] && t < DEMO_KF[i + 1][0]) { a = DEMO_KF[i]; b = DEMO_KF[i + 1]; break; }
+    }
+    const f = b[0] === a[0] ? 0 : (t - a[0]) / (b[0] - a[0]);
+    const m = S.metrics;
+    const jitter = (amt) => (Math.random() - 0.5) * amt;
+    m.lumPrev = m.lum;
+    m.lum = clamp01(lerp(a[1], b[1], f) + jitter(a[1] < 0.2 ? 0.03 : 0.012)); // flicker plus fort dans le noir
+    m.lumDelta = Math.abs(m.lum - m.lumPrev);
+    m.motion = clamp01(lerp(a[3], b[3], f) + jitter(0.01));
+    m.red = clamp01(lerp(a[4], b[4], f));
+    Sensors.setRms(clamp01(lerp(a[2], b[2], f) + jitter(0.004)));
+    m.samples++;
+    if (b[5] && b[0] - t < 0.25) this.flash = 1; // flash visuel pour le peintre
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   PEINTRE — rendu de la scène (démo, capture, veille)
+   ═══════════════════════════════════════════════════════════════ */
+const Painter = {
+  cv: null, cx: null, last: 0,
+  init() {
+    this.cv = $("#scene");
+    this.cx = this.cv.getContext("2d");
+    const fit = () => {
+      const r = this.cv.getBoundingClientRect();
+      this.cv.width = Math.max(320, r.width | 0);
+      this.cv.height = Math.max(180, r.height | 0);
+    };
+    fit(); window.addEventListener("resize", fit);
+    const loop = (ts) => {
+      if (ts - this.last > 50) { this.last = ts; this.draw(); }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  },
+  draw() {
+    const cx = this.cx, w = this.cv.width, h = this.cv.height, m = S.metrics;
+    if (S.mode === "capture" && Sensors.video.readyState >= 2 && Sensors.video.videoWidth) {
+      const v = Sensors.video;
+      const s = Math.min(w / v.videoWidth, h / v.videoHeight);
+      const dw = v.videoWidth * s, dh = v.videoHeight * s;
+      cx.fillStyle = "#05060a"; cx.fillRect(0, 0, w, h);
+      cx.drawImage(v, (w - dw) / 2, (h - dh) / 2, dw, dh);
+      return;
+    }
+    // fond
+    const g = cx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, "#070910"); g.addColorStop(1, "#03040a");
+    cx.fillStyle = g; cx.fillRect(0, 0, w, h);
+    const t = nowS();
+    if (S.mode === "demo") {
+      // torche vacillante dont l'intensité suit la luminosité
+      const px = w * (0.5 + Math.sin(t * 0.6) * 0.1), py = h * 0.55;
+      const rad = Math.max(30, w * 0.55 * (m.lum + 0.08));
+      const rg = cx.createRadialGradient(px, py, 10, px, py, rad);
+      const a = clamp01(m.lum * 1.5);
+      rg.addColorStop(0, "rgba(255,196,130," + (0.35 * a + 0.05) + ")");
+      rg.addColorStop(1, "rgba(0,0,0,0)");
+      cx.fillStyle = rg; cx.fillRect(0, 0, w, h);
+      // teinte rouge (sang)
+      if (m.red > 0.06) { cx.fillStyle = "rgba(255,40,60," + clamp01(m.red * 1.6) + ")"; cx.fillRect(0, 0, w, h); }
+      // grain
+      cx.fillStyle = "rgba(255,255,255,0.03)";
+      for (let i = 0; i < 26; i++) cx.fillRect(Math.random() * w, Math.random() * h, 1.4, 1.4);
+      // flash jumpscare : deux yeux
+      if (Demo.flash > 0.02) {
+        cx.fillStyle = "rgba(255,235,235," + (Demo.flash * 0.55) + ")"; cx.fillRect(0, 0, w, h);
+        cx.fillStyle = "rgba(255,30,50," + Demo.flash + ")";
+        const ew = w * 0.05, eh = h * 0.11, ey = h * 0.42;
+        cx.beginPath(); cx.ellipse(w * 0.42, ey, ew, eh, 0, 0, 7); cx.fill();
+        cx.beginPath(); cx.ellipse(w * 0.58, ey, ew, eh, 0, 0, 7); cx.fill();
+        Demo.flash *= 0.86;
+      }
+    } else {
+      // veille
+      cx.fillStyle = "rgba(232,234,240,0.05)";
+      cx.font = "700 " + Math.round(h * 0.16) + "px system-ui";
+      cx.textAlign = "center"; cx.textBaseline = "middle";
+      cx.fillText("S P E C T R E", w / 2, h / 2 + Math.sin(t * 0.8) * 4);
+      cx.fillStyle = "rgba(255,255,255,0.02)";
+      for (let i = 0; i < 14; i++) cx.fillRect(Math.random() * w, Math.random() * h, 1.4, 1.4);
+    }
+    // vignette
+    const vg = cx.createRadialGradient(w / 2, h / 2, h * 0.3, w / 2, h / 2, h);
+    vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.55)");
+    cx.fillStyle = vg; cx.fillRect(0, 0, w, h);
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   TWITCH — lecture anonyme du chat (IRC over WebSocket)
+   ═══════════════════════════════════════════════════════════════ */
+const Twitch = {
+  ws: null, channel: "", msgTimes: [], wantClose: false,
+  connect(channel) {
+    this.disconnect();
+    this.channel = channel.toLowerCase().replace(/^#/, "").trim();
+    if (!this.channel) return;
+    this.wantClose = false;
+    const pill = $("#twPill");
+    pill.className = "pill warn"; pill.textContent = "connexion…";
+    try { this.ws = new WebSocket("wss://irc-ws.chat.twitch.tv:443"); }
+    catch (e) { pill.className = "pill err"; pill.textContent = "erreur"; return; }
+    this.ws.onopen = () => {
+      this.ws.send("NICK justinfan" + Math.floor(Math.random() * 89999 + 10000));
+    };
+    this.ws.onmessage = (ev) => this.onData(String(ev.data));
+    this.ws.onclose = () => {
+      $("#twPill").className = "pill"; $("#twPill").textContent = "déconnecté";
+      $("#btnTwitch").textContent = "Se connecter";
+      if (!this.wantClose && this.channel) setTimeout(() => this.connect(this.channel), 4000);
+    };
+    this.ws.onerror = () => {};
+  },
+  onData(data) {
+    for (const line of data.split("\r\n")) {
+      if (!line) continue;
+      if (line.startsWith("PING")) { this.ws.send("PONG :tmi.twitch.tv"); continue; }
+      if (line.includes(" 001 ")) {
+        this.ws.send("JOIN #" + this.channel);
+        const pill = $("#twPill");
+        pill.className = "pill ok"; pill.textContent = "#" + this.channel;
+        $("#btnTwitch").textContent = "Se déconnecter";
+        $("#chatCard").style.display = "";
+        logLine("chat Twitch connecté : #" + this.channel + " (lecture seule)");
+        continue;
+      }
+      const m = line.match(/^:(\w+)!\S+ PRIVMSG #\S+ :(.*)$/);
+      if (m) this.onChat(m[1], m[2]);
+    }
+  },
+  onChat(user, msg) {
+    const feed = $("#chatFeed");
+    const d = document.createElement("div");
+    const u = document.createElement("span"); u.className = "cu"; u.textContent = user + " ";
+    const tx = document.createElement("span"); tx.textContent = msg;
+    d.append(u, tx);
+    feed.prepend(d);
+    while (feed.children.length > 40) feed.lastChild.remove();
+    const t = Date.now();
+    this.msgTimes.push(t);
+    this.msgTimes = this.msgTimes.filter((x) => t - x < 10000);
+    $("#chatCount").textContent = this.msgTimes.length + " msg/10s";
+    if (this.msgTimes.length >= 8) fireEvent("CHAT_HYPE");
+    if (/\bspectre\b|(^|\s)!ia\b/i.test(msg)) fireEvent("CHAT_MENTION", { user, msg: msg.slice(0, 120) });
+  },
+  disconnect() {
+    this.wantClose = true;
+    if (this.ws) { try { this.ws.close(); } catch (e) {} this.ws = null; }
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   SYNC OVERLAY (BroadcastChannel entre onglets)
+   ═══════════════════════════════════════════════════════════════ */
+const Live = {
+  ch: null, isMirror: false,
+  init() {
+    try { this.ch = new BroadcastChannel("spectre_live"); } catch (e) { return; }
+    this.ch.onmessage = (ev) => {
+      if (!this.isMirror) return;
+      const d = ev.data || {};
+      if (d.type === "state") applyMirror(d);
+      if (d.type === "say") { $("#ovBubble").textContent = d.text; clearTimeout(Live._to); Live._to = setTimeout(() => { $("#ovBubble").textContent = ""; }, 9000); }
+    };
+  },
+  post(obj) { if (this.ch && !this.isMirror) { try { this.ch.postMessage(obj); } catch (e) {} } },
+};
+const MOOD_EMOJI = { calme: "👻", tension: "😰", alerte: "😨", panique: "😱" };
+function applyMirror(d) {
+  S.fear = d.fear; S.mood = d.mood;
+  document.body.classList.remove("mood-calme", "mood-tension", "mood-alerte", "mood-panique");
+  document.body.classList.add("mood-" + d.mood);
+  renderState();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDU UI
+   ═══════════════════════════════════════════════════════════════ */
+const MOOD_COLOR = { calme: "var(--calme)", tension: "var(--tension)", alerte: "var(--alerte)", panique: "var(--panique)" };
+function setMeter(id, v, label) {
+  const el = $(id);
+  el.querySelector(".bar i").style.width = (clamp01(v) * 100).toFixed(0) + "%";
+  el.querySelector("label span").textContent = label;
+}
+function renderState() {
+  const f = Math.round(S.fear);
+  $("#fearNum").textContent = f;
+  const ring = $("#ring");
+  ring.style.setProperty("--p", f);
+  ring.style.setProperty("--moodc", MOOD_COLOR[S.mood]);
+  const pill = $("#moodPill");
+  pill.textContent = S.mood.toUpperCase();
+  pill.style.color = MOOD_COLOR[S.mood];
+  pill.style.borderColor = MOOD_COLOR[S.mood];
+  $("#stageFear").style.width = f + "%";
+  $("#avatar").textContent = MOOD_EMOJI[S.mood];
+  $("#ovAvatar").textContent = MOOD_EMOJI[S.mood];
+  $("#ovMeter i").style.width = f + "%";
+}
+function renderMeters() {
+  const m = S.metrics;
+  setMeter("#mLum", m.lum, (m.lum * 100).toFixed(0) + " %");
+  setMeter("#mVol", m.rms * 6, m.rms > 0.001 ? (m.rms * 100).toFixed(1) : "—");
+  setMeter("#mMot", m.motion, (m.motion * 100).toFixed(0) + " %");
+  setMeter("#mRed", m.red * 3, (m.red * 100).toFixed(0) + " %");
+}
+function renderStats() {
+  $("#stComments").textContent = S.counters.comments;
+  $("#stJumps").textContent = S.counters.jumps;
+  $("#stEvents").textContent = S.counters.events;
+  if (S.startedAt) {
+    const s = Math.floor(nowS() - S.startedAt);
+    $("#stUptime").textContent = pad2(Math.floor(s / 60)) + ":" + pad2(s % 60);
+  }
+}
+function setStatus(txt, on) {
+  $("#statusTxt").textContent = txt;
+  $("#statusDot").className = "status-dot" + (on ? " on" : "");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CYCLE DE VIE
+   ═══════════════════════════════════════════════════════════════ */
+function resetSession() {
+  S.fear = 0; S.mood = "calme"; S.crossed60 = false; S.crossed28 = true;
+  S.metrics.samples = 0; S.metrics.rmsBase = 0; S.darkSince = 0; S.quietSince = 0;
+  S.lastFired = {}; S.lastCommentAt = nowS() - 999;
+  S.counters = { comments: 0, jumps: 0, events: 0 };
+  S.startedAt = nowS();
+}
+
+async function startCapture() {
+  try {
+    stopAll(false);
+    await Sensors.startCapture();
+    resetSession();
+    S.mode = "capture";
+    uiRunning("CAPTURE EN COURS", "🔴 capture live");
+    fireEvent("DEMARRAGE", { force: true });
+  } catch (e) {
+    logLine("capture annulée ou refusée (" + (e.name || e.message || "?") + ")", "warnl");
+  }
+}
+function startDemo() {
+  stopAll(false);
+  resetSession();
+  S.mode = "demo";
+  Demo.start();
+  // le mode démo simule aussi une base audio déjà calibrée
+  S.metrics.rmsBase = 0.028; S.metrics.samples = 50;
+  uiRunning("MODE DÉMO", "🧪 démo en cours");
+  fireEvent("DEMARRAGE", { force: true });
+}
+function uiRunning(badge, statusTxt) {
+  $("#stageBadge").textContent = badge;
+  $("#stageBadge").classList.toggle("live", S.mode === "capture");
+  $("#capPill").className = "pill ok";
+  $("#capPill").textContent = S.mode === "capture" ? "live" : "démo";
+  $("#btnStop").style.display = "";
+  $("#btnCap").style.display = S.mode === "capture" ? "none" : "";
+  $("#btnDemo").style.display = S.mode === "demo" ? "none" : "";
+  setStatus(statusTxt + " — j'ai l'œil (et je ne suis pas rassurée)", true);
+}
+function stopAll(sayBye) {
+  const wasRunning = S.mode !== "idle";
+  if (S.mode === "capture") Sensors.stop();
+  S.mode = "idle";
+  $("#stageBadge").textContent = "EN VEILLE";
+  $("#stageBadge").classList.remove("live");
+  $("#capPill").className = "pill";
+  $("#capPill").textContent = "inactif";
+  $("#btnStop").style.display = "none";
+  $("#btnCap").style.display = "";
+  $("#btnDemo").style.display = "";
+  setStatus("en veille — lance une capture ou la démo", false);
+  if (sayBye && wasRunning) comment("FIN", { force: true });
+}
+
+/* ── Boucle principale ───────────────────────────────────────── */
+let lastTick = nowS();
+setInterval(() => {
+  const t = nowS();
+  const dt = Math.min(0.5, t - lastTick);
+  lastTick = t;
+  if (Live.isMirror) return;      // l'overlay miroir ne calcule rien
+  if (S.mode === "demo") Demo.tick();
+  if (S.mode === "capture") { Sensors.sampleVideo(); Sensors.sampleAudio(); }
+  brainTick(dt);
+  renderMeters();
+  renderState();
+}, 200);
+setInterval(() => {
+  if (Live.isMirror) return;
+  renderStats();
+  Live.post({ type: "state", fear: S.fear, mood: S.mood });
+}, 1000);
+
+/* ═══════════════════════════════════════════════════════════════
+   RÉGLAGES — liaison UI ↔ CFG
+   ═══════════════════════════════════════════════════════════════ */
+function bindSettings() {
+  $("#sStreamer").value = CFG.streamer;
+  $("#sJeu").value = CFG.jeu;
+  $("#sFreq").value = CFG.freq;
+  $("#freqVal").textContent = CFG.freq + " s";
+  $("#sVoiceOn").checked = CFG.voiceOn;
+  $("#sVol").value = CFG.vol;
+  $("#volVal").textContent = CFG.vol + " %";
+  $("#sOllamaUrl").value = CFG.ollamaUrl;
+  $("#sOllamaModel").value = CFG.ollamaModel;
+  $("#sTwitch").value = CFG.twitch;
+  document.querySelectorAll('input[name="persona"]').forEach((r) => { r.checked = r.value === CFG.persona; });
+  document.querySelectorAll('input[name="engine"]').forEach((r) => { r.checked = r.value === CFG.engine; });
+  $("#ollamaFields").style.display = CFG.engine === "ollama" ? "" : "none";
+
+  $("#sStreamer").addEventListener("input", (e) => { CFG.streamer = e.target.value; saveCfg(); });
+  $("#sJeu").addEventListener("input", (e) => { CFG.jeu = e.target.value; saveCfg(); });
+  $("#sFreq").addEventListener("input", (e) => { CFG.freq = +e.target.value; $("#freqVal").textContent = CFG.freq + " s"; saveCfg(); });
+  $("#sVoiceOn").addEventListener("change", (e) => { CFG.voiceOn = e.target.checked; if (!CFG.voiceOn && "speechSynthesis" in window) speechSynthesis.cancel(); saveCfg(); });
+  $("#sVoice").addEventListener("change", (e) => { CFG.voiceName = e.target.value; saveCfg(); });
+  $("#sVol").addEventListener("input", (e) => { CFG.vol = +e.target.value; $("#volVal").textContent = CFG.vol + " %"; saveCfg(); });
+  $("#sOllamaUrl").addEventListener("input", (e) => { CFG.ollamaUrl = e.target.value; saveCfg(); });
+  $("#sOllamaModel").addEventListener("input", (e) => { CFG.ollamaModel = e.target.value; saveCfg(); });
+  $("#sTwitch").addEventListener("input", (e) => { CFG.twitch = e.target.value; saveCfg(); });
+  document.querySelectorAll('input[name="persona"]').forEach((r) =>
+    r.addEventListener("change", () => { CFG.persona = r.value; saveCfg(); logLine("personnalité : " + r.value); }));
+  document.querySelectorAll('input[name="engine"]').forEach((r) =>
+    r.addEventListener("change", () => {
+      CFG.engine = r.value; saveCfg();
+      $("#ollamaFields").style.display = r.value === "ollama" ? "" : "none";
+      logLine("moteur : " + (r.value === "ollama" ? "LLM local (Ollama)" : "scripté"));
+    }));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   OVERLAY + BOUTONS + INIT
+   ═══════════════════════════════════════════════════════════════ */
+function enterOverlay(bg) {
+  document.body.classList.add("overlay");
+  if (bg) document.body.dataset.bg = bg;
+  renderState();
+}
+function exitOverlay() {
+  document.body.classList.remove("overlay");
+  delete document.body.dataset.bg;
+  Live.isMirror = false;
+  const u = new URL(location.href);
+  u.searchParams.delete("overlay"); u.searchParams.delete("bg");
+  history.replaceState(null, "", u.pathname + (u.search || ""));
+}
+
+function init() {
+  Painter.init();
+  Live.init();
+  bindSettings();
+  renderState();
+
+  $("#btnCap").addEventListener("click", startCapture);
+  $("#btnDemo").addEventListener("click", startDemo);
+  $("#btnStop").addEventListener("click", () => stopAll(true));
+  $("#btnGuide").addEventListener("click", () => $("#guide").classList.add("open"));
+  $("#btnGuideClose").addEventListener("click", () => $("#guide").classList.remove("open"));
+  $("#guide").addEventListener("click", (e) => { if (e.target === $("#guide")) $("#guide").classList.remove("open"); });
+  $("#btnOverlay").addEventListener("click", () => enterOverlay());
+  $("#ovExit").addEventListener("click", exitOverlay);
+  $("#btnOllamaTest").addEventListener("click", testOllama);
+  $("#btnTwitch").addEventListener("click", () => {
+    if (Twitch.ws) { Twitch.disconnect(); Twitch.channel = ""; }
+    else Twitch.connect($("#sTwitch").value);
+  });
+
+  const params = new URLSearchParams(location.search);
+  if (params.get("overlay") === "1") {
+    Live.isMirror = true;                 // cet onglet est un miroir passif
+    enterOverlay(params.get("bg") || "");
+    setStatus("overlay miroir — pilote la session depuis l'autre onglet", true);
+  } else if (params.get("demo") === "1") {
+    startDemo();
+  }
+  if (!("mediaDevices" in navigator) || !navigator.mediaDevices.getDisplayMedia) {
+    $("#btnCap").disabled = true;
+    $("#btnCap").title = "Capture d'écran non supportée par ce navigateur";
+  }
+  logLine("SPECTRE prête. Moteur : " + (CFG.engine === "ollama" ? "Ollama" : "scripté") + ", personnalité : " + CFG.persona + ".");
+}
+document.addEventListener("DOMContentLoaded", init);
+
+/* Hook de debug/test (utilisé par les tests automatisés) */
+window.SPECTRE = {
+  fire: (ev, extra) => fireEvent(ev, Object.assign({ force: true }, extra || {})),
+  state: () => ({
+    mode: S.mode, fear: Math.round(S.fear), mood: S.mood,
+    comments: S.counters.comments, events: S.counters.events, jumps: S.counters.jumps,
+    armed: S.spikeArmed,
+    m: { lum: +S.metrics.lum.toFixed(3), rms: +S.metrics.rms.toFixed(4), rmsBase: +S.metrics.rmsBase.toFixed(4), motion: +S.metrics.motion.toFixed(3), red: +S.metrics.red.toFixed(3), samples: S.metrics.samples },
+  }),
+  startDemo, stopAll,
+};
+</script>
+</body>
+</html>
