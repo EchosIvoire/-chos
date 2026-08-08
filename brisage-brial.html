@@ -192,6 +192,16 @@
       <span class="hint">jours, avant alerte</span>
     </div>
     <div class="field">
+      <label for="horizon">Horizon de vente</label>
+      <input type="number" id="horizon" value="3" min="0" step="1" />
+      <span class="hint">jours acceptés pour écouler les runes</span>
+    </div>
+    <div class="field">
+      <label for="decote">Décote de saturation</label>
+      <input type="number" id="decote" value="40" min="0" max="95" step="5" />
+      <span class="hint">% perdu sur le surplus invendable</span>
+    </div>
+    <div class="field">
       <label for="constante">Constante de formule</label>
       <input type="number" id="constante" value="0.015" min="0.0001" step="0.001" />
       <span class="hint">0,015 — ne change qu'en cas d'écart</span>
@@ -326,6 +336,8 @@
           <option value="roi">Trier : ROI</option>
           <option value="kamasHeure">Trier : kamas / heure</option>
           <option value="ecartCoef">Trier : coef manquant</option>
+          <option value="bientot">Trier : rentable le plus tôt</option>
+          <option value="vitesse">Trier : coef qui remonte le plus vite</option>
           <option value="fraicheur">Trier : relevé le plus ancien</option>
           <option value="nom">Trier : nom</option>
         </select>
@@ -336,12 +348,28 @@
       <div id="classementResume"></div>
       <div class="tbl-scroll"><table id="classementTbl">
         <thead><tr>
-          <th>Item</th><th>Niv.</th><th>Coef relevé</th><th>Seuil</th><th>Écart</th>
-          <th>Qté</th><th>Prix achat</th><th>Prix max</th><th>Runes</th>
-          <th>Net / unité</th><th>Marge / unité</th><th>Marge totale</th><th>ROI</th><th>Kamas / h</th><th></th>
+          <th>Item</th><th>Niv.</th><th>Coef relevé</th><th>Tendance</th><th>Seuil</th><th>Écart</th>
+          <th>Rentable dans</th><th>Qté</th><th>Prix achat</th><th>Prix max</th><th>Runes</th>
+          <th>Net / unité</th><th>Marge / unité</th><th>Marge totale</th><th>ROI</th><th>Kamas / jour</th><th></th>
         </tr></thead>
-        <tbody><tr><td colspan="15" class="empty">Aucun item enregistré.</td></tr></tbody>
+        <tbody><tr><td colspan="17" class="empty">Aucun item enregistré.</td></tr></tbody>
       </table></div>
+    </div>
+
+    <div class="card">
+      <h2>Production de runes</h2>
+      <div class="desc">Ce que l'ensemble du classement déverserait sur l'HDV, et si le marché peut l'absorber.</div>
+      <div id="prodOut"><div class="empty">Aucun item au classement.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Ajout en masse</h2>
+      <div class="desc">Colle plusieurs lignes d'un coup, une par item. Format : <code>nom ; niveau ; coef ; prix ; quantité ; stats séparées par |</code> — seuls le nom et les stats sont obligatoires.</div>
+      <textarea id="collage" rows="4" placeholder="Cape du Bouftou ; 200 ; 850 ; 2400000 ; 3 ; +301 Vitalité | +61 Sagesse | +1 PA
+Anneau du Dragoss ; 90 ; 3600 ; 95000 ; 20 ; +90 Vitalité | +21 Prospection"></textarea>
+      <div class="row" style="margin-top:.7rem">
+        <button id="btnCollage">Ajouter ces items</button>
+      </div>
     </div>
 
     <div class="card" id="editCard" style="display:none">
@@ -359,6 +387,7 @@
         <select id="editFocus"><option value="">Aucun</option></select>
       </div>
       <textarea id="editStats" rows="7"></textarea>
+      <div id="editHist" style="margin-top:.8rem"></div>
       <div class="row" style="margin-top:.7rem">
         <button id="btnSaveEdit">Enregistrer</button>
         <button class="ghost" id="btnCancelEdit">Annuler</button>
@@ -371,7 +400,10 @@
     <div class="note">
       Le concasseur ne rend que des <strong>runes basiques</strong> : les runes Pa et Ra s'obtiennent en
       combinant (10 basiques pour 1 Pa), ce qui est une autre opération. Seul le prix de la rune basique
-      entre donc dans le calcul. Aucune API n'expose l'HDV de Brial : ces prix sont les tiens.
+      entre donc dans le calcul. Aucune API n'expose l'HDV de Brial : ces prix sont les tiens.<br><br>
+      Le <strong>volume par jour</strong> est le nombre de runes que l'HDV absorbe quotidiennement à ce prix.
+      C'est lui qui empêche l'outil de te promettre la vente instantanée de 6 000 runes de Vitalité.
+      Laisse-le vide et la rune est traitée comme infiniment liquide — l'estimation sera alors optimiste.
     </div>
     <div class="card">
       <div class="toolbar">
@@ -384,7 +416,7 @@
       </div>
       <div id="prixResume"></div>
       <div class="tbl-scroll"><table id="prixTbl">
-        <thead><tr><th>Rune</th><th>Poids unitaire</th><th>Prix unitaire</th><th>Kamas / poids</th></tr></thead>
+        <thead><tr><th>Rune</th><th>Poids</th><th>Prix unitaire</th><th>Volume / jour</th><th>Relevé</th><th>Kamas / poids</th></tr></thead>
         <tbody></tbody>
       </table></div>
     </div>
@@ -482,6 +514,18 @@
         pour moitié, et tout est converti en runes de la caractéristique focalisée.<br>
         <strong style="color:var(--accent2)">Runes produites.</strong> Le concasseur rend des runes basiques.
         Les Pa et Ra viennent de la combinaison, hors périmètre de cet outil.<br>
+        <strong style="color:var(--accent2)">Liquidité.</strong> Chaque rune a un volume quotidien absorbable
+        par l'HDV. Ce que ton horizon de vente permet d'écouler part au prix plein, le surplus part avec la
+        décote. Sans cette limite, l'outil surévalue exactement les cas les plus tentants, ceux où le
+        coefficient est haut et la production massive. Une rune sans volume est supposée infiniment liquide :
+        l'estimation devient alors un plafond optimiste.<br>
+        <strong style="color:var(--accent2)">Seuil de rentabilité.</strong> La décote rend le net non
+        proportionnel au coefficient : le seuil est donc cherché par dichotomie sur une fonction qui reste
+        croissante, et non par simple inversion.<br>
+        <strong style="color:var(--accent2)">Tendance du coefficient.</strong> Régression linéaire sur tes
+        relevés datés, en points par jour. La projection extrapole depuis le dernier relevé ; elle sert à
+        estimer une date, jamais à gonfler une marge. Les marges affichées utilisent toujours le coefficient
+        que tu as réellement relevé.<br>
         <strong style="color:var(--accent2)">Sources.</strong> Formule et table de poids recoupées entre une
         implémentation communautaire open-source et la documentation de la mise à jour qui a rendu les
         coefficients dynamiques. La constante 0,015 n'est pas confirmée par Ankama : c'est elle qu'il faut
@@ -676,7 +720,7 @@ const K_DEFAUT = 0.015;
 function prixDe(id) {
   const p = PRIX[id] || {};
   const ba = Number(p.ba) || 0;
-  return { ba, defini: ba > 0, est: !!p.est };
+  return { ba, defini: ba > 0, est: !!p.est, vol: Number(p.vol) || 0, date: p.date || null };
 }
 
 /* Runes garanties, chance d'une de plus, et espérance — exactement linéaire en poids. */
@@ -764,36 +808,149 @@ function calculerBrisage(text, cfg, opts) {
   };
 }
 
-/* ═══════════════ SEUILS ═══════════════
-   Le net est exactement proportionnel au coefficient, donc on inverse :
-   c'est le coefficient minimum à voir dans le Concasseur pour rentrer
-   dans ses frais — le chiffre le plus actionnable de l'outil.
-*/
-function seuils(res, prixAchat, margeCiblePct) {
-  const p = Number(prixAchat) || 0;
-  const m = Math.max(0, Number(margeCiblePct) || 0);
-  if (res.netPer100 <= 0 || p <= 0) {
-    return { coefMort: NaN, coefCible: NaN, atteignableMort: false, atteignableCible: false };
-  }
-  const coefMort  = 100 * p / res.netPer100;
-  const coefCible = coefMort * (1 + m / 100);
-  return {
-    coefMort, coefCible,
-    atteignableMort:  coefMort  <= 4000,
-    atteignableCible: coefCible <= 4000
-  };
-}
 
 function prixMax(res, margeCiblePct) {
   const m = Math.max(0, Number(margeCiblePct) || 0);
   return { pointMort: res.net, cible: res.net / (1 + m / 100) };
 }
 
+/* ═══════════════ LIQUIDITÉ ═══════════════
+   Une rune ne se vend pas en quantité illimitée au prix affiché. Chaque rune
+   a un volume quotidien absorbable par l'HDV ; au-delà de ce que l'horizon de
+   vente permet d'écouler, le surplus part avec une décote. Sans ce garde-fou,
+   l'outil surévalue exactement les cas les plus tentants — ceux où le
+   coefficient est haut et la production massive.
+*/
+function valoriserRunes(id, quantite, opts) {
+  const r = prixDe(id);
+  if (!r.defini || quantite <= 0) {
+    return { valeur: 0, jours: NaN, plein: 0, brade: 0, sature: false, volInconnu: !r.vol };
+  }
+  if (r.vol <= 0) {
+    return { valeur: quantite * r.ba, jours: NaN, plein: quantite, brade: 0, sature: false, volInconnu: true };
+  }
+  const capacite = r.vol * Math.max(0, Number(opts.horizon) || 0);
+  const plein = Math.min(quantite, capacite);
+  const brade = Math.max(0, quantite - capacite);
+  const d = Math.min(95, Math.max(0, Number(opts.decote) || 0)) / 100;
+  return {
+    valeur: plein * r.ba + brade * r.ba * (1 - d),
+    jours: quantite / r.vol,
+    plein, brade, sature: brade > 0, volInconnu: false
+  };
+}
+
+/* Applique la liquidité au lot entier : c'est bien la totalité des runes
+   produites par les `qte` exemplaires qui arrive sur le marché d'un coup. */
+function appliquerLiquidite(res, qte, opts) {
+  const q = Math.max(1, Number(qte) || 1);
+  let brut = 0, jours = 0, satures = 0, volInconnus = 0;
+  const detail = [];
+  for (const l of res.lignes) {
+    const quantite = l.esperance * q;
+    const v = valoriserRunes(l.id, quantite, opts);
+    brut += v.valeur;
+    if (isFinite(v.jours)) jours = Math.max(jours, v.jours);
+    if (v.sature) satures++;
+    if (v.volInconnu && prixDe(l.id).defini) volInconnus++;
+    detail.push({ id: l.id, label: l.label, quantite, ...v });
+  }
+  const net = brut * res.facteur;
+  return { brut, net, netUnite: net / q, jours, detail, satures, volInconnus, qte: q };
+}
+
+/* Avec la décote, le net n'est plus proportionnel au coefficient : on cherche
+   le seuil par dichotomie sur une fonction qui reste monotone croissante. */
+function netPourCoef(it, coef, opts) {
+  const res = calculerBrisage(it.stats, { niveau: it.niveau, coef, focus: it.focus }, opts);
+  return appliquerLiquidite(res, it.qte, opts).net;
+}
+
+function coefPourNet(it, cible, opts) {
+  if (!(cible > 0)) return NaN;
+  if (netPourCoef(it, 4000, opts) < cible) return Infinity;   // hors d'atteinte
+  let lo = 0, hi = 4000;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (netPourCoef(it, mid, opts) < cible) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/* ═══════════════ HISTORIQUE DE COEFFICIENT ═══════════════
+   Le coefficient remonte quand personne ne brise l'objet. En gardant les
+   relevés, on mesure cette vitesse de remontée : c'est elle qui dit quels
+   objets deviendront rentables, et quand — avant que les autres le voient.
+*/
+function histCoef(it) {
+  const h = Array.isArray(it.coefHist) ? it.coefHist.slice() : [];
+  // Compatibilité avec les items enregistrés avant l'historique.
+  if (!h.length && Number(it.coef) > 0) h.push({ d: it.coefDate || new Date().toISOString(), c: Number(it.coef) });
+  return h.filter(e => isFinite(Date.parse(e.d)) && isFinite(Number(e.c)))
+          .sort((a, b) => Date.parse(a.d) - Date.parse(b.d));
+}
+
+/* Le coefficient courant vit soit dans le champ, soit au bout de l'historique
+   (cas des items importés en CSV ou restaurés d'une sauvegarde). */
+function coefCourant(it) {
+  const c = Number(it.coef);
+  if (isFinite(c) && c > 0) return c;
+  const h = histCoef(it);
+  return h.length ? h[h.length - 1].c : 0;
+}
+
+function enregistrerCoef(it, valeur, quand) {
+  const c = Math.min(4000, Math.max(0, Number(valeur) || 0));
+  const h = histCoef(it);
+  const d = quand || new Date().toISOString();
+  const dernier = h[h.length - 1];
+  // Un relevé identique le même jour ne crée pas de doublon.
+  if (dernier && dernier.c === c && ageJours(dernier.d) < 1) { it.coef = c; it.coefDate = dernier.d; return; }
+  h.push({ d, c });
+  it.coefHist = h.slice(-40);
+  it.coef = c;
+  it.coefDate = d;
+}
+
+/* Régression linéaire des relevés : points de coefficient gagnés par jour. */
+function vitesseCoef(it) {
+  const h = histCoef(it);
+  if (h.length < 2) return NaN;
+  const t0 = Date.parse(h[0].d);
+  const xs = h.map(e => (Date.parse(e.d) - t0) / JOUR_MS), ys = h.map(e => e.c);
+  const n = xs.length;
+  const mx = xs.reduce((a, b) => a + b, 0) / n, my = ys.reduce((a, b) => a + b, 0) / n;
+  let num = 0, den = 0;
+  for (let i = 0; i < n; i++) { num += (xs[i] - mx) * (ys[i] - my); den += (xs[i] - mx) ** 2; }
+  return den > 0 ? num / den : NaN;
+}
+
+/* Coefficient probable aujourd'hui, extrapolé depuis le dernier relevé. */
+function coefProjete(it) {
+  const h = histCoef(it);
+  if (!h.length) return Number(it.coef) || 0;
+  if (h.length === 1) return h[0].c;
+  const dernier = h[h.length - 1];
+  const v = vitesseCoef(it), j = ageJours(dernier.d);
+  if (!isFinite(v) || !isFinite(j) || j <= 0) return dernier.c;
+  return Math.min(4000, Math.max(1, dernier.c + v * j));
+}
+
+function joursAvantSeuil(it, seuil) {
+  if (!isFinite(seuil)) return NaN;
+  const c = coefProjete(it);
+  if (c >= seuil) return 0;
+  const v = vitesseCoef(it);
+  if (!isFinite(v) || v <= 0) return NaN;
+  const j = (seuil - c) / v;
+  return j > 3650 ? NaN : j;
+}
+
 /* Scénario prudent : le coefficient a pu baisser depuis ton relevé et les
    runes peuvent se vendre moins cher. Les deux effets sont proportionnels. */
 function prudent(res, secuPct) {
   const f = 1 - Math.min(90, Math.max(0, Number(secuPct) || 0)) / 100;
-  return { facteur: f * f, net: res.net * f * f };
+  return { facteur: f * f, net: (Number(res.net) || 0) * f * f };
 }
 
 const JOUR_MS = 86400000;
@@ -804,24 +961,42 @@ function ageJours(iso) {
 }
 
 function evaluerItem(it, opts) {
-  const res = calculerBrisage(it.stats, { niveau: it.niveau, coef: it.coef, focus: it.focus }, opts);
   const qte   = Math.max(1, Number(it.qte) || 1);
   const duree = Math.max(0, Number(it.duree) || 0);
   const prix  = Number(it.prix) || 0;
+  const base  = { ...it, qte };   // le coef y est passé explicitement par netPourCoef
 
-  const marge = res.net - prix;
-  const margeTotale = marge * qte;
+  const coef = coefCourant(it);
+  const res = calculerBrisage(it.stats, { niveau: it.niveau, coef, focus: it.focus }, opts);
+  const liq = appliquerLiquidite(res, qte, opts);
+
+  const marge       = liq.netUnite - prix;
+  const margeTotale = liq.net - prix * qte;
   const roi = prix > 0 ? (marge / prix) * 100 : NaN;
-  const minutes = duree * qte;
-  const s = seuils(res, prix, opts.margeCible);
+
+  // Le temps réel d'une opération, c'est le brisage ET l'écoulement des runes.
+  const joursBrisage = (duree * qte) / (60 * 24);
+  const joursTotal   = Math.max(joursBrisage, isFinite(liq.jours) ? liq.jours : 0);
+  const kamasJour    = joursTotal > 0 ? margeTotale / joursTotal : NaN;
+
+  const coefMort  = prix > 0 ? coefPourNet(base, prix * qte, opts) : NaN;
+  const coefCible = prix > 0 ? coefPourNet(base, prix * qte * (1 + (Number(opts.margeCible) || 0) / 100), opts) : NaN;
+  const projete   = coefProjete(it);
+  const vitesse   = vitesseCoef(it);
 
   return {
-    it, res, qte, prix, marge, margeTotale, roi,
-    kamasHeure: minutes > 0 ? (margeTotale / minutes) * 60 : NaN,
-    seuils: s,
-    ecartCoef: isFinite(s.coefMort) ? (Number(it.coef) || 0) - s.coefMort : NaN,
-    prudent: prudent(res, opts.margeSecu),
-    prixMax: prixMax(res, opts.margeCible),
+    it, res, liq, qte, prix, marge, margeTotale, roi, kamasJour, joursTotal,
+    seuils: {
+      coefMort, coefCible,
+      atteignableMort:  isFinite(coefMort)  && coefMort  <= 4000,
+      atteignableCible: isFinite(coefCible) && coefCible <= 4000
+    },
+    coef,
+    ecartCoef: isFinite(coefMort) ? coef - coefMort : NaN,
+    projete, vitesse,
+    joursAvant: joursAvantSeuil(it, coefMort),
+    prudent: prudent({ net: liq.netUnite, valeurBrute: liq.brut }, opts.margeSecu),
+    prixMax: { pointMort: liq.netUnite, cible: liq.netUnite / (1 + (Number(opts.margeCible) || 0) / 100) },
     capital: prix * qte,
     age: ageJours(it.coefDate)
   };
@@ -859,6 +1034,8 @@ function getOpts() {
     margeCible: parseFloat($('#margeCible').value),
     margeSecu:  parseFloat($('#margeSecu').value),
     fraicheur:  parseFloat($('#fraicheur').value),
+    horizon:    parseFloat($('#horizon').value),
+    decote:     parseFloat($('#decote').value),
     constante:  parseFloat($('#constante').value)
   };
 }
@@ -882,41 +1059,45 @@ function majFocusOptions(selectEl, text, garder) {
 }
 
 /* ═══════════════ ATELIER ═══════════════ */
+function itemDepuisAtelier() {
+  const cfg = cfgAtelier();
+  return {
+    nom: $('#itemNom').value.trim(), stats: $('#statsInput').value,
+    niveau: cfg.niveau, coef: cfg.coef, focus: cfg.focus,
+    prix: parseFloat($('#itemPrix').value) || 0,
+    qte: Math.max(1, parseInt($('#itemQte').value, 10) || 1),
+    duree: parseFloat($('#itemDuree').value) || 0
+  };
+}
+
 function renderAtelier() {
   const opts = getOpts();
-  const texte = $('#statsInput').value;
-  const cfg = cfgAtelier();
-  const res = calculerBrisage(texte, cfg, opts);
-  const prixAchat = parseFloat($('#itemPrix').value) || 0;
-  const qte = Math.max(1, parseInt($('#itemQte').value, 10) || 1);
-  const vide = texte.trim() === '';
+  const it = itemDepuisAtelier();
+  const ev = evaluerItem(it, opts);
+  const res = ev.res, liq = ev.liq, s = ev.seuils;
+  const vide = String(it.stats).trim() === '';
 
-  const marge = res.net - prixAchat;
-  const roi = prixAchat > 0 ? (marge / prixAchat) * 100 : NaN;
-  const s = seuils(res, prixAchat, opts.margeCible);
-  const pm = prixMax(res, opts.margeCible);
-  const pr = prudent(res, opts.margeSecu);
-
-  /* ---- Carte du seuil ---- */
-  if (res.lignes.length === 0 || prixAchat <= 0) {
+  /* ---- Seuil de rentabilité ---- */
+  if (res.lignes.length === 0 || it.prix <= 0) {
     $('#seuilOut').innerHTML = `<div class="empty">${
       vide ? 'Renseigne les stats, le niveau et un prix d\'achat.'
            : (res.lignes.length === 0 ? 'Aucune stat exploitable détectée.' : 'Renseigne un prix d\'achat pour obtenir le seuil.')}</div>`;
   } else if (!isFinite(s.coefMort)) {
     $('#seuilOut').innerHTML = '<div class="empty">Aucun prix de rune renseigné pour cet objet : le seuil est incalculable.</div>';
+  } else if (!s.atteignableMort) {
+    $('#seuilOut').innerHTML = `<div class="seuil"><span class="big neg">hors d'atteinte</span></div>
+      <div class="verdict neg">Cet objet ne sera jamais rentable à ce prix : même à 4000 %, le brisage rapporte
+      ${fmtK(netPourCoef({ ...it, qte: ev.qte }, 4000, opts) / ev.qte)} par exemplaire contre ${fmtK(it.prix)} payés.</div>`;
   } else {
-    const pctMort  = Math.min(100, s.coefMort  / 4000 * 100);
-    const pctCible = Math.min(100, s.coefCible / 4000 * 100);
-    const pctActuel = Math.min(100, cfg.coef / 4000 * 100);
-    const ok = cfg.coef >= s.coefMort;
-    const okCible = cfg.coef >= s.coefCible;
-    const verdict = !s.atteignableMort
-      ? `<span class="neg">Jamais rentable : il faudrait ${fmtN(s.coefMort, 0)} % alors que le maximum du jeu est 4000 %.</span>`
-      : okCible
-        ? `<span class="pos">Rentable avec ta marge cible.</span>`
-        : ok
-          ? `<span style="color:var(--accent3)">Rentable, mais sous ta marge cible de ${fmtPct(opts.margeCible)} — il faudrait ${fmtN(s.coefCible, 0)} %.</span>`
-          : `<span class="neg">Perdant à ${fmtN(cfg.coef, 0)} % : il manque ${fmtN(s.coefMort - cfg.coef, 0)} points de coefficient.</span>`;
+    const pctMort   = Math.min(100, s.coefMort  / 4000 * 100);
+    const pctCible  = Math.min(100, s.coefCible / 4000 * 100);
+    const pctActuel = Math.min(100, it.coef / 4000 * 100);
+    const ok = it.coef >= s.coefMort, okCible = s.atteignableCible && it.coef >= s.coefCible;
+    const verdict = okCible
+      ? '<span class="pos">Rentable avec ta marge cible.</span>'
+      : ok
+        ? `<span style="color:var(--accent3)">Rentable, mais sous ta marge cible de ${fmtPct(opts.margeCible)} — il faudrait ${s.atteignableCible ? fmtN(s.coefCible, 0) + ' %' : 'plus de 4000 %'}.</span>`
+        : `<span class="neg">Perdant à ${fmtN(it.coef, 0)} % : il manque ${fmtN(s.coefMort - it.coef, 0)} points de coefficient.</span>`;
 
     $('#seuilOut').innerHTML = `
       <div class="seuil">
@@ -928,33 +1109,45 @@ function renderAtelier() {
         <div class="marker" style="left:${pctMort}%" title="point mort"></div>
         ${s.atteignableCible ? `<div class="marker" style="left:${pctCible}%; background:var(--accent3)" title="marge cible"></div>` : ''}
       </div>
-      <div class="risk-legend"><span>1 %</span><span>coef relevé : ${fmtN(cfg.coef, 0)} %</span><span>4000 %</span></div>
+      <div class="risk-legend"><span>1 %</span><span>coef relevé : ${fmtN(it.coef, 0)} %</span><span>4000 %</span></div>
       <div class="verdict" style="margin-top:.7rem">${verdict}</div>
       <div style="font-size:.8rem;color:var(--muted);margin-top:.5rem">
-        Pour ta marge cible de ${fmtPct(opts.margeCible)} : ${s.atteignableCible ? fmtN(s.coefCible, 0) + ' %' : 'hors d\'atteinte'} ·
-        Prix d'achat max au coef actuel : <strong style="color:var(--text)">${fmtK(pm.cible)}</strong>
+        Marge cible ${fmtPct(opts.margeCible)} : ${s.atteignableCible ? fmtN(s.coefCible, 0) + ' %' : 'hors d\'atteinte'} ·
+        Prix d'achat max au coef actuel : <strong style="color:var(--text)">${fmtK(ev.prixMax.cible)}</strong>
       </div>`;
   }
 
-  /* ---- Résultat au coefficient saisi ---- */
+  /* ---- Résultat ---- */
   if (res.lignes.length === 0) {
     $('#atelierOut').innerHTML = `<div class="empty">${vide ? 'Colle les stats de l\'objet pour voir le détail.' : 'Aucune stat exploitable détectée.'}</div>`;
   } else {
+    const alerteLiq = liq.satures > 0
+      ? `<div class="note" style="margin-top:.9rem"><strong>Marché saturé sur ${liq.satures} rune${liq.satures > 1 ? 's' : ''}.</strong>
+         Le surplus est valorisé avec ${fmtPct(opts.decote)} de décote. Écoulement complet :
+         ${isFinite(liq.jours) ? fmtN(liq.jours, 1) + ' jours' : 'inconnu'} — c'est ce délai, pas la durée de brisage, qui limite ton rythme.</div>`
+      : (liq.volInconnus > 0
+        ? `<div class="note" style="margin-top:.9rem">Volume quotidien non renseigné pour ${liq.volInconnus} rune${liq.volInconnus > 1 ? 's' : ''} :
+           l'outil les suppose infiniment liquides, donc cette marge est un plafond optimiste.</div>` : '');
+
     $('#atelierOut').innerHTML = `
       <div class="kpis" style="margin-top:0">
-        <div class="kpi"><div class="k">Runes attendues</div><div class="v">${fmtN(res.runesTotal, 1)}</div>
-          <div class="s">${res.focus ? 'toutes en ' + esc(STAT_BY_ID[res.focus].label) : 'runes basiques'}</div></div>
-        <div class="kpi"><div class="k">Net après taxe</div><div class="v">${fmtK(res.net)}</div>
-          <div class="s">brut ${fmtK(res.valeurBrute)}</div></div>
-        <div class="kpi"><div class="k">Marge / unité</div><div class="v ${cls(marge)}">${fmtK(marge)}</div>
-          <div class="s">ROI ${fmtPct(roi)}</div></div>
-        <div class="kpi"><div class="k">Scénario prudent</div><div class="v ${cls(pr.net - prixAchat)}">${fmtK(pr.net - prixAchat)}</div>
+        <div class="kpi"><div class="k">Runes attendues</div><div class="v">${fmtN(res.runesTotal * ev.qte, 1)}</div>
+          <div class="s">${res.focus ? 'toutes en ' + esc(STAT_BY_ID[res.focus].label) : 'runes basiques'}${ev.qte > 1 ? ' · ' + ev.qte + ' exemplaires' : ''}</div></div>
+        <div class="kpi"><div class="k">Net / unité</div><div class="v">${fmtK(liq.netUnite)}</div>
+          <div class="s">brut ${fmtK(liq.brut / ev.qte)}</div></div>
+        <div class="kpi"><div class="k">Marge / unité</div><div class="v ${cls(ev.marge)}">${fmtK(ev.marge)}</div>
+          <div class="s">ROI ${fmtPct(ev.roi)}</div></div>
+        <div class="kpi"><div class="k">Scénario prudent</div><div class="v ${cls(ev.prudent.net - it.prix)}">${fmtK(ev.prudent.net - it.prix)}</div>
           <div class="s">coef et prix −${fmtPct(opts.margeSecu)}</div></div>
       </div>
-      ${qte > 1 ? `<div style="font-size:.8rem;color:var(--muted)">
-        Sur ${qte} exemplaires : capital ${fmtK(prixAchat * qte)} → marge totale
-        <strong class="${cls(marge * qte)}">${fmtK(marge * qte)}</strong></div>` : ''}
-      <div style="font-size:.8rem;color:var(--muted);margin-top:.4rem">
+      <div class="kpis">
+        <div class="kpi"><div class="k">Marge totale</div><div class="v ${cls(ev.margeTotale)}">${fmtK(ev.margeTotale)}</div>
+          <div class="s">capital ${fmtK(ev.capital)}</div></div>
+        <div class="kpi"><div class="k">Écoulement</div><div class="v">${isFinite(liq.jours) ? fmtN(liq.jours, 1) + ' j' : '—'}</div>
+          <div class="s">${ev.joursTotal > 0 ? fmtK(ev.kamasJour) + ' / jour' : 'volumes non renseignés'}</div></div>
+      </div>
+      ${alerteLiq}
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.6rem">
         Niveau ${res.niveau} · coefficient ${fmtN(res.coef, 0)} % · poids total ${fmtN(res.poidsTotal, 1)}
       </div>`;
   }
@@ -964,18 +1157,21 @@ function renderAtelier() {
   if (res.lignes.length === 0) {
     tb.innerHTML = `<tr><td colspan="9" class="empty">${vide ? 'Aucun calcul pour l\'instant.' : 'Aucune ligne de stat reconnue.'}</td></tr>`;
   } else {
-    tb.innerHTML = res.lignes.slice().sort((a, b) => b.valeur - a.valeur).map(l => `
-      <tr>
-        <td>${esc(l.label)}${l.focus ? '<span class="badge est">focus</span>' : ''}${l.prixDefini ? '' : '<span class="badge warn">prix manquant</span>'}${l.prixEst ? '<span class="badge est">prix estimé</span>' : ''}</td>
+    const parId = Object.fromEntries(liq.detail.map(d => [d.id, d]));
+    tb.innerHTML = res.lignes.slice().sort((a, b) => b.valeur - a.valeur).map(l => {
+      const d = parId[l.id] || {};
+      return `<tr>
+        <td>${esc(l.label)}${l.focus ? '<span class="badge est">focus</span>' : ''}${l.prixDefini ? '' : '<span class="badge warn">prix manquant</span>'}${d.sature ? '<span class="badge warn">saturé</span>' : ''}${l.prixEst ? '<span class="badge est">prix estimé</span>' : ''}</td>
         <td class="num">${fmtN(l.jet, 0)}</td>
         <td class="num">${fmtN(l.poidsUnit, 2)}</td>
         <td class="num">${fmtN(l.poids, 1)}</td>
         <td class="num">${fmtN(l.sures, 0)}</td>
         <td class="num">${fmtPct(l.chance * 100)}</td>
         <td class="num">${fmtN(l.esperance, 1)}</td>
-        <td class="num">${fmtK(l.valeur)}</td>
+        <td class="num">${fmtK(d.valeur !== undefined ? d.valeur / ev.qte : l.valeur)}</td>
         <td class="num">${fmtPct(l.part * 100)}</td>
-      </tr>`).join('');
+      </tr>`;
+    }).join('');
   }
 
   const warns = res.warnings.slice();
@@ -986,11 +1182,29 @@ function renderAtelier() {
 /* ═══════════════ CLASSEMENT ═══════════════ */
 let TRI = 'marge', RECH = '', EDIT_INDEX = -1;
 
+/* Courbe miniature des relevés de coefficient : la tendance se lit d'un coup. */
+function sparkline(hist, w, h) {
+  w = w || 62; h = h || 16;
+  if (hist.length < 2) return '<span style="color:var(--muted);font-size:.75rem">1 relevé</span>';
+  const cs = hist.map(e => e.c);
+  const mn = Math.min(...cs), mx = Math.max(...cs), span = (mx - mn) || 1;
+  const t0 = Date.parse(hist[0].d), t1 = Date.parse(hist[hist.length - 1].d), ts = (t1 - t0) || 1;
+  const pts = hist.map(e => {
+    const x = ((Date.parse(e.d) - t0) / ts) * (w - 2) + 1;
+    const y = h - 1 - ((e.c - mn) / span) * (h - 2);
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+  const monte = cs[cs.length - 1] >= cs[0];
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true" style="vertical-align:middle">
+    <polyline points="${pts}" fill="none" stroke="${monte ? 'var(--accent2)' : 'var(--red)'}" stroke-width="1.5" stroke-linejoin="round" /></svg>`;
+}
+
 function renderClassement() {
   const opts = getOpts();
   const tb = $('#classementTbl tbody');
+  renderProduction();
   if (!ITEMS.length) {
-    tb.innerHTML = '<tr><td colspan="15" class="empty">Aucun item enregistré.</td></tr>';
+    tb.innerHTML = '<tr><td colspan="17" class="empty">Aucun item enregistré.</td></tr>';
     $('#classementResume').innerHTML = ''; return;
   }
 
@@ -1000,44 +1214,55 @@ function renderClassement() {
   if (q) rows = rows.filter(r => String(r.it.nom || '').toLowerCase().includes(q));
 
   rows.sort((a, b) => {
-    const inf = (v, s) => isFinite(v) ? v : s;
+    const inf = (v, d) => isFinite(v) ? v : d;
     switch (TRI) {
       case 'nom':         return String(a.it.nom || '').localeCompare(String(b.it.nom || ''), 'fr');
       case 'roi':         return inf(b.roi, -Infinity) - inf(a.roi, -Infinity);
-      case 'kamasHeure':  return inf(b.kamasHeure, -Infinity) - inf(a.kamasHeure, -Infinity);
+      case 'kamasHeure':  return inf(b.kamasJour, -Infinity) - inf(a.kamasJour, -Infinity);
       case 'margeTotale': return b.margeTotale - a.margeTotale;
       case 'ecartCoef':   return inf(b.ecartCoef, -Infinity) - inf(a.ecartCoef, -Infinity);
+      case 'bientot':     return inf(a.joursAvant, Infinity) - inf(b.joursAvant, Infinity);
+      case 'vitesse':     return inf(b.vitesse, -Infinity) - inf(a.vitesse, -Infinity);
       case 'fraicheur':   return inf(b.age, -Infinity) - inf(a.age, -Infinity);
       default:            return b.marge - a.marge;
     }
   });
 
   if (!rows.length) {
-    tb.innerHTML = '<tr><td colspan="15" class="empty">Aucun item ne correspond au filtre.</td></tr>';
+    tb.innerHTML = '<tr><td colspan="17" class="empty">Aucun item ne correspond au filtre.</td></tr>';
   } else {
     tb.innerHTML = rows.map(r => {
       const perime = isFinite(r.age) && r.age > opts.fraicheur;
-      const seuilTxt = !isFinite(r.seuils.coefMort) ? '—'
-        : (r.seuils.atteignableMort ? fmtN(r.seuils.coefMort, 0) + ' %' : '> 4000 %');
+      const s = r.seuils;
+      const seuilTxt = !isFinite(s.coefMort) ? '—' : (s.atteignableMort ? fmtN(s.coefMort, 0) + ' %' : '> 4000 %');
+      const hist = histCoef(r.it);
+      const vTxt = isFinite(r.vitesse)
+        ? `<span class="${r.vitesse >= 0 ? 'pos' : 'neg'}">${r.vitesse >= 0 ? '+' : ''}${fmtN(r.vitesse, 1)}/j</span>`
+        : '<span style="color:var(--muted)">—</span>';
+      const bientot = r.joursAvant === 0 ? '<span class="pos">maintenant</span>'
+        : isFinite(r.joursAvant) ? `<span style="color:var(--accent3)">${fmtN(r.joursAvant, 0)} j</span>`
+        : '<span style="color:var(--muted)">—</span>';
       return `
       <tr>
-        <td>${esc(r.it.nom || '(sans nom)')}${r.it.focus ? `<span class="badge est">focus ${esc((STAT_BY_ID[r.it.focus] || {}).label || '')}</span>` : ''}${perime ? `<span class="badge warn">relevé il y a ${fmtN(r.age, 0)} j</span>` : ''}</td>
+        <td>${esc(r.it.nom || '(sans nom)')}${r.it.focus ? `<span class="badge est">focus ${esc((STAT_BY_ID[r.it.focus] || {}).label || '')}</span>` : ''}${perime ? `<span class="badge warn">relevé il y a ${fmtN(r.age, 0)} j</span>` : ''}${r.liq.satures ? '<span class="badge warn">saturé</span>' : ''}</td>
         <td class="num">${fmtN(r.res.niveau, 0)}</td>
-        <td class="num"><input type="number" class="mini-sm" data-champ="coef" data-idx="${r.i}" value="${Number(r.it.coef) || 0}" min="1" max="4000" step="10" /></td>
+        <td class="num"><input type="number" class="mini-sm" data-champ="coef" data-idx="${r.i}" value="${r.coef}" min="1" max="4000" step="10" /></td>
+        <td class="num" title="${hist.length} relevé(s)">${sparkline(hist)} ${vTxt}</td>
         <td class="num">${seuilTxt}</td>
         <td class="num ${isFinite(r.ecartCoef) ? cls(r.ecartCoef) : ''}">${isFinite(r.ecartCoef) ? (r.ecartCoef >= 0 ? '+' : '') + fmtN(r.ecartCoef, 0) : '—'}</td>
+        <td class="num">${bientot}</td>
         <td class="num"><input type="number" class="mini-sm" data-champ="qte" data-idx="${r.i}" value="${r.qte}" min="1" step="1" /></td>
         <td class="num"><input type="number" class="mini" data-champ="prix" data-idx="${r.i}" value="${r.prix}" min="0" step="1000" /></td>
         <td class="num">${fmtK(r.prixMax.cible)}</td>
-        <td class="num">${fmtN(r.res.runesTotal, 1)}</td>
-        <td class="num">${fmtK(r.res.net)}</td>
+        <td class="num">${fmtN(r.res.runesTotal * r.qte, 0)}</td>
+        <td class="num">${fmtK(r.liq.netUnite)}</td>
         <td class="num ${cls(r.marge)}">${fmtK(r.marge)}</td>
         <td class="num ${cls(r.margeTotale)}">${fmtK(r.margeTotale)}</td>
         <td class="num ${cls(r.roi)}">${fmtPct(r.roi)}</td>
-        <td class="num ${cls(r.kamasHeure)}">${isFinite(r.kamasHeure) ? fmtK(r.kamasHeure) : '—'}</td>
+        <td class="num ${cls(r.kamasJour)}">${isFinite(r.kamasJour) ? fmtK(r.kamasJour) : '—'}</td>
         <td style="white-space:nowrap">
           <button class="ghost icon" data-edit="${r.i}" title="Modifier">✎</button>
-          <button class="ghost icon" data-coefnow="${r.i}" title="Marquer le coef comme relevé aujourd'hui">⟳</button>
+          <button class="ghost icon" data-coefnow="${r.i}" title="Enregistrer ce coef comme relevé du jour">⟳</button>
           <button class="ghost icon" data-dup="${r.i}" title="Dupliquer">⧉</button>
           <button class="danger icon" data-del="${r.i}" title="Supprimer">✕</button>
         </td>
@@ -1047,18 +1272,72 @@ function renderClassement() {
 
   const capital = rows.reduce((a, r) => a + r.capital, 0);
   const gain    = rows.reduce((a, r) => a + r.margeTotale, 0);
-  const minutes = rows.reduce((a, r) => a + (Number(r.it.duree) || 0) * r.qte, 0);
   const rentables = rows.filter(r => r.marge > 0).length;
-  const perimes = rows.filter(r => isFinite(r.age) && r.age > opts.fraicheur).length;
+  const perimes   = rows.filter(r => isFinite(r.age) && r.age > opts.fraicheur).length;
+  const bientot   = rows.filter(r => isFinite(r.joursAvant) && r.joursAvant > 0 && r.joursAvant <= 14).length;
   $('#classementResume').innerHTML = `
     <div class="kpis" style="margin-top:0">
       <div class="kpi"><div class="k">Items affichés</div><div class="v">${rows.length}</div>
-        <div class="s">${rentables} rentable${rentables > 1 ? 's' : ''}${q ? ` · ${total} au total` : ''}</div></div>
+        <div class="s">${rentables} rentable${rentables > 1 ? 's' : ''} maintenant${q ? ` · ${total} au total` : ''}</div></div>
+      <div class="kpi hero"><div class="k">Bientôt rentables</div><div class="v">${bientot}</div>
+        <div class="s">sous 14 jours, au rythme observé</div></div>
       <div class="kpi"><div class="k">Capital engagé</div><div class="v">${fmtK(capital)}</div></div>
-      <div class="kpi"><div class="k">Marge attendue</div><div class="v ${cls(gain)}">${fmtK(gain)}</div></div>
-      <div class="kpi"><div class="k">Relevés périmés</div><div class="v ${perimes ? 'stale' : ''}">${perimes}</div>
-        <div class="s">${minutes > 0 ? fmtK(gain / (minutes / 60)) + ' / h' : 'durées non renseignées'}</div></div>
+      <div class="kpi"><div class="k">Marge attendue</div><div class="v ${cls(gain)}">${fmtK(gain)}</div>
+        <div class="s">${perimes} relevé${perimes > 1 ? 's' : ''} périmé${perimes > 1 ? 's' : ''}</div></div>
     </div>`;
+}
+
+/* ═══════════════ PRODUCTION DE RUNES ═══════════════
+   Chaque item pris isolément peut sembler rentable ; c'est le cumul qui
+   sature le marché. Cette vue montre ce que tout le classement déverserait. */
+function renderProduction() {
+  const opts = getOpts();
+  if (!ITEMS.length) { $('#prodOut').innerHTML = '<div class="empty">Aucun item au classement.</div>'; return; }
+
+  const tot = {};
+  for (const it of ITEMS) {
+    const res = calculerBrisage(it.stats, { niveau: it.niveau, coef: coefCourant(it), focus: it.focus }, opts);
+    const q = Math.max(1, Number(it.qte) || 1);
+    for (const l of res.lignes) tot[l.id] = (tot[l.id] || 0) + l.esperance * q;
+  }
+
+  const lignes = Object.entries(tot).map(([id, quantite]) => {
+    const v = valoriserRunes(id, quantite, opts);
+    const r = prixDe(id);
+    return { id, label: (STAT_BY_ID[id] || {}).label || id, quantite, ...v, vol: r.vol, defini: r.defini };
+  }).sort((a, b) => b.valeur - a.valeur);
+
+  if (!lignes.length) { $('#prodOut').innerHTML = '<div class="empty">Aucune rune produite.</div>'; return; }
+
+  const valeurTotale = lignes.reduce((a, l) => a + l.valeur, 0);
+  const pleinTotal   = lignes.reduce((a, l) => a + (l.plein + l.brade) * (prixDe(l.id).ba || 0), 0);
+  const perte = pleinTotal - valeurTotale;
+  const joursMax = Math.max(0, ...lignes.filter(l => isFinite(l.jours)).map(l => l.jours));
+  const satures = lignes.filter(l => l.sature);
+
+  $('#prodOut').innerHTML = `
+    <div class="kpis" style="margin-top:0">
+      <div class="kpi"><div class="k">Runes produites</div><div class="v">${fmtN(lignes.reduce((a, l) => a + l.quantite, 0), 0)}</div>
+        <div class="s">${lignes.length} types</div></div>
+      <div class="kpi"><div class="k">Valeur réalisable</div><div class="v">${fmtK(valeurTotale)}</div>
+        <div class="s">avant taxe HDV</div></div>
+      <div class="kpi"><div class="k">Perdu à la saturation</div><div class="v ${perte > 0 ? 'neg' : ''}">${fmtK(perte)}</div>
+        <div class="s">${satures.length} rune${satures.length > 1 ? 's' : ''} saturée${satures.length > 1 ? 's' : ''}</div></div>
+      <div class="kpi"><div class="k">Écoulement complet</div><div class="v">${joursMax > 0 ? fmtN(joursMax, 1) + ' j' : '—'}</div>
+        <div class="s">rune la plus lente</div></div>
+    </div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Rune</th><th>Quantité</th><th>Volume / jour</th><th>Écoulement</th><th>Vendable plein</th><th>Bradé</th><th>Valeur</th></tr></thead>
+      <tbody>${lignes.map(l => `<tr>
+        <td>${esc(l.label)}${!l.defini ? '<span class="badge warn">prix manquant</span>' : ''}${l.volInconnu && l.defini ? '<span class="badge warn">volume inconnu</span>' : ''}</td>
+        <td class="num">${fmtN(l.quantite, 0)}</td>
+        <td class="num">${l.vol > 0 ? fmtN(l.vol, 0) : '—'}</td>
+        <td class="num ${isFinite(l.jours) && l.jours > 7 ? 'stale' : ''}">${isFinite(l.jours) ? fmtN(l.jours, 1) + ' j' : '—'}</td>
+        <td class="num">${fmtN(l.plein, 0)}</td>
+        <td class="num ${l.brade > 0 ? 'neg' : ''}">${fmtN(l.brade, 0)}</td>
+        <td class="num">${fmtK(l.valeur)}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
 }
 
 /* ═══════════════ PRIX ═══════════════ */
@@ -1071,21 +1350,27 @@ function renderPrix() {
   if (vides) liste = liste.filter(s => !prixDe(s.id).defini);
 
   $('#prixTbl tbody').innerHTML = liste.length === 0
-    ? '<tr><td colspan="4" class="empty">Aucune rune ne correspond.</td></tr>'
+    ? '<tr><td colspan="6" class="empty">Aucune rune ne correspond.</td></tr>'
     : liste.map(s => {
         const p = PRIX[s.id] || {}, pu = poidsDe(s.id);
         const ratio = (Number(p.ba) > 0 && pu > 0) ? Number(p.ba) / pu : NaN;
+        const age = ageJours(p.date);
+        const vieux = isFinite(age) && age > (parseFloat($('#fraicheur').value) || 7);
         return `<tr>
           <td>${esc(s.label)}${p.est ? '<span class="badge est">estimé</span>' : ''}</td>
           <td class="num">${fmtN(pu, 2)}</td>
-          <td><input type="number" class="mini" data-prix="${s.id}" value="${p.ba ?? ''}" placeholder="0" min="0" step="1" /></td>
+          <td><input type="number" class="mini" data-prix="${s.id}" data-champ="ba" value="${p.ba ?? ''}" placeholder="0" min="0" step="1" /></td>
+          <td><input type="number" class="mini" data-prix="${s.id}" data-champ="vol" value="${p.vol ?? ''}" placeholder="illimité" min="0" step="10" /></td>
+          <td class="num ${vieux ? 'stale' : ''}">${isFinite(age) ? fmtN(age, 0) + ' j' : '—'}</td>
           <td class="num">${isFinite(ratio) ? fmtK(ratio) : '—'}</td>
         </tr>`;
       }).join('');
 
   const def = STATS_DEF.filter(s => prixDe(s.id).defini).length;
+  const vol = STATS_DEF.filter(s => prixDe(s.id).vol > 0).length;
   $('#prixResume').innerHTML = `<div style="font-size:.8rem;color:var(--muted);margin-bottom:.7rem">
-    ${def} / ${STATS_DEF.length} runes ont un prix. Les autres comptent pour 0 dans les marges.</div>`;
+    ${def} / ${STATS_DEF.length} runes ont un prix, ${vol} ont un volume quotidien.
+    Sans prix, une rune compte pour 0 ; sans volume, elle est supposée infiniment liquide.</div>`;
 }
 
 function estimerPrixManquants() {
@@ -1103,7 +1388,7 @@ function estimerPrixManquants() {
     if (prixDe(s.id).defini && !(PRIX[s.id] || {}).est) continue;
     const pu = poidsDe(s.id);
     if (pu <= 0) continue;
-    PRIX[s.id] = { ba: Math.round(med * pu), est: true }; n++;
+    PRIX[s.id] = { ...(PRIX[s.id] || {}), ba: Math.round(med * pu), est: true, date: new Date().toISOString() }; n++;
   }
   store.set('prix', PRIX);
   renderPrix(); renderAtelier(); renderClassement();
@@ -1286,7 +1571,7 @@ function importerTout(txt) {
   VERIF = Array.isArray(d.verif) ? d.verif : [];
   store.set('prix', PRIX); store.set('poids', POIDS); store.set('items', ITEMS); store.set('verif', VERIF);
   if (d.opts) {
-    for (const [k, sel] of [['taxe','#taxe'],['margeCible','#margeCible'],['margeSecu','#margeSecu'],['fraicheur','#fraicheur'],['constante','#constante']]) {
+    for (const [k, sel] of [['taxe','#taxe'],['margeCible','#margeCible'],['margeSecu','#margeSecu'],['fraicheur','#fraicheur'],['horizon','#horizon'],['decote','#decote'],['constante','#constante']]) {
       if (isFinite(d.opts[k])) $(sel).value = d.opts[k];
     }
     saveOpts();
@@ -1314,8 +1599,8 @@ $$('.tab').forEach(t => t.addEventListener('click', () => {
   t.classList.add('active'); $('#' + t.dataset.panel).classList.add('active');
 }));
 
-const rerendreConfig = debounce(() => { saveOpts(); renderAtelier(); renderClassement(); renderVerif(); }, 60);
-['#taxe','#margeCible','#margeSecu','#fraicheur','#constante'].forEach(s => $(s).addEventListener('input', rerendreConfig));
+const rerendreConfig = debounce(() => { saveOpts(); renderAtelier(); renderClassement(); renderVerif(); renderPrix(); }, 60);
+['#taxe','#margeCible','#margeSecu','#fraicheur','#horizon','#decote','#constante'].forEach(s => $(s).addEventListener('input', rerendreConfig));
 
 const rerendreAtelier = debounce(renderAtelier, 60);
 ['#itemPrix','#itemQte','#itemNiveau','#itemCoef'].forEach(s => $(s).addEventListener('input', rerendreAtelier));
@@ -1377,13 +1662,14 @@ $('#btnAddClassement').addEventListener('click', () => {
   if (!stats) { toast('Renseigne d\'abord les stats de l\'objet'); return; }
   const cfg = cfgAtelier();
   const nom = $('#itemNom').value.trim() || 'Item ' + (ITEMS.length + 1);
-  ITEMS.push({
-    nom, stats, niveau: cfg.niveau, coef: cfg.coef, focus: cfg.focus,
-    coefDate: new Date().toISOString(),
+  const nouveau = {
+    nom, stats, niveau: cfg.niveau, focus: cfg.focus, coefHist: [],
     prix: parseFloat($('#itemPrix').value) || 0,
     qte: Math.max(1, parseInt($('#itemQte').value, 10) || 1),
     duree: parseFloat($('#itemDuree').value) || 0
-  });
+  };
+  enregistrerCoef(nouveau, cfg.coef);
+  ITEMS.push(nouveau);
   store.set('items', ITEMS); renderClassement(); renderStockage();
   toast(`« ${nom} » ajouté au classement`);
 });
@@ -1404,7 +1690,7 @@ $('#classementTbl').addEventListener('input', debounce(e => {
   const it = ITEMS[Number(idx)];
   if (!it) return;
   if (champ === 'qte') it.qte = Math.max(1, parseInt(e.target.value, 10) || 1);
-  else if (champ === 'coef') { it.coef = Math.min(4000, Math.max(0, parseFloat(e.target.value) || 0)); it.coefDate = new Date().toISOString(); }
+  else if (champ === 'coef') enregistrerCoef(it, e.target.value);
   else it[champ] = parseFloat(e.target.value) || 0;
   store.set('items', ITEMS); renderClassement();
 }, 250));
@@ -1422,8 +1708,14 @@ $('#classementTbl').addEventListener('click', e => {
     store.set('items', ITEMS); renderClassement(); renderStockage(); toast('Item dupliqué');
   } else if (b.dataset.coefnow !== undefined) {
     const it = ITEMS[Number(b.dataset.coefnow)]; if (!it) return;
-    it.coefDate = new Date().toISOString();
-    store.set('items', ITEMS); renderClassement(); toast('Relevé daté d\'aujourd\'hui');
+    const saisi = prompt(`Coefficient relevé aujourd'hui pour « ${it.nom} » :`, String(Number(it.coef) || 0));
+    if (saisi === null) return;
+    const v = parseFloat(String(saisi).replace(',', '.'));
+    if (!isFinite(v) || v < 0 || v > 4000) { toast('Coefficient invalide (1 à 4000)'); return; }
+    enregistrerCoef(it, v);
+    store.set('items', ITEMS); renderClassement();
+    const n = histCoef(it).length;
+    toast(`Relevé enregistré (${n} au total)` + (n >= 2 ? ` — tendance ${isFinite(vitesseCoef(it)) ? (vitesseCoef(it) >= 0 ? '+' : '') + fmtN(vitesseCoef(it), 1) + '/j' : 'indéterminée'}` : ''));
   } else if (b.dataset.edit !== undefined) {
     ouvrirEdition(Number(b.dataset.edit));
   }
@@ -1434,12 +1726,19 @@ function ouvrirEdition(i) {
   EDIT_INDEX = i;
   $('#editNom').value = it.nom || '';
   $('#editNiveau').value = it.niveau || 1;
-  $('#editCoef').value = it.coef || 0;
+  $('#editCoef').value = coefCourant(it);
   $('#editPrix').value = it.prix || 0;
   $('#editQte').value = Math.max(1, Number(it.qte) || 1);
   $('#editDuree').value = Number(it.duree) || 0;
   $('#editStats').value = it.stats || '';
   majFocusOptions($('#editFocus'), it.stats, it.focus || '');
+  const h = histCoef(it);
+  $('#editHist').innerHTML = h.length
+    ? `<div style="font-size:.8rem;color:var(--muted)">Relevés de coefficient ${sparkline(h, 120, 22)}
+        ${h.map(e => `<span class="badge">${new Date(e.d).toLocaleDateString('fr-FR')} : ${fmtN(e.c, 0)} %</span>`).join('')}
+        ${h.length >= 2 && isFinite(vitesseCoef(it)) ? `<br>Remontée moyenne : <strong style="color:var(--text)">${vitesseCoef(it) >= 0 ? '+' : ''}${fmtN(vitesseCoef(it), 2)} points par jour</strong>` : ''}
+       </div>`
+    : '<div style="font-size:.8rem;color:var(--muted)">Aucun relevé enregistré.</div>';
   $('#editCard').style.display = '';
   $('#editCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -1451,16 +1750,17 @@ $('#btnSaveEdit').addEventListener('click', () => {
   const stats = $('#editStats').value.trim();
   if (!stats) { toast('Les stats ne peuvent pas être vides'); return; }
   const anc = ITEMS[EDIT_INDEX];
-  const coef = Math.min(4000, Math.max(0, parseFloat($('#editCoef').value) || 0));
-  ITEMS[EDIT_INDEX] = {
+  const maj = {
+    ...anc,
     nom: $('#editNom').value.trim() || anc.nom, stats,
     niveau: Math.min(200, Math.max(1, parseInt($('#editNiveau').value, 10) || 1)),
-    coef, focus: $('#editFocus').value,
-    coefDate: coef !== anc.coef ? new Date().toISOString() : anc.coefDate,
+    focus: $('#editFocus').value,
     prix: parseFloat($('#editPrix').value) || 0,
     qte: Math.max(1, parseInt($('#editQte').value, 10) || 1),
     duree: parseFloat($('#editDuree').value) || 0
   };
+  enregistrerCoef(maj, parseFloat($('#editCoef').value) || 0);
+  ITEMS[EDIT_INDEX] = maj;
   store.set('items', ITEMS); fermerEdition(); renderClassement(); toast('Item mis à jour');
 });
 $('#btnCancelEdit').addEventListener('click', fermerEdition);
@@ -1472,9 +1772,10 @@ $('#btnClearItems').addEventListener('click', () => {
 });
 
 $('#btnExportItems').addEventListener('click', () => {
-  const rows = [['nom','niveau','coef','coef_date','focus','prix_achat','quantite','duree_min','stats']];
+  const rows = [['nom','niveau','coef','coef_date','focus','prix_achat','quantite','duree_min','stats','historique_coef']];
   for (const it of ITEMS) rows.push([it.nom, it.niveau || '', it.coef || '', it.coefDate || '', it.focus || '',
-    it.prix || 0, it.qte || 1, it.duree || 0, String(it.stats || '').replace(/\n/g, ' | ')]);
+    it.prix || 0, it.qte || 1, it.duree || 0, String(it.stats || '').replace(/\n/g, ' | '),
+    histCoef(it).map(e => `${e.d}@${e.c}`).join(' ')]);
   download('brisage-brial-items.csv', toCSV(rows)); toast('Items exportés');
 });
 
@@ -1485,35 +1786,76 @@ $('#btnImportItems').addEventListener('click', () => pickFile('.csv,text/csv', t
   for (const r of rows.slice(1)) {
     if (r.length < 9) continue;
     const fid = String(r[4] || '').trim();
-    ITEMS.push({
+    const hist = String(r[9] || '').trim().split(/\s+/).map(tok => {
+      const m = tok.match(/^(.+)@([\d.]+)$/);
+      return m && isFinite(Date.parse(m[1])) ? { d: m[1], c: Math.min(4000, Math.max(0, parseFloat(m[2]) || 0)) } : null;
+    }).filter(Boolean);
+    const it = {
       nom: r[0],
       niveau: Math.min(200, Math.max(1, parseInt(r[1], 10) || 1)),
-      coef: Math.min(4000, Math.max(0, parseFloat(r[2]) || 0)),
+      coefHist: hist,
       coefDate: String(r[3] || '').trim() || null,
       focus: STAT_BY_ID[fid] ? fid : '',
       prix: parseFloat(r[5]) || 0,
       qte: Math.max(1, parseInt(r[6], 10) || 1),
       duree: parseFloat(r[7]) || 0,
       stats: String(r[8]).replace(/\s*\|\s*/g, '\n')
-    });
+    };
+    if (hist.length) { it.coef = hist[hist.length - 1].c; it.coefDate = hist[hist.length - 1].d; }
+    else enregistrerCoef(it, parseFloat(r[2]) || 0, String(r[3] || '').trim() || undefined);
+    ITEMS.push(it);
     n++;
   }
   store.set('items', ITEMS); renderClassement(); renderStockage(); toast(`${n} item(s) importé(s)`);
 }));
+
+/* Ajout en masse : nom ; niveau ; coef ; prix ; quantité ; stats séparées par | */
+$('#btnCollage').addEventListener('click', () => {
+  const txt = $('#collage').value.trim();
+  if (!txt) { toast('Colle d\'abord des lignes'); return; }
+  let n = 0; const refuses = [];
+  for (const brut of txt.split(/\n+/)) {
+    const ligne = brut.trim();
+    if (!ligne) continue;
+    const ch = ligne.split(';').map(x => x.trim());
+    const nom = ch[0];
+    const stats = (ch[5] || '').replace(/\s*\|\s*/g, '\n').trim();
+    if (!nom || !stats) { refuses.push(ligne.slice(0, 40)); continue; }
+    if (!parseStats(stats).effects.length) { refuses.push(nom + ' (aucune stat reconnue)'); continue; }
+    const it = {
+      nom, stats, coefHist: [],
+      niveau: Math.min(200, Math.max(1, parseInt(ch[1], 10) || 1)),
+      focus: '',
+      prix: parseFloat(ch[3]) || 0,
+      qte: Math.max(1, parseInt(ch[4], 10) || 1),
+      duree: 0
+    };
+    enregistrerCoef(it, parseFloat(ch[2]) || 0);
+    ITEMS.push(it); n++;
+  }
+  store.set('items', ITEMS); renderClassement(); renderStockage();
+  if (n) $('#collage').value = '';
+  toast(`${n} item(s) ajouté(s)` + (refuses.length ? ` · ${refuses.length} ligne(s) refusée(s)` : ''));
+});
 
 // --- Prix ---
 $('#rechPrix').addEventListener('input', debounce(e => { RECH_PRIX = e.target.value; renderPrix(); }, 60));
 $('#filtrePrixVides').addEventListener('change', renderPrix);
 $('#btnEstimerPrix').addEventListener('click', estimerPrixManquants);
 $('#prixTbl').addEventListener('input', debounce(e => {
-  const id = e.target.dataset.prix; if (!id) return;
+  const id = e.target.dataset.prix, champ = e.target.dataset.champ;
+  if (!id || !champ) return;
   const v = e.target.value;
-  if (v === '') delete PRIX[id]; else PRIX[id] = { ba: parseFloat(v) || 0 };
-  store.set('prix', PRIX); renderAtelier(); renderClassement(); renderStockage();
-}, 200));
+  const cur = PRIX[id] || {};
+  if (v === '') delete cur[champ]; else cur[champ] = parseFloat(v) || 0;
+  delete cur.est;                                   // une saisie manuelle n'est plus une estimation
+  if (champ === 'ba') cur.date = new Date().toISOString();
+  if (cur.ba === undefined && cur.vol === undefined) delete PRIX[id]; else PRIX[id] = cur;
+  store.set('prix', PRIX); renderPrix(); renderAtelier(); renderClassement(); renderStockage();
+}, 250));
 $('#btnExportPrix').addEventListener('click', () => {
-  const rows = [['stat_id','stat','poids','prix_unitaire','estime']];
-  for (const s of STATS_DEF) { const p = PRIX[s.id] || {}; rows.push([s.id, s.label, poidsDe(s.id), p.ba ?? '', p.est ? 'oui' : '']); }
+  const rows = [['stat_id','stat','poids','prix_unitaire','volume_jour','releve','estime']];
+  for (const s of STATS_DEF) { const p = PRIX[s.id] || {}; rows.push([s.id, s.label, poidsDe(s.id), p.ba ?? '', p.vol ?? '', p.date ?? '', p.est ? 'oui' : '']); }
   download('brisage-brial-prix.csv', toCSV(rows)); toast('Prix exportés');
 });
 $('#btnImportPrix').addEventListener('click', () => pickFile('.csv,text/csv', txt => {
@@ -1523,9 +1865,13 @@ $('#btnImportPrix').addEventListener('click', () => pickFile('.csv,text/csv', tx
   for (const r of rows.slice(1)) {
     const id = String(r[0] || '').trim();
     if (!STAT_BY_ID[id]) continue;
-    if (String(r[3] ?? '').trim() === '') { delete PRIX[id]; continue; }
-    PRIX[id] = { ba: parseFloat(r[3]) || 0 };
-    if (String(r[4] ?? '').trim().toLowerCase() === 'oui') PRIX[id].est = true;
+    const e = {};
+    if (String(r[3] ?? '').trim() !== '') e.ba = parseFloat(r[3]) || 0;
+    if (String(r[4] ?? '').trim() !== '') e.vol = parseFloat(r[4]) || 0;
+    if (String(r[5] ?? '').trim() !== '') e.date = String(r[5]).trim();
+    if (String(r[6] ?? '').trim().toLowerCase() === 'oui') e.est = true;
+    if (e.ba === undefined && e.vol === undefined) { delete PRIX[id]; continue; }
+    PRIX[id] = e;
     n++;
   }
   store.set('prix', PRIX); renderPrix(); renderAtelier(); renderClassement(); renderStockage();
@@ -1606,7 +1952,7 @@ $('#filePicker').addEventListener('change', e => {
 (function init() {
   const s = store.get('opts', null);
   if (s) {
-    for (const [k, sel] of [['taxe','#taxe'],['margeCible','#margeCible'],['margeSecu','#margeSecu'],['fraicheur','#fraicheur'],['constante','#constante']]) {
+    for (const [k, sel] of [['taxe','#taxe'],['margeCible','#margeCible'],['margeSecu','#margeSecu'],['fraicheur','#fraicheur'],['horizon','#horizon'],['decote','#decote'],['constante','#constante']]) {
       if (isFinite(s[k])) $(sel).value = s[k];
     }
   }
