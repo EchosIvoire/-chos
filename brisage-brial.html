@@ -4,54 +4,43 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Brisage Brial — Calculateur de rentabilité runes (Dofus)</title>
-<meta name="description" content="Calculateur de brisage Dofus pour le serveur Brial : poids des runes, rendement calibrable, prix HDV, marge nette et classement des items les plus rentables à briser." />
+<meta name="description" content="Calculateur de brisage Dofus pour le serveur Brial : poids des runes, rendement calibrable, risque de perte, prix d'achat maximum, marge nette et classement des items les plus rentables à briser." />
 <meta name="theme-color" content="#0d0f14" />
 <style>
   :root {
-    --bg: #0d0f14;
-    --bg2: #12151f;
-    --bg3: #1a1f2e;
+    --bg: #0d0f14;  --bg2: #12151f; --bg3: #1a1f2e;
     --border: #252a3a;
-    --accent: #6c63ff;
-    --accent2: #00d9b5;
-    --accent3: #f5a623;
+    --accent: #6c63ff; --accent2: #00d9b5; --accent3: #f5a623;
     --red: #e05c6a;
-    --text: #e8eaf0;
-    --muted: #6a7090;
-    --card: #12151f;
+    --text: #e8eaf0; --muted: #6a7090; --card: #12151f;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: var(--bg);
-    color: var(--text);
+    background: var(--bg); color: var(--text);
     font-family: system-ui, -apple-system, sans-serif;
-    line-height: 1.6;
-    font-size: 15px;
-    -webkit-font-smoothing: antialiased;
-    padding-bottom: 4rem;
+    line-height: 1.6; font-size: 15px;
+    -webkit-font-smoothing: antialiased; padding-bottom: 4rem;
   }
   a { color: var(--accent2); text-decoration: none; }
   a:hover { text-decoration: underline; }
   .gradient-bar { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%); }
 
   header {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
     display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
   }
   header h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: -.01em; }
   header .sub { color: var(--muted); font-size: .82rem; }
   header .home { margin-left: auto; font-size: .82rem; color: var(--muted); }
 
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 1.5rem; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 1.5rem; }
 
-  /* ---- CONFIG BAR ---- */
   .config {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: .75rem; background: var(--bg2); border: 1px solid var(--border);
     border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;
   }
-  .field { display: flex; flex-direction: column; gap: .3rem; }
+  .field { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
   .field label { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
   .field .hint { font-size: .7rem; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
   input, select, textarea {
@@ -60,6 +49,8 @@
   }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
   textarea { resize: vertical; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .85rem; line-height: 1.5; }
+  input.mini { width: 96px; padding: .25rem .4rem; font-size: .8rem; }
+  input.mini-sm { width: 62px; padding: .25rem .4rem; font-size: .8rem; }
 
   button {
     background: var(--accent); color: #fff; border: none; border-radius: 8px;
@@ -70,8 +61,8 @@
   button.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
   button.ghost:hover { border-color: var(--accent); filter: none; }
   button.danger { background: transparent; border: 1px solid var(--border); color: var(--red); }
+  button.icon { padding: .2rem .5rem; font-size: .75rem; }
 
-  /* ---- TABS ---- */
   .tabs { display: flex; gap: .4rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; flex-wrap: wrap; }
   .tab {
     background: transparent; border: none; border-bottom: 2px solid transparent;
@@ -83,24 +74,30 @@
   .panel { display: none; }
   .panel.active { display: block; }
 
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.1rem; margin-bottom: 1rem;
-  }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem; margin-bottom: 1rem; }
   .card h2 { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; }
   .card .desc { color: var(--muted); font-size: .82rem; margin-bottom: .9rem; }
 
   .row { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  @media (max-width: 780px) { .grid2 { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
 
-  /* ---- TABLES ---- */
+  .toolbar { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-bottom: .9rem; }
+  .toolbar input[type="search"] { width: auto; flex: 1; min-width: 150px; }
+  .toolbar label.chk { display: flex; align-items: center; gap: .35rem; font-size: .8rem; color: var(--muted); white-space: nowrap; }
+  .toolbar label.chk input { width: auto; }
+
   .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   table { width: 100%; border-collapse: collapse; font-size: .85rem; }
   th, td { padding: .5rem .6rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; }
   th { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--text); }
+  th.sorted::after { content: ' ▾'; color: var(--accent); }
   tbody tr:hover { background: var(--bg3); }
+  /* 12 colonnes : on resserre pour limiter le défilement horizontal */
+  #classementTbl th, #classementTbl td { padding: .45rem .4rem; font-size: .82rem; }
   td.num { font-variant-numeric: tabular-nums; }
   .pos { color: var(--accent2); font-weight: 600; }
   .neg { color: var(--red); font-weight: 600; }
@@ -110,6 +107,7 @@
     background: var(--bg3); border: 1px solid var(--border); color: var(--muted); margin-left: .35rem;
   }
   .badge.warn { color: var(--accent3); border-color: var(--accent3); }
+  .badge.est  { color: var(--accent); border-color: var(--accent); }
 
   .note {
     background: rgba(245,166,35,.07); border: 1px solid rgba(245,166,35,.3);
@@ -118,21 +116,32 @@
   }
   .note strong { color: var(--accent3); }
   .note code { background: rgba(0,0,0,.3); padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+  .note.info { background: rgba(108,99,255,.07); border-color: rgba(108,99,255,.3); border-left-color: var(--accent); color: #ccd0ea; }
+  .note.info strong { color: var(--accent); }
 
-  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: .7rem; margin: 1rem 0; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: .7rem; margin: 1rem 0; }
   .kpi { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: .75rem .85rem; }
   .kpi .k { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
-  .kpi .v { font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: .15rem; }
+  .kpi .v { font-size: 1.2rem; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: .15rem; }
+  .kpi .v.range { font-size: .92rem; letter-spacing: -.01em; }
+  .kpi .s { font-size: .7rem; color: var(--muted); margin-top: .1rem; }
+  .kpi.hero { border-color: var(--accent); background: rgba(108,99,255,.1); }
+
+  /* Barre de risque : part perdante vs gagnante */
+  .riskbar { height: 8px; border-radius: 4px; overflow: hidden; display: flex; background: var(--bg3); margin: .5rem 0 .35rem; }
+  .riskbar .loss { background: var(--red); }
+  .riskbar .win  { background: var(--accent2); }
+  .risk-legend { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); }
 
   .empty { color: var(--muted); font-size: .85rem; padding: 1.2rem; text-align: center; font-style: italic; }
   .toast {
     position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
     background: var(--bg3); border: 1px solid var(--accent); color: var(--text);
     padding: .6rem 1.1rem; border-radius: 8px; font-size: .85rem; z-index: 999;
-    opacity: 0; pointer-events: none; transition: opacity .2s;
+    opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 90vw; text-align: center;
   }
   .toast.show { opacity: 1; }
-  footer { text-align: center; color: var(--muted); font-size: .78rem; padding: 2rem 1rem 0; }
+  footer { text-align: center; color: var(--muted); font-size: .78rem; padding: 2rem 1rem 0; line-height: 1.8; }
 </style>
 </head>
 <body>
@@ -161,7 +170,12 @@
     <div class="field">
       <label for="taxe">Taxe HDV</label>
       <input type="number" id="taxe" value="2" min="0" max="100" step="0.5" />
-      <span class="hint">% prélevé à la vente des runes</span>
+      <span class="hint">% prélevé à la vente</span>
+    </div>
+    <div class="field">
+      <label for="margeCible">Marge cible</label>
+      <input type="number" id="margeCible" value="30" min="0" step="5" />
+      <span class="hint">% visé, fixe le prix d'achat max</span>
     </div>
     <div class="field">
       <label for="packing">Répartition Ba/Pa/Ra</label>
@@ -169,7 +183,7 @@
         <option value="greedy">Regroupée (max Ra, puis Pa)</option>
         <option value="ba">100 % basiques</option>
       </select>
-      <span class="hint">modèle de conversion des runes</span>
+      <span class="hint">modèle de conversion</span>
     </div>
   </div>
 
@@ -179,6 +193,7 @@
     <button class="tab" data-panel="p-prix">Prix des runes</button>
     <button class="tab" data-panel="p-calib">Calibrage</button>
     <button class="tab" data-panel="p-poids">Poids des runes</button>
+    <button class="tab" data-panel="p-donnees">Données</button>
   </div>
 
   <!-- ══════════════ ATELIER ══════════════ -->
@@ -186,8 +201,8 @@
     <div class="grid2">
       <div class="card">
         <h2>1. Colle les stats de l'item</h2>
-        <div class="desc">Depuis le jeu (clic droit → copier) ou DofusBook. Une ligne par stat, le parseur gère les accents, les %, les pluriels.</div>
-        <textarea id="statsInput" rows="11" placeholder="+301 Vitalité
+        <div class="desc">Depuis le jeu (clic droit → copier) ou DofusBook. Une ligne par stat : le parseur gère les accents, les %, les pluriels et l'ordre nom/valeur.</div>
+        <textarea id="statsInput" rows="10" placeholder="+301 Vitalité
 +61 Sagesse
 +81 Force
 +1 PA
@@ -196,37 +211,48 @@
 +9 Dommages Feu
 +21 Prospection"></textarea>
         <div class="row" style="margin-top:.7rem">
-          <div class="field" style="flex:1; min-width:130px">
+          <div class="field" style="flex:2; min-width:150px">
             <label for="itemNom">Nom de l'item</label>
             <input type="text" id="itemNom" placeholder="Coiffe du Bouftou" />
           </div>
-          <div class="field" style="flex:1; min-width:130px">
-            <label for="itemPrix">Prix d'achat HDV</label>
+          <div class="field" style="flex:1; min-width:110px">
+            <label for="itemPrix">Prix d'achat</label>
             <input type="number" id="itemPrix" value="0" min="0" step="1000" />
           </div>
         </div>
+        <div class="row" style="margin-top:.6rem">
+          <div class="field" style="flex:1; min-width:90px">
+            <label for="itemQte">Quantité</label>
+            <input type="number" id="itemQte" value="1" min="1" step="1" />
+          </div>
+          <div class="field" style="flex:1; min-width:110px">
+            <label for="itemDuree">Durée / item</label>
+            <input type="number" id="itemDuree" value="1" min="0" step="0.5" />
+            <span class="hint">minutes, achat + brisage + vente</span>
+          </div>
+        </div>
         <div class="row" style="margin-top:.8rem">
-          <button id="btnCalc">Calculer le brisage</button>
-          <button class="ghost" id="btnAddClassement">Ajouter au classement</button>
+          <button id="btnAddClassement">Ajouter au classement</button>
+          <button class="ghost" id="btnResetAtelier">Vider</button>
         </div>
       </div>
 
       <div class="card">
         <h2>2. Résultat</h2>
-        <div class="desc">Espérance de runes et marge nette, au taux et au rendement configurés en haut.</div>
-        <div id="atelierOut"><div class="empty">Colle des stats puis clique sur « Calculer le brisage ».</div></div>
+        <div class="desc">Espérance de gain, prix d'achat à ne pas dépasser, et risque réel du brisage.</div>
+        <div id="atelierOut"><div class="empty">Colle les stats de l'item à gauche pour voir la marge.</div></div>
       </div>
     </div>
 
     <div class="card">
       <h2>Détail par ligne de stat</h2>
-      <div class="desc">Poids = jet × poids unitaire de la rune. C'est ce poids qui détermine le nombre de runes récupérées.</div>
+      <div class="desc">Poids = jet × poids unitaire de la rune. Le jet pilote la quantité de runes, le poids pilote leur valeur.</div>
       <div class="tbl-scroll"><table id="detailTbl">
         <thead><tr>
           <th>Stat</th><th>Jet</th><th>Poids unitaire</th><th>Poids</th>
-          <th>Runes Ra</th><th>Runes Pa</th><th>Runes Ba</th><th>Valeur brute</th>
+          <th>Runes Ra</th><th>Runes Pa</th><th>Runes Ba</th><th>Valeur brute</th><th>Part</th>
         </tr></thead>
-        <tbody><tr><td colspan="8" class="empty">Aucun calcul pour l'instant.</td></tr></tbody>
+        <tbody><tr><td colspan="9" class="empty">Aucun calcul pour l'instant.</td></tr></tbody>
       </table></div>
       <div id="parseWarn"></div>
     </div>
@@ -235,24 +261,58 @@
   <!-- ══════════════ CLASSEMENT ══════════════ -->
   <div class="panel" id="p-classement">
     <div class="note">
-      <strong>C'est ici que tu trouves quoi briser.</strong> Ajoute tes items depuis l'onglet Atelier
-      (bouton « Ajouter au classement »), renseigne leur prix d'achat HDV, et le tableau les classe
-      par marge nette et par ROI. Tout est sauvegardé dans ton navigateur.
+      <strong>C'est ici que tu trouves quoi briser.</strong> Ajoute tes items depuis l'Atelier, renseigne
+      leur prix d'achat, et trie par ce qui compte : marge à l'unité, marge totale une fois la quantité
+      prise en compte, ROI, ou kamas par heure si ton temps est la contrainte.
     </div>
     <div class="card">
-      <div class="row" style="margin-bottom:.9rem">
-        <button class="ghost" id="btnRecalcAll">Tout recalculer</button>
+      <div class="toolbar">
+        <input type="search" id="rechClassement" placeholder="Filtrer par nom…" />
+        <select id="triClassement" style="width:auto">
+          <option value="marge">Trier : marge unitaire</option>
+          <option value="margeTotale">Trier : marge totale</option>
+          <option value="roi">Trier : ROI</option>
+          <option value="kamasHeure">Trier : kamas / heure</option>
+          <option value="risque">Trier : risque de perte</option>
+          <option value="nom">Trier : nom</option>
+        </select>
         <button class="ghost" id="btnExportItems">Exporter CSV</button>
         <button class="ghost" id="btnImportItems">Importer CSV</button>
         <button class="danger" id="btnClearItems">Vider</button>
       </div>
+      <div id="classementResume"></div>
       <div class="tbl-scroll"><table id="classementTbl">
         <thead><tr>
-          <th>Item</th><th>Prix achat</th><th>Runes</th><th>Valeur brute</th>
-          <th>Net après taxe</th><th>Marge</th><th>ROI</th><th></th>
+          <th>Item</th><th>Qté</th><th>Prix achat</th><th>Prix max</th><th>Runes</th>
+          <th>Net / unité</th><th>Marge / unité</th><th>Marge totale</th><th>ROI</th>
+          <th>Kamas / h</th><th>Perte</th><th></th>
         </tr></thead>
-        <tbody><tr><td colspan="8" class="empty">Aucun item enregistré.</td></tr></tbody>
+        <tbody><tr><td colspan="12" class="empty">Aucun item enregistré.</td></tr></tbody>
       </table></div>
+    </div>
+
+    <div class="card" id="editCard" style="display:none">
+      <h2>Modifier l'item</h2>
+      <div class="desc">Corrige les stats ou les paramètres, puis enregistre.</div>
+      <div class="row" style="margin-bottom:.6rem">
+        <div class="field" style="flex:2; min-width:150px">
+          <label for="editNom">Nom</label><input type="text" id="editNom" />
+        </div>
+        <div class="field" style="flex:1; min-width:100px">
+          <label for="editPrix">Prix d'achat</label><input type="number" id="editPrix" min="0" step="1000" />
+        </div>
+        <div class="field" style="flex:1; min-width:80px">
+          <label for="editQte">Quantité</label><input type="number" id="editQte" min="1" step="1" />
+        </div>
+        <div class="field" style="flex:1; min-width:90px">
+          <label for="editDuree">Durée (min)</label><input type="number" id="editDuree" min="0" step="0.5" />
+        </div>
+      </div>
+      <textarea id="editStats" rows="7"></textarea>
+      <div class="row" style="margin-top:.7rem">
+        <button id="btnSaveEdit">Enregistrer</button>
+        <button class="ghost" id="btnCancelEdit">Annuler</button>
+      </div>
     </div>
   </div>
 
@@ -260,17 +320,21 @@
   <div class="panel" id="p-prix">
     <div class="note">
       Aucune API publique n'expose l'HDV de Brial — les prix sont donc les tiens. Saisis-les une fois,
-      ils sont mémorisés. Le prix Ba sert de base : laisse Pa et Ra vides pour qu'ils soient estimés
-      à <code>3×</code> et <code>10×</code> le Ba.
+      ils sont mémorisés. Le prix Ba sert de base : laisse Pa et Ra vides pour qu'ils soient déduits
+      à <code>×3</code> et <code>×10</code>.
     </div>
     <div class="card">
-      <div class="row" style="margin-bottom:.9rem">
+      <div class="toolbar">
+        <input type="search" id="rechPrix" placeholder="Filtrer une rune…" />
+        <label class="chk"><input type="checkbox" id="filtrePrixVides" /> Seulement sans prix</label>
+        <button class="ghost" id="btnEstimerPrix">Estimer les manquants</button>
         <button class="ghost" id="btnExportPrix">Exporter CSV</button>
         <button class="ghost" id="btnImportPrix">Importer CSV</button>
         <button class="danger" id="btnResetPrix">Réinitialiser</button>
       </div>
+      <div id="prixResume"></div>
       <div class="tbl-scroll"><table id="prixTbl">
-        <thead><tr><th>Rune</th><th>Poids unitaire</th><th>Prix Ba</th><th>Prix Pa</th><th>Prix Ra</th></tr></thead>
+        <thead><tr><th>Rune</th><th>Poids unitaire</th><th>Prix Ba</th><th>Prix Pa</th><th>Prix Ra</th><th>Kamas / poids</th></tr></thead>
         <tbody></tbody>
       </table></div>
     </div>
@@ -280,42 +344,47 @@
   <div class="panel" id="p-calib">
     <div class="note">
       <strong>Pourquoi calibrer ?</strong> Le poids des runes est connu et fiable, mais le coefficient qui
-      relie ce poids au nombre de runes réellement lâchées dépend de la version et du serveur.
-      Brise un item pour de vrai, note ce que tu récupères, et l'outil en déduit ton rendement exact.
-      Deux ou trois mesures suffisent pour que toutes les marges deviennent justes.
+      relie ce poids au nombre de runes réellement lâchées dépend de la version et du serveur. Brise un item
+      pour de vrai, note ce que tu récupères, et l'outil en déduit ton rendement exact — ainsi que sa
+      dispersion, qui alimente le calcul de risque.
     </div>
     <div class="grid2">
       <div class="card">
         <h2>Nouvelle mesure</h2>
-        <div class="desc">Stats de l'item brisé + nombre total de runes obtenues, converti en équivalent Ba (1 Ra = 10 Ba, 1 Pa = 3 Ba).</div>
-        <textarea id="calibStats" rows="7" placeholder="+301 Vitalité
+        <div class="desc">Stats de l'item brisé + runes obtenues converties en équivalent Ba (1 Ra = 10 Ba, 1 Pa = 3 Ba).</div>
+        <textarea id="calibStats" rows="6" placeholder="+301 Vitalité
 +61 Sagesse
 +81 Force"></textarea>
-        <div class="row" style="margin-top:.7rem">
-          <div class="field" style="flex:1; min-width:120px">
-            <label for="calibTaux">Taux utilisé (%)</label>
+        <div class="row" style="margin-top:.6rem">
+          <div class="field" style="flex:2; min-width:130px">
+            <label for="calibNom">Item brisé</label>
+            <input type="text" id="calibNom" placeholder="Coiffe du Bouftou" />
+          </div>
+          <div class="field" style="flex:1; min-width:100px">
+            <label for="calibTaux">Taux (%)</label>
             <input type="number" id="calibTaux" value="4000" min="1" step="50" />
           </div>
-          <div class="field" style="flex:1; min-width:120px">
-            <label for="calibRunes">Runes obtenues (éq. Ba)</label>
+          <div class="field" style="flex:1; min-width:110px">
+            <label for="calibRunes">Runes (éq. Ba)</label>
             <input type="number" id="calibRunes" value="0" min="0" step="1" />
           </div>
         </div>
         <div class="row" style="margin-top:.8rem">
           <button id="btnAddCalib">Enregistrer la mesure</button>
+          <button class="ghost" id="btnCalibDepuisAtelier">Reprendre les stats de l'Atelier</button>
         </div>
       </div>
       <div class="card">
         <h2>Rendement mesuré</h2>
-        <div class="desc">Moyenne pondérée de tes mesures. Applique-la pour l'utiliser dans tous les calculs.</div>
+        <div class="desc">Moyenne pondérée par le volume de jets, avec sa marge d'erreur.</div>
         <div id="calibOut"><div class="empty">Aucune mesure enregistrée.</div></div>
       </div>
     </div>
     <div class="card">
       <h2>Historique des mesures</h2>
       <div class="tbl-scroll"><table id="calibTbl">
-        <thead><tr><th>Item</th><th>Jets totaux</th><th>Taux</th><th>Runes (éq. Ba)</th><th>Rendement</th><th></th></tr></thead>
-        <tbody><tr><td colspan="6" class="empty">Aucune mesure.</td></tr></tbody>
+        <thead><tr><th>Item</th><th>Jets totaux</th><th>Taux</th><th>Runes (éq. Ba)</th><th>Rendement</th><th>Écart</th><th></th></tr></thead>
+        <tbody><tr><td colspan="7" class="empty">Aucune mesure.</td></tr></tbody>
       </table></div>
     </div>
   </div>
@@ -328,7 +397,8 @@
       Toute modification est mémorisée et réutilisée dans les calculs.
     </div>
     <div class="card">
-      <div class="row" style="margin-bottom:.9rem">
+      <div class="toolbar">
+        <input type="search" id="rechPoids" placeholder="Filtrer une stat…" />
         <button class="danger" id="btnResetPoids">Restaurer les valeurs par défaut</button>
       </div>
       <div class="tbl-scroll"><table id="poidsTbl">
@@ -338,13 +408,49 @@
     </div>
   </div>
 
+  <!-- ══════════════ DONNÉES ══════════════ -->
+  <div class="panel" id="p-donnees">
+    <div class="grid2">
+      <div class="card">
+        <h2>Sauvegarde complète</h2>
+        <div class="desc">Prix, items, mesures de calibrage, poids modifiés et réglages, dans un seul fichier JSON. À garder avant de changer de navigateur ou de vider ton cache.</div>
+        <div class="row">
+          <button id="btnExportTout">Exporter la sauvegarde</button>
+          <button class="ghost" id="btnImportTout">Restaurer</button>
+        </div>
+        <div id="statsStockage" style="margin-top:1rem"></div>
+      </div>
+      <div class="card">
+        <h2>Repartir de zéro</h2>
+        <div class="desc">Efface tout ce que l'outil a mémorisé dans ce navigateur. Irréversible : exporte d'abord.</div>
+        <button class="danger" id="btnResetTout">Tout effacer</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Modèle de calcul</h2>
+      <div class="desc">Ce que l'outil suppose, pour que tu saches quoi corriger si un chiffre te paraît faux.</div>
+      <div style="font-size:.84rem; line-height:1.9; color:#c3c8dc">
+        <strong style="color:var(--accent2)">Quantité de runes.</strong>
+        <code>runes Ba = jet × (taux / 100) × rendement</code>. Le jet pilote la quantité,
+        le poids unitaire pilote la valeur : une rune PA vaut structurellement bien plus qu'une rune Vitalité.<br>
+        <strong style="color:var(--accent2)">Rendement.</strong> Seul coefficient non vérifiable hors du jeu.
+        Sa valeur par défaut est un ordre de grandeur, à remplacer par une mesure réelle via l'onglet Calibrage.<br>
+        <strong style="color:var(--accent2)">Risque.</strong> Chaque ligne de stat est tirée selon une loi de
+        Poisson autour de son espérance — la dispersion relative diminue donc quand les quantités augmentent.
+        S'y ajoute l'incertitude sur le rendement lui-même, mesurée à partir de l'écart entre tes calibrages.<br>
+        <strong style="color:var(--accent2)">Répartition Ba/Pa/Ra.</strong> Modèle de regroupement, pas une
+        garantie : le jeu rend un mélange aléatoire. Sans prix Pa et Ra explicites, les deux modes donnent la même valeur.
+      </div>
+    </div>
+  </div>
+
   <footer>
-    Calcul local, aucune donnée envoyée. Poids de runes issus de la table de forgemagie communautaire ;
-    rendement à calibrer sur ton serveur.
+    Calcul local, aucune donnée envoyée, aucun tracker.<br>
+    Poids de runes issus de la table de forgemagie communautaire ; rendement à calibrer sur ton serveur.
   </footer>
 </div>
 <div class="toast" id="toast"></div>
-<input type="file" id="filePicker" accept=".csv,text/csv" style="display:none" />
+<input type="file" id="filePicker" style="display:none" />
 
 <script>
 "use strict";
@@ -429,13 +535,14 @@ const store = {
   set(key, val) {
     try { localStorage.setItem(NS + key, JSON.stringify(val)); }
     catch (e) { toast('Sauvegarde impossible (stockage plein ou bloqué)'); }
-  }
+  },
+  del(key) { try { localStorage.removeItem(NS + key); } catch (e) {} }
 };
 
-let PRIX   = store.get('prix', {});    // { statId: {ba,pa,ra} }
-let POIDS  = store.get('poids', {});   // { statId: number }  surcharges utilisateur
-let ITEMS  = store.get('items', []);   // [{nom, prix, stats}]
-let CALIB  = store.get('calib', []);   // [{nom, jets, taux, runes, k}]
+let PRIX  = store.get('prix', {});    // { statId: {ba,pa,ra,est?} }
+let POIDS = store.get('poids', {});   // { statId: number } surcharges utilisateur
+let ITEMS = store.get('items', []);   // [{nom, prix, stats, qte, duree}]
+let CALIB = store.get('calib', []);   // [{nom, jets, taux, runes, k}]
 
 function poidsDe(id) {
   return POIDS[id] !== undefined ? POIDS[id] : (STAT_BY_ID[id] ? STAT_BY_ID[id].poids : 0);
@@ -453,9 +560,7 @@ function norm(s) {
 function matchStat(rawName) {
   const n = norm(rawName);
   if (!n) return null;
-  for (const entry of ALIAS_INDEX) {
-    if (n === entry.alias) return entry.id;
-  }
+  for (const entry of ALIAS_INDEX) if (n === entry.alias) return entry.id;
   for (const entry of ALIAS_INDEX) {
     if (n.startsWith(entry.alias + ' ') || n.endsWith(' ' + entry.alias) || n.includes(' ' + entry.alias + ' ')) {
       return entry.id;
@@ -464,8 +569,17 @@ function matchStat(rawName) {
   return null;
 }
 
-/* Retourne { effects: [{id,label,jet,poidsUnit,poids}], warnings: [string] } */
+/* Le parsing est refait à chaque frappe et pour chaque item du classement :
+   on mémoïse par texte, invalidé dès qu'un poids change. */
+let PARSE_CACHE = new Map();
+let POIDS_VERSION = 0;
+function invaliderCache() { PARSE_CACHE = new Map(); POIDS_VERSION++; }
+
 function parseStats(text) {
+  const cle = POIDS_VERSION + ' ' + String(text || '');
+  const hit = PARSE_CACHE.get(cle);
+  if (hit) return hit;
+
   const effects = [];
   const warnings = [];
   const lines = String(text || '').split(/[\n;]+/);
@@ -474,7 +588,7 @@ function parseStats(text) {
     const line = rawLine.trim();
     if (!line) continue;
 
-    // "+301 Vitalité" / "301 Vitalité" / "Vitalité +301"
+    // « +301 Vitalité » / « 301 Vitalité » / « Vitalité +301 »
     let m = line.match(/^([+-]?\s*\d+(?:[.,]\d+)?)\s*(.+)$/);
     let valStr, namePart;
     if (m) {
@@ -496,27 +610,28 @@ function parseStats(text) {
     const existing = effects.find(e => e.id === id);
     if (existing) { existing.jet += jet; existing.poids = existing.jet * pu; continue; }
 
-    effects.push({ id, label: STAT_BY_ID[id].label, jet, poidsUnit: pu, poids: jet * pu });
+    effects.push({ id, label: STAT_BY_ID[id].label, jet, poidsUnit: pu, poids: jet * pu, estime: !!STAT_BY_ID[id].estime });
   }
-  return { effects, warnings };
+
+  const res = { effects, warnings };
+  if (PARSE_CACHE.size > 400) PARSE_CACHE.clear();
+  PARSE_CACHE.set(cle, res);
+  return res;
 }
 
 /* ═══════════════ MOTEUR DE BRISAGE ═══════════════ */
 /*
-   Nombre de runes basiques d'une stat :
+   Quantité de runes basiques d'une stat :
        nbBa = jet × (taux / 100) × rendement
-
-   Le jet pilote la quantité, le poids unitaire pilote la valeur
-   (une rune PA vaut structurellement bien plus qu'une rune Vi).
-   `rendement` est le seul coefficient à caler sur le serveur :
-   onglet Calibrage.
+   Le jet pilote la quantité, le poids unitaire pilote la valeur.
+   `rendement` est le seul coefficient à caler sur le serveur (onglet Calibrage).
 */
 function prixDe(id) {
   const p = PRIX[id] || {};
   const ba = Number(p.ba) || 0;
   const pa = (p.pa !== undefined && p.pa !== null && p.pa !== '') ? Number(p.pa) : ba * TIER.pa;
   const ra = (p.ra !== undefined && p.ra !== null && p.ra !== '') ? Number(p.ra) : ba * TIER.ra;
-  return { ba, pa: Number(pa) || 0, ra: Number(ra) || 0, defini: ba > 0 };
+  return { ba, pa: Number(pa) || 0, ra: Number(ra) || 0, defini: ba > 0, estime: !!p.est };
 }
 
 function repartir(baEq, mode) {
@@ -536,7 +651,7 @@ function calculerBrisage(text, opts) {
 
   const lignes = [];
   let valeurBrute = 0, totalBaEq = 0, totalJets = 0, poidsTotal = 0;
-  const sansPrix = [];
+  const sansPrix = [], poidsEstimes = [];
 
   for (const e of effects) {
     const baEq = e.jet * (taux / 100) * rendement;
@@ -545,18 +660,95 @@ function calculerBrisage(text, opts) {
     const valeur = rep.ra * px.ra + rep.pa * px.pa + rep.ba * px.ba;
 
     if (!px.defini) sansPrix.push(e.label);
+    if (e.estime) poidsEstimes.push(e.label);
     valeurBrute += valeur;
-    totalBaEq   += baEq;
-    totalJets   += e.jet;
-    poidsTotal  += e.poids;
+    totalBaEq += baEq;
+    totalJets += e.jet;
+    poidsTotal += e.poids;
 
-    lignes.push({ ...e, baEq, ...rep, valeur, prixDefini: px.defini });
+    lignes.push({ ...e, baEq, ...rep, valeur, prixDefini: px.defini, prixEstime: px.estime });
   }
 
   const taxe = Number(opts.taxe) || 0;
-  const net  = valeurBrute * (1 - taxe / 100);
+  const facteur = 1 - taxe / 100;
+  const net = valeurBrute * facteur;
 
-  return { lignes, warnings, valeurBrute, net, totalBaEq, totalJets, poidsTotal, sansPrix };
+  // Part de chaque ligne dans la valeur totale : montre d'où vient réellement l'argent.
+  for (const l of lignes) l.part = valeurBrute > 0 ? l.valeur / valeurBrute : 0;
+
+  return { lignes, warnings, valeurBrute, net, facteur, totalBaEq, totalJets, poidsTotal, sansPrix, poidsEstimes };
+}
+
+/* ═══════════════ RISQUE ═══════════════
+   Le brisage est aléatoire : l'espérance seule peut masquer une majorité
+   de brisages perdants. Deux sources de dispersion sont combinées :
+     · le tirage des runes, modélisé par une loi de Poisson par ligne de stat
+       (variance = espérance, donc dispersion relative décroissante en 1/√n) ;
+     · l'incertitude sur le rendement lui-même, mesurée par l'écart entre
+       tes calibrages — nulle tant qu'il y a moins de deux mesures.
+*/
+function cvRendement() {
+  const c = statsCalib();
+  return (c.n >= 2 && c.k > 0) ? (c.sd / c.k) : 0;
+}
+
+/* Fonction de répartition de la loi normale (Abramowitz & Stegun 7.1.26). */
+function phi(z) {
+  const t = 1 / (1 + 0.2316419 * Math.abs(z));
+  const d = 0.3989422804014327 * Math.exp(-z * z / 2);
+  const p = d * t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+  return z >= 0 ? 1 - p : p;
+}
+
+function risque(res, prixAchatUnitaire) {
+  let variance = 0;
+  for (const l of res.lignes) {
+    if (l.baEq <= 0) continue;
+    const prixParRune = l.valeur / l.baEq;            // kamas par rune Ba équivalente
+    variance += l.baEq * prixParRune * prixParRune;   // Poisson : Var(n·p) = λ·p²
+  }
+  const cv = cvRendement();
+  variance += res.valeurBrute * res.valeurBrute * cv * cv;
+
+  const sd = Math.sqrt(variance) * res.facteur;
+  const moyenne = res.net;
+  const z90 = 1.2815515655446004;
+
+  let pPerte = 0;
+  if (prixAchatUnitaire > 0) {
+    pPerte = sd > 0 ? phi((prixAchatUnitaire - moyenne) / sd) : (moyenne < prixAchatUnitaire ? 1 : 0);
+  }
+  return {
+    sd, pPerte, cv, mesure: cv > 0,
+    p10: Math.max(0, moyenne - z90 * sd),
+    p90: Math.max(0, moyenne + z90 * sd)
+  };
+}
+
+/* Prix d'achat maximum : point mort, et plafond pour tenir la marge visée. */
+function prixMax(res, margeCiblePct) {
+  const pointMort = res.net;
+  const m = Math.max(0, Number(margeCiblePct) || 0);
+  return { pointMort, cible: pointMort / (1 + m / 100) };
+}
+
+/* Synthèse complète d'un item du classement. */
+function evaluerItem(it, opts) {
+  const res = calculerBrisage(it.stats, opts);
+  const qte = Math.max(1, Number(it.qte) || 1);
+  const duree = Math.max(0, Number(it.duree) || 0);
+  const prix = Number(it.prix) || 0;
+
+  const marge = res.net - prix;
+  const margeTotale = marge * qte;
+  const roi = prix > 0 ? (marge / prix) * 100 : NaN;
+  const minutes = duree * qte;
+  const kamasHeure = minutes > 0 ? (margeTotale / minutes) * 60 : NaN;
+
+  return {
+    it, res, qte, prix, marge, margeTotale, roi, kamasHeure,
+    risque: risque(res, prix), prixMax: prixMax(res, opts.margeCible), capital: prix * qte
+  };
 }
 
 /* ═══════════════ UTILITAIRES UI ═══════════════ */
@@ -569,7 +761,7 @@ function toast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
 function esc(s) {
@@ -578,63 +770,102 @@ function esc(s) {
 
 function fmtK(n) {
   if (!isFinite(n)) return '—';
-  const r = Math.round(n);
-  return r.toLocaleString('fr-FR');
+  const a = Math.abs(n);
+  if (a >= 1e6) return (n / 1e6).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' M';
+  if (a >= 1e4) return (n / 1e3).toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' k';
+  return Math.round(n).toLocaleString('fr-FR');
 }
 function fmtN(n, dec) {
   if (!isFinite(n)) return '—';
   return n.toLocaleString('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
+function fmtPct(n, dec) { return isFinite(n) ? fmtN(n, dec === undefined ? 0 : dec) + ' %' : '—'; }
+function cls(n) { return n >= 0 ? 'pos' : 'neg'; }
 
 function getOpts() {
   return {
-    taux:      parseFloat($('#taux').value),
-    rendement: parseFloat($('#rendement').value),
-    taxe:      parseFloat($('#taxe').value),
-    packing:   $('#packing').value
+    taux:       parseFloat($('#taux').value),
+    rendement:  parseFloat($('#rendement').value),
+    taxe:       parseFloat($('#taxe').value),
+    margeCible: parseFloat($('#margeCible').value),
+    packing:    $('#packing').value
   };
 }
+function saveOpts() { store.set('opts', getOpts()); }
 
-function saveOpts() {
-  store.set('opts', getOpts());
+/* Le rendu complet est relancé à chaque frappe : on regroupe les appels. */
+function debounce(fn, ms) {
+  let t = null;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
 }
 
 /* ═══════════════ ONGLET ATELIER ═══════════════ */
 function renderAtelier() {
   const opts = getOpts();
-  const res = calculerBrisage($('#statsInput').value, opts);
+  const texte = $('#statsInput').value;
+  const res = calculerBrisage(texte, opts);
   const prixAchat = parseFloat($('#itemPrix').value) || 0;
+  const qte = Math.max(1, parseInt($('#itemQte').value, 10) || 1);
+
   const marge = res.net - prixAchat;
   const roi = prixAchat > 0 ? (marge / prixAchat) * 100 : NaN;
+  const r = risque(res, prixAchat);
+  const pm = prixMax(res, opts.margeCible);
+  const vide = texte.trim() === '';
 
-  const vide = $('#statsInput').value.trim() === '';
   if (res.lignes.length === 0) {
     $('#atelierOut').innerHTML = vide
       ? '<div class="empty">Colle les stats de l\'item à gauche pour voir la marge.</div>'
       : '<div class="empty">Aucune stat exploitable détectée dans ce texte.</div>';
   } else {
+    const pertePct = r.pPerte * 100;
+    const barre = prixAchat > 0 ? `
+      <div style="margin-top:1rem">
+        <div class="riskbar">
+          <div class="loss" style="width:${(pertePct).toFixed(1)}%"></div>
+          <div class="win"  style="width:${(100 - pertePct).toFixed(1)}%"></div>
+        </div>
+        <div class="risk-legend">
+          <span>${fmtPct(pertePct)} de brisages perdants</span>
+          <span>${fmtPct(100 - pertePct)} gagnants</span>
+        </div>
+        ${r.mesure ? '' : '<div style="font-size:.72rem;color:var(--muted);margin-top:.4rem">Dispersion du rendement non mesurée : le risque réel est probablement supérieur. Ajoute des mesures de calibrage.</div>'}
+      </div>` : '';
+
     $('#atelierOut').innerHTML = `
       <div class="kpis">
         <div class="kpi"><div class="k">Runes (éq. Ba)</div><div class="v">${fmtN(res.totalBaEq, 1)}</div></div>
-        <div class="kpi"><div class="k">Valeur brute</div><div class="v">${fmtK(res.valeurBrute)}</div></div>
-        <div class="kpi"><div class="k">Net après taxe</div><div class="v">${fmtK(res.net)}</div></div>
-        <div class="kpi"><div class="k">Marge</div><div class="v ${marge >= 0 ? 'pos' : 'neg'}">${fmtK(marge)}</div></div>
-        <div class="kpi"><div class="k">ROI</div><div class="v ${roi >= 0 ? 'pos' : 'neg'}">${isFinite(roi) ? fmtN(roi, 0) + ' %' : '—'}</div></div>
+        <div class="kpi"><div class="k">Net après taxe</div><div class="v">${fmtK(res.net)}</div>
+          <div class="s">brut ${fmtK(res.valeurBrute)}</div></div>
+        <div class="kpi"><div class="k">Marge / unité</div><div class="v ${cls(marge)}">${fmtK(marge)}</div>
+          <div class="s">ROI ${fmtPct(roi)}</div></div>
       </div>
-      <div style="font-size:.8rem;color:var(--muted)">
-        Poids total de l'item : <strong>${fmtN(res.poidsTotal, 1)}</strong> ·
-        Jets cumulés : <strong>${fmtN(res.totalJets, 0)}</strong>
+      <div class="kpis">
+        <div class="kpi hero"><div class="k">Prix d'achat max</div><div class="v">${fmtK(pm.cible)}</div>
+          <div class="s">pour ${fmtPct(opts.margeCible)} de marge</div></div>
+        <div class="kpi"><div class="k">Point mort</div><div class="v">${fmtK(pm.pointMort)}</div>
+          <div class="s">au-delà, tu perds</div></div>
+        <div class="kpi"><div class="k">Fourchette nette</div><div class="v range">${fmtK(r.p10)} → ${fmtK(r.p90)}</div>
+          <div class="s">8 brisages sur 10</div></div>
+      </div>
+      ${barre}
+      ${qte > 1 ? `<div style="font-size:.8rem;color:var(--muted);margin-top:.8rem">
+        Sur ${qte} exemplaires : capital ${fmtK(prixAchat * qte)} → marge totale
+        <strong class="${cls(marge * qte)}">${fmtK(marge * qte)}</strong></div>` : ''}
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.6rem">
+        Poids total ${fmtN(res.poidsTotal, 1)} · jets cumulés ${fmtN(res.totalJets, 0)}
       </div>`;
   }
 
-  // Détail par ligne
+  // Détail par ligne, trié par contribution décroissante à la valeur
   const tb = $('#detailTbl tbody');
   if (res.lignes.length === 0) {
-    tb.innerHTML = `<tr><td colspan="8" class="empty">${vide ? 'Aucun calcul pour l\'instant.' : 'Aucune ligne de stat reconnue.'}</td></tr>`;
+    tb.innerHTML = `<tr><td colspan="9" class="empty">${vide ? 'Aucun calcul pour l\'instant.' : 'Aucune ligne de stat reconnue.'}</td></tr>`;
   } else {
-    tb.innerHTML = res.lignes.map(l => `
+    const tri = res.lignes.slice().sort((a, b) => b.valeur - a.valeur);
+    tb.innerHTML = tri.map(l => `
       <tr>
-        <td>${esc(l.label)}${l.prixDefini ? '' : '<span class="badge warn">prix manquant</span>'}</td>
+        <td>${esc(l.label)}${l.prixDefini ? '' : '<span class="badge warn">prix manquant</span>'}${l.prixEstime ? '<span class="badge est">prix estimé</span>' : ''}${l.estime ? '<span class="badge warn">poids estimé</span>' : ''}</td>
         <td class="num">${fmtN(l.jet, 0)}</td>
         <td class="num">${fmtN(l.poidsUnit, 2)}</td>
         <td class="num">${fmtN(l.poids, 1)}</td>
@@ -642,14 +873,16 @@ function renderAtelier() {
         <td class="num">${fmtN(l.pa, 0)}</td>
         <td class="num">${fmtN(l.ba, 1)}</td>
         <td class="num">${fmtK(l.valeur)}</td>
+        <td class="num">${fmtPct(l.part * 100)}</td>
       </tr>`).join('');
   }
 
-  // Avertissements
-  const warns = [];
-  if (res.warnings.length) warns.push(...res.warnings);
+  const warns = res.warnings.slice();
   if (res.sansPrix.length) {
     warns.push(`Prix non renseigné pour : ${res.sansPrix.join(', ')} — ces runes comptent pour 0, la marge est donc sous-estimée.`);
+  }
+  if (res.poidsEstimes.length) {
+    warns.push(`Poids non confirmé pour : ${res.poidsEstimes.join(', ')} — vérifie-les dans l'onglet Poids des runes.`);
   }
   $('#parseWarn').innerHTML = warns.length
     ? `<div class="note" style="margin-top:1rem">${warns.map(esc).join('<br>')}</div>`
@@ -657,137 +890,244 @@ function renderAtelier() {
 }
 
 /* ═══════════════ ONGLET CLASSEMENT ═══════════════ */
+let TRI_CLASSEMENT = 'marge';
+let RECH_CLASSEMENT = '';
+let EDIT_INDEX = -1;
+
 function renderClassement() {
   const opts = getOpts();
   const tb = $('#classementTbl tbody');
 
   if (!ITEMS.length) {
-    tb.innerHTML = '<tr><td colspan="8" class="empty">Aucun item enregistré.</td></tr>';
+    tb.innerHTML = '<tr><td colspan="12" class="empty">Aucun item enregistré.</td></tr>';
+    $('#classementResume').innerHTML = '';
     return;
   }
 
-  const rows = ITEMS.map((it, i) => {
-    const res = calculerBrisage(it.stats, opts);
-    const marge = res.net - (it.prix || 0);
-    const roi = it.prix > 0 ? (marge / it.prix) * 100 : NaN;
-    return { i, it, res, marge, roi };
+  const q = RECH_CLASSEMENT.trim().toLowerCase();
+  let rows = ITEMS.map((it, i) => ({ i, ...evaluerItem(it, opts) }));
+  const total = rows.length;
+  if (q) rows = rows.filter(r => String(r.it.nom || '').toLowerCase().includes(q));
+
+  const sens = { nom: 1, risque: 1 };
+  rows.sort((a, b) => {
+    switch (TRI_CLASSEMENT) {
+      case 'nom':         return String(a.it.nom || '').localeCompare(String(b.it.nom || ''), 'fr');
+      case 'roi':         return (isFinite(b.roi) ? b.roi : -Infinity) - (isFinite(a.roi) ? a.roi : -Infinity);
+      case 'kamasHeure':  return (isFinite(b.kamasHeure) ? b.kamasHeure : -Infinity) - (isFinite(a.kamasHeure) ? a.kamasHeure : -Infinity);
+      case 'margeTotale': return b.margeTotale - a.margeTotale;
+      case 'risque':      return a.risque.pPerte - b.risque.pPerte;
+      default:            return b.marge - a.marge;
+    }
   });
 
-  rows.sort((a, b) => b.marge - a.marge);
+  if (!rows.length) {
+    tb.innerHTML = '<tr><td colspan="12" class="empty">Aucun item ne correspond au filtre.</td></tr>';
+  } else {
+    tb.innerHTML = rows.map(r => {
+      const pertePct = r.prix > 0 ? r.risque.pPerte * 100 : NaN;
+      const alerte = r.prix > 0 && r.prix > r.prixMax.pointMort;
+      return `
+      <tr>
+        <td>${esc(r.it.nom || '(sans nom)')}${alerte ? '<span class="badge warn">au-dessus du point mort</span>' : ''}</td>
+        <td class="num"><input type="number" class="mini-sm" data-champ="qte" data-idx="${r.i}" value="${r.qte}" min="1" step="1" /></td>
+        <td class="num"><input type="number" class="mini" data-champ="prix" data-idx="${r.i}" value="${r.prix}" min="0" step="1000" /></td>
+        <td class="num">${fmtK(r.prixMax.cible)}</td>
+        <td class="num">${fmtN(r.res.totalBaEq, 1)}</td>
+        <td class="num">${fmtK(r.res.net)}</td>
+        <td class="num ${cls(r.marge)}">${fmtK(r.marge)}</td>
+        <td class="num ${cls(r.margeTotale)}">${fmtK(r.margeTotale)}</td>
+        <td class="num ${cls(r.roi)}">${fmtPct(r.roi)}</td>
+        <td class="num ${cls(r.kamasHeure)}">${isFinite(r.kamasHeure) ? fmtK(r.kamasHeure) : '—'}</td>
+        <td class="num">${isFinite(pertePct) ? fmtPct(pertePct) : '—'}</td>
+        <td style="white-space:nowrap">
+          <button class="ghost icon" data-edit="${r.i}" title="Modifier">✎</button>
+          <button class="ghost icon" data-dup="${r.i}" title="Dupliquer">⧉</button>
+          <button class="danger icon" data-del="${r.i}" title="Supprimer">✕</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
 
-  tb.innerHTML = rows.map(r => `
-    <tr>
-      <td>${esc(r.it.nom || '(sans nom)')}</td>
-      <td class="num"><input type="number" data-prix-idx="${r.i}" value="${r.it.prix || 0}"
-            step="1000" min="0" style="width:110px;padding:.25rem .4rem;font-size:.8rem" /></td>
-      <td class="num">${fmtN(r.res.totalBaEq, 1)}</td>
-      <td class="num">${fmtK(r.res.valeurBrute)}</td>
-      <td class="num">${fmtK(r.res.net)}</td>
-      <td class="num ${r.marge >= 0 ? 'pos' : 'neg'}">${fmtK(r.marge)}</td>
-      <td class="num ${r.roi >= 0 ? 'pos' : 'neg'}">${isFinite(r.roi) ? fmtN(r.roi, 0) + ' %' : '—'}</td>
-      <td><button class="danger" data-del-idx="${r.i}" style="padding:.2rem .5rem;font-size:.75rem">✕</button></td>
-    </tr>`).join('');
+  // Synthèse du portefeuille : ce que coûte la session et ce qu'elle rapporte.
+  const capital = rows.reduce((a, r) => a + r.capital, 0);
+  const gain    = rows.reduce((a, r) => a + r.margeTotale, 0);
+  const minutes = rows.reduce((a, r) => a + (Number(r.it.duree) || 0) * r.qte, 0);
+  const rentables = rows.filter(r => r.marge > 0).length;
+  $('#classementResume').innerHTML = `
+    <div class="kpis" style="margin-top:0">
+      <div class="kpi"><div class="k">Items affichés</div><div class="v">${rows.length}</div>
+        <div class="s">${rentables} rentable${rentables > 1 ? 's' : ''}${q ? ` · ${total} au total` : ''}</div></div>
+      <div class="kpi"><div class="k">Capital engagé</div><div class="v">${fmtK(capital)}</div></div>
+      <div class="kpi"><div class="k">Marge attendue</div><div class="v ${cls(gain)}">${fmtK(gain)}</div></div>
+      <div class="kpi"><div class="k">Temps total</div><div class="v">${minutes > 0 ? fmtN(minutes / 60, 1) + ' h' : '—'}</div>
+        <div class="s">${minutes > 0 ? fmtK(gain / (minutes / 60)) + ' / h' : 'durées non renseignées'}</div></div>
+    </div>`;
 }
 
 /* ═══════════════ ONGLET PRIX ═══════════════ */
+let RECH_PRIX = '';
+
 function renderPrix() {
+  const q = RECH_PRIX.trim().toLowerCase();
+  const seulementVides = $('#filtrePrixVides').checked;
+
+  let liste = STATS_DEF;
+  if (q) liste = liste.filter(s => norm(s.label).includes(norm(q)) || s.alias.some(a => a.includes(norm(q))));
+  if (seulementVides) liste = liste.filter(s => !prixDe(s.id).defini);
+
   const tb = $('#prixTbl tbody');
-  tb.innerHTML = STATS_DEF.map(s => {
+  tb.innerHTML = liste.length === 0
+    ? '<tr><td colspan="6" class="empty">Aucune rune ne correspond.</td></tr>'
+    : liste.map(s => {
+        const p = PRIX[s.id] || {};
+        const pu = poidsDe(s.id);
+        const ratio = (Number(p.ba) > 0 && pu > 0) ? Number(p.ba) / pu : NaN;
+        return `
+        <tr>
+          <td>${esc(s.label)}${p.est ? '<span class="badge est">estimé</span>' : ''}</td>
+          <td class="num">${fmtN(pu, 2)}</td>
+          <td><input type="number" class="mini" data-prix="${s.id}" data-tier="ba" value="${p.ba ?? ''}" placeholder="0" min="0" step="1" /></td>
+          <td><input type="number" class="mini" data-prix="${s.id}" data-tier="pa" value="${p.pa ?? ''}" placeholder="× 3" min="0" step="1" /></td>
+          <td><input type="number" class="mini" data-prix="${s.id}" data-tier="ra" value="${p.ra ?? ''}" placeholder="× 10" min="0" step="1" /></td>
+          <td class="num">${isFinite(ratio) ? fmtK(ratio) : '—'}</td>
+        </tr>`;
+      }).join('');
+
+  const definis = STATS_DEF.filter(s => prixDe(s.id).defini).length;
+  $('#prixResume').innerHTML = `<div style="font-size:.8rem;color:var(--muted);margin-bottom:.7rem">
+    ${definis} / ${STATS_DEF.length} runes ont un prix. Les autres comptent pour 0 dans les marges.</div>`;
+}
+
+/* Bootstrap des prix manquants : le poids de forgemagie est un proxy correct
+   de la valeur d'une rune. On extrapole depuis le ratio médian kamas/poids
+   des runes déjà renseignées, et on marque le résultat comme estimé. */
+function estimerPrixManquants() {
+  const ratios = [];
+  for (const s of STATS_DEF) {
     const p = PRIX[s.id] || {};
-    return `
-      <tr>
-        <td>${esc(s.label)}</td>
-        <td class="num">${fmtN(poidsDe(s.id), 2)}</td>
-        <td><input type="number" data-prix="${s.id}" data-tier="ba" value="${p.ba ?? ''}"
-              placeholder="0" min="0" step="1" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
-        <td><input type="number" data-prix="${s.id}" data-tier="pa" value="${p.pa ?? ''}"
-              placeholder="× 3" min="0" step="1" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
-        <td><input type="number" data-prix="${s.id}" data-tier="ra" value="${p.ra ?? ''}"
-              placeholder="× 10" min="0" step="1" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
-      </tr>`;
-  }).join('');
+    const pu = poidsDe(s.id);
+    if (!p.est && Number(p.ba) > 0 && pu > 0) ratios.push(Number(p.ba) / pu);
+  }
+  if (ratios.length < 3) {
+    toast('Renseigne au moins 3 prix réels avant d\'extrapoler les autres');
+    return;
+  }
+  ratios.sort((a, b) => a - b);
+  const median = ratios.length % 2
+    ? ratios[(ratios.length - 1) / 2]
+    : (ratios[ratios.length / 2 - 1] + ratios[ratios.length / 2]) / 2;
+
+  let n = 0;
+  for (const s of STATS_DEF) {
+    if (prixDe(s.id).defini && !(PRIX[s.id] || {}).est) continue;
+    const pu = poidsDe(s.id);
+    if (pu <= 0) continue;
+    PRIX[s.id] = { ba: Math.round(median * pu), est: true };
+    n++;
+  }
+  store.set('prix', PRIX);
+  renderPrix(); renderAtelier(); renderClassement();
+  toast(`${n} prix estimés à ${fmtK(median)} kamas par point de poids`);
 }
 
 /* ═══════════════ ONGLET POIDS ═══════════════ */
+let RECH_POIDS = '';
+
 function renderPoids() {
+  const q = norm(RECH_POIDS.trim());
+  let liste = STATS_DEF;
+  if (q) liste = liste.filter(s => norm(s.label).includes(q) || s.alias.some(a => a.includes(q)));
+
   const tb = $('#poidsTbl tbody');
-  tb.innerHTML = STATS_DEF.map(s => `
-    <tr>
-      <td>${esc(s.label)}${s.estime ? '<span class="badge warn">estimé</span>' : ''}</td>
-      <td><input type="number" data-poids="${s.id}" value="${poidsDe(s.id)}"
-            min="0" step="0.05" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
-      <td style="text-align:left;color:var(--muted);font-size:.78rem;white-space:normal">${esc(s.alias.join(', '))}</td>
-    </tr>`).join('');
+  tb.innerHTML = liste.length === 0
+    ? '<tr><td colspan="3" class="empty">Aucune stat ne correspond.</td></tr>'
+    : liste.map(s => {
+        const modifie = POIDS[s.id] !== undefined && POIDS[s.id] !== s.poids;
+        return `
+        <tr>
+          <td>${esc(s.label)}${s.estime ? '<span class="badge warn">estimé</span>' : ''}${modifie ? `<span class="badge est">modifié · défaut ${fmtN(s.poids, 2)}</span>` : ''}</td>
+          <td><input type="number" class="mini" data-poids="${s.id}" value="${poidsDe(s.id)}" min="0" step="0.05" /></td>
+          <td style="text-align:left;color:var(--muted);font-size:.78rem;white-space:normal">${esc(s.alias.join(', '))}</td>
+        </tr>`;
+      }).join('');
 }
 
 /* ═══════════════ ONGLET CALIBRAGE ═══════════════ */
-/* Le badge reflète l'état réel : aucune mesure, mesures non appliquées,
-   ou rendement du champ conforme à la moyenne mesurée. */
+/* Moyenne pondérée par le volume de jets, et dispersion des mesures :
+   c'est cette dispersion qui alimente le calcul de risque. */
+function statsCalib() {
+  const n = CALIB.length;
+  if (!n) return { n: 0, k: 0, sd: 0, se: 0 };
+
+  let numer = 0, denom = 0;
+  for (const c of CALIB) { numer += c.k * c.jets; denom += c.jets; }
+  const k = denom > 0 ? numer / denom : 0;
+
+  if (n < 2) return { n, k, sd: 0, se: 0 };
+  let s2 = 0;
+  for (const c of CALIB) s2 += (c.k - k) * (c.k - k);
+  const sd = Math.sqrt(s2 / (n - 1));
+  return { n, k, sd, se: sd / Math.sqrt(n) };
+}
+
 function updateCalibBadge() {
   const badge = $('#calibBadge');
-  if (!CALIB.length) {
-    badge.textContent = 'à calibrer';
-    badge.className = 'badge warn';
-    return;
-  }
-  const k = kMesure();
+  const c = statsCalib();
+  if (!c.n) { badge.textContent = 'à calibrer'; badge.className = 'badge warn'; return; }
   const actuel = parseFloat($('#rendement').value);
-  if (isFinite(actuel) && Math.abs(actuel - k) <= Math.max(k * 0.02, 1e-6)) {
-    badge.textContent = 'calibré';
-    badge.className = 'badge';
+  if (isFinite(actuel) && Math.abs(actuel - c.k) <= Math.max(c.k * 0.02, 1e-6)) {
+    badge.textContent = c.n >= 2 ? 'calibré' : 'calibré (1 mesure)';
+    badge.className = c.n >= 2 ? 'badge' : 'badge warn';
   } else {
     badge.textContent = 'mesure non appliquée';
     badge.className = 'badge warn';
   }
 }
 
-/* Moyenne pondérée par le volume de jets : les grosses mesures pèsent plus. */
-function kMesure() {
-  let numer = 0, denom = 0;
-  for (const c of CALIB) { numer += c.k * c.jets; denom += c.jets; }
-  return denom > 0 ? numer / denom : 0;
-}
-
 function renderCalib() {
   const tb = $('#calibTbl tbody');
   updateCalibBadge();
+  const c = statsCalib();
 
-  if (!CALIB.length) {
-    tb.innerHTML = '<tr><td colspan="6" class="empty">Aucune mesure.</td></tr>';
+  if (!c.n) {
+    tb.innerHTML = '<tr><td colspan="7" class="empty">Aucune mesure.</td></tr>';
     $('#calibOut').innerHTML = '<div class="empty">Aucune mesure enregistrée.</div>';
     return;
   }
 
-  tb.innerHTML = CALIB.map((c, i) => `
+  tb.innerHTML = CALIB.map((m, i) => {
+    const ecart = c.k > 0 ? ((m.k - c.k) / c.k) * 100 : 0;
+    return `
     <tr>
-      <td>${esc(c.nom || 'Mesure ' + (i + 1))}</td>
-      <td class="num">${fmtN(c.jets, 0)}</td>
-      <td class="num">${fmtN(c.taux, 0)} %</td>
-      <td class="num">${fmtN(c.runes, 1)}</td>
-      <td class="num">${fmtN(c.k, 4)}</td>
-      <td><button class="danger" data-delcalib="${i}" style="padding:.2rem .5rem;font-size:.75rem">✕</button></td>
-    </tr>`).join('');
+      <td>${esc(m.nom || 'Mesure ' + (i + 1))}</td>
+      <td class="num">${fmtN(m.jets, 0)}</td>
+      <td class="num">${fmtN(m.taux, 0)} %</td>
+      <td class="num">${fmtN(m.runes, 1)}</td>
+      <td class="num">${fmtN(m.k, 4)}</td>
+      <td class="num ${Math.abs(ecart) > 25 ? 'neg' : ''}">${ecart >= 0 ? '+' : ''}${fmtN(ecart, 0)} %</td>
+      <td><button class="danger icon" data-delcalib="${i}">✕</button></td>
+    </tr>`;
+  }).join('');
 
-  const kMoyen = kMesure();
-
-  const ks = CALIB.map(c => c.k);
-  const spread = ks.length > 1 ? (Math.max(...ks) - Math.min(...ks)) : 0;
-
+  const cv = c.k > 0 ? (c.sd / c.k) * 100 : 0;
   $('#calibOut').innerHTML = `
-    <div class="kpis">
-      <div class="kpi"><div class="k">Rendement moyen</div><div class="v">${fmtN(kMoyen, 4)}</div></div>
-      <div class="kpi"><div class="k">Mesures</div><div class="v">${CALIB.length}</div></div>
-      <div class="kpi"><div class="k">Écart max</div><div class="v">${fmtN(spread, 4)}</div></div>
+    <div class="kpis" style="margin-top:0">
+      <div class="kpi hero"><div class="k">Rendement</div><div class="v">${fmtN(c.k, 4)}</div>
+        <div class="s">${c.n >= 2 ? '± ' + fmtN(1.96 * c.se, 4) : 'marge d\'erreur inconnue'}</div></div>
+      <div class="kpi"><div class="k">Mesures</div><div class="v">${c.n}</div></div>
+      <div class="kpi"><div class="k">Dispersion</div><div class="v">${c.n >= 2 ? fmtPct(cv) : '—'}</div>
+        <div class="s">alimente le risque</div></div>
     </div>
     <button id="btnApplyCalib">Appliquer ce rendement</button>
-    ${CALIB.length < 2 ? '<div style="font-size:.78rem;color:var(--muted);margin-top:.6rem">Ajoute au moins une deuxième mesure pour lisser le hasard du brisage.</div>' : ''}`;
+    ${c.n < 2
+      ? '<div style="font-size:.78rem;color:var(--muted);margin-top:.6rem">Avec une seule mesure, impossible de distinguer ton rendement réel du hasard d\'un brisage. Ajoutes-en une deuxième : le calcul de risque ne s\'active qu\'à partir de là.</div>'
+      : (cv > 40 ? '<div style="font-size:.78rem;color:var(--accent3);margin-top:.6rem">Dispersion élevée : soit le brisage est très aléatoire, soit une mesure est erronée. Vérifie les écarts dans l\'historique.</div>' : '')}`;
 
   $('#btnApplyCalib').addEventListener('click', () => {
-    $('#rendement').value = kMoyen.toFixed(4);
-    saveOpts();
-    updateCalibBadge();
-    renderAtelier(); renderClassement();
-    toast('Rendement appliqué : ' + fmtN(kMoyen, 4));
+    $('#rendement').value = c.k.toFixed(4);
+    saveOpts(); updateCalibBadge(); renderAtelier(); renderClassement();
+    toast('Rendement appliqué : ' + fmtN(c.k, 4));
   });
 }
 
@@ -806,10 +1146,8 @@ function parseCSV(text) {
   for (let i = 0; i < t.length; i++) {
     const c = t[i];
     if (inQ) {
-      if (c === '"') {
-        if (t[i + 1] === '"') { cur += '"'; i++; }
-        else inQ = false;
-      } else cur += c;
+      if (c === '"') { if (t[i + 1] === '"') { cur += '"'; i++; } else inQ = false; }
+      else cur += c;
     } else if (c === '"') inQ = true;
     else if (c === ',') { row.push(cur); cur = ''; }
     else if (c === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
@@ -819,26 +1157,82 @@ function parseCSV(text) {
   return rows.filter(r => r.some(c => String(c).trim() !== ''));
 }
 
-function download(filename, text) {
-  const blob = new Blob([text], { type: 'text/csv;charset=utf-8' });
+function download(filename, text, mime) {
+  const blob = new Blob([text], { type: (mime || 'text/csv') + ';charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 let pendingImport = null;
-function pickFile(handler) {
+function pickFile(accept, handler) {
   pendingImport = handler;
-  $('#filePicker').value = '';
-  $('#filePicker').click();
+  const fp = $('#filePicker');
+  fp.accept = accept; fp.value = '';
+  fp.click();
+}
+
+/* ═══════════════ SAUVEGARDE COMPLÈTE ═══════════════ */
+function exporterTout() {
+  const data = {
+    format: 'brisage-brial', version: 1, date: new Date().toISOString(),
+    opts: getOpts(), prix: PRIX, poids: POIDS, items: ITEMS, calib: CALIB
+  };
+  download('brisage-brial-sauvegarde.json', JSON.stringify(data, null, 2), 'application/json');
+  toast('Sauvegarde exportée');
+}
+
+function importerTout(texte) {
+  let d;
+  try { d = JSON.parse(texte); }
+  catch (e) { toast('Fichier illisible : ce n\'est pas du JSON valide'); return; }
+  if (!d || d.format !== 'brisage-brial') { toast('Ce fichier n\'est pas une sauvegarde de cet outil'); return; }
+  if (!confirm('Remplacer toutes les données actuelles par cette sauvegarde ?')) return;
+
+  PRIX  = (d.prix  && typeof d.prix  === 'object') ? d.prix  : {};
+  POIDS = (d.poids && typeof d.poids === 'object') ? d.poids : {};
+  ITEMS = Array.isArray(d.items) ? d.items : [];
+  CALIB = Array.isArray(d.calib) ? d.calib : [];
+  store.set('prix', PRIX); store.set('poids', POIDS);
+  store.set('items', ITEMS); store.set('calib', CALIB);
+
+  if (d.opts) {
+    if (isFinite(d.opts.taux))       $('#taux').value = d.opts.taux;
+    if (isFinite(d.opts.rendement))  $('#rendement').value = d.opts.rendement;
+    if (isFinite(d.opts.taxe))       $('#taxe').value = d.opts.taxe;
+    if (isFinite(d.opts.margeCible)) $('#margeCible').value = d.opts.margeCible;
+    if (d.opts.packing)              $('#packing').value = d.opts.packing;
+    saveOpts();
+  }
+  invaliderCache(); renderTout();
+  toast(`Sauvegarde restaurée : ${ITEMS.length} items, ${CALIB.length} mesures`);
+}
+
+function renderStockage() {
+  let octets = 0;
+  for (const k of ['prix', 'poids', 'items', 'calib', 'opts']) {
+    const raw = localStorage.getItem(NS + k);
+    if (raw) octets += raw.length;
+  }
+  const definis = STATS_DEF.filter(s => prixDe(s.id).defini).length;
+  $('#statsStockage').innerHTML = `
+    <div style="font-size:.82rem;color:var(--muted);line-height:1.9">
+      <strong style="color:var(--text)">${ITEMS.length}</strong> items ·
+      <strong style="color:var(--text)">${definis}</strong> prix de runes ·
+      <strong style="color:var(--text)">${CALIB.length}</strong> mesures de calibrage ·
+      <strong style="color:var(--text)">${Object.keys(POIDS).length}</strong> poids modifiés<br>
+      ${fmtN(octets / 1024, 1)} Ko utilisés dans ce navigateur
+    </div>`;
+}
+
+function renderTout() {
+  renderPoids(); renderPrix(); renderCalib(); renderClassement(); renderAtelier(); renderStockage();
 }
 
 /* ═══════════════ ÉVÉNEMENTS ═══════════════ */
 
-// Onglets
 $$('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     $$('.tab').forEach(t => t.classList.remove('active'));
@@ -848,106 +1242,177 @@ $$('.tab').forEach(tab => {
   });
 });
 
-// Barre de configuration
-['#taux', '#rendement', '#taxe', '#packing'].forEach(sel => {
-  $(sel).addEventListener('input', () => {
-    saveOpts();
-    updateCalibBadge();
-    renderAtelier();
-    renderClassement();
-  });
+const rerendreConfig = debounce(() => {
+  saveOpts(); updateCalibBadge(); renderAtelier(); renderClassement();
+}, 60);
+['#taux', '#rendement', '#taxe', '#margeCible', '#packing'].forEach(sel => {
+  $(sel).addEventListener('input', rerendreConfig);
 });
 
 // --- Atelier ---
-$('#btnCalc').addEventListener('click', renderAtelier);
-$('#statsInput').addEventListener('input', renderAtelier);
-$('#itemPrix').addEventListener('input', renderAtelier);
+const rerendreAtelier = debounce(renderAtelier, 60);
+['#statsInput', '#itemPrix', '#itemQte'].forEach(sel => $(sel).addEventListener('input', rerendreAtelier));
 
 $('#btnAddClassement').addEventListener('click', () => {
   const stats = $('#statsInput').value.trim();
   if (!stats) { toast('Colle d\'abord les stats de l\'item'); return; }
   const nom = $('#itemNom').value.trim() || 'Item ' + (ITEMS.length + 1);
-  ITEMS.push({ nom, prix: parseFloat($('#itemPrix').value) || 0, stats });
+  ITEMS.push({
+    nom, stats,
+    prix:  parseFloat($('#itemPrix').value) || 0,
+    qte:   Math.max(1, parseInt($('#itemQte').value, 10) || 1),
+    duree: parseFloat($('#itemDuree').value) || 0
+  });
   store.set('items', ITEMS);
-  renderClassement();
+  renderClassement(); renderStockage();
   toast(`« ${nom} » ajouté au classement`);
 });
 
-// --- Classement ---
-$('#classementTbl').addEventListener('input', (e) => {
-  const idx = e.target.dataset.prixIdx;
-  if (idx === undefined) return;
-  ITEMS[Number(idx)].prix = parseFloat(e.target.value) || 0;
-  store.set('items', ITEMS);
+$('#btnResetAtelier').addEventListener('click', () => {
+  $('#statsInput').value = ''; $('#itemNom').value = '';
+  $('#itemPrix').value = 0; $('#itemQte').value = 1;
+  renderAtelier();
 });
 
-$('#classementTbl').addEventListener('click', (e) => {
-  const idx = e.target.dataset.delIdx;
-  if (idx === undefined) return;
-  const nom = ITEMS[Number(idx)].nom;
-  ITEMS.splice(Number(idx), 1);
+// --- Classement ---
+$('#rechClassement').addEventListener('input', debounce((e) => {
+  RECH_CLASSEMENT = e.target.value; renderClassement();
+}, 60));
+
+$('#triClassement').addEventListener('change', (e) => {
+  TRI_CLASSEMENT = e.target.value; renderClassement();
+});
+
+$('#classementTbl').addEventListener('input', debounce((e) => {
+  const idx = e.target.dataset.idx, champ = e.target.dataset.champ;
+  if (idx === undefined || !champ) return;
+  const it = ITEMS[Number(idx)];
+  if (!it) return;
+  it[champ] = champ === 'qte'
+    ? Math.max(1, parseInt(e.target.value, 10) || 1)
+    : (parseFloat(e.target.value) || 0);
   store.set('items', ITEMS);
   renderClassement();
-  toast(`« ${nom} » supprimé`);
+}, 250));
+
+$('#classementTbl').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+
+  if (btn.dataset.del !== undefined) {
+    const i = Number(btn.dataset.del);
+    const nom = ITEMS[i] ? ITEMS[i].nom : '';
+    ITEMS.splice(i, 1);
+    store.set('items', ITEMS);
+    if (EDIT_INDEX === i) fermerEdition();
+    renderClassement(); renderStockage();
+    toast(`« ${nom} » supprimé`);
+  } else if (btn.dataset.dup !== undefined) {
+    const src = ITEMS[Number(btn.dataset.dup)];
+    if (!src) return;
+    ITEMS.push({ ...src, nom: src.nom + ' (copie)' });
+    store.set('items', ITEMS);
+    renderClassement(); renderStockage();
+    toast('Item dupliqué');
+  } else if (btn.dataset.edit !== undefined) {
+    ouvrirEdition(Number(btn.dataset.edit));
+  }
 });
 
-$('#btnRecalcAll').addEventListener('click', () => { renderClassement(); toast('Classement recalculé'); });
+function ouvrirEdition(i) {
+  const it = ITEMS[i];
+  if (!it) return;
+  EDIT_INDEX = i;
+  $('#editNom').value = it.nom || '';
+  $('#editPrix').value = it.prix || 0;
+  $('#editQte').value = Math.max(1, Number(it.qte) || 1);
+  $('#editDuree').value = Number(it.duree) || 0;
+  $('#editStats').value = it.stats || '';
+  $('#editCard').style.display = '';
+  $('#editCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function fermerEdition() { EDIT_INDEX = -1; $('#editCard').style.display = 'none'; }
+
+$('#btnSaveEdit').addEventListener('click', () => {
+  if (EDIT_INDEX < 0 || !ITEMS[EDIT_INDEX]) { fermerEdition(); return; }
+  const stats = $('#editStats').value.trim();
+  if (!stats) { toast('Les stats ne peuvent pas être vides'); return; }
+  ITEMS[EDIT_INDEX] = {
+    nom: $('#editNom').value.trim() || ITEMS[EDIT_INDEX].nom,
+    stats,
+    prix:  parseFloat($('#editPrix').value) || 0,
+    qte:   Math.max(1, parseInt($('#editQte').value, 10) || 1),
+    duree: parseFloat($('#editDuree').value) || 0
+  };
+  store.set('items', ITEMS);
+  fermerEdition(); renderClassement();
+  toast('Item mis à jour');
+});
+$('#btnCancelEdit').addEventListener('click', fermerEdition);
 
 $('#btnClearItems').addEventListener('click', () => {
   if (!ITEMS.length) return;
   if (!confirm(`Supprimer les ${ITEMS.length} items du classement ?`)) return;
-  ITEMS = [];
-  store.set('items', ITEMS);
-  renderClassement();
+  ITEMS = []; store.set('items', ITEMS);
+  fermerEdition(); renderClassement(); renderStockage();
   toast('Classement vidé');
 });
 
 $('#btnExportItems').addEventListener('click', () => {
-  const rows = [['nom', 'prix_achat', 'stats']];
-  for (const it of ITEMS) rows.push([it.nom, it.prix, it.stats.replace(/\n/g, ' | ')]);
+  const rows = [['nom', 'prix_achat', 'quantite', 'duree_min', 'stats']];
+  for (const it of ITEMS) {
+    rows.push([it.nom, it.prix || 0, it.qte || 1, it.duree || 0, String(it.stats || '').replace(/\n/g, ' | ')]);
+  }
   download('brisage-brial-items.csv', toCSV(rows));
   toast('Items exportés');
 });
 
-$('#btnImportItems').addEventListener('click', () => pickFile((text) => {
+$('#btnImportItems').addEventListener('click', () => pickFile('.csv,text/csv', (text) => {
   const rows = parseCSV(text);
   if (rows.length < 2) { toast('CSV vide ou illisible'); return; }
   let n = 0;
   for (const r of rows.slice(1)) {
-    if (r.length < 3) continue;
-    ITEMS.push({ nom: r[0], prix: parseFloat(r[1]) || 0, stats: r[2].replace(/\s*\|\s*/g, '\n') });
+    if (r.length < 5) continue;
+    ITEMS.push({
+      nom: r[0], prix: parseFloat(r[1]) || 0,
+      qte: Math.max(1, parseInt(r[2], 10) || 1), duree: parseFloat(r[3]) || 0,
+      stats: String(r[4]).replace(/\s*\|\s*/g, '\n')
+    });
     n++;
   }
   store.set('items', ITEMS);
-  renderClassement();
+  renderClassement(); renderStockage();
   toast(`${n} item(s) importé(s)`);
 }));
 
 // --- Prix ---
-$('#prixTbl').addEventListener('input', (e) => {
+$('#rechPrix').addEventListener('input', debounce((e) => { RECH_PRIX = e.target.value; renderPrix(); }, 60));
+$('#filtrePrixVides').addEventListener('change', renderPrix);
+$('#btnEstimerPrix').addEventListener('click', estimerPrixManquants);
+
+$('#prixTbl').addEventListener('input', debounce((e) => {
   const id = e.target.dataset.prix;
   if (!id) return;
-  const tier = e.target.dataset.tier;
+  const tier = e.target.dataset.tier, v = e.target.value;
   if (!PRIX[id]) PRIX[id] = {};
-  const v = e.target.value;
   if (v === '') delete PRIX[id][tier];
   else PRIX[id][tier] = parseFloat(v) || 0;
+  delete PRIX[id].est;                       // une saisie manuelle n'est plus une estimation
   store.set('prix', PRIX);
-  renderAtelier();
-  renderClassement();
-});
+  renderAtelier(); renderClassement(); renderStockage();
+}, 200));
 
 $('#btnExportPrix').addEventListener('click', () => {
-  const rows = [['stat_id', 'stat', 'prix_ba', 'prix_pa', 'prix_ra']];
+  const rows = [['stat_id', 'stat', 'prix_ba', 'prix_pa', 'prix_ra', 'estime']];
   for (const s of STATS_DEF) {
     const p = PRIX[s.id] || {};
-    rows.push([s.id, s.label, p.ba ?? '', p.pa ?? '', p.ra ?? '']);
+    rows.push([s.id, s.label, p.ba ?? '', p.pa ?? '', p.ra ?? '', p.est ? 'oui' : '']);
   }
   download('brisage-brial-prix.csv', toCSV(rows));
   toast('Prix exportés');
 });
 
-$('#btnImportPrix').addEventListener('click', () => pickFile((text) => {
+$('#btnImportPrix').addEventListener('click', () => pickFile('.csv,text/csv', (text) => {
   const rows = parseCSV(text);
   if (rows.length < 2) { toast('CSV vide ou illisible'); return; }
   let n = 0;
@@ -958,42 +1423,50 @@ $('#btnImportPrix').addEventListener('click', () => pickFile((text) => {
     if (String(r[2] ?? '').trim() !== '') e.ba = parseFloat(r[2]) || 0;
     if (String(r[3] ?? '').trim() !== '') e.pa = parseFloat(r[3]) || 0;
     if (String(r[4] ?? '').trim() !== '') e.ra = parseFloat(r[4]) || 0;
-    PRIX[id] = e;
-    n++;
+    if (String(r[5] ?? '').trim().toLowerCase() === 'oui') e.est = true;
+    PRIX[id] = e; n++;
   }
   store.set('prix', PRIX);
-  renderPrix(); renderAtelier(); renderClassement();
+  renderPrix(); renderAtelier(); renderClassement(); renderStockage();
   toast(`${n} prix importé(s)`);
 }));
 
 $('#btnResetPrix').addEventListener('click', () => {
   if (!confirm('Effacer tous les prix de runes enregistrés ?')) return;
-  PRIX = {};
-  store.set('prix', PRIX);
-  renderPrix(); renderAtelier(); renderClassement();
+  PRIX = {}; store.set('prix', PRIX);
+  renderPrix(); renderAtelier(); renderClassement(); renderStockage();
   toast('Prix réinitialisés');
 });
 
 // --- Poids ---
-$('#poidsTbl').addEventListener('input', (e) => {
+$('#rechPoids').addEventListener('input', debounce((e) => { RECH_POIDS = e.target.value; renderPoids(); }, 60));
+
+$('#poidsTbl').addEventListener('input', debounce((e) => {
   const id = e.target.dataset.poids;
   if (!id) return;
   const v = parseFloat(e.target.value);
-  if (isFinite(v) && v >= 0) POIDS[id] = v;
-  else delete POIDS[id];
+  if (isFinite(v) && v >= 0) POIDS[id] = v; else delete POIDS[id];
   store.set('poids', POIDS);
-  renderPrix(); renderAtelier(); renderClassement();
-});
+  invaliderCache();
+  renderPrix(); renderAtelier(); renderClassement(); renderStockage();
+}, 200));
 
 $('#btnResetPoids').addEventListener('click', () => {
   if (!confirm('Restaurer tous les poids de runes par défaut ?')) return;
-  POIDS = {};
-  store.set('poids', POIDS);
-  renderPoids(); renderPrix(); renderAtelier(); renderClassement();
+  POIDS = {}; store.set('poids', POIDS);
+  invaliderCache(); renderPoids(); renderPrix(); renderAtelier(); renderClassement(); renderStockage();
   toast('Poids restaurés');
 });
 
 // --- Calibrage ---
+$('#btnCalibDepuisAtelier').addEventListener('click', () => {
+  const s = $('#statsInput').value.trim();
+  if (!s) { toast('L\'Atelier est vide'); return; }
+  $('#calibStats').value = s;
+  if (!$('#calibNom').value.trim()) $('#calibNom').value = $('#itemNom').value.trim();
+  toast('Stats reprises depuis l\'Atelier');
+});
+
 $('#btnAddCalib').addEventListener('click', () => {
   const { effects, warnings } = parseStats($('#calibStats').value);
   const jets  = effects.reduce((a, e) => a + e.jet, 0);
@@ -1005,31 +1478,42 @@ $('#btnAddCalib').addEventListener('click', () => {
   if (runes <= 0) { toast('Renseigne le nombre de runes obtenues'); return; }
 
   const k = runes / (jets * (taux / 100));
-  CALIB.push({ nom: $('#itemNom').value.trim() || 'Mesure ' + (CALIB.length + 1), jets, taux, runes, k });
+  CALIB.push({ nom: $('#calibNom').value.trim() || 'Mesure ' + (CALIB.length + 1), jets, taux, runes, k });
   store.set('calib', CALIB);
-  renderCalib();
+  $('#calibRunes').value = 0;
+  renderCalib(); renderAtelier(); renderClassement(); renderStockage();
   toast('Mesure enregistrée — rendement ' + fmtN(k, 4));
 });
 
 $('#calibTbl').addEventListener('click', (e) => {
-  const idx = e.target.dataset.delcalib;
-  if (idx === undefined) return;
-  CALIB.splice(Number(idx), 1);
+  const btn = e.target.closest('button');
+  if (!btn || btn.dataset.delcalib === undefined) return;
+  CALIB.splice(Number(btn.dataset.delcalib), 1);
   store.set('calib', CALIB);
-  renderCalib();
+  renderCalib(); renderAtelier(); renderClassement(); renderStockage();
 });
 
-// --- Import de fichier ---
+// --- Données ---
+$('#btnExportTout').addEventListener('click', exporterTout);
+$('#btnImportTout').addEventListener('click', () => pickFile('.json,application/json', importerTout));
+
+$('#btnResetTout').addEventListener('click', () => {
+  if (!confirm('Effacer définitivement prix, items, calibrages et réglages ?')) return;
+  if (!confirm('Dernière confirmation : cette action est irréversible.')) return;
+  for (const k of ['prix', 'poids', 'items', 'calib', 'opts']) store.del(k);
+  PRIX = {}; POIDS = {}; ITEMS = []; CALIB = [];
+  invaliderCache(); fermerEdition(); renderTout();
+  toast('Toutes les données ont été effacées');
+});
+
 $('#filePicker').addEventListener('change', (e) => {
   const file = e.target.files && e.target.files[0];
   if (!file || !pendingImport) return;
+  const handler = pendingImport;
+  pendingImport = null;
   const reader = new FileReader();
-  reader.onload = () => {
-    try { pendingImport(String(reader.result)); }
-    catch (err) { toast('Import impossible : ' + err.message); }
-    pendingImport = null;
-  };
-  reader.onerror = () => { toast('Lecture du fichier impossible'); pendingImport = null; };
+  reader.onload  = () => { try { handler(String(reader.result)); } catch (err) { toast('Import impossible : ' + err.message); } };
+  reader.onerror = () => toast('Lecture du fichier impossible');
   reader.readAsText(file, 'utf-8');
 });
 
@@ -1037,16 +1521,13 @@ $('#filePicker').addEventListener('change', (e) => {
 (function init() {
   const saved = store.get('opts', null);
   if (saved) {
-    if (isFinite(saved.taux))      $('#taux').value = saved.taux;
-    if (isFinite(saved.rendement)) $('#rendement').value = saved.rendement;
-    if (isFinite(saved.taxe))      $('#taxe').value = saved.taxe;
-    if (saved.packing)             $('#packing').value = saved.packing;
+    if (isFinite(saved.taux))       $('#taux').value = saved.taux;
+    if (isFinite(saved.rendement))  $('#rendement').value = saved.rendement;
+    if (isFinite(saved.taxe))       $('#taxe').value = saved.taxe;
+    if (isFinite(saved.margeCible)) $('#margeCible').value = saved.margeCible;
+    if (saved.packing)              $('#packing').value = saved.packing;
   }
-  renderPoids();
-  renderPrix();
-  renderCalib();
-  renderClassement();
-  renderAtelier();
+  renderTout();
 })();
 </script>
 </body>
