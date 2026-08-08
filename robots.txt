@@ -16,3 +16,4 @@ Allow: /
 
 # Fichiers internes non publiés
 Disallow: /bot.html
+Disallow: /brisage-brial.html

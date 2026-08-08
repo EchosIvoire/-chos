@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brisage Brial — Calculateur de rentabilité runes (Dofus)</title>
+<meta name="description" content="Calculateur de brisage Dofus pour le serveur Brial : poids des runes, rendement calibrable, prix HDV, marge nette et classement des items les plus rentables à briser." />
+<meta name="theme-color" content="#0d0f14" />
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #12151f;
+    --bg3: #1a1f2e;
+    --border: #252a3a;
+    --accent: #6c63ff;
+    --accent2: #00d9b5;
+    --accent3: #f5a623;
+    --red: #e05c6a;
+    --text: #e8eaf0;
+    --muted: #6a7090;
+    --card: #12151f;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 4rem;
+  }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .gradient-bar { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%); }
+
+  header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  header h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: -.01em; }
+  header .sub { color: var(--muted); font-size: .82rem; }
+  header .home { margin-left: auto; font-size: .82rem; color: var(--muted); }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 1.5rem; }
+
+  /* ---- CONFIG BAR ---- */
+  .config {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+    gap: .75rem; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;
+  }
+  .field { display: flex; flex-direction: column; gap: .3rem; }
+  .field label { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  .field .hint { font-size: .7rem; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
+  input, select, textarea {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: .5rem .65rem; font-size: .9rem; font-family: inherit; width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  textarea { resize: vertical; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .85rem; line-height: 1.5; }
+
+  button {
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    padding: .55rem 1rem; font-size: .87rem; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: filter .15s;
+  }
+  button:hover { filter: brightness(1.15); }
+  button.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  button.ghost:hover { border-color: var(--accent); filter: none; }
+  button.danger { background: transparent; border: 1px solid var(--border); color: var(--red); }
+
+  /* ---- TABS ---- */
+  .tabs { display: flex; gap: .4rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .tab {
+    background: transparent; border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); padding: .6rem .9rem; font-weight: 600; font-size: .88rem;
+    cursor: pointer; border-radius: 0;
+  }
+  .tab:hover { color: var(--text); filter: none; }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.1rem; margin-bottom: 1rem;
+  }
+  .card h2 { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; }
+  .card .desc { color: var(--muted); font-size: .82rem; margin-bottom: .9rem; }
+
+  .row { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 780px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* ---- TABLES ---- */
+  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { padding: .5rem .6rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+  tbody tr:hover { background: var(--bg3); }
+  td.num { font-variant-numeric: tabular-nums; }
+  .pos { color: var(--accent2); font-weight: 600; }
+  .neg { color: var(--red); font-weight: 600; }
+
+  .badge {
+    display: inline-block; font-size: .68rem; padding: .1rem .4rem; border-radius: 4px;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--muted); margin-left: .35rem;
+  }
+  .badge.warn { color: var(--accent3); border-color: var(--accent3); }
+
+  .note {
+    background: rgba(245,166,35,.07); border: 1px solid rgba(245,166,35,.3);
+    border-left: 3px solid var(--accent3); border-radius: 8px;
+    padding: .75rem .9rem; font-size: .83rem; margin-bottom: 1rem; color: #d9d2c4;
+  }
+  .note strong { color: var(--accent3); }
+  .note code { background: rgba(0,0,0,.3); padding: .05rem .3rem; border-radius: 4px; font-size: .95em; }
+
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: .7rem; margin: 1rem 0; }
+  .kpi { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: .75rem .85rem; }
+  .kpi .k { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  .kpi .v { font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: .15rem; }
+
+  .empty { color: var(--muted); font-size: .85rem; padding: 1.2rem; text-align: center; font-style: italic; }
+  .toast {
+    position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+    background: var(--bg3); border: 1px solid var(--accent); color: var(--text);
+    padding: .6rem 1.1rem; border-radius: 8px; font-size: .85rem; z-index: 999;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .toast.show { opacity: 1; }
+  footer { text-align: center; color: var(--muted); font-size: .78rem; padding: 2rem 1rem 0; }
+</style>
+</head>
+<body>
+<div class="gradient-bar"></div>
+<header>
+  <div>
+    <h1>Brisage Brial</h1>
+    <div class="sub">Calculateur de rentabilité runes — Dofus, serveur Brial</div>
+  </div>
+  <div class="home"><a href="/">← TheBenchLab</a></div>
+</header>
+
+<div class="wrap">
+
+  <div class="config">
+    <div class="field">
+      <label for="taux">Taux de brisage</label>
+      <input type="number" id="taux" value="4000" min="0" step="50" />
+      <span class="hint">en %, celui affiché en jeu</span>
+    </div>
+    <div class="field">
+      <label for="rendement">Rendement <span class="badge warn" id="calibBadge">à calibrer</span></label>
+      <input type="number" id="rendement" value="0.01" min="0" step="0.001" />
+      <span class="hint">runes Ba par point de jet, à 100&nbsp;% de taux</span>
+    </div>
+    <div class="field">
+      <label for="taxe">Taxe HDV</label>
+      <input type="number" id="taxe" value="2" min="0" max="100" step="0.5" />
+      <span class="hint">% prélevé à la vente des runes</span>
+    </div>
+    <div class="field">
+      <label for="packing">Répartition Ba/Pa/Ra</label>
+      <select id="packing">
+        <option value="greedy">Regroupée (max Ra, puis Pa)</option>
+        <option value="ba">100 % basiques</option>
+      </select>
+      <span class="hint">modèle de conversion des runes</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-panel="p-atelier">Atelier</button>
+    <button class="tab" data-panel="p-classement">Classement</button>
+    <button class="tab" data-panel="p-prix">Prix des runes</button>
+    <button class="tab" data-panel="p-calib">Calibrage</button>
+    <button class="tab" data-panel="p-poids">Poids des runes</button>
+  </div>
+
+  <!-- ══════════════ ATELIER ══════════════ -->
+  <div class="panel active" id="p-atelier">
+    <div class="grid2">
+      <div class="card">
+        <h2>1. Colle les stats de l'item</h2>
+        <div class="desc">Depuis le jeu (clic droit → copier) ou DofusBook. Une ligne par stat, le parseur gère les accents, les %, les pluriels.</div>
+        <textarea id="statsInput" rows="11" placeholder="+301 Vitalité
++61 Sagesse
++81 Force
++1 PA
++11 % Critique
++31 Dommages
++9 Dommages Feu
++21 Prospection"></textarea>
+        <div class="row" style="margin-top:.7rem">
+          <div class="field" style="flex:1; min-width:130px">
+            <label for="itemNom">Nom de l'item</label>
+            <input type="text" id="itemNom" placeholder="Coiffe du Bouftou" />
+          </div>
+          <div class="field" style="flex:1; min-width:130px">
+            <label for="itemPrix">Prix d'achat HDV</label>
+            <input type="number" id="itemPrix" value="0" min="0" step="1000" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:.8rem">
+          <button id="btnCalc">Calculer le brisage</button>
+          <button class="ghost" id="btnAddClassement">Ajouter au classement</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2. Résultat</h2>
+        <div class="desc">Espérance de runes et marge nette, au taux et au rendement configurés en haut.</div>
+        <div id="atelierOut"><div class="empty">Colle des stats puis clique sur « Calculer le brisage ».</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Détail par ligne de stat</h2>
+      <div class="desc">Poids = jet × poids unitaire de la rune. C'est ce poids qui détermine le nombre de runes récupérées.</div>
+      <div class="tbl-scroll"><table id="detailTbl">
+        <thead><tr>
+          <th>Stat</th><th>Jet</th><th>Poids unitaire</th><th>Poids</th>
+          <th>Runes Ra</th><th>Runes Pa</th><th>Runes Ba</th><th>Valeur brute</th>
+        </tr></thead>
+        <tbody><tr><td colspan="8" class="empty">Aucun calcul pour l'instant.</td></tr></tbody>
+      </table></div>
+      <div id="parseWarn"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ CLASSEMENT ══════════════ -->
+  <div class="panel" id="p-classement">
+    <div class="note">
+      <strong>C'est ici que tu trouves quoi briser.</strong> Ajoute tes items depuis l'onglet Atelier
+      (bouton « Ajouter au classement »), renseigne leur prix d'achat HDV, et le tableau les classe
+      par marge nette et par ROI. Tout est sauvegardé dans ton navigateur.
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:.9rem">
+        <button class="ghost" id="btnRecalcAll">Tout recalculer</button>
+        <button class="ghost" id="btnExportItems">Exporter CSV</button>
+        <button class="ghost" id="btnImportItems">Importer CSV</button>
+        <button class="danger" id="btnClearItems">Vider</button>
+      </div>
+      <div class="tbl-scroll"><table id="classementTbl">
+        <thead><tr>
+          <th>Item</th><th>Prix achat</th><th>Runes</th><th>Valeur brute</th>
+          <th>Net après taxe</th><th>Marge</th><th>ROI</th><th></th>
+        </tr></thead>
+        <tbody><tr><td colspan="8" class="empty">Aucun item enregistré.</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRIX ══════════════ -->
+  <div class="panel" id="p-prix">
+    <div class="note">
+      Aucune API publique n'expose l'HDV de Brial — les prix sont donc les tiens. Saisis-les une fois,
+      ils sont mémorisés. Le prix Ba sert de base : laisse Pa et Ra vides pour qu'ils soient estimés
+      à <code>3×</code> et <code>10×</code> le Ba.
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:.9rem">
+        <button class="ghost" id="btnExportPrix">Exporter CSV</button>
+        <button class="ghost" id="btnImportPrix">Importer CSV</button>
+        <button class="danger" id="btnResetPrix">Réinitialiser</button>
+      </div>
+      <div class="tbl-scroll"><table id="prixTbl">
+        <thead><tr><th>Rune</th><th>Poids unitaire</th><th>Prix Ba</th><th>Prix Pa</th><th>Prix Ra</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ CALIBRAGE ══════════════ -->
+  <div class="panel" id="p-calib">
+    <div class="note">
+      <strong>Pourquoi calibrer ?</strong> Le poids des runes est connu et fiable, mais le coefficient qui
+      relie ce poids au nombre de runes réellement lâchées dépend de la version et du serveur.
+      Brise un item pour de vrai, note ce que tu récupères, et l'outil en déduit ton rendement exact.
+      Deux ou trois mesures suffisent pour que toutes les marges deviennent justes.
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Nouvelle mesure</h2>
+        <div class="desc">Stats de l'item brisé + nombre total de runes obtenues, converti en équivalent Ba (1 Ra = 10 Ba, 1 Pa = 3 Ba).</div>
+        <textarea id="calibStats" rows="7" placeholder="+301 Vitalité
++61 Sagesse
++81 Force"></textarea>
+        <div class="row" style="margin-top:.7rem">
+          <div class="field" style="flex:1; min-width:120px">
+            <label for="calibTaux">Taux utilisé (%)</label>
+            <input type="number" id="calibTaux" value="4000" min="1" step="50" />
+          </div>
+          <div class="field" style="flex:1; min-width:120px">
+            <label for="calibRunes">Runes obtenues (éq. Ba)</label>
+            <input type="number" id="calibRunes" value="0" min="0" step="1" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:.8rem">
+          <button id="btnAddCalib">Enregistrer la mesure</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Rendement mesuré</h2>
+        <div class="desc">Moyenne pondérée de tes mesures. Applique-la pour l'utiliser dans tous les calculs.</div>
+        <div id="calibOut"><div class="empty">Aucune mesure enregistrée.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Historique des mesures</h2>
+      <div class="tbl-scroll"><table id="calibTbl">
+        <thead><tr><th>Item</th><th>Jets totaux</th><th>Taux</th><th>Runes (éq. Ba)</th><th>Rendement</th><th></th></tr></thead>
+        <tbody><tr><td colspan="6" class="empty">Aucune mesure.</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ POIDS ══════════════ -->
+  <div class="panel" id="p-poids">
+    <div class="note">
+      Poids unitaires de forgemagie. Les valeurs marquées <span class="badge warn">estimé</span> ne sont pas
+      confirmées par la source communautaire de référence : corrige-les si tu constates un écart en jeu.
+      Toute modification est mémorisée et réutilisée dans les calculs.
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:.9rem">
+        <button class="danger" id="btnResetPoids">Restaurer les valeurs par défaut</button>
+      </div>
+      <div class="tbl-scroll"><table id="poidsTbl">
+        <thead><tr><th>Stat</th><th>Poids unitaire</th><th>Alias reconnus</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <footer>
+    Calcul local, aucune donnée envoyée. Poids de runes issus de la table de forgemagie communautaire ;
+    rendement à calibrer sur ton serveur.
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+<input type="file" id="filePicker" accept=".csv,text/csv" style="display:none" />
+
+<script>
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════
+   TABLE DES POIDS DE RUNES (forgemagie)
+   Valeurs de référence de la table communautaire FR.
+   `estime: true` = valeur non confirmée, éditable par l'utilisateur.
+   ═══════════════════════════════════════════════════════════ */
+const STATS_DEF = [
+  { id:'vitalite',        label:'Vitalité',              poids:0.2,  alias:['vitalite','vita','vit'] },
+  { id:'sagesse',         label:'Sagesse',               poids:3,    alias:['sagesse'] },
+  { id:'force',           label:'Force',                 poids:1,    alias:['force'] },
+  { id:'intelligence',    label:'Intelligence',          poids:1,    alias:['intelligence','intel'] },
+  { id:'chance',          label:'Chance',                poids:1,    alias:['chance'] },
+  { id:'agilite',         label:'Agilité',               poids:1,    alias:['agilite'] },
+  { id:'puissance',       label:'Puissance',             poids:2,    alias:['puissance'] },
+  { id:'pa',              label:'PA',                    poids:100,  alias:['pa','point d action','points d action','point action','points action'] },
+  { id:'pm',              label:'PM',                    poids:90,   alias:['pm','point de mouvement','points de mouvement','point mouvement','points mouvement'] },
+  { id:'portee',          label:'Portée',                poids:51,   alias:['portee','po'] },
+  { id:'initiative',      label:'Initiative',            poids:0.1,  alias:['initiative','ini'] },
+  { id:'prospection',     label:'Prospection',           poids:3,    alias:['prospection','pp'] },
+  { id:'pods',            label:'Pods',                  poids:0.25, alias:['pods','pod'] },
+  { id:'invocation',      label:'Invocation',            poids:30,   alias:['invocation','invocations','invo'] },
+  { id:'soins',           label:'Soins',                 poids:10,   alias:['soins','soin'] },
+  { id:'dommages',        label:'Dommages',              poids:20,   alias:['dommages','dommage'] },
+  { id:'do_critiques',    label:'Dommages critiques',    poids:5,    alias:['dommages critiques','dommage critiques','dommages critique'] },
+  { id:'do_terre',        label:'Dommages Terre',        poids:5,    alias:['dommages terre','dommage terre'] },
+  { id:'do_eau',          label:'Dommages Eau',          poids:5,    alias:['dommages eau','dommage eau'] },
+  { id:'do_feu',          label:'Dommages Feu',          poids:5,    alias:['dommages feu','dommage feu'] },
+  { id:'do_air',          label:'Dommages Air',          poids:5,    alias:['dommages air','dommage air'] },
+  { id:'do_neutre',       label:'Dommages Neutre',       poids:5,    alias:['dommages neutre','dommage neutre'] },
+  { id:'do_poussee',      label:'Dommages Poussée',      poids:5,    estime:true, alias:['dommages poussee','dommage poussee'] },
+  { id:'pct_do_distance', label:'% Dommages distance',   poids:15,   alias:['% dommages distance','% dommage distance','dommages distance'] },
+  { id:'pct_do_melee',    label:'% Dommages mêlée',      poids:15,   estime:true, alias:['% dommages melee','% dommage melee','dommages melee'] },
+  { id:'pct_do_sorts',    label:'% Dommages sorts',      poids:15,   estime:true, alias:['% dommages sorts','% dommage sorts','dommages sorts'] },
+  { id:'pct_do_armes',    label:'% Dommages armes',      poids:15,   estime:true, alias:['% dommages armes','% dommage armes','dommages armes'] },
+  { id:'pct_critique',    label:'% Critique',            poids:10,   alias:['% critique','% critiques','critique','critiques','cc'] },
+  { id:'res_neutre',      label:'Résistance Neutre',     poids:2,    alias:['resistance neutre','res neutre'] },
+  { id:'res_terre',       label:'Résistance Terre',      poids:2,    alias:['resistance terre','res terre'] },
+  { id:'res_eau',         label:'Résistance Eau',        poids:2,    alias:['resistance eau','res eau'] },
+  { id:'res_feu',         label:'Résistance Feu',        poids:2,    alias:['resistance feu','res feu'] },
+  { id:'res_air',         label:'Résistance Air',        poids:2,    alias:['resistance air','res air'] },
+  { id:'res_critiques',   label:'Résistance critiques',  poids:2,    alias:['resistance critiques','res critiques'] },
+  { id:'pct_res_neutre',  label:'% Résistance Neutre',   poids:6,    alias:['% resistance neutre','% res neutre'] },
+  { id:'pct_res_terre',   label:'% Résistance Terre',    poids:6,    alias:['% resistance terre','% res terre'] },
+  { id:'pct_res_eau',     label:'% Résistance Eau',      poids:6,    alias:['% resistance eau','% res eau'] },
+  { id:'pct_res_feu',     label:'% Résistance Feu',      poids:6,    alias:['% resistance feu','% res feu'] },
+  { id:'pct_res_air',     label:'% Résistance Air',      poids:6,    alias:['% resistance air','% res air'] },
+  { id:'fuite',           label:'Fuite',                 poids:4,    alias:['fuite'] },
+  { id:'tacle',           label:'Tacle',                 poids:4,    alias:['tacle'] },
+  { id:'retrait_pa',      label:'Retrait PA',            poids:7,    alias:['retrait pa'] },
+  { id:'retrait_pm',      label:'Retrait PM',            poids:7,    alias:['retrait pm'] },
+  { id:'esquive_pa',      label:'Esquive PA',            poids:7,    estime:true, alias:['esquive pa'] },
+  { id:'esquive_pm',      label:'Esquive PM',            poids:7,    alias:['esquive pm'] },
+  { id:'renvoi',          label:'Renvoi de dommages',    poids:10,   estime:true, alias:['renvoi de dommages','renvoi dommages','renvoi'] }
+];
+
+/* Multiplicateurs de tiers de rune : 1 Pa = 3 Ba, 1 Ra = 10 Ba */
+const TIER = { ba: 1, pa: 3, ra: 10 };
+
+/* Index alias -> stat, trié par longueur décroissante pour que
+   « % résistance terre » l'emporte sur « résistance terre », etc. */
+const ALIAS_INDEX = (() => {
+  const list = [];
+  for (const s of STATS_DEF) for (const a of s.alias) list.push({ alias: a, id: s.id });
+  list.sort((x, y) => y.alias.length - x.alias.length);
+  return list;
+})();
+
+const STAT_BY_ID = Object.fromEntries(STATS_DEF.map(s => [s.id, s]));
+
+/* ═══════════════ PERSISTANCE ═══════════════ */
+const NS = 'brisage_brial_v1_';
+const store = {
+  get(key, fallback) {
+    try {
+      const raw = localStorage.getItem(NS + key);
+      return raw === null ? fallback : JSON.parse(raw);
+    } catch (e) { return fallback; }
+  },
+  set(key, val) {
+    try { localStorage.setItem(NS + key, JSON.stringify(val)); }
+    catch (e) { toast('Sauvegarde impossible (stockage plein ou bloqué)'); }
+  }
+};
+
+let PRIX   = store.get('prix', {});    // { statId: {ba,pa,ra} }
+let POIDS  = store.get('poids', {});   // { statId: number }  surcharges utilisateur
+let ITEMS  = store.get('items', []);   // [{nom, prix, stats}]
+let CALIB  = store.get('calib', []);   // [{nom, jets, taux, runes, k}]
+
+function poidsDe(id) {
+  return POIDS[id] !== undefined ? POIDS[id] : (STAT_BY_ID[id] ? STAT_BY_ID[id].poids : 0);
+}
+
+/* ═══════════════ PARSING DES STATS ═══════════════ */
+function norm(s) {
+  return s.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9%\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function matchStat(rawName) {
+  const n = norm(rawName);
+  if (!n) return null;
+  for (const entry of ALIAS_INDEX) {
+    if (n === entry.alias) return entry.id;
+  }
+  for (const entry of ALIAS_INDEX) {
+    if (n.startsWith(entry.alias + ' ') || n.endsWith(' ' + entry.alias) || n.includes(' ' + entry.alias + ' ')) {
+      return entry.id;
+    }
+  }
+  return null;
+}
+
+/* Retourne { effects: [{id,label,jet,poidsUnit,poids}], warnings: [string] } */
+function parseStats(text) {
+  const effects = [];
+  const warnings = [];
+  const lines = String(text || '').split(/[\n;]+/);
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    // "+301 Vitalité" / "301 Vitalité" / "Vitalité +301"
+    let m = line.match(/^([+-]?\s*\d+(?:[.,]\d+)?)\s*(.+)$/);
+    let valStr, namePart;
+    if (m) {
+      valStr = m[1]; namePart = m[2];
+    } else {
+      m = line.match(/^(.+?)\s*([+-]?\s*\d+(?:[.,]\d+)?)\s*$/);
+      if (!m) { warnings.push(`Ligne ignorée (aucun nombre trouvé) : « ${line} »`); continue; }
+      namePart = m[1]; valStr = m[2];
+    }
+
+    const jet = parseFloat(valStr.replace(/\s+/g, '').replace(',', '.'));
+    if (!isFinite(jet)) { warnings.push(`Ligne ignorée (nombre illisible) : « ${line} »`); continue; }
+
+    const id = matchStat(namePart);
+    if (!id) { warnings.push(`Stat non reconnue, ligne ignorée : « ${line} »`); continue; }
+    if (jet <= 0) { warnings.push(`Jet négatif ou nul, ne produit pas de rune : « ${line} »`); continue; }
+
+    const pu = poidsDe(id);
+    const existing = effects.find(e => e.id === id);
+    if (existing) { existing.jet += jet; existing.poids = existing.jet * pu; continue; }
+
+    effects.push({ id, label: STAT_BY_ID[id].label, jet, poidsUnit: pu, poids: jet * pu });
+  }
+  return { effects, warnings };
+}
+
+/* ═══════════════ MOTEUR DE BRISAGE ═══════════════ */
+/*
+   Nombre de runes basiques d'une stat :
+       nbBa = jet × (taux / 100) × rendement
+
+   Le jet pilote la quantité, le poids unitaire pilote la valeur
+   (une rune PA vaut structurellement bien plus qu'une rune Vi).
+   `rendement` est le seul coefficient à caler sur le serveur :
+   onglet Calibrage.
+*/
+function prixDe(id) {
+  const p = PRIX[id] || {};
+  const ba = Number(p.ba) || 0;
+  const pa = (p.pa !== undefined && p.pa !== null && p.pa !== '') ? Number(p.pa) : ba * TIER.pa;
+  const ra = (p.ra !== undefined && p.ra !== null && p.ra !== '') ? Number(p.ra) : ba * TIER.ra;
+  return { ba, pa: Number(pa) || 0, ra: Number(ra) || 0, defini: ba > 0 };
+}
+
+function repartir(baEq, mode) {
+  if (mode === 'ba') return { ra: 0, pa: 0, ba: baEq };
+  const ra = Math.floor(baEq / TIER.ra);
+  let reste = baEq - ra * TIER.ra;
+  const pa = Math.floor(reste / TIER.pa);
+  reste = reste - pa * TIER.pa;
+  return { ra, pa, ba: reste };
+}
+
+function calculerBrisage(text, opts) {
+  const { effects, warnings } = parseStats(text);
+  const taux = Number(opts.taux) || 0;
+  const rendement = Number(opts.rendement) || 0;
+  const mode = opts.packing || 'greedy';
+
+  const lignes = [];
+  let valeurBrute = 0, totalBaEq = 0, totalJets = 0, poidsTotal = 0;
+  const sansPrix = [];
+
+  for (const e of effects) {
+    const baEq = e.jet * (taux / 100) * rendement;
+    const rep = repartir(baEq, mode);
+    const px = prixDe(e.id);
+    const valeur = rep.ra * px.ra + rep.pa * px.pa + rep.ba * px.ba;
+
+    if (!px.defini) sansPrix.push(e.label);
+    valeurBrute += valeur;
+    totalBaEq   += baEq;
+    totalJets   += e.jet;
+    poidsTotal  += e.poids;
+
+    lignes.push({ ...e, baEq, ...rep, valeur, prixDefini: px.defini });
+  }
+
+  const taxe = Number(opts.taxe) || 0;
+  const net  = valeurBrute * (1 - taxe / 100);
+
+  return { lignes, warnings, valeurBrute, net, totalBaEq, totalJets, poidsTotal, sansPrix };
+}
+
+/* ═══════════════ UTILITAIRES UI ═══════════════ */
+const $  = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+let toastTimer = null;
+function toast(msg) {
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function fmtK(n) {
+  if (!isFinite(n)) return '—';
+  const r = Math.round(n);
+  return r.toLocaleString('fr-FR');
+}
+function fmtN(n, dec) {
+  if (!isFinite(n)) return '—';
+  return n.toLocaleString('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+function getOpts() {
+  return {
+    taux:      parseFloat($('#taux').value),
+    rendement: parseFloat($('#rendement').value),
+    taxe:      parseFloat($('#taxe').value),
+    packing:   $('#packing').value
+  };
+}
+
+function saveOpts() {
+  store.set('opts', getOpts());
+}
+
+/* ═══════════════ ONGLET ATELIER ═══════════════ */
+function renderAtelier() {
+  const opts = getOpts();
+  const res = calculerBrisage($('#statsInput').value, opts);
+  const prixAchat = parseFloat($('#itemPrix').value) || 0;
+  const marge = res.net - prixAchat;
+  const roi = prixAchat > 0 ? (marge / prixAchat) * 100 : NaN;
+
+  const vide = $('#statsInput').value.trim() === '';
+  if (res.lignes.length === 0) {
+    $('#atelierOut').innerHTML = vide
+      ? '<div class="empty">Colle les stats de l\'item à gauche pour voir la marge.</div>'
+      : '<div class="empty">Aucune stat exploitable détectée dans ce texte.</div>';
+  } else {
+    $('#atelierOut').innerHTML = `
+      <div class="kpis">
+        <div class="kpi"><div class="k">Runes (éq. Ba)</div><div class="v">${fmtN(res.totalBaEq, 1)}</div></div>
+        <div class="kpi"><div class="k">Valeur brute</div><div class="v">${fmtK(res.valeurBrute)}</div></div>
+        <div class="kpi"><div class="k">Net après taxe</div><div class="v">${fmtK(res.net)}</div></div>
+        <div class="kpi"><div class="k">Marge</div><div class="v ${marge >= 0 ? 'pos' : 'neg'}">${fmtK(marge)}</div></div>
+        <div class="kpi"><div class="k">ROI</div><div class="v ${roi >= 0 ? 'pos' : 'neg'}">${isFinite(roi) ? fmtN(roi, 0) + ' %' : '—'}</div></div>
+      </div>
+      <div style="font-size:.8rem;color:var(--muted)">
+        Poids total de l'item : <strong>${fmtN(res.poidsTotal, 1)}</strong> ·
+        Jets cumulés : <strong>${fmtN(res.totalJets, 0)}</strong>
+      </div>`;
+  }
+
+  // Détail par ligne
+  const tb = $('#detailTbl tbody');
+  if (res.lignes.length === 0) {
+    tb.innerHTML = `<tr><td colspan="8" class="empty">${vide ? 'Aucun calcul pour l\'instant.' : 'Aucune ligne de stat reconnue.'}</td></tr>`;
+  } else {
+    tb.innerHTML = res.lignes.map(l => `
+      <tr>
+        <td>${esc(l.label)}${l.prixDefini ? '' : '<span class="badge warn">prix manquant</span>'}</td>
+        <td class="num">${fmtN(l.jet, 0)}</td>
+        <td class="num">${fmtN(l.poidsUnit, 2)}</td>
+        <td class="num">${fmtN(l.poids, 1)}</td>
+        <td class="num">${fmtN(l.ra, 0)}</td>
+        <td class="num">${fmtN(l.pa, 0)}</td>
+        <td class="num">${fmtN(l.ba, 1)}</td>
+        <td class="num">${fmtK(l.valeur)}</td>
+      </tr>`).join('');
+  }
+
+  // Avertissements
+  const warns = [];
+  if (res.warnings.length) warns.push(...res.warnings);
+  if (res.sansPrix.length) {
+    warns.push(`Prix non renseigné pour : ${res.sansPrix.join(', ')} — ces runes comptent pour 0, la marge est donc sous-estimée.`);
+  }
+  $('#parseWarn').innerHTML = warns.length
+    ? `<div class="note" style="margin-top:1rem">${warns.map(esc).join('<br>')}</div>`
+    : '';
+}
+
+/* ═══════════════ ONGLET CLASSEMENT ═══════════════ */
+function renderClassement() {
+  const opts = getOpts();
+  const tb = $('#classementTbl tbody');
+
+  if (!ITEMS.length) {
+    tb.innerHTML = '<tr><td colspan="8" class="empty">Aucun item enregistré.</td></tr>';
+    return;
+  }
+
+  const rows = ITEMS.map((it, i) => {
+    const res = calculerBrisage(it.stats, opts);
+    const marge = res.net - (it.prix || 0);
+    const roi = it.prix > 0 ? (marge / it.prix) * 100 : NaN;
+    return { i, it, res, marge, roi };
+  });
+
+  rows.sort((a, b) => b.marge - a.marge);
+
+  tb.innerHTML = rows.map(r => `
+    <tr>
+      <td>${esc(r.it.nom || '(sans nom)')}</td>
+      <td class="num"><input type="number" data-prix-idx="${r.i}" value="${r.it.prix || 0}"
+            step="1000" min="0" style="width:110px;padding:.25rem .4rem;font-size:.8rem" /></td>
+      <td class="num">${fmtN(r.res.totalBaEq, 1)}</td>
+      <td class="num">${fmtK(r.res.valeurBrute)}</td>
+      <td class="num">${fmtK(r.res.net)}</td>
+      <td class="num ${r.marge >= 0 ? 'pos' : 'neg'}">${fmtK(r.marge)}</td>
+      <td class="num ${r.roi >= 0 ? 'pos' : 'neg'}">${isFinite(r.roi) ? fmtN(r.roi, 0) + ' %' : '—'}</td>
+      <td><button class="danger" data-del-idx="${r.i}" style="padding:.2rem .5rem;font-size:.75rem">✕</button></td>
+    </tr>`).join('');
+}
+
+/* ═══════════════ ONGLET PRIX ═══════════════ */
+function renderPrix() {
+  const tb = $('#prixTbl tbody');
+  tb.innerHTML = STATS_DEF.map(s => {
+    const p = PRIX[s.id] || {};
+    return `
+      <tr>
+        <td>${esc(s.label)}</td>
+        <td class="num">${fmtN(poidsDe(s.id), 2)}</td>
+        <td><input type="number" data-prix="${s.id}" data-tier="ba" value="${p.ba ?? ''}"
+              placeholder="0" min="0" step="1" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
+        <td><input type="number" data-prix="${s.id}" data-tier="pa" value="${p.pa ?? ''}"
+              placeholder="× 3" min="0" step="1" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
+        <td><input type="number" data-prix="${s.id}" data-tier="ra" value="${p.ra ?? ''}"
+              placeholder="× 10" min="0" step="1" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
+      </tr>`;
+  }).join('');
+}
+
+/* ═══════════════ ONGLET POIDS ═══════════════ */
+function renderPoids() {
+  const tb = $('#poidsTbl tbody');
+  tb.innerHTML = STATS_DEF.map(s => `
+    <tr>
+      <td>${esc(s.label)}${s.estime ? '<span class="badge warn">estimé</span>' : ''}</td>
+      <td><input type="number" data-poids="${s.id}" value="${poidsDe(s.id)}"
+            min="0" step="0.05" style="width:100px;padding:.25rem .4rem;font-size:.8rem" /></td>
+      <td style="text-align:left;color:var(--muted);font-size:.78rem;white-space:normal">${esc(s.alias.join(', '))}</td>
+    </tr>`).join('');
+}
+
+/* ═══════════════ ONGLET CALIBRAGE ═══════════════ */
+/* Le badge reflète l'état réel : aucune mesure, mesures non appliquées,
+   ou rendement du champ conforme à la moyenne mesurée. */
+function updateCalibBadge() {
+  const badge = $('#calibBadge');
+  if (!CALIB.length) {
+    badge.textContent = 'à calibrer';
+    badge.className = 'badge warn';
+    return;
+  }
+  const k = kMesure();
+  const actuel = parseFloat($('#rendement').value);
+  if (isFinite(actuel) && Math.abs(actuel - k) <= Math.max(k * 0.02, 1e-6)) {
+    badge.textContent = 'calibré';
+    badge.className = 'badge';
+  } else {
+    badge.textContent = 'mesure non appliquée';
+    badge.className = 'badge warn';
+  }
+}
+
+/* Moyenne pondérée par le volume de jets : les grosses mesures pèsent plus. */
+function kMesure() {
+  let numer = 0, denom = 0;
+  for (const c of CALIB) { numer += c.k * c.jets; denom += c.jets; }
+  return denom > 0 ? numer / denom : 0;
+}
+
+function renderCalib() {
+  const tb = $('#calibTbl tbody');
+  updateCalibBadge();
+
+  if (!CALIB.length) {
+    tb.innerHTML = '<tr><td colspan="6" class="empty">Aucune mesure.</td></tr>';
+    $('#calibOut').innerHTML = '<div class="empty">Aucune mesure enregistrée.</div>';
+    return;
+  }
+
+  tb.innerHTML = CALIB.map((c, i) => `
+    <tr>
+      <td>${esc(c.nom || 'Mesure ' + (i + 1))}</td>
+      <td class="num">${fmtN(c.jets, 0)}</td>
+      <td class="num">${fmtN(c.taux, 0)} %</td>
+      <td class="num">${fmtN(c.runes, 1)}</td>
+      <td class="num">${fmtN(c.k, 4)}</td>
+      <td><button class="danger" data-delcalib="${i}" style="padding:.2rem .5rem;font-size:.75rem">✕</button></td>
+    </tr>`).join('');
+
+  const kMoyen = kMesure();
+
+  const ks = CALIB.map(c => c.k);
+  const spread = ks.length > 1 ? (Math.max(...ks) - Math.min(...ks)) : 0;
+
+  $('#calibOut').innerHTML = `
+    <div class="kpis">
+      <div class="kpi"><div class="k">Rendement moyen</div><div class="v">${fmtN(kMoyen, 4)}</div></div>
+      <div class="kpi"><div class="k">Mesures</div><div class="v">${CALIB.length}</div></div>
+      <div class="kpi"><div class="k">Écart max</div><div class="v">${fmtN(spread, 4)}</div></div>
+    </div>
+    <button id="btnApplyCalib">Appliquer ce rendement</button>
+    ${CALIB.length < 2 ? '<div style="font-size:.78rem;color:var(--muted);margin-top:.6rem">Ajoute au moins une deuxième mesure pour lisser le hasard du brisage.</div>' : ''}`;
+
+  $('#btnApplyCalib').addEventListener('click', () => {
+    $('#rendement').value = kMoyen.toFixed(4);
+    saveOpts();
+    updateCalibBadge();
+    renderAtelier(); renderClassement();
+    toast('Rendement appliqué : ' + fmtN(kMoyen, 4));
+  });
+}
+
+/* ═══════════════ CSV ═══════════════ */
+function toCSV(rows) {
+  return rows.map(r => r.map(cell => {
+    const s = String(cell ?? '');
+    return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }).join(',')).join('\n');
+}
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cur = '', inQ = false;
+  const t = String(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (inQ) {
+      if (c === '"') {
+        if (t[i + 1] === '"') { cur += '"'; i++; }
+        else inQ = false;
+      } else cur += c;
+    } else if (c === '"') inQ = true;
+    else if (c === ',') { row.push(cur); cur = ''; }
+    else if (c === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
+    else cur += c;
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+  return rows.filter(r => r.some(c => String(c).trim() !== ''));
+}
+
+function download(filename, text) {
+  const blob = new Blob([text], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+let pendingImport = null;
+function pickFile(handler) {
+  pendingImport = handler;
+  $('#filePicker').value = '';
+  $('#filePicker').click();
+}
+
+/* ═══════════════ ÉVÉNEMENTS ═══════════════ */
+
+// Onglets
+$$('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    $$('.tab').forEach(t => t.classList.remove('active'));
+    $$('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $('#' + tab.dataset.panel).classList.add('active');
+  });
+});
+
+// Barre de configuration
+['#taux', '#rendement', '#taxe', '#packing'].forEach(sel => {
+  $(sel).addEventListener('input', () => {
+    saveOpts();
+    updateCalibBadge();
+    renderAtelier();
+    renderClassement();
+  });
+});
+
+// --- Atelier ---
+$('#btnCalc').addEventListener('click', renderAtelier);
+$('#statsInput').addEventListener('input', renderAtelier);
+$('#itemPrix').addEventListener('input', renderAtelier);
+
+$('#btnAddClassement').addEventListener('click', () => {
+  const stats = $('#statsInput').value.trim();
+  if (!stats) { toast('Colle d\'abord les stats de l\'item'); return; }
+  const nom = $('#itemNom').value.trim() || 'Item ' + (ITEMS.length + 1);
+  ITEMS.push({ nom, prix: parseFloat($('#itemPrix').value) || 0, stats });
+  store.set('items', ITEMS);
+  renderClassement();
+  toast(`« ${nom} » ajouté au classement`);
+});
+
+// --- Classement ---
+$('#classementTbl').addEventListener('input', (e) => {
+  const idx = e.target.dataset.prixIdx;
+  if (idx === undefined) return;
+  ITEMS[Number(idx)].prix = parseFloat(e.target.value) || 0;
+  store.set('items', ITEMS);
+});
+
+$('#classementTbl').addEventListener('click', (e) => {
+  const idx = e.target.dataset.delIdx;
+  if (idx === undefined) return;
+  const nom = ITEMS[Number(idx)].nom;
+  ITEMS.splice(Number(idx), 1);
+  store.set('items', ITEMS);
+  renderClassement();
+  toast(`« ${nom} » supprimé`);
+});
+
+$('#btnRecalcAll').addEventListener('click', () => { renderClassement(); toast('Classement recalculé'); });
+
+$('#btnClearItems').addEventListener('click', () => {
+  if (!ITEMS.length) return;
+  if (!confirm(`Supprimer les ${ITEMS.length} items du classement ?`)) return;
+  ITEMS = [];
+  store.set('items', ITEMS);
+  renderClassement();
+  toast('Classement vidé');
+});
+
+$('#btnExportItems').addEventListener('click', () => {
+  const rows = [['nom', 'prix_achat', 'stats']];
+  for (const it of ITEMS) rows.push([it.nom, it.prix, it.stats.replace(/\n/g, ' | ')]);
+  download('brisage-brial-items.csv', toCSV(rows));
+  toast('Items exportés');
+});
+
+$('#btnImportItems').addEventListener('click', () => pickFile((text) => {
+  const rows = parseCSV(text);
+  if (rows.length < 2) { toast('CSV vide ou illisible'); return; }
+  let n = 0;
+  for (const r of rows.slice(1)) {
+    if (r.length < 3) continue;
+    ITEMS.push({ nom: r[0], prix: parseFloat(r[1]) || 0, stats: r[2].replace(/\s*\|\s*/g, '\n') });
+    n++;
+  }
+  store.set('items', ITEMS);
+  renderClassement();
+  toast(`${n} item(s) importé(s)`);
+}));
+
+// --- Prix ---
+$('#prixTbl').addEventListener('input', (e) => {
+  const id = e.target.dataset.prix;
+  if (!id) return;
+  const tier = e.target.dataset.tier;
+  if (!PRIX[id]) PRIX[id] = {};
+  const v = e.target.value;
+  if (v === '') delete PRIX[id][tier];
+  else PRIX[id][tier] = parseFloat(v) || 0;
+  store.set('prix', PRIX);
+  renderAtelier();
+  renderClassement();
+});
+
+$('#btnExportPrix').addEventListener('click', () => {
+  const rows = [['stat_id', 'stat', 'prix_ba', 'prix_pa', 'prix_ra']];
+  for (const s of STATS_DEF) {
+    const p = PRIX[s.id] || {};
+    rows.push([s.id, s.label, p.ba ?? '', p.pa ?? '', p.ra ?? '']);
+  }
+  download('brisage-brial-prix.csv', toCSV(rows));
+  toast('Prix exportés');
+});
+
+$('#btnImportPrix').addEventListener('click', () => pickFile((text) => {
+  const rows = parseCSV(text);
+  if (rows.length < 2) { toast('CSV vide ou illisible'); return; }
+  let n = 0;
+  for (const r of rows.slice(1)) {
+    const id = String(r[0] || '').trim();
+    if (!STAT_BY_ID[id]) continue;
+    const e = {};
+    if (String(r[2] ?? '').trim() !== '') e.ba = parseFloat(r[2]) || 0;
+    if (String(r[3] ?? '').trim() !== '') e.pa = parseFloat(r[3]) || 0;
+    if (String(r[4] ?? '').trim() !== '') e.ra = parseFloat(r[4]) || 0;
+    PRIX[id] = e;
+    n++;
+  }
+  store.set('prix', PRIX);
+  renderPrix(); renderAtelier(); renderClassement();
+  toast(`${n} prix importé(s)`);
+}));
+
+$('#btnResetPrix').addEventListener('click', () => {
+  if (!confirm('Effacer tous les prix de runes enregistrés ?')) return;
+  PRIX = {};
+  store.set('prix', PRIX);
+  renderPrix(); renderAtelier(); renderClassement();
+  toast('Prix réinitialisés');
+});
+
+// --- Poids ---
+$('#poidsTbl').addEventListener('input', (e) => {
+  const id = e.target.dataset.poids;
+  if (!id) return;
+  const v = parseFloat(e.target.value);
+  if (isFinite(v) && v >= 0) POIDS[id] = v;
+  else delete POIDS[id];
+  store.set('poids', POIDS);
+  renderPrix(); renderAtelier(); renderClassement();
+});
+
+$('#btnResetPoids').addEventListener('click', () => {
+  if (!confirm('Restaurer tous les poids de runes par défaut ?')) return;
+  POIDS = {};
+  store.set('poids', POIDS);
+  renderPoids(); renderPrix(); renderAtelier(); renderClassement();
+  toast('Poids restaurés');
+});
+
+// --- Calibrage ---
+$('#btnAddCalib').addEventListener('click', () => {
+  const { effects, warnings } = parseStats($('#calibStats').value);
+  const jets  = effects.reduce((a, e) => a + e.jet, 0);
+  const taux  = parseFloat($('#calibTaux').value) || 0;
+  const runes = parseFloat($('#calibRunes').value) || 0;
+
+  if (jets <= 0)  { toast('Stats illisibles : ' + (warnings[0] || 'aucun jet détecté')); return; }
+  if (taux <= 0)  { toast('Renseigne le taux de brisage utilisé'); return; }
+  if (runes <= 0) { toast('Renseigne le nombre de runes obtenues'); return; }
+
+  const k = runes / (jets * (taux / 100));
+  CALIB.push({ nom: $('#itemNom').value.trim() || 'Mesure ' + (CALIB.length + 1), jets, taux, runes, k });
+  store.set('calib', CALIB);
+  renderCalib();
+  toast('Mesure enregistrée — rendement ' + fmtN(k, 4));
+});
+
+$('#calibTbl').addEventListener('click', (e) => {
+  const idx = e.target.dataset.delcalib;
+  if (idx === undefined) return;
+  CALIB.splice(Number(idx), 1);
+  store.set('calib', CALIB);
+  renderCalib();
+});
+
+// --- Import de fichier ---
+$('#filePicker').addEventListener('change', (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file || !pendingImport) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try { pendingImport(String(reader.result)); }
+    catch (err) { toast('Import impossible : ' + err.message); }
+    pendingImport = null;
+  };
+  reader.onerror = () => { toast('Lecture du fichier impossible'); pendingImport = null; };
+  reader.readAsText(file, 'utf-8');
+});
+
+/* ═══════════════ INITIALISATION ═══════════════ */
+(function init() {
+  const saved = store.get('opts', null);
+  if (saved) {
+    if (isFinite(saved.taux))      $('#taux').value = saved.taux;
+    if (isFinite(saved.rendement)) $('#rendement').value = saved.rendement;
+    if (isFinite(saved.taxe))      $('#taxe').value = saved.taxe;
+    if (saved.packing)             $('#packing').value = saved.packing;
+  }
+  renderPoids();
+  renderPrix();
+  renderCalib();
+  renderClassement();
+  renderAtelier();
+})();
+</script>
+</body>
+</html>
