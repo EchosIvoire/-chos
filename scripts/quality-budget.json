@@ -1,0 +1,62 @@
+{
+  "_comment": "Seuils du contrôle qualité. Un score sous le seuil fait échouer `npm run audit`. Relever un seuil = décision consciente, pas un ajustement pour faire passer la CI.",
+  "categories": {
+    "performance": 95,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 95
+  },
+  "axeViolations": 0,
+  "pages": [
+    {
+      "url": "/",
+      "nom": "Accueil blog"
+    },
+    {
+      "url": "/about.html",
+      "nom": "À propos"
+    },
+    {
+      "url": "/blog/setup-pc-ia-local-jarvis-2026.html",
+      "nom": "Article GPU"
+    },
+    {
+      "url": "/blog/ollama-vs-lm-studio-2026.html",
+      "nom": "Article Ollama"
+    },
+    {
+      "url": "/mentions-legales.html",
+      "nom": "Mentions légales",
+      "seo": 60
+    },
+    {
+      "url": "/politique-confidentialite.html",
+      "nom": "Confidentialité",
+      "seo": 60
+    },
+    {
+      "url": "/formation/",
+      "nom": "Formation (app)"
+    },
+    {
+      "url": "/formation/#/l/m1l2",
+      "nom": "Formation (leçon)",
+      "axeOnly": true
+    },
+    {
+      "url": "/formation/#/outils",
+      "nom": "Formation (outils)",
+      "axeOnly": true
+    },
+    {
+      "url": "/formation/lecons/",
+      "nom": "Plan du cours"
+    },
+    {
+      "url": "/formation/lecons/m1l2.html",
+      "nom": "Leçon statique"
+    }
+  ],
+  "_note_seo": "Les pages légales portent volontairement noindex : Lighthouse le compte comme un défaut SEO, d'où leur seuil abaissé.",
+  "_note_reseau": "L'article GPU charge Chart.js depuis un CDN. Sur un réseau qui bloque ce CDN, Lighthouse compte la requête échouée et fait tomber « bonnes pratiques » à 96 : c'est un faux positif hors ligne, pas une régression. La page dispose d'un repli qui évite toute erreur JavaScript dans ce cas."
+}

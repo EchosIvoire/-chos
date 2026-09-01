@@ -1,0 +1,59 @@
+# Contrôle qualité : mêmes seuils et même commande qu'en local (npm run audit).
+# Échoue si une page passe sous un seuil de scripts/quality-budget.json,
+# ou si les pages générées ne correspondent plus aux JSON de contenu.
+name: Contrôle qualité
+
+on:
+  pull_request:
+    paths-ignore: ['**.md']
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Installer Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Audit complet
+        id: audit
+        run: npm run audit -- --json rapport-audit.json | tee resultat.txt
+
+      - name: Résumé dans l'onglet Actions
+        if: always()
+        run: |
+          {
+            echo '## Contrôle qualité'
+            echo '```'
+            sed 's/\x1b\[[0-9;]*m//g' resultat.txt || echo "pas de sortie"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Conserver le rapport
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-audit
+          path: rapport-audit.json
+          if-no-files-found: ignore

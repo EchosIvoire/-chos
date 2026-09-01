@@ -1,0 +1,20 @@
+{
+  "name": "thebenchlab-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site statique TheBenchLab + e-formation carrossier-peintre. Les dépendances ci-dessous servent UNIQUEMENT au développement (génération et audit) : le site livré reste du HTML/CSS/JS sans dépendance ni build côté serveur.",
+  "scripts": {
+    "build": "node formation/build.mjs",
+    "audit": "node scripts/audit.mjs",
+    "audit:fast": "node scripts/audit.mjs --fast",
+    "serve": "python3 -m http.server 8765",
+    "check": "npm run build && npm run audit"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0",
+    "lighthouse": "^13.4.1",
+    "playwright": "^1.56.1"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,47 @@
+# Régénère les pages statiques de /formation/lecons/ dès que le contenu change.
+# Couvre les modifications faites hors machine de développement : édition depuis
+# l'interface GitHub, depuis le téléphone, ou par un agent.
+name: Régénérer les pages de leçon
+
+on:
+  push:
+    branches-ignore: [gh-pages]
+    paths:
+      - 'formation/data/**'
+      - 'formation/assets/img/**'
+      - 'formation/build.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Générer
+        run: node formation/build.mjs
+
+      - name: Committer si le résultat a changé
+        run: |
+          if [ -z "$(git status --porcelain formation/lecons sitemap.xml)" ]; then
+            echo "Pages déjà à jour, rien à committer."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add formation/lecons sitemap.xml
+          git commit -m "Régénère les pages de leçon [skip ci]"
+          git push
