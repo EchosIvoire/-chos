@@ -162,7 +162,7 @@ function block(b, ctx){
 
     case 'flip':
       return `<div class="flips">${b.items.map(f =>
-        `<div class="flip" tabindex="0" role="button" aria-label="Retourner la carte">
+        `<div class="flip" tabindex="0" role="button" aria-pressed="false" aria-label="Question : ${esc(strip(f.f))}. Retourner la carte">
            <div class="flip-in"><div class="flip-f">${md(f.f)}</div><div class="flip-b">${md(f.b)}</div></div>
          </div>`).join('')}</div>`;
 
@@ -170,7 +170,7 @@ function block(b, ctx){
       const key = `${ctx.id}:${b.id || 'c'}`;
       const on = P.checks[key] || [];
       return `<div class="checks" data-check="${esc(key)}">${b.items.map((i, n) =>
-        `<button class="check ${on.includes(n) ? 'on' : ''}" data-i="${n}">
+        `<button class="check ${on.includes(n) ? 'on' : ''}" data-i="${n}" aria-pressed="${on.includes(n)}">
            <span class="box"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
            <span>${md(i)}</span></button>`).join('')}</div>`;
     }
@@ -245,7 +245,7 @@ function quizHTML(quiz, id){
       <p>${i + 1}. ${md(q.q)}</p>
       <div class="opts">${q.choices.map((c, j) =>
         `<button class="opt" data-j="${j}"><span class="mark">${'ABCD'[j]}</span><span>${md(c)}</span></button>`).join('')}</div>
-      <div class="why" hidden>${md(q.why || '')}</div>
+      <div class="why" role="status" hidden>${md(q.why || '')}</div>
     </div>`).join('')}
   </section>`;
 }
@@ -279,16 +279,27 @@ function bindQuiz(root, lessonId, total){
    VUES
    ========================================================================= */
 const view = $('#main');
+const SITE = 'E-formation Carrossier-Peintre';
+
+/* Le titre ne changeait jamais : lien partagé illisible, onglets identiques,
+   et aucun repère pour un lecteur d'écran au changement de vue. */
+function setTitle(t){
+  document.title = t ? `${t} — ${SITE}` : `${SITE} | Formation interactive gratuite`;
+  const live = $('#route-live');
+  if (live) live.textContent = t || 'Accueil';
+}
 
 function setView(html){
   view.innerHTML = `<div class="wrap">${html}</div>`;
-  view.scrollIntoView({ block:'start' });
-  window.scrollTo({ top:0, behavior:'instant' in window ? 'instant' : 'auto' });
+  /* Le scroll est reporté à la frame suivante : appelé juste après innerHTML,
+     il force le navigateur à recalculer la mise en page de façon synchrone. */
+  if (scrollY) requestAnimationFrame(() => window.scrollTo({ top:0, behavior:'auto' }));
 }
 
 /* ---- accueil ---- */
 async function viewHome(){
   const c = await getCurriculum(), s = stats();
+  setTitle('');
   const next = DB.flat.find(l => !P.done[l.id]) || DB.flat[0];
   const heures = Math.round(DB.flat.reduce((a, l) => a + (l.duration || 10), 0) / 60);
 
@@ -351,6 +362,7 @@ async function viewModule(id){
   const m = c.modules.find(x => x.id === id);
   if (!m) return notFound();
   const p = Math.round((stats().mods[m.id] || 0) * 100);
+  setTitle(m.title);
   setView(`
     <div class="crumb"><a href="#/">Parcours</a> <span>›</span> <span>${esc(m.title)}</span></div>
     <section class="hero" style="padding:1.7rem 1.5rem">
@@ -384,6 +396,7 @@ async function viewLesson(id){
   const idx  = DB.flat.findIndex(l => l.id === id);
   const prev = DB.flat[idx - 1], next = DB.flat[idx + 1];
   const ctx  = { id };
+  setTitle(L.title);
 
   setView(`
     <article class="lesson">
@@ -425,7 +438,7 @@ async function viewLesson(id){
 function bindLessonUI(id){
   /* cartes mémo */
   $$('.flip').forEach(f => {
-    const go = () => f.classList.toggle('on');
+    const go = () => f.setAttribute('aria-pressed', f.classList.toggle('on'));
     f.addEventListener('click', go);
     f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
   });
@@ -434,7 +447,9 @@ function bindLessonUI(id){
     const key = list.dataset.check;
     $$('.check', list).forEach(c => c.addEventListener('click', () => {
       const i = +c.dataset.i, cur = new Set(P.checks[key] || []);
-      c.classList.toggle('on') ? cur.add(i) : cur.delete(i);
+      const on = c.classList.toggle('on');
+      c.setAttribute('aria-pressed', on);
+      on ? cur.add(i) : cur.delete(i);
       P.checks[key] = [...cur]; save();
     }));
   });
@@ -470,13 +485,14 @@ const GRAINS = [
 ];
 
 async function viewTools(){
+  setTitle('Outils d’atelier');
   setView(`
     <div class="crumb"><a href="#/">Parcours</a> <span>›</span> <span>Outils</span></div>
     <h1 style="font-size:1.7rem;letter-spacing:-.02em;margin-bottom:.4rem">Outils d’atelier</h1>
     <p class="muted" style="margin-bottom:1.6rem">Trois calculateurs qui servent tous les jours en cabine. Tout tourne côté navigateur.</p>
 
     <section class="tool">
-      <h3>1. Calculateur de mélange 2K</h3>
+      <h2>1. Calculateur de mélange 2K</h2>
       <p>Vous connaissez le ratio de la fiche technique et le volume de produit prêt à l’emploi dont vous avez besoin ? Le calculateur vous donne les quantités exactes à verser dans le godet.</p>
       <div class="grid2">
         <div class="field"><label for="t-vol">Volume total voulu (ml)</label><input id="t-vol" type="number" value="1000" min="50" step="50"></div>
@@ -498,7 +514,7 @@ async function viewTools(){
     </section>
 
     <section class="tool">
-      <h3>2. Assistant grain de ponçage</h3>
+      <h2>2. Assistant grain de ponçage</h2>
       <p>Le principe : on ne saute jamais plus de deux graduations. Chaque grain doit effacer les rayures du précédent.</p>
       <div class="field"><label for="t-step">À quelle étape êtes-vous ?</label>
         <select id="t-step">${GRAINS.map((g, i) => `<option value="${i}">${esc(g.step)}</option>`).join('')}</select></div>
@@ -506,7 +522,7 @@ async function viewTools(){
     </section>
 
     <section class="tool">
-      <h3>3. Diagnostic express d’un défaut de peinture</h3>
+      <h2>3. Diagnostic express d’un défaut de peinture</h2>
       <p>Décrivez ce que vous voyez sur l’élément : l’outil remonte la cause la plus probable et le remède.</p>
       <div class="field"><label for="t-def">Aspect du défaut</label><select id="t-def"></select></div>
       <div class="tool-out" id="t-out3"></div>
@@ -552,6 +568,7 @@ async function viewTools(){
 
 /* ---- examen blanc ---- */
 async function viewExam(){
+  setTitle('Examen blanc');
   setView('<div class="loader"><i></i><i></i><i></i></div>');
   await loadAll();
   const pool = [];
@@ -571,7 +588,7 @@ async function viewExam(){
         <p>${i + 1}. ${md(q.q)}</p>
         <div class="opts">${q.choices.map((c, j) =>
           `<button class="opt" data-j="${j}"><span class="mark">${'ABCD'[j]}</span><span>${md(c)}</span></button>`).join('')}</div>
-        <div class="why" hidden>${md(q.why || '')} <em style="opacity:.7">— ${esc(q.from)}</em></div></div>`).join('')}
+        <div class="why" role="status" hidden>${md(q.why || '')} <em style="opacity:.7">— ${esc(q.from)}</em></div></div>`).join('')}
     </section>
     <div id="exam-res"></div>`);
 
@@ -614,6 +631,7 @@ async function viewExam(){
 /* ---- glossaire ---- */
 async function viewGlossary(){
   if (!DB.glossary) DB.glossary = await json('data/glossaire.json').catch(() => []);
+  setTitle('Glossaire');
   const letters = [...new Set(DB.glossary.map(g => g.t[0].toUpperCase()))].sort();
   setView(`
     <div class="crumb"><a href="#/">Parcours</a> <span>›</span> <span>Glossaire</span></div>
@@ -701,7 +719,12 @@ async function route(){
   }
   refreshChrome();
   closeMenu();
+  /* Ramène le focus en tête de contenu : sans cela, un utilisateur au clavier
+     ou au lecteur d'écran reste sur <body> sans savoir que la page a changé. */
+  if (!first) view.focus({ preventScroll:true });
+  first = false;
 }
+let first = true;
 
 /* ---------- recherche / palette ---------- */
 let PAL = [], sel = 0;
@@ -714,14 +737,21 @@ async function buildIndex(){
     ...DB.curriculum.modules.map(m => ({ t:m.title, s:'Parcours · ' + m.lessons.length + ' leçons', h:'#/m/' + m.id, k:m.summary })),
     ...DB.flat.map(l => ({ t:l.title, s:l.module.title, h:'#/l/' + l.id, k:(l.summary || '') + ' ' + (l.keywords || []).join(' ') }))
   ];
-  /* enrichissement : texte complet des leçons, chargé en arrière-plan */
-  loadAll().then(() => {
-    DB.flat.forEach(l => {
-      const L = DB.lessons.get(l.id); if (!L) return;
-      const item = PAL.find(p => p.h === '#/l/' + l.id);
-      if (item) item.k += ' ' + (L.blocks || []).map(b => b.x || b.title || (b.items || []).map(i => i.x || i.title || i.f || i).join(' ')).join(' ');
-    });
+}
+
+/* Enrichissement plein texte : déclenché à la PREMIÈRE ouverture de la recherche,
+   jamais au démarrage — sinon la page d'accueil télécharge tout le programme. */
+let deepIndexed = false;
+async function deepenIndex(){
+  if (deepIndexed) return;
+  deepIndexed = true;
+  await loadAll();
+  DB.flat.forEach(l => {
+    const L = DB.lessons.get(l.id); if (!L) return;
+    const item = PAL.find(p => p.h === '#/l/' + l.id);
+    if (item) item.k += ' ' + (L.blocks || []).map(b => b.x || b.title || (b.items || []).map(i => i.x || i.title || i.f || i).join(' ')).join(' ');
   });
+  if (!$('#palette').hidden) palSearch($('#pal-q').value);
 }
 function palSearch(q){
   const n = norm(q);
@@ -734,7 +764,7 @@ function palSearch(q){
     : '<div class="pal-empty">Aucun résultat. Essayez « coulure », « teinte », « MIG »…</div>';
   $$('.pal-item', box).forEach(b => b.addEventListener('click', () => { location.hash = b.dataset.h; closePal(); }));
 }
-const openPal  = () => { $('#palette').hidden = false; $('#pal-q').value = ''; palSearch(''); $('#pal-q').focus(); };
+const openPal  = () => { $('#palette').hidden = false; $('#pal-q').value = ''; palSearch(''); $('#pal-q').focus(); deepenIndex(); };
 const closePal = () => { $('#palette').hidden = true; };
 
 /* ---------- démarrage ---------- */
