@@ -105,11 +105,12 @@
 
   <!-- Chart.js chargé en defer pour ne pas bloquer le rendu (INP / LCP) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <style>
     :root {
       --bg:#0d0f14; --bg2:#13161e; --bg3:#1a1f2e; --border:#252a3a;
-      --accent:#6c63ff; --accent2:#00d9b5; --accent3:#ff6b6b; --orange:#f5a623;
-      --text:#e8eaf0; --muted:#6a7090; --card:#12151f;
+      --accent:#6c63ff;--accent-text:#8b83ff; --accent2:#00d9b5; --accent3:#ff6b6b; --orange:#f5a623;
+      --text:#e8eaf0; --muted:#8b93b0; --card:#12151f;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
@@ -118,24 +119,25 @@
     /* NAV */
     nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.65rem 2rem;display:flex;align-items:center;gap:1.25rem}
     nav a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s}
-    nav a:hover{color:var(--accent)}
+    nav a:hover{color:var(--accent-text)}
     .logo{color:var(--text);font-weight:800;font-size:.95rem;margin-right:auto}
-    .nav-tag{background:var(--accent);color:#fff;font-size:.65rem;font-weight:700;padding:.18rem .5rem;border-radius:999px;text-transform:uppercase;letter-spacing:.06em}
+    .nav-tag{background:#544bd6;color:#fff;font-size:.65rem;font-weight:700;padding:.18rem .5rem;border-radius:999px;text-transform:uppercase;letter-spacing:.06em}
 
     /* AFFILIATE DISCLOSURE */
-    .aff-banner{border-bottom:1px solid var(--border);padding:.35rem 2rem;font-size:.7rem;color:var(--muted);text-align:center;opacity:.7}
+    .pc-list{list-style:none;margin:0;padding:0}
+    .aff-banner{border-bottom:1px solid var(--border);padding:.35rem 2rem;font-size:.72rem;color:var(--muted);text-align:center}
     .aff-banner strong{color:var(--orange)}
 
     /* HERO */
     .hero{max-width:860px;margin:0 auto;padding:4rem 2rem 2rem}
     .hero-eyebrow{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap}
     .tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;text-transform:uppercase;letter-spacing:.05em}
-    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent);border:1px solid rgba(108,99,255,.25)}
+    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent-text);border:1px solid rgba(108,99,255,.25)}
     .tag.green{background:rgba(0,217,181,.12);color:var(--accent2);border:1px solid rgba(0,217,181,.22)}
     .tag.orange{background:rgba(245,166,35,.12);color:var(--orange);border:1px solid rgba(245,166,35,.22)}
     .tag.red{background:rgba(255,107,107,.12);color:var(--accent3);border:1px solid rgba(255,107,107,.22)}
     .hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:.9rem}
-    .hero h1 em{font-style:normal;color:var(--accent)}
+    .hero h1 em{font-style:normal;color:var(--accent-text)}
     .hero-lead{font-size:1rem;color:var(--muted);max-width:660px;margin-bottom:1.25rem;line-height:1.7}
     .hero-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:var(--muted);padding:.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
     .hero-meta span{display:flex;align-items:center;gap:.3rem}
@@ -157,13 +159,13 @@
     .pick-card:hover{border-color:var(--accent)}
     .pick-badge{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:.2rem .55rem;border-radius:5px;margin-bottom:.65rem;display:inline-block}
     .pick-badge.best{background:rgba(0,217,181,.15);color:var(--accent2)}
-    .pick-badge.value{background:rgba(108,99,255,.15);color:var(--accent)}
+    .pick-badge.value{background:rgba(108,99,255,.15);color:var(--accent-text)}
     .pick-badge.budget{background:rgba(245,166,35,.15);color:var(--orange)}
     .pick-name{font-weight:800;font-size:.97rem;margin-bottom:.15rem}
     .pick-sub{font-size:.78rem;color:var(--muted);margin-bottom:.7rem}
-    .pick-price{font-size:1.1rem;font-weight:800;color:var(--accent);margin-bottom:.7rem}
+    .pick-price{font-size:1.1rem;font-weight:800;color:var(--accent-text);margin-bottom:.7rem}
     .pick-why{font-size:.78rem;color:var(--muted);margin-bottom:.85rem;line-height:1.5}
-    .btn-aff{display:block;width:100%;padding:.5rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;transition:opacity .2s}
+    .btn-aff{display:block;width:100%;padding:.5rem;background:#544bd6;color:#fff;border:none;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;transition:opacity .2s}
     .btn-aff:hover{opacity:.82}
     .btn-aff.green{background:var(--accent2);color:#0a0c10}
     .btn-aff.orange{background:var(--orange);color:#0a0c10}
@@ -172,7 +174,7 @@
     .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-top:1.25rem}
     @media(max-width:580px){.stats-row{grid-template-columns:repeat(2,1fr)}}
     .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
-    .stat .sv{font-size:1.7rem;font-weight:800;color:var(--accent);line-height:1}
+    .stat .sv{font-size:1.7rem;font-weight:800;color:var(--accent-text);line-height:1}
     .stat .sl{font-size:.73rem;color:var(--muted);margin-top:.3rem}
 
     /* PRODUCT CARDS */
@@ -184,7 +186,7 @@
     .pc-name{font-size:1.05rem;font-weight:800;margin-bottom:.2rem}
     .pc-sub{font-size:.78rem;color:var(--muted)}
     .pc-score{text-align:right;flex-shrink:0}
-    .pc-score .score-num{font-size:1.5rem;font-weight:800;color:var(--accent);line-height:1}
+    .pc-score .score-num{font-size:1.5rem;font-weight:800;color:var(--accent-text);line-height:1}
     .pc-score .score-max{font-size:.75rem;color:var(--muted)}
     .stars{color:var(--orange);font-size:.85rem;margin-bottom:.1rem}
     .pc-specs{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
@@ -200,14 +202,14 @@
     .pros-cons li{list-style:none;padding:.2rem 0;display:flex;gap:.4rem;align-items:flex-start;color:#9aa0b8;line-height:1.4}
     .pros-cons li .icon{flex-shrink:0;font-size:.8rem}
     .pc-footer{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;padding-top:1rem;border-top:1px solid var(--border)}
-    .pc-price-box .pc-price{font-size:1.25rem;font-weight:800;color:var(--accent)}
+    .pc-price-box .pc-price{font-size:1.25rem;font-weight:800;color:var(--accent-text)}
     .pc-price-box .pc-price-sub{font-size:.7rem;color:var(--muted)}
     .pc-btns{display:flex;gap:.5rem;flex:1;justify-content:flex-end;flex-wrap:wrap}
     .btn-buy{padding:.48rem 1.1rem;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;border:none;display:inline-flex;align-items:center;gap:.35rem}
-    .btn-buy.primary{background:var(--accent);color:#fff}
+    .btn-buy.primary{background:#544bd6;color:#fff}
     .btn-buy.primary:hover{opacity:.82}
     .btn-buy.secondary{background:transparent;border:1px solid var(--border);color:var(--muted)}
-    .btn-buy.secondary:hover{border-color:var(--accent);color:var(--accent)}
+    .btn-buy.secondary:hover{border-color:var(--accent);color:var(--accent-text)}
     .btn-buy.amazon{background:transparent;color:var(--accent2);border:1px solid rgba(0,217,181,.3);font-size:.78rem}
     .btn-buy.amazon:hover{background:rgba(0,217,181,.06);border-color:var(--accent2)}
     .aff-note{font-size:.65rem;color:var(--muted);display:block;margin-top:.35rem}
@@ -234,42 +236,42 @@
     .chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.35rem;margin-top:1rem}
     .chart-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:1rem}
     .chart-canvas{position:relative;height:240px}
-    .chart-note{font-size:.72rem;color:#4a5068;margin-top:.6rem}
+    .chart-note{font-size:.72rem;color:var(--muted);margin-top:.6rem}
     .filter-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.75rem 0}
     .fbtn{padding:.3rem .75rem;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:.76rem;cursor:pointer;transition:all .15s}
-    .fbtn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .fbtn.active{background:#544bd6;border-color:#544bd6;color:#fff}
 
     /* GPU TABLE */
     .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:.75rem}
     table{width:100%;border-collapse:collapse;font-size:.83rem}
     thead{background:var(--bg3)}
     th{padding:.75rem 1rem;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);cursor:pointer;white-space:nowrap}
-    th:hover{color:var(--accent)}
+    th:hover{color:var(--accent-text)}
     td{padding:.65rem 1rem;border-top:1px solid var(--border);white-space:nowrap}
     tr:hover td{background:rgba(255,255,255,.015)}
     .badge{display:inline-block;font-size:.65rem;font-weight:700;padding:.13rem .48rem;border-radius:5px}
     .badge.g{background:rgba(0,217,181,.13);color:var(--accent2)}
-    .badge.p{background:rgba(108,99,255,.13);color:var(--accent)}
+    .badge.p{background:rgba(108,99,255,.13);color:var(--accent-text)}
     .badge.r{background:rgba(255,107,107,.13);color:var(--accent3)}
     .badge.o{background:rgba(245,166,35,.13);color:var(--orange)}
     .bar-wrap{display:flex;align-items:center;gap:.4rem}
     .bar-bg{flex:1;height:5px;background:var(--border);border-radius:3px;min-width:50px}
     .bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-    .td-aff a{font-size:.7rem;color:var(--accent);text-decoration:none;padding:.15rem .45rem;border:1px solid rgba(108,99,255,.3);border-radius:5px;transition:all .15s}
-    .td-aff a:hover{background:var(--accent);color:#fff}
+    .td-aff a{font-size:.7rem;color:var(--accent-text);text-decoration:none;padding:.15rem .45rem;border:1px solid rgba(108,99,255,.3);border-radius:5px;transition:all .15s}
+    .td-aff a:hover{background:#544bd6;color:#fff}
 
     /* TOKEN DEMO */
     #token-demo{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.35rem;margin-top:1rem}
     .demo-gpus{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem;align-items:center}
     .gpu-btn{padding:.38rem .85rem;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:.78rem;cursor:pointer;transition:all .2s}
-    .gpu-btn.active,.gpu-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+    .gpu-btn.active,.gpu-btn:hover{background:#544bd6;border-color:var(--accent);color:#fff}
     #demo-play{padding:.42rem 1rem;background:var(--accent2);color:#0a0c10;border:none;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer}
     .demo-out{background:#070910;border-radius:8px;padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.83rem;min-height:75px;color:var(--accent2);border:1px solid var(--border)}
     .cursor{display:inline-block;width:2px;height:1em;background:var(--accent2);animation:blink .8s step-end infinite;vertical-align:middle;margin-left:2px}
     @keyframes blink{50%{opacity:0}}
     .demo-stats{display:flex;gap:1.25rem;margin-top:.55rem;flex-wrap:wrap}
     .ds{font-size:.76rem;color:var(--muted)}
-    .ds span{color:var(--accent);font-weight:700}
+    .ds span{color:var(--accent-text);font-weight:700}
 
     /* MODEL CARDS */
     .models-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.75rem;margin-top:.75rem}
@@ -303,17 +305,17 @@
     .calc-title{font-size:.88rem;font-weight:700;margin-bottom:1rem}
     .slider-row{margin-bottom:1rem}
     .slider-lbl{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:.4rem}
-    .slider-lbl span{color:var(--accent);font-weight:800;font-size:.95rem}
+    .slider-lbl span{color:var(--accent-text);font-weight:800;font-size:.95rem}
     input[type=range]{width:100%;accent-color:var(--accent);height:4px}
     .calc-out{background:var(--bg3);border-radius:10px;padding:1.1rem;margin-top:.75rem}
     .calc-out h4{font-size:.82rem;color:var(--accent2);font-weight:700;margin-bottom:.6rem}
     .bl{display:flex;justify-content:space-between;font-size:.82rem;padding:.28rem 0;border-bottom:1px solid var(--border);color:var(--text)}
-    .bl:last-of-type{border:none;font-weight:800;color:var(--accent)}
+    .bl:last-of-type{border:none;font-weight:800;color:var(--accent-text)}
     .bl .bp{color:var(--muted)}
     .mpills{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.6rem}
-    .mpill{font-size:.7rem;padding:.15rem .5rem;border-radius:999px;background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.25);color:var(--accent)}
+    .mpill{font-size:.7rem;padding:.15rem .5rem;border-radius:999px;background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.25);color:var(--accent-text)}
     .calc-aff-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.9rem}
-    .calc-aff-btns a{flex:1;min-width:120px;padding:.45rem .75rem;background:var(--accent);color:#fff;border-radius:7px;font-size:.75rem;font-weight:700;text-align:center;text-decoration:none;transition:opacity .2s}
+    .calc-aff-btns a{flex:1;min-width:120px;padding:.45rem .75rem;background:#544bd6;color:#fff;border-radius:7px;font-size:.75rem;font-weight:700;text-align:center;text-decoration:none;transition:opacity .2s}
     .calc-aff-btns a:hover{opacity:.82}
     .calc-aff-btns a.amz{background:#ff9900;color:#111}
 
@@ -325,7 +327,7 @@
     .pn{font-weight:800;font-size:.92rem;margin-bottom:.15rem}
     .pd{font-size:.76rem;color:var(--muted);margin-bottom:.6rem;line-height:1.4}
     .pb{font-size:.82rem;color:var(--accent2);font-weight:700;margin-bottom:.4rem}
-    .pp{display:inline-block;font-size:.68rem;padding:.15rem .48rem;border-radius:5px;background:rgba(108,99,255,.12);color:var(--accent);border:1px solid rgba(108,99,255,.22);margin:.12rem .12rem 0 0}
+    .pp{display:inline-block;font-size:.68rem;padding:.15rem .48rem;border-radius:5px;background:rgba(108,99,255,.12);color:var(--accent-text);border:1px solid rgba(108,99,255,.22);margin:.12rem .12rem 0 0}
 
     /* ERRORS */
     .err-list{list-style:none;margin-top:.75rem}
@@ -350,7 +352,7 @@
     .toc ol{padding-left:1.1rem;color:var(--muted);font-size:.82rem}
     .toc li{margin-bottom:.25rem}
     .toc a{color:var(--muted);text-decoration:none;transition:color .15s}
-    .toc a:hover{color:var(--accent)}
+    .toc a:hover{color:var(--accent-text)}
 
     /* CONCLUSION */
     .conclusion{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(0,217,181,.07));border:1px solid rgba(108,99,255,.25);border-radius:14px;padding:2rem;margin-top:2rem}
@@ -364,7 +366,7 @@
 
     /* ── VIDEO EMBEDS (lazy-load) ── */
     .vid-section{margin-top:1.25rem}
-    .vid-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
+    .vid-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-text);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
     .vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
     .vid-wrap{position:relative;border-radius:12px;overflow:hidden;background:#000;cursor:pointer;border:1px solid var(--border);aspect-ratio:16/9}
     .vid-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
@@ -385,7 +387,7 @@
     .mockup-body{padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.7;color:#c5c8d6;min-height:120px}
     .mockup-body .cmd{color:var(--accent2)}
     .mockup-body .out{color:#7a7f96}
-    .mockup-body .hi{color:var(--accent)}
+    .mockup-body .hi{color:var(--accent-text)}
     .mockup-body .ok{color:#00d9b5}
 
     /* ── MOBILE ── */
@@ -467,7 +469,8 @@
       footer{padding:1.5rem 1rem}
 
       /* Aff banner */
-      .aff-banner{font-size:.7rem;padding:.5rem 1rem}
+      .pc-list{list-style:none;margin:0;padding:0}
+    .aff-banner{font-size:.7rem;padding:.5rem 1rem}
 
       /* TOC */
       .toc{padding:.9rem 1.1rem}
@@ -486,7 +489,7 @@
 <body>
 
 <!-- Skip link accessibilité (WCAG 2.1) -->
-<a href="#main-content" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:999;background:var(--accent);color:#fff;padding:.5rem 1rem;border-radius:0 0 8px 0;font-size:.85rem;font-weight:700;text-decoration:none" onfocus="this.style.left='0';this.style.width='auto';this.style.height='auto'" onblur="this.style.left='-999px'">Aller au contenu principal</a>
+<a href="#main-content" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:999;background:#544bd6;color:#fff;padding:.5rem 1rem;border-radius:0 0 8px 0;font-size:.85rem;font-weight:700;text-decoration:none" onfocus="this.style.left='0';this.style.width='auto';this.style.height='auto'" onblur="this.style.left='-999px'">Aller au contenu principal</a>
 
 <!-- AFFILIATE DISCLOSURE (légalement obligatoire) -->
 <div class="aff-banner" role="note" aria-label="Information liens affiliés">
@@ -527,7 +530,7 @@
     <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;color:#fff;flex-shrink:0">EI</div>
     <div>
       <div style="font-size:.82rem;font-weight:700;color:var(--text)">TheBenchLab</div>
-      <div style="font-size:.75rem;color:var(--muted)">Testeur terrain · <a href="/about.html" style="color:var(--accent);text-decoration:none">À propos de l'auteur →</a></div>
+      <div style="font-size:.75rem;color:var(--muted)">Testeur terrain · <a href="/about.html" style="color:var(--accent-text);text-decoration:none">À propos de l'auteur →</a></div>
     </div>
     <div style="margin-left:auto;font-size:.72rem;color:var(--muted);text-align:right">6 mois de tests<br>sur setup personnel</div>
   </div>
@@ -638,16 +641,20 @@
       <div class="pc-body">
         <div class="pros-cons">
           <div class="pc-label p">Points forts</div>
+          <ul class="pc-list">
           <li><span class="icon">✅</span>Qwen 3 32B Q5 entier en VRAM — 48 t/s</li>
           <li><span class="icon">✅</span>Llama 3.3 70B Q4 à 22 t/s — utilisable</li>
           <li><span class="icon">✅</span>GDDR7 = bande passante excellente</li>
           <li><span class="icon">✅</span>Aucun problème de stabilité en 6 mois</li>
+          </ul>
         </div>
         <div class="pros-cons">
           <div class="pc-label c">Points faibles</div>
+          <ul class="pc-list">
           <li><span class="icon">❌</span>70B Q5 déborde en RAM (lent)</li>
           <li><span class="icon">❌</span>Pas de RTX 5080 16 Go — le 5070 Ti comble le vide</li>
           <li><span class="icon">⚠️</span>Consommation élevée sous charge continue</li>
+          </ul>
         </div>
       </div>
       <div class="verdict success"><div class="verdict-icon">💬</div><p><strong>Mon avis terrain :</strong> C'est le GPU que je conseille à 90% des gens. 700€ pour faire tourner du 32B à 48 t/s et du 70B Q4 confortablement, c'est le meilleur deal du marché en ce moment. Je n'ai pas eu envie de l'échanger depuis que je l'ai installé.</p></div>
@@ -688,15 +695,19 @@
       <div class="pc-body">
         <div class="pros-cons">
           <div class="pc-label p">Points forts</div>
+          <ul class="pc-list">
           <li><span class="icon">✅</span>16 Go VRAM pour 380€ — imbattable</li>
           <li><span class="icon">✅</span>Consommation basse — 160W sous charge</li>
           <li><span class="icon">✅</span>Silencieuse en usage normal</li>
+          </ul>
         </div>
         <div class="pros-cons">
           <div class="pc-label c">Points faibles</div>
+          <ul class="pc-list">
           <li><span class="icon">❌</span>18 t/s sur 70B — c'est lent au quotidien</li>
           <li><span class="icon">❌</span>GDDR6 vs GDDR7 : bande passante en retrait</li>
           <li><span class="icon">⚠️</span>Limite à 32B Q4 pour rester fluide</li>
+          </ul>
         </div>
       </div>
       <div class="verdict warn"><div class="verdict-icon">💬</div><p><strong>Mon avis terrain :</strong> Parfaite pour débuter. <strong>J'aurais commencé avec celle-là</strong> au lieu de gaspiller du temps sur ma vieille GTX 1080. Si tu as moins de 500€ à investir, c'est le choix sans hésiter.</p></div>
@@ -735,15 +746,19 @@
       <div class="pc-body">
         <div class="pros-cons">
           <div class="pc-label p">Points forts</div>
+          <ul class="pc-list">
           <li><span class="icon">✅</span>24 Go : 70B Q5 entier en VRAM</li>
           <li><span class="icon">✅</span>Deux modèles en parallèle possibles</li>
           <li><span class="icon">✅</span>68 t/s sur 70B — très confortable</li>
+          </ul>
         </div>
         <div class="pros-cons">
           <div class="pc-label c">Points faibles</div>
+          <ul class="pc-list">
           <li><span class="icon">❌</span>1700€ — l'écart avec la 5070 Ti est énorme</li>
           <li><span class="icon">❌</span>Consommation 400W : alim 1000W obligatoire</li>
           <li><span class="icon">⚠️</span>Volumineux — boîtier large requis</li>
+          </ul>
         </div>
       </div>
       <div class="verdict"><div class="verdict-icon">💬</div><p><strong>Mon avis terrain :</strong> Justifié si tu fais tourner des agents multi-modèles ou si tu héberges un Open WebUI pour une équipe. Pour un usage solo, l'écart de 1000€ avec la 5070 Ti ne se justifie pas en pratique.</p></div>
@@ -779,14 +794,18 @@
       <div class="pc-body">
         <div class="pros-cons">
           <div class="pc-label p">Points forts</div>
+          <ul class="pc-list">
           <li><span class="icon">✅</span>24 Go pour 950€ — bonne VRAM/prix</li>
           <li><span class="icon">✅</span>Très bon sous Linux + ROCm 6.x</li>
+          </ul>
         </div>
         <div class="pros-cons">
           <div class="pc-label c">Points faibles</div>
+          <ul class="pc-list">
           <li><span class="icon">❌</span>Windows : ROCm expérimental, crashs fréquents</li>
           <li><span class="icon">❌</span>J'ai perdu 3 jours à la faire marcher</li>
           <li><span class="icon">❌</span>Moins bien supportée par llama.cpp</li>
+          </ul>
         </div>
       </div>
       <div class="verdict danger"><div class="verdict-icon">⚠️</div><p><strong>Mon avis terrain :</strong> <strong>Évite si tu es sous Windows.</strong> Si tu es à l'aise avec Ubuntu, c'est un bon plan à 950€ pour 24 Go. Sinon, la 5070 Ti NVIDIA à 700€ est plus facile à vivre.</p></div>
@@ -925,42 +944,42 @@
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">GPU</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">RTX 5070 Ti 16 Go</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">Founders Edition</div>
-        <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~700€</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--accent-text);margin-bottom:.55rem">~700€</div>
         <a href="https://www.amazon.fr/s?k=RTX+5070+Ti+16+Go" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">RAM</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">G.Skill Trident Z5 64 Go</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">DDR5-5600 · 2×32 Go</div>
-        <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~160€</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--accent-text);margin-bottom:.55rem">~160€</div>
         <a href="https://www.amazon.fr/s?k=G.Skill+Trident+Z5+64+Go+DDR5+6000" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">SSD modèles</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">WD Black SN850X 2 To</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">NVMe Gen4 · 7300 MB/s</div>
-        <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~155€</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--accent-text);margin-bottom:.55rem">~155€</div>
         <a href="https://www.amazon.fr/s?k=WD+Black+SN850X+2+To+NVMe" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">SSD système</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">Samsung 990 Pro 1 To</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">NVMe Gen4 · 7450 MB/s</div>
-        <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~90€</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--accent-text);margin-bottom:.55rem">~90€</div>
         <a href="https://www.amazon.fr/s?k=Samsung+990+Pro+4+To+NVMe" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">Alimentation</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">Corsair RM1000x</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">1000W · 80+ Gold · Semi-modulaire</div>
-        <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~140€</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--accent-text);margin-bottom:.55rem">~140€</div>
         <a href="https://www.amazon.fr/s?k=Corsair+RM1000x+alimentation" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
       <div class="product-card" style="padding:1rem;margin-bottom:0">
         <div class="tag purple" style="margin-bottom:.5rem;font-size:.62rem">CPU</div>
         <div style="font-weight:800;font-size:.9rem;margin-bottom:.2rem">Ryzen 9 7900X</div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">12 cœurs · 4.7 GHz · AM5</div>
-        <div style="font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.55rem">~380€</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--accent-text);margin-bottom:.55rem">~380€</div>
         <a href="https://www.amazon.fr/s?k=AMD+Ryzen+9+7900X" class="btn-aff" style="font-size:.73rem" target="_blank" rel="nofollow sponsored">Voir sur Amazon →</a>
       </div>
     </div>
@@ -1100,7 +1119,7 @@
       <div class="calc-title">Budget pour les composants clés (GPU + RAM + SSD) ?</div>
       <div class="slider-row">
         <div class="slider-lbl"><label>Budget estimé</label><span id="budget-val">800€</span></div>
-        <input type="range" id="budget-slider" min="400" max="3500" step="50" value="800" oninput="updateBudget(this.value)" />
+        <input type="range" id="budget-slider" aria-label="Budget du poste, en euros" min="400" max="3500" step="50" value="800" oninput="updateBudget(this.value)" />
       </div>
       <div class="calc-out" id="calc-result"></div>
     </div>
@@ -1188,7 +1207,7 @@
 
   <!-- ═══ EMAIL CAPTURE ═══ -->
   <div style="background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(0,217,181,.05));border:1px solid rgba(108,99,255,.2);border-radius:14px;padding:1.75rem 2rem;margin-top:1.5rem;text-align:center">
-    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem">Newsletter — Tests terrain</div>
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-text);margin-bottom:.5rem">Newsletter — Tests terrain</div>
     <h3 style="font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:.5rem">Le prochain test arrive dans ta boîte.</h3>
     <p style="font-size:.84rem;color:var(--muted);margin-bottom:1.25rem;max-width:480px;margin-left:auto;margin-right:auto">Un article par semaine. Benchmarks réels, setup détaillé, erreurs terrain. Aucun spam — désabonnement en un clic.</p>
     <form action="https://50315367.sibforms.com/serve/MUIFALBt3mGak8GXb1NLYRkEofFgqFSxerVOntNjkNTEC0MtFv2BJDR2HajryQ_rZrTNfdO3_IGXe0QCpRqkFT5DQybJfRe9pQkoUxQNQxuEkvH9yJcJ2GOGY8zu6hO2_tFmdSPe712sV8iNYeR12UwIs5kcCdkO7QozBRFP8r0bhemJx9sClrkrNVsGy8U8B5ZS4HO67MCUaHbcIA==" method="post"
@@ -1199,7 +1218,7 @@
              aria-label="Ton adresse email"
              style="flex:1;min-width:200px;background:#12151f;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;color:var(--text);font-size:.88rem;outline:none" />
       <button type="submit"
-              style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.7rem 1.25rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap">
+              style="background:#544bd6;color:#fff;border:none;border-radius:8px;padding:.7rem 1.25rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap">
         M'inscrire →
       </button>
     </form>
@@ -1308,12 +1327,23 @@ function sortTable(col) {
 
 // CHARTS
 function initCharts() {
+  // Chart.js vient d'un CDN : bloqueur de pub, coupure réseau ou proxy d'entreprise
+  // peuvent l'empêcher de charger. Sans ce garde-fou, une ReferenceError non
+  // interceptée remonte dans la console et casse la fin du script.
+  if (typeof Chart === 'undefined') {
+    ['gpuChart','valueChart','modelChart'].forEach(id => {
+      const c = document.getElementById(id);
+      if (c && c.parentElement) c.parentElement.innerHTML =
+        '<p class="chart-note">Graphique indisponible : la bibliothèque de rendu n\'a pas pu être chargée. Les chiffres sont détaillés dans les fiches ci-dessous.</p>';
+    });
+    return;
+  }
   const labels=GPU_DATA.map(g=>g.name);
   const colors=GPU_DATA.map(g=>g.verdict==='sweet'?'#00d9b5':g.verdict==='pro'?'#6c63ff':g.verdict==='amd'?'#ff6b6b':'#3a3f58');
-  new Chart(document.getElementById('gpuChart'),{type:'bar',data:{labels,datasets:[{label:'Tokens/sec',data:GPU_DATA.map(g=>g.tps),backgroundColor:colors,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#6a7090',font:{size:10}},grid:{color:'#252a3a'}},y:{ticks:{color:'#6a7090'},grid:{color:'#252a3a'},title:{display:true,text:'tokens/sec',color:'#6a7090'}}}}});
+  new Chart(document.getElementById('gpuChart'),{type:'bar',data:{labels,datasets:[{label:'Tokens/sec',data:GPU_DATA.map(g=>g.tps),backgroundColor:colors,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b93b0',font:{size:10}},grid:{color:'#252a3a'}},y:{ticks:{color:'#8b93b0'},grid:{color:'#252a3a'},title:{display:true,text:'tokens/sec',color:'#8b93b0'}}}}});
   const vs=GPU_DATA.map(g=>+(g.tps/g.price*100).toFixed(1));
-  new Chart(document.getElementById('valueChart'),{type:'bar',data:{labels,datasets:[{label:'t/s par 100€',data:vs,backgroundColor:vs.map(v=>v>4?'#6c63ff':'#2a2f42'),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#6a7090',font:{size:10}},grid:{color:'#252a3a'}},y:{ticks:{color:'#6a7090'},grid:{color:'#252a3a'},title:{display:true,text:'t/s par 100€',color:'#6a7090'}}}}});
-  new Chart(document.getElementById('modelChart'),{type:'bubble',data:{datasets:MODEL_DATA.map((m,i)=>({label:m.name,data:[{x:m.tps,y:m.quality,r:Math.max(7,Math.min(20,m.vram))}],backgroundColor:`hsla(${220+i*30},65%,60%,.55)`,borderColor:`hsla(${220+i*30},65%,65%,1)`}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#6a7090',font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:ctx=>{const m=MODEL_DATA[ctx.datasetIndex];return[`${m.name} (${m.quant})`,`Vitesse: ${m.tps} t/s`,`Qualité: ${m.quality}/100`,`VRAM: ${m.vram} Go`];}}}},scales:{x:{title:{display:true,text:'Vitesse (tokens/sec)',color:'#6a7090'},ticks:{color:'#6a7090'},grid:{color:'#252a3a'}},y:{title:{display:true,text:'Qualité estimée /100',color:'#6a7090'},ticks:{color:'#6a7090'},grid:{color:'#252a3a'},min:40,max:100}}}});
+  new Chart(document.getElementById('valueChart'),{type:'bar',data:{labels,datasets:[{label:'t/s par 100€',data:vs,backgroundColor:vs.map(v=>v>4?'#6c63ff':'#2a2f42'),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b93b0',font:{size:10}},grid:{color:'#252a3a'}},y:{ticks:{color:'#8b93b0'},grid:{color:'#252a3a'},title:{display:true,text:'t/s par 100€',color:'#8b93b0'}}}}});
+  new Chart(document.getElementById('modelChart'),{type:'bubble',data:{datasets:MODEL_DATA.map((m,i)=>({label:m.name,data:[{x:m.tps,y:m.quality,r:Math.max(7,Math.min(20,m.vram))}],backgroundColor:`hsla(${220+i*30},65%,60%,.55)`,borderColor:`hsla(${220+i*30},65%,65%,1)`}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8b93b0',font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:ctx=>{const m=MODEL_DATA[ctx.datasetIndex];return[`${m.name} (${m.quant})`,`Vitesse: ${m.tps} t/s`,`Qualité: ${m.quality}/100`,`VRAM: ${m.vram} Go`];}}}},scales:{x:{title:{display:true,text:'Vitesse (tokens/sec)',color:'#8b93b0'},ticks:{color:'#8b93b0'},grid:{color:'#252a3a'}},y:{title:{display:true,text:'Qualité estimée /100',color:'#8b93b0'},ticks:{color:'#8b93b0'},grid:{color:'#252a3a'},min:40,max:100}}}});
 }
 
 // DEMO
@@ -1360,7 +1390,7 @@ function updateBudget(val) {
   const p=BUDGET_PRESETS.find(x=>parseInt(val)<=x.max)||BUDGET_PRESETS[BUDGET_PRESETS.length-1];
   const total=p.gp+p.rp+p.sp;
   document.getElementById('calc-result').innerHTML=`
-    <h4>${p.label}</h4>
+    <h3>${p.label}</h3>
     <div class="bl"><span class="bp">GPU</span><span>${p.gpu}</span><span>${p.gp}€</span></div>
     <div class="bl"><span class="bp">RAM</span><span>${p.ram}</span><span>${p.rp}€</span></div>
     <div class="bl"><span class="bp">SSD</span><span>${p.ssd}</span><span>${p.sp}€</span></div>

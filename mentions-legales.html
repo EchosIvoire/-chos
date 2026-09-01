@@ -7,13 +7,14 @@
   <meta name="description" content="Mentions légales du site TheBenchLab — éditeur, hébergeur, droits de propriété intellectuelle." />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://thebenchlab.fr/mentions-legales.html" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <style>
-    :root{--bg:#0d0f14;--bg2:#13161e;--border:#252a3a;--accent:#6c63ff;--accent2:#00d9b5;--text:#e8eaf0;--muted:#6a7090;--card:#12151f}
+    :root{--bg:#0d0f14;--bg2:#13161e;--border:#252a3a;--accent:#6c63ff;--accent-text:#8b83ff;--accent2:#00d9b5;--text:#e8eaf0;--muted:#8b93b0;--card:#12151f}
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;font-size:15px}
     nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.65rem 2rem;display:flex;align-items:center;gap:1.25rem}
     nav a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s}
-    nav a:hover{color:var(--accent)}
+    nav a:hover{color:var(--accent-text)}
     .logo{color:var(--text);font-weight:800;font-size:.95rem;margin-right:auto;display:flex;align-items:center;gap:.45rem}
     .logo-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:inline-block}
     .page{max-width:760px;margin:0 auto;padding:3.5rem 2rem 6rem}
@@ -21,13 +22,15 @@
     .subtitle{color:var(--muted);font-size:.88rem;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
     h2{font-size:1.1rem;font-weight:800;color:var(--accent2);margin:2rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
     p{color:#c0c4d8;margin:.6rem 0;font-size:.9rem}
-    a{color:var(--accent);text-decoration:none}
+    a{color:var(--accent-text);text-decoration:none}
     a:hover{text-decoration:underline}
     footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center;color:var(--muted);font-size:.78rem}
     footer a{color:var(--muted);text-decoration:none;transition:color .2s}
     footer a:hover{color:var(--accent2)}
     .footer-inner{max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem}
     @media(max-width:640px){nav{padding:.65rem 1rem}.page{padding:2.5rem 1.25rem 4rem}}
+      /* WCAG 1.4.1 : un lien dans un paragraphe ne peut pas se distinguer par la seule couleur */
+    p a, li a{text-decoration:underline;text-underline-offset:3px}
   </style>
 </head>
 <body>
@@ -38,7 +41,7 @@
     <a href="/about.html">À propos</a>
   </nav>
 
-  <div class="page">
+  <main class="page">
     <h1>Mentions légales</h1>
     <p class="subtitle">Conformément à la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique (LCEN), les présentes mentions légales sont portées à la connaissance des utilisateurs du site thebenchlab.fr.</p>
 
@@ -94,7 +97,7 @@
     </p>
 
     <p style="margin-top:2rem;color:var(--muted);font-size:.82rem">Dernière mise à jour : 18 mai 2026</p>
-  </div>
+  </main>
 
   <footer>
     <div class="footer-inner">

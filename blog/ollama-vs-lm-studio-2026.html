@@ -18,7 +18,7 @@
   <meta property="og:url" content="https://thebenchlab.fr/blog/ollama-vs-lm-studio-2026.html" />
   <meta property="og:title" content="Ollama vs LM Studio en 2026 : lequel choisir pour vos LLM locaux ?" />
   <meta property="og:description" content="Benchmarks réels sur RTX 5070 Ti. Qwen 3 32B, Llama 3.3 70B, Mistral 7B. Comparatif complet avec tableau de fonctionnalités et verdict terrain." />
-  <meta property="og:image" content="https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.svg" />
+  <meta property="og:image" content="https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Ollama vs LM Studio 2026 — Benchmark LLM locaux" />
@@ -39,7 +39,7 @@
   <meta name="twitter:creator" content="@TheBenchLab" />
   <meta name="twitter:title" content="Ollama vs LM Studio en 2026 : le vrai comparatif" />
   <meta name="twitter:description" content="Benchmarks réels, comparatif fonctionnalités, verdict terrain. Quel outil pour faire tourner vos LLM en local ?" />
-  <meta name="twitter:image" content="https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.svg" />
+  <meta name="twitter:image" content="https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.png" />
 
   <!-- JSON-LD Article -->
   <script type="application/ld+json">
@@ -48,7 +48,7 @@
     "@type": "Article",
     "headline": "Ollama vs LM Studio en 2026 : lequel choisir pour vos LLM locaux ?",
     "description": "Comparatif terrain Ollama vs LM Studio : benchmarks réels sur RTX 5070 Ti, tableau de fonctionnalités, cas d'usage et verdict honnête.",
-    "image": "https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.svg",
+    "image": "https://thebenchlab.fr/og/ollama-vs-lm-studio-2026.png",
     "datePublished": "2026-05-18T00:00:00+02:00",
     "dateModified": "2026-05-18T00:00:00+02:00",
     "author": {
@@ -132,11 +132,12 @@
   }
   </script>
 
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <style>
     :root {
       --bg:#0d0f14; --bg2:#13161e; --bg3:#1a1f2e; --border:#252a3a;
-      --accent:#6c63ff; --accent2:#00d9b5; --accent3:#ff6b6b; --orange:#f5a623;
-      --text:#e8eaf0; --muted:#6a7090; --card:#12151f;
+      --accent:#6c63ff;--accent-text:#8b83ff; --accent2:#00d9b5; --accent3:#ff6b6b; --orange:#f5a623;
+      --text:#e8eaf0; --muted:#8b93b0; --card:#12151f;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
@@ -144,20 +145,20 @@
 
     nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.65rem 2rem;display:flex;align-items:center;gap:1.25rem}
     nav a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s}
-    nav a:hover{color:var(--accent)}
+    nav a:hover{color:var(--accent-text)}
     .logo{color:var(--text);font-weight:800;font-size:.95rem;margin-right:auto;display:flex;align-items:center;gap:.45rem}
     .logo-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:inline-block}
 
-    .aff-banner{border-bottom:1px solid var(--border);padding:.35rem 2rem;font-size:.7rem;color:var(--muted);text-align:center;opacity:.7}
+    .aff-banner{border-bottom:1px solid var(--border);padding:.35rem 2rem;font-size:.72rem;color:var(--muted);text-align:center}
 
     .hero{max-width:860px;margin:0 auto;padding:4rem 2rem 2rem}
     .hero-eyebrow{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap}
     .tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;text-transform:uppercase;letter-spacing:.05em}
-    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent);border:1px solid rgba(108,99,255,.25)}
+    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent-text);border:1px solid rgba(108,99,255,.25)}
     .tag.green{background:rgba(0,217,181,.12);color:var(--accent2);border:1px solid rgba(0,217,181,.22)}
     .tag.orange{background:rgba(245,166,35,.12);color:var(--orange);border:1px solid rgba(245,166,35,.22)}
     .hero h1{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:800;line-height:1.15;margin-bottom:.9rem}
-    .hero h1 em{font-style:normal;color:var(--accent)}
+    .hero h1 em{font-style:normal;color:var(--accent-text)}
     .hero-lead{font-size:1rem;color:var(--muted);max-width:660px;margin-bottom:1.25rem;line-height:1.7}
     .hero-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:var(--muted);padding:.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
     .hero-meta span{display:flex;align-items:center;gap:.3rem}
@@ -192,7 +193,7 @@
     .pick-card:hover{border-color:var(--accent)}
     .pick-card.featured{border-color:rgba(0,217,181,.35);border-width:2px}
     .pick-badge{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:.2rem .55rem;border-radius:5px;margin-bottom:.65rem;display:inline-block}
-    .pick-badge.ollama{background:rgba(108,99,255,.15);color:var(--accent)}
+    .pick-badge.ollama{background:rgba(108,99,255,.15);color:var(--accent-text)}
     .pick-badge.lmstudio{background:rgba(0,217,181,.15);color:var(--accent2)}
     .pick-name{font-weight:800;font-size:1.05rem;margin-bottom:.25rem}
     .pick-sub{font-size:.82rem;color:var(--muted);margin-bottom:.75rem;line-height:1.55}
@@ -206,7 +207,7 @@
     .bench-table th{padding:.65rem .85rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border);background:var(--bg2)}
     .bench-table td{padding:.7rem .85rem;border-bottom:1px solid var(--border);color:#c0c4d8;vertical-align:middle}
     .bench-table tr:hover td{background:rgba(255,255,255,.02)}
-    .bench-table .tool-ollama{color:var(--accent);font-weight:700}
+    .bench-table .tool-ollama{color:var(--accent-text);font-weight:700}
     .bench-table .tool-lms{color:var(--accent2);font-weight:700}
     .bench-table .winner{color:var(--accent2)}
     .bench-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:1rem}
@@ -220,7 +221,7 @@
     .bar-fill.ollama{background:linear-gradient(90deg,rgba(108,99,255,.8),rgba(108,99,255,.5))}
     .bar-fill.lms{background:linear-gradient(90deg,rgba(0,217,181,.7),rgba(0,217,181,.4))}
     .bar-val{font-size:.78rem;font-weight:700;flex-shrink:0;min-width:50px}
-    .bar-val.ollama{color:var(--accent)}
+    .bar-val.ollama{color:var(--accent-text)}
     .bar-val.lms{color:var(--accent2)}
     .bar-group-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:.75rem 0 .3rem;padding-left:110px}
 
@@ -240,13 +241,13 @@
     .code-block{background:#0a0c12;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin:.9rem 0;overflow-x:auto}
     .code-block pre{font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:.82rem;line-height:1.6;color:#a8b4d8;white-space:pre}
     .code-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem}
-    .kw{color:#6c63ff}.cmd{color:#00d9b5}.str{color:#f5a623}.cmt{color:#3a4060}
+    .kw{color:#6c63ff}.cmd{color:#00d9b5}.str{color:#f5a623}.cmt{color:#7d8590}
 
     /* STATS ROW */
     .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-top:1.25rem}
     @media(max-width:520px){.stats-row{grid-template-columns:1fr 1fr}}
     .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
-    .stat .sv{font-size:1.65rem;font-weight:800;color:var(--accent);line-height:1}
+    .stat .sv{font-size:1.65rem;font-weight:800;color:var(--accent-text);line-height:1}
     .stat .sl{font-size:.73rem;color:var(--muted);margin-top:.3rem}
 
     /* SCORE BAR */
@@ -271,9 +272,9 @@
     /* RELATED */
     .related-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color .2s;text-decoration:none;display:block;margin-top:1rem}
     .related-card:hover{border-color:rgba(108,99,255,.35)}
-    .related-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .55rem;border-radius:5px;background:rgba(108,99,255,.12);color:var(--accent);border:1px solid rgba(108,99,255,.22);display:inline-block;margin-bottom:.65rem}
+    .related-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .55rem;border-radius:5px;background:rgba(108,99,255,.12);color:var(--accent-text);border:1px solid rgba(108,99,255,.22);display:inline-block;margin-bottom:.65rem}
     .related-title{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.4rem;transition:color .2s}
-    .related-card:hover .related-title{color:var(--accent)}
+    .related-card:hover .related-title{color:var(--accent-text)}
     .related-sub{font-size:.82rem;color:var(--muted);line-height:1.6}
 
     /* FAQ */
@@ -294,6 +295,8 @@
       .hero{padding:3rem 1.25rem 1.5rem}
       .container{padding:0 1.25rem 4rem}
     }
+      /* WCAG 1.4.1 : un lien dans un paragraphe ne peut pas se distinguer par la seule couleur */
+    p a, li a{text-decoration:underline;text-underline-offset:3px}
   </style>
 </head>
 <body>
@@ -308,7 +311,7 @@
 
   <div class="aff-banner">
     Certains liens sont affiliés Amazon. <strong>Ça ne change rien à mes conclusions</strong> — je teste les deux sans favori.
-    <a href="/about.html#affiliation" style="color:var(--accent);text-decoration:none;margin-left:.4rem">En savoir plus</a>
+    <a href="/about.html#affiliation" style="color:var(--accent-text);text-decoration:underline;text-underline-offset:3px;margin-left:.4rem">En savoir plus</a>
   </div>
 
   <!-- HERO -->
@@ -455,7 +458,7 @@
           <thead>
             <tr>
               <th>Fonctionnalité</th>
-              <th style="color:var(--accent)">Ollama</th>
+              <th style="color:var(--accent-text)">Ollama</th>
               <th style="color:var(--accent2)">LM Studio</th>
             </tr>
           </thead>
@@ -605,7 +608,7 @@
           <thead>
             <tr>
               <th>Critère</th>
-              <th style="color:var(--accent)">Ollama</th>
+              <th style="color:var(--accent-text)">Ollama</th>
               <th style="color:var(--accent2)">LM Studio</th>
             </tr>
           </thead>

@@ -79,17 +79,18 @@
   }
   </script>
 
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <style>
     :root {
       --bg: #0d0f14;
       --bg2: #12151f;
       --bg3: #1a1f2e;
       --border: #252a3a;
-      --accent: #6c63ff;
+      --accent: #6c63ff;--accent-text:#8b83ff;
       --accent2: #00d9b5;
       --accent3: #f5a623;
       --text: #e8eaf0;
-      --muted: #6a7090;
+      --muted: #8b93b0;
       --card: #12151f;
     }
 
@@ -184,7 +185,7 @@
       margin-bottom: 1.25rem;
       letter-spacing: -.02em;
     }
-    .hero h1 .accent { color: var(--accent); }
+    .hero h1 .accent { color: var(--accent-text); }
     .hero h1 .accent2 { color: var(--accent2); }
     .hero-desc {
       font-size: 1rem;
@@ -207,7 +208,7 @@
     .h-stat .val {
       font-size: 1.4rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--accent-text);
       line-height: 1;
     }
     .h-stat .lbl {
@@ -292,7 +293,7 @@
       padding: .2rem .6rem;
       border-radius: 6px;
       background: rgba(108, 99, 255, .12);
-      color: var(--accent);
+      color: var(--accent-text);
       border: 1px solid rgba(108, 99, 255, .22);
     }
     .card-date {
@@ -307,7 +308,7 @@
       color: var(--text);
       transition: color .2s;
     }
-    .article-card:hover .card-title { color: var(--accent); }
+    .article-card:hover .card-title { color: var(--accent-text); }
     .card-excerpt {
       font-size: .88rem;
       color: var(--muted);
@@ -334,7 +335,7 @@
       align-items: center;
       gap: .4rem;
       padding: .5rem 1.1rem;
-      background: var(--accent);
+      background: #544bd6;
       color: #fff;
       border-radius: 8px;
       font-size: .82rem;

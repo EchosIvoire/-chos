@@ -121,23 +121,24 @@
   <!-- Décommenter si l'article utilise Chart.js : -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script> -->
 
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <style>
     /* ════ DESIGN SYSTEM (identique à tous les articles) ════ */
     :root{
       --bg:#0d0f14;--bg2:#12151f;--bg3:#1a1f2e;
-      --text:#e8eaf0;--muted:#6a7090;--border:#252a3a;
-      --accent:#6c63ff;--accent2:#00d9b5;--accent3:#f5a623;
+      --text:#e8eaf0;--muted:#8b93b0;--border:#252a3a;
+      --accent:#6c63ff;--accent-text:#8b83ff;--accent2:#00d9b5;--accent3:#f5a623;
       --orange:#f5a623;--red:#e85d75;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.6}
-    a{color:var(--accent);text-decoration:none}
+    a{color:var(--accent-text);text-decoration:none}
     a:hover{text-decoration:underline}
     code{background:var(--bg3);padding:.15em .4em;border-radius:4px;font-size:.85em;font-family:'Courier New',monospace;color:var(--accent2)}
 
     /* ── SKIP LINK ── */
-    .skip-link{position:absolute;top:-100%;left:1rem;background:var(--accent);color:#fff;padding:.5rem 1rem;border-radius:0 0 8px 8px;z-index:999;font-weight:700;font-size:.85rem}
+    .skip-link{position:absolute;top:-100%;left:1rem;background:#544bd6;color:#fff;padding:.5rem 1rem;border-radius:0 0 8px 8px;z-index:999;font-weight:700;font-size:.85rem}
     .skip-link:focus{top:0}
 
     /* ── BARRE ACCENT ── */
@@ -151,17 +152,17 @@
     .logo{font-weight:800;font-size:1.05rem;color:var(--text);flex-shrink:0;text-decoration:none}
     nav a{font-size:.82rem;color:var(--muted);transition:color .15s;white-space:nowrap}
     nav a:hover{color:var(--text);text-decoration:none}
-    .nav-tag{margin-left:auto;font-size:.68rem;font-weight:700;background:rgba(108,99,255,.15);color:var(--accent);padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(108,99,255,.3);flex-shrink:0}
+    .nav-tag{margin-left:auto;font-size:.68rem;font-weight:700;background:rgba(108,99,255,.15);color:var(--accent-text);padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(108,99,255,.3);flex-shrink:0}
 
     /* ── HERO ── */
     .hero{max-width:860px;margin:0 auto;padding:4rem 2rem 2rem}
     .hero-eyebrow{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap}
     .tag{display:inline-flex;align-items:center;padding:.25rem .7rem;border-radius:20px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent);border:1px solid rgba(108,99,255,.3)}
+    .tag.purple{background:rgba(108,99,255,.15);color:var(--accent-text);border:1px solid rgba(108,99,255,.3)}
     .tag.green{background:rgba(0,217,181,.12);color:var(--accent2);border:1px solid rgba(0,217,181,.3)}
     .tag.orange{background:rgba(245,166,35,.12);color:var(--orange);border:1px solid rgba(245,166,35,.3)}
     .hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:.9rem}
-    .hero h1 em{font-style:normal;color:var(--accent)}
+    .hero h1 em{font-style:normal;color:var(--accent-text)}
     .hero-lead{font-size:1rem;color:var(--muted);max-width:660px;margin-bottom:1.25rem;line-height:1.7}
     .hero-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:var(--muted);padding:.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
     .hero-meta span{display:flex;align-items:center;gap:.3rem}
@@ -177,7 +178,7 @@
     .product-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:.75rem}
     .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}
     .card-name{font-size:1.05rem;font-weight:800;color:var(--text)}
-    .card-price{font-size:1.2rem;font-weight:800;color:var(--accent);flex-shrink:0}
+    .card-price{font-size:1.2rem;font-weight:800;color:var(--accent-text);flex-shrink:0}
     .card-rating{display:flex;gap:.25rem;margin:.4rem 0}
     .star{color:var(--orange);font-size:.95rem}
     .star.empty{color:var(--border)}
@@ -211,7 +212,7 @@
     .faq-item{border-bottom:1px solid var(--border)}
     .faq-item:last-child{border-bottom:none}
     .faq-q{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--text);user-select:none;gap:.5rem}
-    .faq-q:hover{color:var(--accent)}
+    .faq-q:hover{color:var(--accent-text)}
     .faq-q.open .chev{transform:rotate(180deg)}
     .chev{transition:transform .2s;font-size:.7rem;color:var(--muted);flex-shrink:0}
     .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
@@ -223,11 +224,11 @@
     .conclusion h2{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:.75rem}
     .conclusion p{font-size:.88rem;color:#9aa0b8;margin-bottom:.75rem}
     .recomm-box{background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.3);border-radius:8px;padding:.9rem 1.1rem;font-size:.85rem;color:var(--text);margin:.75rem 0}
-    .recomm-box strong{display:block;color:var(--accent);margin-bottom:.3rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+    .recomm-box strong{display:block;color:var(--accent-text);margin-bottom:.3rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
 
     /* ── LAZY VIDEO ── */
     .vid-section{margin-top:1.25rem}
-    .vid-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
+    .vid-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-text);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
     .vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
     .vid-wrap{position:relative;border-radius:12px;overflow:hidden;background:#000;cursor:pointer;border:1px solid var(--border);aspect-ratio:16/9}
     .vid-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
@@ -248,7 +249,7 @@
     .mockup-body{padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.78rem;line-height:1.7;color:#c5c8d6;min-height:120px}
     .mockup-body .cmd{color:var(--accent2)}
     .mockup-body .out{color:#7a7f96}
-    .mockup-body .hi{color:var(--accent)}
+    .mockup-body .hi{color:var(--accent-text)}
     .mockup-body .ok{color:#00d9b5}
 
     /* ── FOOTER ── */
@@ -322,7 +323,7 @@
     <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;color:#fff;flex-shrink:0">EI</div>
     <div>
       <div style="font-size:.82rem;font-weight:700;color:var(--text)">TheBenchLab</div>
-      <div style="font-size:.75rem;color:var(--muted)">Testeur terrain · <a href="/about.html" style="color:var(--accent)">À propos →</a></div>
+      <div style="font-size:.75rem;color:var(--muted)">Testeur terrain · <a href="/about.html" style="color:var(--accent-text)">À propos →</a></div>
     </div>
     <div style="margin-left:auto;font-size:.72rem;color:var(--muted);text-align:right">DUREE_TEST<br>sur setup personnel</div>
   </div>
@@ -430,7 +431,7 @@
 
   <!-- ═══ EMAIL CAPTURE — NE PAS SUPPRIMER ═══ -->
   <div style="background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(0,217,181,.05));border:1px solid rgba(108,99,255,.2);border-radius:14px;padding:1.75rem 2rem;margin-top:1.5rem;text-align:center">
-    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem">Newsletter — Tests terrain</div>
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-text);margin-bottom:.5rem">Newsletter — Tests terrain</div>
     <h3 style="font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:.5rem">Le prochain test arrive dans ta boîte.</h3>
     <p style="font-size:.84rem;color:var(--muted);margin-bottom:1.25rem;max-width:480px;margin-left:auto;margin-right:auto">Un article par semaine. Benchmarks réels, setup détaillé, erreurs terrain. Aucun spam — désabonnement en 1 clic.</p>
     <form action="https://REMPLACE_PAR_TON_URL_BREVO_OU_MAILCHIMP" method="post" target="_blank"
@@ -440,7 +441,7 @@
              aria-label="Ton adresse email"
              style="flex:1;min-width:200px;background:#12151f;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;color:var(--text);font-size:.88rem;outline:none" />
       <button type="submit"
-              style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.7rem 1.25rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap">
+              style="background:#544bd6;color:#fff;border:none;border-radius:8px;padding:.7rem 1.25rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap">
         M'inscrire →
       </button>
     </form>
