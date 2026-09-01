@@ -403,3 +403,8 @@ tbody tr:hover{background:color-mix(in srgb,var(--acc) 4%,transparent)}
 .score-ring .b{stroke:var(--border2)}
 .score-ring .f{stroke:var(--acc2);stroke-linecap:round;stroke-dasharray:333;transition:stroke-dashoffset 1s}
 .score-ring b{font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* pied de page de l'app : porte le lien vers les pages statiques indexables */
+.app-foot{border-top:1px solid var(--border);padding:1.4rem 1.5rem 2.4rem;text-align:center;font-size:.83rem;color:var(--muted)}
+.app-foot a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.app-foot a:hover{color:var(--acc-text)}

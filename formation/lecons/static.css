@@ -1,0 +1,65 @@
+/* Complément à app.css pour les pages statiques (version texte, sans JS).
+   Ne redéfinit aucun token : les couleurs et le thème viennent d'app.css. */
+
+.static-page .topbar{position:static;padding:.8rem 1.25rem}
+.static-page .top-nav{display:flex;margin-left:auto}
+.static-page .top-nav a{padding:.42rem .75rem;border-radius:9px;font-size:.9rem;color:var(--muted);font-weight:500}
+.static-page .top-nav a:hover{color:var(--text);background:var(--bg3)}
+.static-page .content{padding:2.2rem 1.5rem 4rem}
+@media(max-width:900px){.static-page .content{padding:1.25rem 1rem 3rem}}
+
+.cta-app{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;margin:1.4rem 0 2rem;
+  padding:1rem 1.15rem;border:1px solid var(--border);border-radius:var(--r);background:var(--card)}
+.cta-app .muted{font-size:.82rem}
+
+/* cartes mémo → liste de définitions */
+.memo{margin:1.4rem 0;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden;background:var(--card)}
+.memo dt{padding:.7rem 1rem .2rem;font-weight:650;font-size:.92rem}
+.memo dd{padding:0 1rem .7rem;margin:0;font-size:.88rem;color:var(--muted);border-bottom:1px solid var(--border)}
+.memo dd:last-child{border-bottom:none}
+
+/* check-list → liste simple */
+.static-check{list-style:none;margin:1.4rem 0;padding:0;display:flex;flex-direction:column;gap:.35rem}
+.static-check li{position:relative;padding:.55rem .8rem .55rem 2.2rem;border:1px solid var(--border);
+  border-radius:var(--r-sm);background:var(--card);font-size:.89rem}
+.static-check li::before{content:"";position:absolute;left:.8rem;top:.72rem;width:16px;height:16px;
+  border:1.8px solid var(--muted2);border-radius:5px}
+
+/* points chauds → texte */
+.hot-list{margin:.9rem 0 0;padding-left:1.3rem;font-size:.88rem}
+.hot-list li{margin:.4rem 0}
+.hot-list b{color:var(--acc-text)}
+
+.video-link{font-size:.9rem}
+
+/* quiz jouable sans JavaScript */
+.quiz-static{margin-top:2.6rem;border-top:1px solid var(--border);padding-top:1.4rem}
+.quiz-static > ol{margin:1.2rem 0 0;padding-left:1.3rem}
+.quiz-static > ol > li{margin-bottom:1.6rem}
+.q-txt{font-weight:640;margin:0 0 .6rem}
+.q-choices{list-style:upper-alpha;margin:0 0 .7rem 1.1rem;font-size:.89rem;color:var(--muted)}
+.quiz-static details{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--card)}
+.quiz-static summary{cursor:pointer;padding:.6rem .9rem;font-size:.86rem;font-weight:600;color:var(--acc-text)}
+.quiz-static details[open] summary{border-bottom:1px solid var(--border)}
+.quiz-static details p{margin:.6rem .9rem;font-size:.88rem}
+.quiz-static details p:first-of-type{color:var(--text)}
+.quiz-static details p + p{color:var(--muted)}
+
+/* plan du cours */
+.plan-mod{margin:2.4rem 0}
+.plan-list{list-style:none;margin:1rem 0 0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.plan-list li{display:flex;flex-wrap:wrap;align-items:baseline;gap:.55rem;padding:.75rem 1rem;
+  border:1px solid var(--border);border-radius:var(--r-sm);background:var(--card)}
+.plan-list a{color:var(--text)}
+.plan-list a:hover b{color:var(--acc-text);text-decoration:underline}
+.plan-list .muted{font-size:.84rem;flex:1;min-width:200px}
+
+.static-foot{border-top:1px solid var(--border);padding:1.6rem 1.5rem 3rem;text-align:center;font-size:.85rem}
+.static-foot a{color:var(--acc-text);text-decoration:underline;text-underline-offset:3px}
+.static-foot .muted{font-size:.8rem;margin-top:.4rem;max-width:60ch;margin-inline:auto}
+
+@media print{
+  .static-page .topbar,.cta-app,.pager,.static-foot{display:none!important}
+  .quiz-static details{border:none} .quiz-static summary{display:none}
+  .quiz-static details p{margin-left:0}
+}

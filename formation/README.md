@@ -6,6 +6,8 @@ aucun serveur applicatif. Elle se déploie telle quelle sur GitHub Pages.
 ```
 formation/
 ├── index.html                # coquille de l'application (SEO, JSON-LD, noscript)
+├── build.mjs                 # génère les pages statiques indexables (voir plus bas)
+├── lecons/                   # 18 pages HTML + plan du cours, générés — ne pas éditer à la main
 ├── manifest.webmanifest      # installable sur mobile (PWA)
 ├── sw.js                     # service worker : consultation hors ligne
 ├── assets/
@@ -100,6 +102,32 @@ Pour intégrer une vidéo, renseigner l'identifiant YouTube :
 Le lecteur reste en **façade** : rien n'est chargé depuis YouTube tant que
 l'utilisateur n'a pas cliqué, et l'iframe utilise `youtube-nocookie.com`.
 Un bloc `{"t":"video", …}` peut aussi être placé n'importe où dans `blocks`.
+
+## Pages statiques indexables
+
+Les routes de l'app sont des fragments (`#/l/m1l2`) : **les moteurs de recherche
+les ignorent**, donc aucune leçon n'existait comme URL. `build.mjs` génère à partir
+des mêmes JSON une page HTML par leçon dans `lecons/`, plus un plan du cours.
+
+```bash
+node formation/build.mjs      # aucune dépendance, ~1 seconde
+```
+
+Ce que fait la génération :
+
+- une page par leçon, **entièrement lisible sans JavaScript** (les schémas SVG sont
+  intégrés en ligne, les points chauds deviennent du texte, les quiz des `<details>`) ;
+- `<title>`, meta description, canonical, Open Graph et JSON-LD `LearningResource`
+  + `BreadcrumbList` propres à chaque leçon ;
+- un plan du cours (`lecons/index.html`) qui donne aux moteurs un chemin
+  d'exploration vers les 18 pages — le pied de page de l'app y renvoie ;
+- mise à jour du `sitemap.xml` racine entre les marqueurs `lecons:start` / `lecons:end`,
+  sans toucher au reste du fichier.
+
+Ce n'est pas une duplication du moteur de rendu de l'app : le support n'a pas
+d'interaction, donc les blocs sont rendus différemment. **Relancez la commande après
+toute modification du contenu**, et committez le résultat (GitHub Pages sert les
+fichiers tels quels, il n'y a pas d'étape de build côté serveur).
 
 ## Développement local
 
