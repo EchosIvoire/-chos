@@ -1,0 +1,56 @@
+{
+  "id": "m2l3",
+  "title": "Chiffrage, expertise et relation client",
+  "duration": 12,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Construire un devis de carrosserie et comprendre les temps barémés",
+    "Situer le rôle de l'expert d'assurance dans un dossier sinistre",
+    "Expliquer clairement une réparation à un client non technicien"
+  ],
+  "video": { "query": "chiffrage carrosserie devis expert assurance temps barémés", "title": "Comment se construit un devis de carrosserie" },
+  "blocks": [
+    { "t": "p", "x": "Un devis de carrosserie n'est pas une estimation à la louche : c'est un calcul. Trois blocs le composent — les **pièces**, la **main-d'œuvre** (en temps barémés), et les **ingrédients peinture**." },
+    { "t": "h", "x": "Les trois blocs du chiffrage" },
+    { "t": "table", "head": ["Bloc", "Contenu", "Ce qui fait varier"], "rows": [
+      ["Pièces", "Éléments neufs, échange standard, pièces de réemploi (PIEC), consommables", "Origine constructeur ou adaptable, disponibilité, politique de l'assureur"],
+      ["Main-d'œuvre", "Temps de dépose/repose, de réparation, de tôlerie, de peinture", "Barème du logiciel de chiffrage, taux horaire de l'atelier, niveau de technicité (T1/T2/T3)"],
+      ["Ingrédients peinture", "Produits consommés : apprêt, base, vernis, abrasifs, masquage", "Calculés forfaitairement à partir du temps de peinture, variables selon la teinte"]
+    ] },
+    { "t": "note", "kind": "info", "title": "Le temps barémé", "x": "Les logiciels de chiffrage utilisés dans la profession contiennent les temps publiés par les constructeurs pour chaque opération, sur chaque modèle. Ce ne sont pas des estimations : ce sont des **références partagées** entre le réparateur, l'assureur et l'expert. C'est ce langage commun qui rend un devis discutable objectivement." },
+    { "t": "h", "x": "Le rôle de l'expert" },
+    { "t": "p", "x": "Dans un sinistre assuré, l'expert en automobile mandaté par l'assureur intervient entre votre devis et l'accord de prise en charge. Il ne conteste pas votre savoir-faire : il vérifie que la **méthode** et le **montant** correspondent au dommage constaté." },
+    { "t": "steps", "items": [
+      { "title": "Vous chiffrez", "x": "Devis détaillé, photos, éventuellement rapport de mesure. Plus le dossier est documenté, moins il y a de discussion." },
+      { "title": "L'expert examine", "x": "Sur place ou à distance (expertise photo). Il valide, ajuste, ou demande un complément d'investigation." },
+      { "title": "Accord de réparation", "x": "L'assureur donne son accord sur un montant. C'est le feu vert pour commander les pièces." },
+      { "title": "Complément si découverte", "x": "Si le démontage révèle un dommage caché, on **arrête** et on demande un accord complémentaire. Réparer d'abord et facturer ensuite, c'est prendre le risque de ne pas être payé." }
+    ] },
+    { "t": "h", "x": "VEI et VGE : les seuils qui changent tout" },
+    { "t": "cmp", "left": { "title": "VEI — économiquement irréparable", "items": ["Le coût de réparation dépasse la valeur du véhicule", "Décision économique, pas technique", "Le propriétaire choisit : indemnisation ou conservation", "Aucune atteinte forcément structurelle"] }, "right": { "title": "VGE — gravement endommagé", "items": ["Atteinte à la structure ou aux organes de sécurité", "Décision technique de l'expert", "Immobilisation du véhicule, procédure encadrée", "Contrôle obligatoire avant remise en circulation"] } },
+    { "t": "note", "kind": "warn", "x": "Un véhicule ancien à faible valeur devient VEI pour un dommage modéré : un pare-chocs, une aile et une peinture peuvent suffire. Savoir l'annoncer tôt au client, avec les chiffres, évite une conversation très désagréable trois jours plus tard." },
+    { "t": "h", "x": "Parler au client : la partie qu'on n'apprend pas à l'école" },
+    { "t": "ul", "items": [
+      "**Montrez.** Un client comprend un pli de longeron quand il le voit, jamais quand on le lui décrit.",
+      "**Annoncez les délais réels**, y compris l'attente de pièces et l'accord de l'expert. Un délai tenu vaut mieux qu'un délai optimiste.",
+      "**Expliquez ce qui n'est pas visible** : la remise en cote, l'anticorrosion des zones soudées, la calibration ADAS. C'est ce qui justifie votre prix face à un devis moins cher.",
+      "**Ne promettez jamais un raccord invisible sur une teinte difficile.** Expliquez la plaquette d'essai et le fondu : le client acceptera bien mieux une explication qu'une déception.",
+      "**Écrivez.** Un accord verbal sur un supplément n'existe pas le jour de la facture."
+    ] },
+    { "t": "note", "kind": "tip", "title": "L'argument qui fonctionne", "x": "« Ce que vous payez, ce n'est pas seulement la peinture qu'on voit : c'est la garantie que la voiture se déformera au bon endroit au prochain choc. » En une phrase, vous déplacez la discussion du prix vers la sécurité." },
+    { "t": "check", "id": "devis", "items": [
+      "Photos avant démontage archivées avec le dossier",
+      "Devis détaillé ligne par ligne, temps barémés identifiés",
+      "Méthode constructeur référencée pour les opérations structurelles",
+      "Accord écrit de l'assureur avant commande des pièces",
+      "Client informé du délai réel et du risque de découverte",
+      "Calibration ADAS chiffrée si un capteur est concerné"
+    ] }
+  ],
+  "quiz": [
+    { "q": "Que sont les temps barémés ?", "choices": ["Le temps réellement passé par le carrossier", "Des temps de référence publiés par les constructeurs", "Une moyenne calculée par l'atelier", "Le délai d'immobilisation du véhicule"], "answer": 1, "why": "Ce sont des références partagées entre réparateurs, experts et assureurs, intégrées aux logiciels de chiffrage. Elles rendent un devis objectivement discutable." },
+    { "q": "Le démontage révèle un longeron plié non chiffré. Que faites-vous ?", "choices": ["Vous réparez et facturez à la fin", "Vous demandez un accord complémentaire avant de continuer", "Vous ignorez le dommage", "Vous refacturez le client directement"], "answer": 1, "why": "Sans accord préalable de l'assureur sur le complément, rien ne garantit le paiement. On documente, on chiffre, on attend l'accord." },
+    { "q": "Un véhicule est déclaré VEI. Cela signifie :", "choices": ["Qu'il est structurellement dangereux", "Que le coût de réparation dépasse sa valeur", "Qu'il ne peut plus rouler", "Qu'il doit être détruit"], "answer": 1, "why": "VEI est une notion économique : réparer coûte plus que le véhicule ne vaut. C'est le VGE qui relève d'une atteinte technique à la sécurité." },
+    { "q": "Quel argument justifie le mieux un prix plus élevé qu'un concurrent ?", "choices": ["La marque des produits utilisés", "Le respect de la méthode constructeur et la sécurité au prochain choc", "La rapidité d'exécution", "La qualité du café d'accueil"], "answer": 1, "why": "Le client n'achète pas de la peinture, il achète un véhicule qui se comportera correctement. C'est le seul argument que le prix ne peut pas contredire." }
+  ]
+}

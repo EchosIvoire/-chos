@@ -1,0 +1,66 @@
+{
+  "id": "m6l1",
+  "title": "Défauts de peinture : diagnostic et remèdes",
+  "duration": 15,
+  "level": "Avancé",
+  "objectives": [
+    "Reconnaître les dix défauts les plus fréquents à l'œil",
+    "Remonter à la cause plutôt que traiter le symptôme",
+    "Décider entre reprise localisée et réfection complète"
+  ],
+  "video": { "query": "défauts peinture automobile coulure peau orange cratère solutions", "title": "Les défauts de peinture expliqués" },
+  "blocks": [
+    { "t": "p", "x": "Tout peintre fait des défauts. Ce qui distingue un professionnel, c'est qu'il **sait pourquoi** : chaque défaut a une cause identifiable, et donc une prévention. Traiter le symptôme sans comprendre, c'est le reproduire au chantier suivant." },
+    { "t": "note", "kind": "tip", "x": "L'onglet **Outils** de cette formation contient un diagnostic express : vous décrivez l'aspect du défaut, il vous remonte la cause probable, le remède et la prévention. Utilisez-le en atelier depuis votre téléphone." },
+    { "t": "h", "x": "Les défauts d'application" },
+    { "t": "table", "head": ["Défaut", "Cause principale", "Remède"], "rows": [
+      ["**Coulure**", "Trop de produit, pistolet trop près, tôle froide, temps d'évaporation sauté", "Durcissement complet, arasage P1500, P2500/P3000, lustrage"],
+      ["**Peau d'orange**", "Mauvais étalement : pression basse, produit trop épais, distance excessive", "P1500 puis P2500 et lustrage ; si trop marquée, P800 et revernissage"],
+      ["**Marbrures / tigrures**", "Recouvrement irrégulier sur base métallisée", "Couche de voile, ou reprise de la base"],
+      ["**Manque de couvrance**", "Trop peu de couches, fond mal choisi, base peu couvrante", "Gris de fond adapté, couches supplémentaires"],
+      ["**Bord sec / raccord visible**", "Bord humide perdu, passes trop espacées dans le temps", "Reprise du panneau entier, raccord noyé"]
+    ] },
+    { "t": "h", "x": "Les défauts de contamination" },
+    { "t": "table", "head": ["Défaut", "Cause principale", "Remède"], "rows": [
+      ["**Cratère (fisheye)**", "Silicone, huile de compresseur, cire", "Poncer, dégraisser à fond, purger le réseau d'air, réappliquer"],
+      ["**Nibs (poussières)**", "Cabine, tenue, chiffon collecteur mal passé", "Dénibage P1500/P3000 puis lustrage"],
+      ["**Bullage / solvent pop**", "Couche trop épaisse, évaporation ou étuvage trop rapides", "Poncer jusqu'à l'apprêt et refaire"],
+      ["**Voile blanchâtre**", "Hygrométrie élevée, tôle froide, diluant trop rapide", "Poncer et revernir avec un diluant adapté à la saison"]
+    ] },
+    { "t": "h", "x": "Les défauts de support" },
+    { "t": "table", "head": ["Défaut", "Cause principale", "Remède"], "rows": [
+      ["**Marquage du ponçage**", "Grain trop grossier laissé sous l'apprêt", "Poncer, réapprêter, finir au P500/P800"],
+      ["**Décollement / écaillage**", "Support non poncé, gras, primaire inadapté au plastique", "Décaper jusqu'au support sain, refaire toute la stratification"],
+      ["**Cloques**", "Humidité ou oxydation piégée sous le feuil", "Décaper la zone, traiter la corrosion, primaire époxy"],
+      ["**Retrait / rétraction**", "Solvant de la couche neuve qui attaque une couche ancienne mal réticulée", "Isoler avec un apprêt bloquant, ou décaper"]
+    ] },
+    { "t": "note", "kind": "danger", "title": "Le piège du rattrapage", "x": "Beaucoup de défauts se **corrigent au lustrage** — mais seulement s'ils sont **dans le vernis**. Un défaut de base, de support ou d'accroche ne se lustre pas : il ressortira. Avant de sortir la polisseuse, demandez-vous à quelle profondeur se situe le problème." },
+    { "t": "h", "x": "La règle de décision" },
+    { "t": "steps", "items": [
+      { "title": "Où est le défaut ?", "x": "Dans le vernis → reprise localisée possible. Dans la base ou plus bas → reprise de la couche concernée, au minimum." },
+      { "title": "Reste-t-il assez d'épaisseur ?", "x": "Mesurez à la jauge. Poncer un vernis déjà mince, c'est traverser jusqu'à la base et devoir tout refaire." },
+      { "title": "Le défaut est-il isolé ou généralisé ?", "x": "Trois nibs se dénibent. Une peau d'orange sur tout un capot se revernit." },
+      { "title": "La cause est-elle traitée ?", "x": "Refaire sans avoir purgé le réseau d'air ou changé les filtres, c'est refaire deux fois." }
+    ] },
+    { "t": "h", "x": "Prévenir : les cinq gestes qui évitent 90 % des défauts" },
+    { "t": "ol", "items": [
+      "**Dégraisser deux fois**, avant et après ponçage, avec la règle des deux chiffons.",
+      "**Filtrer systématiquement** le produit au godet.",
+      "**Respecter les temps d'évaporation**, même quand le planning presse.",
+      "**Mesurer la pression gâchette ouverte** et faire un jet d'essai avant chaque application.",
+      "**Purger le réseau d'air** et suivre le remplacement des filtres de cabine."
+    ] },
+    { "t": "flip", "items": [
+      { "f": "Cratère dans le vernis : cause ?", "b": "Contamination par silicone ou huile de compresseur." },
+      { "f": "Peau d'orange : cause la plus fréquente ?", "b": "Mauvais étalement : pression trop basse, produit trop épais ou distance excessive." },
+      { "f": "Bullage : que s'est-il passé ?", "b": "Du solvant a été emprisonné : couche trop épaisse ou séchage trop rapide." },
+      { "f": "Un défaut de base se lustre-t-il ?", "b": "Non. Seuls les défauts situés dans le vernis se rattrapent au lustrage." }
+    ] }
+  ],
+  "quiz": [
+    { "q": "Une série de petits trous ronds apparaît dans le vernis. Quelle cause ?", "choices": ["Une pression trop élevée", "Une contamination par du silicone ou de l'huile", "Un grain de ponçage trop fin", "Une couche trop mince"], "answer": 1, "why": "Ce sont des cratères : la peinture refuse de mouiller le support contaminé et se rétracte autour du point." },
+    { "q": "Quel défaut se corrige exclusivement en repartant de l'apprêt ?", "choices": ["Un nib de poussière", "Une légère peau d'orange", "Un bullage (solvent pop)", "Une coulure fine"], "answer": 2, "why": "Les bulles traversent le film : les poncer superficiellement les ouvre sans les supprimer. Il faut descendre jusqu'à un support sain." },
+    { "q": "Avant de lustrer un défaut, quelle question se poser ?", "choices": ["Quelle pâte utiliser", "À quelle profondeur se situe le défaut", "Quelle est la teinte", "Quel est le prix du chantier"], "answer": 1, "why": "Le lustrage n'agit que dans le vernis. Un défaut de base ou d'accroche ressortira quoi qu'il arrive." },
+    { "q": "Un voile blanchâtre apparaît sur un vernis appliqué un jour humide. Pourquoi ?", "choices": ["Trop de durcisseur", "Condensation liée à l'hygrométrie et à un diluant inadapté", "Un mauvais ponçage", "Une buse trop grosse"], "answer": 1, "why": "L'évaporation refroidit la surface et de l'humidité se condense dans le film. Le choix du diluant selon la saison et le réchauffement du véhicule l'évitent." }
+  ]
+}

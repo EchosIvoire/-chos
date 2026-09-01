@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Carrossier-Peintre — E-formation interactive | TheBenchLab</title>
+
+<meta name="description" content="E-formation gratuite et interactive au métier de carrossier-peintre : 6 parcours, 18 leçons, quiz, schémas interactifs, outils de calcul et examen blanc. Sécurité, tôlerie, préparation, colorimétrie, application, finition." />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+<link rel="canonical" href="https://thebenchlab.fr/formation/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TheBenchLab" />
+<meta property="og:url" content="https://thebenchlab.fr/formation/" />
+<meta property="og:title" content="Carrossier-Peintre — E-formation interactive" />
+<meta property="og:description" content="6 parcours, 18 leçons, quiz, schémas interactifs et outils métier. Apprenez la carrosserie-peinture automobile, de la sécurité au lustrage." />
+<meta property="og:image" content="https://thebenchlab.fr/formation/assets/img/og-formation.svg" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "E-formation Carrossier-Peintre",
+  "description": "Formation en ligne interactive au métier de carrossier-peintre automobile : sécurité, diagnostic, tôlerie, préparation, colorimétrie, application peinture et finition.",
+  "inLanguage": "fr-FR",
+  "url": "https://thebenchlab.fr/formation/",
+  "isAccessibleForFree": true,
+  "teaches": ["Sécurité en atelier","Diagnostic de choc","Débosselage et planage","Soudure MIG-MAG","Préparation des surfaces","Colorimétrie","Application peinture","Lustrage et contrôle qualité"],
+  "provider": { "@type": "Organization", "name": "TheBenchLab", "url": "https://thebenchlab.fr/" },
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "online",
+    "courseWorkload": "PT6H"
+  }
+}
+</script>
+
+<link rel="preload" href="data/curriculum.json" as="fetch" crossorigin="anonymous" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Aller au contenu</a>
+
+<header class="topbar">
+  <button class="icon-btn only-mobile" id="btn-menu" aria-label="Ouvrir le sommaire" aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+
+  <a class="brand" href="#/">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="M4 20l2-7a4 4 0 013.8-2.8h12.4A4 4 0 0126 13l2 7v5a1 1 0 01-1 1h-3a1 1 0 01-1-1v-2H9v2a1 1 0 01-1 1H5a1 1 0 01-1-1z"/><circle cx="9" cy="20" r="1.6"/><circle cx="23" cy="20" r="1.6"/></svg>
+    </span>
+    <span class="brand-txt"><b>Carrosserie</b><i>E-formation</i></span>
+  </a>
+
+  <nav class="top-nav" aria-label="Navigation principale">
+    <a href="#/" data-nav="/">Parcours</a>
+    <a href="#/outils" data-nav="/outils">Outils</a>
+    <a href="#/examen" data-nav="/examen">Examen</a>
+    <a href="#/glossaire" data-nav="/glossaire">Glossaire</a>
+  </nav>
+
+  <div class="top-actions">
+    <button class="pill-btn" id="btn-search" aria-label="Rechercher (Ctrl+K)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <span class="only-desktop">Rechercher</span><kbd class="only-desktop">Ctrl K</kbd>
+    </button>
+    <button class="icon-btn" id="btn-theme" aria-label="Changer de thème">
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="i-moon"><path d="M21 13A9 9 0 1111 3a7 7 0 0010 10z"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="i-sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+    </button>
+    <div class="xp-chip" id="xp-chip" title="Expérience gagnée">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>
+      <span id="xp-val">0</span>
+    </div>
+  </div>
+
+  <div class="global-progress" role="progressbar" aria-label="Progression globale" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <i id="global-bar"></i>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Sommaire de la formation">
+    <div class="side-head">
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 44 44" aria-hidden="true">
+          <circle class="ring-bg" cx="22" cy="22" r="19"/>
+          <circle class="ring-fg" cx="22" cy="22" r="19" id="side-ring"/>
+        </svg>
+        <span id="side-pct">0%</span>
+      </div>
+      <div>
+        <strong id="side-title">Ma progression</strong>
+        <span class="muted" id="side-sub">0 leçon terminée</span>
+      </div>
+    </div>
+    <nav id="side-tree" class="side-tree"></nav>
+    <div class="side-foot">
+      <button class="ghost-btn" id="btn-export">Exporter</button>
+      <button class="ghost-btn" id="btn-reset">Réinitialiser</button>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim" hidden></div>
+
+  <main id="main" class="content" tabindex="-1">
+    <div class="loader" id="boot"><i></i><i></i><i></i></div>
+  </main>
+</div>
+
+<!-- Palette de commandes / recherche -->
+<div class="modal" id="palette" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Recherche">
+    <div class="pal-input">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="pal-q" placeholder="Rechercher une leçon, un terme, un défaut…" autocomplete="off" />
+      <kbd>Esc</kbd>
+    </div>
+    <div class="pal-results" id="pal-results"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<noscript>
+  <div style="max-width:760px;margin:3rem auto;padding:0 1.25rem;font-family:system-ui;line-height:1.7">
+    <h1>E-formation Carrossier-Peintre</h1>
+    <p>Cette formation interactive nécessite JavaScript. Voici le sommaire :</p>
+    <ol>
+      <li>Le métier &amp; l'atelier — panorama, sécurité et réglementation, organisation de l'atelier</li>
+      <li>Diagnostic &amp; structure — lecture du choc, matériaux, chiffrage et expertise</li>
+      <li>Réparation carrosserie — débosselage, assemblages, remplacement d'élément</li>
+      <li>Préparation des surfaces — décapage, mastics et ponçage, apprêts et masquage</li>
+      <li>Peinture &amp; colorimétrie — chimie des produits, recherche de teinte, réglage pistolet</li>
+      <li>Finition &amp; carrière — défauts et remèdes, lustrage et qualité, technologies et évolution</li>
+    </ol>
+  </div>
+</noscript>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>

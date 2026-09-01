@@ -1,0 +1,57 @@
+{
+  "id": "m2l2",
+  "title": "Matériaux : aciers THLE, aluminium, composites",
+  "duration": 13,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Identifier les grandes familles de matériaux d'une caisse moderne",
+    "Savoir ce qui se répare, ce qui se remplace et pourquoi",
+    "Comprendre l'effet de la chaleur sur les aciers à haute résistance"
+  ],
+  "video": { "query": "acier THLE aluminium réparation carrosserie matériaux constructeur", "title": "Reconnaître et traiter les matériaux modernes" },
+  "blocks": [
+    { "t": "p", "x": "Une caisse en blanc contemporaine est un assemblage de matériaux différents : chaque zone reçoit le matériau qui correspond à son rôle. Traiter un acier ultra-résistant comme une tôle ordinaire, c'est ruiner la sécurité du véhicule sans le voir." },
+    { "t": "h", "x": "Les familles à connaître" },
+    { "t": "table", "head": ["Matériau", "Où on le trouve", "Comportement en réparation"], "rows": [
+      ["**Acier doux**", "Ailes, portes, capots d'ancienne génération", "Se redresse, se plane, se soude. Le matériau « historique » du tôlier."],
+      ["**Acier HLE**", "Traverses, renforts courants", "Redressage limité, chauffe très contrôlée."],
+      ["**Acier THLE / UHLE (borié, press-hardened)**", "Pieds, bas de caisse, traverses de choc, arceaux", "**Ni redressage ni chauffe.** Remplacement par section, selon la méthode constructeur uniquement."],
+      ["**Aluminium**", "Capots, ailes, structures de véhicules premium et électriques", "Se déforme sans revenir en arrière, s'écrouit, se fissure. Outillage et zone dédiés."],
+      ["**Composites / SMC / thermoplastiques**", "Pare-chocs, ailes, panneaux de custode", "Réparation par collage structural, thermosoudage pour les thermoplastiques."],
+      ["**Fibre de carbone**", "Véhicules sportifs et premium", "Diagnostic difficile (délaminage interne), réparation très encadrée, souvent remplacement."]
+    ] },
+    { "t": "note", "kind": "danger", "title": "La chaleur, ennemie des THLE", "x": "Les aciers à ultra haute limite élastique tiennent leur résistance d'un traitement thermique réalisé à l'usine. Les chauffer, même modérément, **détruit cette structure de façon invisible** : la pièce paraît normale et se comporte comme une tôle ordinaire au prochain choc. C'est la raison pour laquelle les constructeurs interdisent le redressage à chaud sur ces zones." },
+    { "t": "h", "x": "Identifier le matériau avant d'intervenir" },
+    { "t": "ol", "items": [
+      "Consultez la **documentation technique du constructeur** : elle publie une cartographie des matériaux de la caisse, zone par zone, avec un code couleur.",
+      "Un aimant distingue immédiatement l'acier de l'aluminium — mais pas un acier doux d'un THLE.",
+      "L'aspect de la limaille et le comportement au perçage donnent des indices, jamais une certitude.",
+      "En cas de doute : **on ne chauffe pas, on ne redresse pas**, on applique la procédure de remplacement."
+    ] },
+    { "t": "h", "x": "L'aluminium : une autre logique de travail" },
+    { "t": "cmp", "left": { "title": "Ce que fait l'acier", "items": ["Il a une élasticité : il « revient » un peu", "Il se plane et se rétreint", "Il pardonne un geste imprécis", "Soudure MIG-MAG ou point de résistance"] }, "right": { "title": "Ce que fait l'aluminium", "items": ["Il ne revient pas : ce qui est déformé est acquis", "Il s'écrouit et se fissure si on insiste", "Il exige souvent une chauffe douce et contrôlée au pyromètre", "Soudure MIG sous argon, collage-rivetage, rivets auto-poinçonneurs"] } },
+    { "t": "note", "kind": "warn", "title": "Séparer les postes acier et aluminium", "x": "La poussière d'acier qui se dépose sur de l'aluminium provoque une **corrosion galvanique**. Un atelier sérieux dédie une zone, des outils et une aspiration séparés au travail de l'aluminium — et cette séparation fait partie des critères d'agrément des constructeurs." },
+    { "t": "h", "x": "Réparer ou remplacer : la grille de décision" },
+    { "t": "steps", "items": [
+      { "title": "1. La méthode constructeur existe-t-elle ?", "x": "Si le constructeur impose le remplacement de la zone, la discussion est close. C'est votre responsabilité juridique." },
+      { "title": "2. Le matériau supporte-t-il la réparation ?", "x": "THLE, UHLE, carbone structurel : non. Acier doux, aluminium de panneau : oui, sous conditions." },
+      { "title": "3. La zone est-elle structurelle ?", "x": "Sur une zone qui participe à l'absorption d'énergie, on ne bricole pas : on suit la procédure ou on remplace." },
+      { "title": "4. Le temps de réparation dépasse-t-il le remplacement ?", "x": "Question économique, examinée **après** les trois précédentes, jamais avant." }
+    ] },
+    { "t": "h", "x": "Les plastiques : savoir les lire" },
+    { "t": "p", "x": "Le sigle moulé au dos de la pièce donne la nature du plastique : `PP` (polypropylène, le plus courant sur les pare-chocs), `ABS`, `PC`, `PA`, `PUR`. Il détermine à la fois la **méthode de réparation** (thermosoudage ou collage bicomposant) et le **primaire d'accrochage** à utiliser avant peinture." },
+    { "t": "note", "kind": "tip", "x": "Un pare-chocs en PP ne reçoit jamais directement un apprêt classique : sans **primaire d'accrochage plastique**, la peinture se décolle en plaques au premier gravillon. Et n'oubliez pas l'**assouplissant** dans le vernis pour les pièces souples." },
+    { "t": "flip", "items": [
+      { "f": "Peut-on redresser un pied de porte en THLE ?", "b": "Non. Ni redressage, ni chauffe : remplacement par section selon la méthode constructeur." },
+      { "f": "Pourquoi séparer acier et aluminium ?", "b": "La poussière d'acier sur l'aluminium déclenche une corrosion galvanique." },
+      { "f": "Que signifie PP au dos d'un pare-chocs ?", "b": "Polypropylène : thermosoudable, et nécessite un primaire d'accrochage avant peinture." },
+      { "f": "Première question avant de réparer ?", "b": "Que dit la méthode constructeur pour cette zone et ce matériau ?" }
+    ] }
+  ],
+  "quiz": [
+    { "q": "Pourquoi ne chauffe-t-on pas un acier UHLE ?", "choices": ["Il rouille plus vite", "La chaleur détruit sa résistance de façon invisible", "Il change de couleur", "Il devient trop dur à percer"], "answer": 1, "why": "Sa résistance vient d'un traitement thermique d'usine. Une chauffe le ramène aux propriétés d'un acier ordinaire, sans signe visible." },
+    { "q": "Quel risque crée la poussière d'acier déposée sur de l'aluminium ?", "choices": ["Une mauvaise accroche de peinture", "Une corrosion galvanique", "Une déformation thermique", "Aucun risque"], "answer": 1, "why": "Le contact entre deux métaux différents en présence d'humidité crée une pile : l'aluminium se corrode. D'où des zones et outils séparés." },
+    { "q": "Quelle question vient en premier dans la décision réparer/remplacer ?", "choices": ["Le coût de la pièce", "Ce qu'impose la méthode constructeur", "Le délai client", "L'avis de l'expert"], "answer": 1, "why": "La méthode constructeur prime : elle engage la sécurité du véhicule et votre responsabilité. L'économie s'examine ensuite." },
+    { "q": "Avant de peindre un pare-chocs en PP, il faut :", "choices": ["Un apprêt garnissant classique", "Un primaire d'accrochage plastique", "Un mastic polyester", "Rien de particulier"], "answer": 1, "why": "Le polypropylène a une énergie de surface très faible. Sans primaire d'accrochage dédié, le feuil se décolle en plaques." }
+  ]
+}

@@ -1,0 +1,35 @@
+<svg viewBox="0 0 720 330" role="img" aria-label="Coupe d'un système de peinture automobile">
+  <rect class="sk-bg" x="0" y="0" width="720" height="330" rx="12"/>
+  <!-- couches -->
+  <rect class="sk-line" x="40" y="52"  width="380" height="30" fill="rgba(0,217,181,.18)"/>
+  <rect class="sk-line" x="40" y="82"  width="380" height="22" fill="rgba(255,92,57,.30)"/>
+  <rect class="sk-line" x="40" y="104" width="380" height="30" fill="rgba(245,166,35,.22)"/>
+  <rect class="sk-line" x="40" y="134" width="380" height="16" fill="rgba(108,99,255,.28)"/>
+  <rect class="sk-line" x="40" y="150" width="380" height="52" fill="rgba(120,130,160,.30)"/>
+  <!-- hachures tôle -->
+  <g class="sk-line" stroke-width="1" opacity=".55">
+    <path d="M50 202l20-52M90 202l20-52M130 202l20-52M170 202l20-52M210 202l20-52M250 202l20-52M290 202l20-52M330 202l20-52M370 202l20-52M405 190l12-32"/>
+  </g>
+  <!-- lignes de rappel -->
+  <g class="sk-line" stroke-width="1" stroke-dasharray="3 3">
+    <path d="M420 67h60M420 93h60M420 119h60M420 142h60M420 176h60"/>
+  </g>
+  <g class="sk-ink">
+    <text x="488" y="64" font-weight="700">Vernis 2K</text>
+    <text x="488" y="78" opacity=".7">40–60 µm · brillance + anti-UV</text>
+    <text x="488" y="97" font-weight="700">Base de teinte</text>
+    <text x="488" y="111" opacity=".7">15–25 µm · couleur et effet</text>
+    <text x="488" y="126" font-weight="700">Apprêt garnissant</text>
+    <text x="488" y="140" opacity=".7">40–80 µm · garnit et bloque</text>
+    <text x="488" y="150" font-weight="700">Cataphorèse (primaire)</text>
+    <text x="488" y="164" opacity=".7">15–20 µm · anticorrosion usine</text>
+    <text x="488" y="182" font-weight="700">Tôle acier / aluminium</text>
+    <text x="488" y="196" opacity=".7">0,6–1,2 mm</text>
+    <text x="40" y="232" opacity=".75">Épaisseur totale d'origine mesurée à la jauge : 90 à 150 µm.</text>
+    <text x="40" y="250" opacity=".75">Au-delà de 250 µm, l'élément a déjà été repeint : prudence au ponçage.</text>
+    <text x="40" y="36" font-weight="700" font-size="13">Système de peinture — coupe transversale</text>
+  </g>
+  <!-- cote épaisseur -->
+  <g class="sk-acc-s"><path d="M28 52v150M22 52h12M22 202h12"/></g>
+  <text class="sk-acc" x="14" y="130" font-size="10" transform="rotate(-90 14 130)">épaisseur</text>
+</svg>

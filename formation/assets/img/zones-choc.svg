@@ -1,0 +1,28 @@
+<svg viewBox="0 0 720 380" role="img" aria-label="Vue de dessus d'un véhicule et zones de contrôle après un choc">
+  <rect class="sk-bg" x="0" y="0" width="720" height="380" rx="12"/>
+  <g class="sk-line" fill="rgba(120,130,160,.18)">
+    <path d="M230 44h260c26 0 44 16 50 42l16 68c6 26 6 66 0 92l-16 68c-6 26-24 42-50 42H230c-26 0-44-16-50-42l-16-68c-6-26-6-66 0-92l16-68c6-26 24-42 50-42z"/>
+  </g>
+  <g class="sk-line" fill="none">
+    <path d="M196 128h328M196 252h328"/>                       <!-- capot / coffre -->
+    <path d="M262 128v124M458 128v124"/>                       <!-- montants -->
+    <path d="M262 190h196"/>                                   <!-- pied milieu -->
+    <path d="M180 96l-34 8M540 96l34 8M180 284l-34-8M540 284l34-8"/>
+  </g>
+  <g class="sk-line" fill="rgba(255,92,57,.20)" stroke-dasharray="5 4">
+    <rect x="176" y="60" width="368" height="52" rx="8"/>      <!-- train avant -->
+  </g>
+  <!-- longerons -->
+  <g class="sk-acc-s" stroke-dasharray="6 5"><path d="M232 66v248M488 66v248"/></g>
+  <g class="sk-ink">
+    <text x="40" y="34" font-weight="700" font-size="13">Lecture d'un choc — les points à contrôler dans l'ordre</text>
+    <text x="292" y="92" font-weight="700">Zone d'impact</text>
+    <text x="238" y="152" opacity=".85">Capot / traverse</text>
+    <text x="300" y="216" opacity=".85">Habitacle — pieds A, B, C</text>
+    <text x="252" y="278" opacity=".85">Plancher arrière</text>
+    <text x="40" y="344" opacity=".75">Règle d'or : l'énergie voyage. Un choc avant se lit jusqu'aux portes (jeux d'affleurement)</text>
+    <text x="40" y="362" opacity=".75">et au plancher. Toujours mesurer en diagonale avant de commander la moindre pièce.</text>
+  </g>
+  <text class="sk-acc" x="112" y="200" font-weight="700" font-size="11">Longerons</text>
+  <text class="sk-acc" x="592" y="200" font-weight="700" font-size="11">Longerons</text>
+</svg>

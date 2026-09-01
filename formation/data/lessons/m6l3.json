@@ -1,0 +1,69 @@
+{
+  "id": "m6l3",
+  "title": "ADAS, électrique et évolution de carrière",
+  "duration": 14,
+  "level": "Avancé",
+  "objectives": [
+    "Identifier quand une calibration ADAS devient obligatoire",
+    "Connaître les précautions de base sur un véhicule électrique ou hybride",
+    "Construire un plan d'évolution professionnelle réaliste"
+  ],
+  "video": { "query": "calibration ADAS carrosserie véhicule électrique sécurité intervention", "title": "ADAS et véhicules électriques en carrosserie" },
+  "blocks": [
+    { "t": "p", "x": "Le métier vit sa plus grande transformation depuis l'arrivée des bases hydro. Deux évolutions changent la façon de travailler : les **aides à la conduite** et l'**électrification**. Les maîtriser, c'est se rendre difficilement remplaçable." },
+    { "t": "h", "x": "ADAS : ce que change un capteur" },
+    { "t": "p", "x": "Caméras de pare-brise, radars de calandre, capteurs d'angle mort dans les pare-chocs, caméras de rétroviseurs et de hayon : ces systèmes pilotent le freinage d'urgence, le maintien de voie et le régulateur adaptatif. Ils sont réglés au **dixième de degré**." },
+    { "t": "table", "head": ["Intervention", "Calibration nécessaire ?"], "rows": [
+      ["Remplacement d'un pare-brise porteur d'une caméra", "**Oui**, systématiquement"],
+      ["Remplacement ou dépose d'un pare-chocs avec radar", "**Oui** dans la plupart des cas"],
+      ["Remplacement d'un rétroviseur à caméra", "**Oui**"],
+      ["Réparation structurelle avant ou passage au marbre", "**Oui** : la géométrie de référence a bougé"],
+      ["Réglage de géométrie des trains roulants", "**Oui** pour les systèmes liés à l'axe de poussée"],
+      ["Simple peinture d'un élément sans capteur", "Non — mais vérifiez l'absence de surépaisseur devant un capteur"]
+    ] },
+    { "t": "note", "kind": "danger", "title": "Une surépaisseur suffit", "x": "Repeindre un pare-chocs avec plusieurs couches supplémentaires devant un radar peut **atténuer son signal**. Certains constructeurs imposent une épaisseur maximale de peinture dans la zone du capteur, et interdisent certains pigments métalliques. Vérifiez la documentation avant d'appliquer, pas après." },
+    { "t": "h", "x": "Les deux types de calibration" },
+    { "t": "cmp", "left": { "title": "Statique", "items": ["Véhicule immobile en atelier", "Mires et cibles positionnées au millimètre", "Nécessite une aire plane, dégagée et un éclairage maîtrisé", "Procédure guidée par l'outil de diagnostic"] }, "right": { "title": "Dynamique", "items": ["Sur route, à vitesse et conditions prescrites", "Nécessite un marquage au sol lisible et une météo correcte", "Durée variable, parfois plusieurs dizaines de kilomètres", "Certains véhicules exigent les deux"] } },
+    { "t": "h", "x": "Véhicules électriques et hybrides : les règles de base" },
+    { "t": "ul", "items": [
+      "Toute intervention à proximité du circuit haute tension exige une **habilitation électrique** adaptée (de type B0L à B2VL selon les opérations). Ce n'est pas une formalité : c'est une obligation.",
+      "**Consignation** avant travaux : mise hors tension selon la procédure constructeur, condamnation, vérification d'absence de tension.",
+      "Les câbles **orange** signalent la haute tension. On ne les coupe pas, on ne les perce pas, on ne les pince pas.",
+      "**Jamais de soudure, de meulage ou de chauffe** à proximité d'un pack batterie sans validation de la procédure.",
+      "Une batterie ayant subi un choc peut s'emballer thermiquement **avec un délai de plusieurs heures ou jours** : zone de quarantaine, distance de sécurité, surveillance.",
+      "Le poids supérieur de ces véhicules impose de contrôler les capacités des ponts et des équipements de levage."
+    ] },
+    { "t": "note", "kind": "warn", "x": "Sur un véhicule accidenté électrique, la première question n'est pas « par où je commence la tôlerie », c'est **« la batterie a-t-elle été impactée ? »**. La réponse conditionne le stationnement du véhicule, le délai avant intervention et parfois le refus de prise en charge." },
+    { "t": "h", "x": "Les spécialisations qui valent cher" },
+    { "t": "table", "head": ["Spécialité", "Pourquoi elle est recherchée"], "rows": [
+      ["**Calibration ADAS**", "Peu d'ateliers équipés et formés : prestation facturée, souvent sous-traitée"],
+      ["**Réparation aluminium et collage structural**", "Exigée par les agréments constructeurs premium et les véhicules électriques"],
+      ["**Débosselage sans peinture**", "Marché de la grêle, forte rentabilité, mobilité possible"],
+      ["**Colorimétrie et raccords difficiles**", "Le peintre qui sort les teintes compliquées est irremplaçable dans un atelier"],
+      ["**Restauration et véhicules de collection**", "Marché de passion, marges élevées, réputation qui se construit"],
+      ["**Covering et personnalisation**", "Investissement matériel modeste, clientèle différente de l'assurance"]
+    ] },
+    { "t": "h", "x": "Évoluer : quatre trajectoires" },
+    { "t": "tl", "items": [
+      { "title": "Technicien confirmé, puis chef d'équipe", "x": "Après 3 à 5 ans d'autonomie, l'encadrement d'une équipe et la répartition des chantiers. Compétence clé : l'organisation, pas seulement la technique." },
+      { "title": "Réceptionnaire / chargé de clientèle", "x": "L'interface entre client, expert et atelier. Il faut aimer expliquer et négocier autant que réparer." },
+      { "title": "Expert en automobile", "x": "Formation complémentaire spécifique. On passe de l'exécution au diagnostic et à l'évaluation, avec un vrai changement de métier." },
+      { "title": "Chef d'entreprise", "x": "Ouvrir son atelier ou racheter une structure existante. La technique devient une condition, pas un métier : gestion, commercial, recrutement." }
+    ] },
+    { "t": "h", "x": "Si vous visez l'installation à votre compte" },
+    { "t": "ol", "items": [
+      "**Le local d'abord** : la cabine, l'extraction, le traitement de l'air et les autorisations d'exploitation représentent l'investissement dominant.",
+      "**Choisissez votre positionnement** : agrément assureurs (volume, prix négociés, contraintes) ou clientèle directe et spécialisation (marges, réputation, indépendance).",
+      "**Calculez votre taux horaire réel** : charges, amortissement du matériel, produits, temps non facturable. Un taux trop bas est la première cause d'échec.",
+      "**Anticipez la réglementation** : installations classées, gestion des déchets dangereux, contrôle des rejets, conformité ATEX.",
+      "**Formez-vous en continu** : les méthodes constructeur et les matériaux changent tous les ans. Un atelier qui ne se forme pas perd ses agréments."
+    ] },
+    { "t": "note", "kind": "tip", "title": "Le mot de la fin", "x": "Ce métier récompense trois choses : la **rigueur** (respecter une méthode même quand personne ne regarde), la **curiosité** (les matériaux et les produits évoluent sans arrêt) et la **patience** (aucun raccourci n'a jamais amélioré une finition). Le reste, l'atelier vous l'apprendra." }
+  ],
+  "quiz": [
+    { "q": "Après un remplacement de pare-brise porteur d'une caméra, que faut-il faire ?", "choices": ["Rien de particulier", "Une calibration de la caméra", "Un simple effacement de défauts", "Un réglage de phares"], "answer": 1, "why": "La caméra est réglée au dixième de degré par rapport au véhicule. Sa dépose impose une recalibration selon la procédure constructeur." },
+    { "q": "Quel est le premier réflexe devant un véhicule électrique accidenté ?", "choices": ["Commencer la tôlerie", "Vérifier si la batterie a été impactée", "Débrancher la batterie 12 V", "Le passer au marbre"], "answer": 1, "why": "Un pack impacté peut s'emballer thermiquement avec plusieurs heures de délai. Cela conditionne le stationnement, la sécurité et l'organisation du chantier." },
+    { "q": "Que signalent les câbles orange sur un véhicule ?", "choices": ["Le circuit audio", "Le circuit haute tension", "Les capteurs ADAS", "Le circuit de refroidissement"], "answer": 1, "why": "L'orange est le code couleur normalisé de la haute tension. On ne les coupe pas, on ne les perce pas, et l'intervention exige une habilitation." },
+    { "q": "Pourquoi une surépaisseur de peinture devant un radar est-elle problématique ?", "choices": ["Elle se voit", "Elle peut atténuer le signal du capteur", "Elle sèche mal", "Elle coûte plus cher"], "answer": 1, "why": "Le radar émet à travers le pare-chocs. Épaisseur excessive ou pigments métalliques peuvent perturber le signal : les constructeurs fixent des limites." }
+  ]
+}

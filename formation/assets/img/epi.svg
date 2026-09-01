@@ -1,0 +1,30 @@
+<svg viewBox="0 0 720 380" role="img" aria-label="Équipements de protection individuelle du peintre">
+  <rect class="sk-bg" x="0" y="0" width="720" height="380" rx="12"/>
+  <text class="sk-ink" x="40" y="34" font-weight="700" font-size="13">La tenue du peintre — rien n'est optionnel en cabine</text>
+  <g class="sk-line" fill="rgba(120,130,160,.20)">
+    <circle cx="360" cy="104" r="34"/>
+    <path d="M312 152h96c20 0 34 14 36 34l12 100h-192l12-100c2-20 16-34 36-34z"/>
+    <path d="M300 286h40l-6 62h-30zM380 286h40l-4 62h-30z"/>
+    <path d="M282 190l-26 62 26 12M438 190l26 62-26 12"/>
+  </g>
+  <g class="sk-line" fill="rgba(0,217,181,.28)"><ellipse cx="360" cy="112" rx="26" ry="18"/></g>
+  <g class="sk-line" fill="rgba(255,92,57,.26)"><rect x="330" y="196" width="60" height="36" rx="6"/></g>
+  <g class="sk-line" stroke-dasharray="3 3" stroke-width="1">
+    <path d="M330 104H210M394 112h116M330 214H210M448 244h62M334 330H210M420 330h90"/>
+  </g>
+  <g class="sk-ink">
+    <text x="60" y="100" font-weight="700">Masque à adduction d'air</text>
+    <text x="60" y="116" opacity=".72">obligatoire dès qu'il y a</text>
+    <text x="60" y="130" opacity=".72">des isocyanates (durcisseur)</text>
+    <text x="520" y="108" font-weight="700">Cagoule intégrale</text>
+    <text x="520" y="124" opacity=".72">antistatique, sans peluche</text>
+    <text x="60" y="212" font-weight="700">Combinaison jetable</text>
+    <text x="60" y="228" opacity=".72">type 5/6, fermée au cou</text>
+    <text x="520" y="248" font-weight="700">Gants nitrile</text>
+    <text x="520" y="264" opacity=".72">jamais en latex : perméable</text>
+    <text x="60" y="328" font-weight="700">Chaussures de sécurité</text>
+    <text x="520" y="330" font-weight="700">Bouchons / casque</text>
+    <text x="520" y="346" opacity=".72">ponceuse = 95 dB</text>
+  </g>
+  <text class="sk-acc" x="40" y="366" font-size="11" font-weight="700">Un demi-masque à cartouches ne protège PAS des isocyanates en cabine.</text>
+</svg>

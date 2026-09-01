@@ -1,0 +1,69 @@
+{
+  "id": "m1l3",
+  "title": "L'atelier : zones, machines, cabine",
+  "duration": 13,
+  "level": "Débutant",
+  "objectives": [
+    "Décrire l'organisation d'une carrosserie et le flux d'un véhicule",
+    "Reconnaître les principaux équipements et leur usage",
+    "Expliquer le fonctionnement d'une cabine de peinture et ses paramètres"
+  ],
+  "video": { "query": "visite atelier carrosserie cabine de peinture fonctionnement", "title": "Le fonctionnement d'une cabine de peinture" },
+  "blocks": [
+    { "t": "p", "x": "Un atelier bien organisé, c'est un atelier où la poussière ne remonte jamais vers la peinture. Toute l'implantation découle de ce principe : les zones sales en amont, les zones propres en aval, et un flux à sens unique." },
+    { "t": "h", "x": "Les cinq zones" },
+    { "t": "steps", "items": [
+      { "title": "Réception et parc", "x": "Accueil client, constat, photos, stockage des véhicules en attente. Zone administrative autant que technique." },
+      { "title": "Zone tôlerie", "x": "Marbre ou banc de mesure, postes de soudure, découpe, démontage. C'est la zone la plus bruyante et la plus sale." },
+      { "title": "Aire de préparation", "x": "Zone ventilée et aspirée pour le ponçage, le masticage, le masquage. Souvent équipée de bras aspirants et d'un éclairage renforcé." },
+      { "title": "Cabine de peinture", "x": "Local fermé en surpression, filtré, chauffé. Zone la plus propre de l'atelier." },
+      { "title": "Zone de remontage et contrôle", "x": "Repose des accessoires, essai, lustrage, nettoyage, contrôle final sous lampe." }
+    ] },
+    { "t": "note", "kind": "tip", "x": "Le flux idéal se fait toujours **de la zone sale vers la zone propre**. Traverser l'aire de préparation avec une combinaison couverte de poussière de ponçage juste avant d'entrer en cabine, c'est se garantir des points de poussière dans le vernis." },
+    { "t": "h", "x": "Les équipements structurants" },
+    { "t": "table", "head": ["Équipement", "Rôle", "Point de vigilance"], "rows": [
+      ["Marbre / banc de mesure", "Ancrer le véhicule, mesurer sa géométrie, exercer des tractions", "Les cotes de référence sont celles du constructeur, pas l'œil"],
+      ["Poste MIG-MAG", "Soudure acier et brasage bronze", "Réglage tension/vitesse de fil selon l'épaisseur"],
+      ["Spotter (poste à inertie)", "Tirage sur tôle sans accès arrière, rétreinte", "Puissance et durée d'impulsion adaptées à l'épaisseur"],
+      ["Compresseur + traitement d'air", "Alimenter pistolets et outils pneumatiques", "**Un déshuileur et un déshydrateur sont obligatoires** : une trace d'huile = cratères garantis"],
+      ["Ponceuses orbitales", "Ponçage machine à sec avec aspiration", "Course 3 mm pour la finition, 5-8 mm pour le dégrossissage"],
+      ["Cabine de peinture", "Application et séchage en atmosphère maîtrisée", "Filtres à changer selon les heures de fonctionnement"],
+      ["Balance de laboratoire", "Peser les formules de teinte au gramme", "Étalonnage régulier, plan de travail stable"]
+    ] },
+    { "t": "note", "kind": "warn", "title": "Le réseau d'air, ennemi n°1 du peintre", "x": "L'air comprimé transporte de l'eau de condensation et de l'huile de compresseur. Sans traitement (séparateur cyclonique + filtre coalesceur + charbon actif), vous pulvérisez ces contaminants sur la carrosserie : cratères, décollements, voiles. Purgez la cuve du compresseur chaque semaine." },
+    { "t": "h", "x": "Comment fonctionne une cabine" },
+    { "t": "img", "src": "cabine.svg", "caption": "Cabine à flux vertical descendant : l'air propre entre par le haut, le brouillard part par le sol.", "hotspots": [
+      { "x": 50, "y": 20.8, "label": "Plénum et filtres", "text": "L'air neuf est aspiré de l'extérieur, filtré (préfiltre + filtre plafond), chauffé, puis poussé vers le bas de façon homogène. La cabine est en **légère surpression** : la poussière extérieure ne peut pas rentrer." },
+      { "x": 50, "y": 58, "label": "Zone de travail", "text": "L'air descend verticalement le long de la carrosserie et entraîne le brouillard de peinture vers le sol, loin de la surface fraîchement appliquée. C'est ce flux qui rend un vernis propre." },
+      { "x": 50, "y": 78.7, "label": "Caillebotis et extraction", "text": "Le sol ajouré aspire l'air chargé, qui traverse des filtres paint-stop avant d'être rejeté. Des filtres saturés = flux perturbé = poussières qui retombent sur le véhicule." }
+    ] },
+    { "t": "h", "x": "Les paramètres à connaître" },
+    { "t": "kpi", "items": [
+      { "v": "20–25 °C", "l": "Température d'application" },
+      { "v": "60 °C / 30 min", "l": "Cycle de séchage classique 2K" },
+      { "v": "< 65 %", "l": "Hygrométrie souhaitable (critique en base hydro)" },
+      { "v": "0,3 m/s", "l": "Ordre de grandeur de la vitesse d'air descendant" }
+    ] },
+    { "t": "note", "kind": "danger", "x": "Le temps d'étuvage se compte **à partir du moment où la carrosserie a atteint la température**, pas au déclenchement du cycle. Une montée en température de 10 minutes suivie de 30 minutes de palier, c'est 40 minutes de cycle. Compter à l'envers, c'est livrer un vernis non réticulé qui marquera au premier lavage." },
+    { "t": "h", "x": "Ce qu'un atelier moderne ajoute" },
+    { "t": "ul", "items": [
+      "**Séchage infrarouge** mobile : pour les réparations localisées, sans passer la voiture entière en cabine.",
+      "**Aire de préparation ventilée** : elle décharge la cabine des travaux d'apprêt et augmente le débit de l'atelier.",
+      "**Laveur de pistolets à circuit fermé** : obligatoire pour ne pas rejeter de solvant, et il rend le nettoyage réellement propre.",
+      "**Système de gestion des teintes** connecté : balance, logiciel et spectrophotomètre reliés à la base du fabricant.",
+      "**Poste de calibration ADAS** : cible, mires et banc de réglage, de plus en plus indispensable."
+    ] },
+    { "t": "flip", "items": [
+      { "f": "Pourquoi la cabine est-elle en surpression ?", "b": "Pour empêcher l'air poussiéreux de l'atelier d'entrer par les interstices." },
+      { "f": "Quel est le rôle du caillebotis ?", "b": "Aspirer l'air chargé de brouillard vers le bas, à travers les filtres d'extraction." },
+      { "f": "Que fait un déshuileur ?", "b": "Il retire l'huile du compresseur de l'air comprimé, évitant cratères et décollements." },
+      { "f": "Quand démarre le temps d'étuvage ?", "b": "Quand la carrosserie — et non l'air — a atteint la température de consigne." }
+    ] }
+  ],
+  "quiz": [
+    { "q": "Pourquoi une cabine de peinture est-elle maintenue en légère surpression ?", "choices": ["Pour accélérer le séchage", "Pour empêcher la poussière extérieure d'entrer", "Pour économiser du chauffage", "Pour améliorer l'accroche du vernis"], "answer": 1, "why": "La surpression fait sortir l'air par les interstices plutôt qu'entrer, ce qui empêche l'air sale de l'atelier de contaminer la peinture fraîche." },
+    { "q": "Quel accessoire du réseau d'air comprimé évite les cratères dans la peinture ?", "choices": ["Le manomètre", "Le déshuileur / filtre coalesceur", "Le raccord rapide", "Le régulateur de débit"], "answer": 1, "why": "Les traces d'huile de compresseur provoquent des cratères (fisheyes). Le traitement d'air — séparateur, coalesceur, charbon actif — est indispensable." },
+    { "q": "Un cycle indique 60 °C pendant 30 minutes. Que compte-t-on ?", "choices": ["30 min à partir du démarrage du cycle", "30 min après que la carrosserie a atteint 60 °C", "30 min de montée en température", "Peu importe, seule la température compte"], "answer": 1, "why": "Le palier utile est celui où la tôle est à température. La montée s'ajoute au temps total, sinon la réticulation est incomplète." },
+    { "q": "Dans quel sens doit circuler le flux de travail dans un atelier ?", "choices": ["De la zone propre vers la zone sale", "De la zone sale vers la zone propre", "Peu importe si on nettoie", "En boucle autour de la cabine"], "answer": 1, "why": "Tôlerie puis préparation puis cabine : on ne ramène jamais de la poussière vers une zone où de la peinture fraîche est appliquée." }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "id": "m6l2",
+  "title": "Lustrage, contrôle qualité et livraison",
+  "duration": 13,
+  "level": "Avancé",
+  "objectives": [
+    "Exécuter un dénibage et un lustrage en trois étapes",
+    "Contrôler une réparation comme le ferait un client exigeant",
+    "Livrer un véhicule complet, avec les bons conseils d'entretien"
+  ],
+  "video": { "query": "lustrage polissage carrosserie dénibage pâte mousse polisseuse", "title": "Lustrage : les trois étapes" },
+  "blocks": [
+    { "t": "p", "x": "La finition est le seul moment où votre travail devient visible pour le client. Une réparation techniquement irréprochable mais mal finie sera jugée mauvaise ; l'inverse est vrai aussi, et c'est plus grave." },
+    { "t": "h", "x": "Le dénibage : supprimer un défaut ponctuel" },
+    { "t": "steps", "items": [
+      { "title": "Attendre la réticulation complète", "x": "Lustrer un vernis qui n'a pas fini de durcir, c'est l'échauffer, le marquer et voir les traces réapparaître quelques jours plus tard." },
+      { "title": "Mesurer l'épaisseur", "x": "À la jauge, avant de toucher quoi que ce soit. Vous devez savoir de combien de microns vous disposez." },
+      { "title": "Poncer très localement", "x": "P1500 à l'eau sur une mini-cale souple, uniquement sur le défaut, en gardant la zone lubrifiée." },
+      { "title": "Affiner", "x": "P2500 puis P3000, toujours à l'eau, en élargissant très légèrement la zone." },
+      { "title": "Lustrer en trois temps", "x": "Pâte abrasive sur mousse dure, pâte de finition sur mousse mi-dure, puis pâte anti-hologrammes sur mousse douce." },
+      { "title": "Contrôler sous plusieurs lumières", "x": "Lampe de contrôle, néon d'atelier, puis lumière du jour. Les hologrammes n'apparaissent que sous certains éclairages." }
+    ] },
+    { "t": "note", "kind": "warn", "title": "Chaleur et vitesse", "x": "Une polisseuse rotative qui reste au même endroit échauffe le vernis et peut le **brûler** en quelques secondes, surtout sur une arête où l'épaisseur est plus faible. Vitesse modérée, mouvements croisés continus, jamais d'arrêt sur place, et **jamais d'appui sur une arête**." },
+    { "t": "h", "x": "Ce qu'on ne peut pas lustrer" },
+    { "t": "ul", "items": [
+      "Un **vernis mat** : aucune reprise possible, le moindre défaut impose une réfection.",
+      "Une **coulure profonde** non arasée : le lustrage seul ne la supprime pas.",
+      "Un défaut situé **sous** le vernis (base, apprêt, support).",
+      "Une zone où l'**épaisseur restante est insuffisante** — la jauge décide, pas l'optimisme."
+    ] },
+    { "t": "h", "x": "Le contrôle qualité, dans l'ordre" },
+    { "t": "steps", "items": [
+      { "title": "Contrôle sous lampe", "x": "Lampe de contrôle rasante sur toute la surface réparée et les éléments voisins. On cherche : nibs, hologrammes, différence de tension, marches de raccord." },
+      { "title": "Contrôle de teinte", "x": "À trois angles et sous deux éclairages minimum, en comparant avec l'élément voisin, véhicule propre." },
+      { "title": "Contrôle des jeux", "x": "Jeux et affleurements, des deux côtés du véhicule. Ouverture et fermeture de chaque ouvrant concerné." },
+      { "title": "Contrôle d'épaisseur", "x": "À la jauge, pour vérifier l'homogénéité et documenter le dossier." },
+      { "title": "Contrôle fonctionnel", "x": "Vitres, serrures, éclairages, capteurs, voyants au tableau de bord, essai routier si la géométrie ou la structure ont été touchées." }
+    ] },
+    { "t": "note", "kind": "tip", "title": "Le test des 3 mètres, puis des 30 centimètres", "x": "Regardez d'abord la voiture **à trois mètres**, comme le client la verra en arrivant : les écarts de teinte et les défauts de tension sautent aux yeux. Puis revenez **à trente centimètres** pour les nibs et les traces de lustrage. Les deux distances révèlent des défauts différents." },
+    { "t": "h", "x": "Préparer la livraison" },
+    { "t": "check", "id": "livraison", "items": [
+      "Démasquage complet, aucun résidu d'adhésif",
+      "Contrôle sous lampe effectué sur toutes les zones",
+      "Jeux et affleurements validés",
+      "Cire de corps creux injectée, cordons d'étanchéité refaits",
+      "Calibration ADAS réalisée et documentée si nécessaire",
+      "Aucun voyant au tableau de bord, essai routier fait si nécessaire",
+      "Véhicule lavé, intérieur nettoyé, protections retirées",
+      "Documents remis : facture détaillée, garantie, conseils d'entretien"
+    ] },
+    { "t": "h", "x": "Les conseils à donner au client" },
+    { "t": "table", "head": ["Délai après réparation", "Recommandation"], "rows": [
+      ["Les premiers jours", "Éviter le lavage haute pression rapproché et les produits agressifs"],
+      ["Les premières semaines", "Pas de lustrage, pas de cire ni de traitement céramique : le film finit de réticuler"],
+      ["En cas de fiente ou de sève", "Retirer rapidement à l'eau tiède : ce sont des agressions chimiques réelles sur un vernis récent"],
+      ["Toujours", "Lavage doux, séchage propre, et retour à l'atelier au moindre doute"]
+    ] },
+    { "t": "note", "kind": "info", "x": "Ces conseils ne sont pas de la politesse commerciale : un vernis 2K continue de réticuler plusieurs jours après l'étuvage. Un traitement céramique appliqué trop tôt emprisonne les solvants résiduels et peut ruiner la brillance. Expliquez-le, le client comprendra." }
+  ],
+  "quiz": [
+    { "q": "Quel est le risque d'une polisseuse laissée au même endroit ?", "choices": ["Un manque de brillance", "Une brûlure du vernis, surtout sur les arêtes", "Une contamination silicone", "Un décollement de la base"], "answer": 1, "why": "La friction échauffe très vite. Sur une arête, l'épaisseur de vernis est plus faible : la brûlure y est presque instantanée." },
+    { "q": "Quel type de finition ne peut pas être rattrapé au lustrage ?", "choices": ["Un vernis brillant HS", "Un vernis mat", "Un vernis MS", "Un vernis anti-rayures"], "answer": 1, "why": "Le lustrage rend du brillant : appliqué sur un vernis mat, il crée des zones brillantes irrattrapables. Tout défaut impose une réfection." },
+    { "q": "Pourquoi contrôler la voiture à trois mètres puis à trente centimètres ?", "choices": ["Pour gagner du temps", "Les deux distances révèlent des défauts différents", "Pour vérifier les jeux", "Par convention avec l'assureur"], "answer": 1, "why": "À trois mètres apparaissent les écarts de teinte et de tension ; à trente centimètres, les nibs et les hologrammes de lustrage." },
+    { "q": "Quel conseil donner au client pour les premières semaines ?", "choices": ["Laver au karcher pour durcir le vernis", "Éviter lustrage, cire et traitement céramique", "Garer au soleil", "Appliquer un polish immédiatement"], "answer": 1, "why": "Le vernis 2K continue de réticuler plusieurs jours. Un traitement appliqué trop tôt emprisonne les solvants résiduels." }
+  ]
+}

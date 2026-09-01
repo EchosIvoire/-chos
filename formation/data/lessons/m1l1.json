@@ -1,0 +1,61 @@
+{
+  "id": "m1l1",
+  "title": "Le carrossier-peintre aujourd'hui",
+  "duration": 12,
+  "level": "Débutant",
+  "objectives": [
+    "Distinguer les trois grandes familles d'intervention du métier",
+    "Situer le carrossier-peintre dans la chaîne de réparation, du client à l'expert",
+    "Identifier les voies de formation et les perspectives d'évolution réalistes"
+  ],
+  "video": { "query": "métier carrossier peintre automobile présentation atelier", "title": "Une journée dans un atelier de carrosserie" },
+  "blocks": [
+    { "t": "p", "x": "Le carrossier-peintre remet en état la **structure** et l'**aspect** d'un véhicule accidenté. Deux métiers en un, longtemps séparés : le *tôlier* qui redresse et assemble, le *peintre* qui prépare et applique. Aujourd'hui, la majorité des offres d'emploi demandent les deux — et c'est cette polyvalence qui fait la valeur d'un professionnel." },
+    { "t": "h", "x": "Trois familles d'intervention" },
+    { "t": "cmp", "left": { "title": "Réparation légère (smart repair)", "items": ["Rayures, impacts, petits enfoncements", "Débosselage sans peinture, raccord noyé", "Intervention en 2 à 6 heures", "Marché en forte croissance : flottes, LOA, restitutions de leasing"] }, "right": { "title": "Réparation lourde", "items": ["Choc structurel, remplacement d'élément", "Passage au marbre, soudure, collage", "Plusieurs jours d'immobilisation", "Encadrée par l'expert et la méthode constructeur"] } },
+    { "t": "p", "x": "Une troisième famille progresse vite : la **personnalisation et la restauration** — covering, peinture custom, remise en état de véhicules de collection. Elle demande moins de matériel structurel, mais un niveau de finition supérieur et un vrai sens commercial." },
+    { "t": "h", "x": "Où se situe le carrossier dans la chaîne" },
+    { "t": "steps", "items": [
+      { "title": "Accueil et constat", "x": "Réception du véhicule, photos, relevé du kilométrage, écoute du client. C'est le moment où on repère les dommages préexistants — et où on se protège." },
+      { "title": "Diagnostic technique", "x": "Contrôle visuel, démontage partiel, mesures. Vous déterminez ce qui se répare et ce qui se remplace." },
+      { "title": "Chiffrage et accord", "x": "Devis chiffré selon les temps barémés. Pour un sinistre, l'expert d'assurance valide la méthode et le montant." },
+      { "title": "Réparation", "x": "Tôlerie, préparation, peinture, remontage. C'est 70 % du temps facturé." },
+      { "title": "Contrôle et livraison", "x": "Contrôle qualité, nettoyage, essai routier si la géométrie a été touchée, explication au client." }
+    ] },
+    { "t": "note", "kind": "info", "title": "Ce qui a changé en dix ans", "x": "Les véhicules embarquent des **capteurs ADAS** (caméras, radars) et des aciers ultra-résistants. Un simple pare-chocs remplacé peut désormais imposer une calibration électronique. Le métier est devenu autant technologique que manuel." },
+    { "t": "h", "x": "Les qualités qui font la différence" },
+    { "t": "ul", "items": [
+      "**La minutie** : 80 % du résultat final se joue avant l'application, dans la préparation.",
+      "**La patience** : respecter un temps d'évaporation, c'est refuser de gagner dix minutes pour ne pas en perdre quatre heures.",
+      "**L'œil** : la perception des écarts de teinte se travaille, mais elle sépare les bons peintres des autres.",
+      "**La rigueur méthodologique** : chaque constructeur impose sa méthode de réparation. L'improvisation engage votre responsabilité.",
+      "**La condition physique** : postures contraignantes, bruit, port de charges. C'est un métier qui use si on ne se protège pas."
+    ] },
+    { "t": "h", "x": "Se former : les voies possibles" },
+    { "t": "table", "head": ["Diplôme", "Durée", "Ce qu'il ouvre"], "rows": [
+      ["CAP Réparation des carrosseries", "2 ans", "Le socle : tôlerie, remplacement d'éléments. Poste d'opérateur."],
+      ["CAP Peinture en carrosserie", "2 ans (ou 1 an après un CAP)", "La spécialisation peinture. Très demandée."],
+      ["Bac pro Réparation des carrosseries", "3 ans", "Diagnostic, structure, organisation. Vers technicien confirmé."],
+      ["BTS / titres pro (CQP)", "1 à 2 ans", "Expertise, chef d'équipe, réceptionnaire, gestion d'atelier."]
+    ] },
+    { "t": "note", "kind": "tip", "x": "L'**apprentissage** reste la voie royale : les entreprises recrutent massivement en alternance, et l'expérience atelier compte davantage que le diplôme au moment de l'embauche. Un apprenti sérieux est presque toujours gardé." },
+    { "t": "h", "x": "Perspectives concrètes" },
+    { "t": "kpi", "items": [
+      { "v": "Tension", "l": "Métier en pénurie de main-d'œuvre dans toute la France" },
+      { "v": "3 à 5 ans", "l": "Pour être autonome sur un chantier complet" },
+      { "v": "Peinture", "l": "La spécialité la mieux rémunérée en atelier" }
+    ] },
+    { "t": "p", "x": "Les évolutions classiques : **chef d'équipe**, **réceptionnaire atelier**, **expert en automobile** (après formation complémentaire), **formateur**, ou **création de son propre atelier**. La spécialisation smart repair ou véhicules premium permet aussi de sortir du salariat classique." },
+    { "t": "flip", "items": [
+      { "f": "Que fait un tôlier ?", "b": "Il redresse, débosselle, soude et remplace les éléments de structure et de carrosserie." },
+      { "f": "Que fait un peintre ?", "b": "Il prépare les surfaces, recherche la teinte, applique base et vernis, puis finit au lustrage." },
+      { "f": "Qui valide un chantier assuré ?", "b": "L'expert d'assurance : il valide la méthode de réparation et le montant avant les travaux." },
+      { "f": "Quelle spécialité est en croissance ?", "b": "Le smart repair et la calibration ADAS, portés par les flottes et l'électronique embarquée." }
+    ] }
+  ],
+  "quiz": [
+    { "q": "Quelle part du résultat final d'une peinture se joue avant l'application ?", "choices": ["Environ 20 %", "Environ la moitié", "Environ 80 %", "Cela n'a pas d'influence"], "answer": 2, "why": "La préparation (décapage, mastic, ponçage, apprêt, masquage) conditionne l'essentiel du rendu. Une belle peinture sur une préparation moyenne n'existe pas." },
+    { "q": "Un pare-chocs équipé de radars est remplacé. Que faut-il prévoir en plus ?", "choices": ["Rien de particulier", "Une calibration des systèmes ADAS", "Un passage au marbre", "Un changement de teinte"], "answer": 1, "why": "Tout capteur déposé ou dont le support est modifié doit être recalibré selon la procédure constructeur, sinon les aides à la conduite deviennent dangereuses." },
+    { "q": "Quelle voie de formation reste la plus efficace pour être embauché ?", "choices": ["La formation à distance", "L'apprentissage en alternance", "Le stage d'observation", "Aucune, l'autodidacte suffit"], "answer": 1, "why": "L'alternance combine diplôme et heures d'atelier réelles. C'est le mode de recrutement principal du secteur, et la majorité des apprentis sont conservés." }
+  ]
+}

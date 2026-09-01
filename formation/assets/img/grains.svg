@@ -1,0 +1,23 @@
+<svg viewBox="0 0 720 300" role="img" aria-label="Échelle des grains abrasifs du décapage au lustrage">
+  <rect class="sk-bg" x="0" y="0" width="720" height="300" rx="12"/>
+  <text class="sk-ink" x="40" y="36" font-weight="700" font-size="13">L'échelle des grains — du décapage au lustrage</text>
+  <g class="sk-line"><path d="M60 210h600"/><path d="M652 204l10 6-10 6"/></g>
+  <g class="sk-line" fill="rgba(255,92,57,.32)"><rect x="60"  y="120" width="86" height="90" rx="4"/></g>
+  <g class="sk-line" fill="rgba(255,140,80,.30)"><rect x="156" y="140" width="86" height="70" rx="4"/></g>
+  <g class="sk-line" fill="rgba(245,166,35,.30)"><rect x="252" y="156" width="86" height="54" rx="4"/></g>
+  <g class="sk-line" fill="rgba(160,190,120,.30)"><rect x="348" y="168" width="86" height="42" rx="4"/></g>
+  <g class="sk-line" fill="rgba(0,217,181,.28)"><rect x="444" y="178" width="86" height="32" rx="4"/></g>
+  <g class="sk-line" fill="rgba(108,99,255,.26)"><rect x="540" y="188" width="120" height="22" rx="4"/></g>
+  <g class="sk-ink" font-size="11">
+    <text x="70"  y="234" font-weight="700">P60–P120</text>  <text x="70"  y="250" opacity=".7">décapage,</text>  <text x="70" y="264" opacity=".7">dégrossi mastic</text>
+    <text x="166" y="234" font-weight="700">P180–P240</text> <text x="166" y="250" opacity=".7">finition</text>    <text x="166" y="264" opacity=".7">du mastic</text>
+    <text x="262" y="234" font-weight="700">P320</text>      <text x="262" y="250" opacity=".7">mastic fin,</text> <text x="262" y="264" opacity=".7">accroche</text>
+    <text x="358" y="234" font-weight="700">P400–P500</text> <text x="358" y="250" opacity=".7">apprêt</text>      <text x="358" y="264" opacity=".7">à sec</text>
+    <text x="454" y="234" font-weight="700">P600–P800</text> <text x="454" y="250" opacity=".7">apprêt à l'eau,</text><text x="454" y="264" opacity=".7">avant peinture</text>
+    <text x="550" y="234" font-weight="700">P1500–P3000</text><text x="550" y="250" opacity=".7">dénibage,</text>   <text x="550" y="264" opacity=".7">lustrage</text>
+    <text x="60" y="98" opacity=".8">Rayure profonde</text>
+    <text x="560" y="98" opacity=".8">Rayure invisible</text>
+  </g>
+  <g class="sk-acc-s" stroke-dasharray="5 4"><path d="M60 82h590"/><path d="M642 76l10 6-10 6"/></g>
+  <text class="sk-acc" x="300" y="70" font-size="11" font-weight="700">on ne saute jamais plus de deux graduations</text>
+</svg>

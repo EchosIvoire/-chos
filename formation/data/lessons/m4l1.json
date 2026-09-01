@@ -1,0 +1,63 @@
+{
+  "id": "m4l1",
+  "title": "Décapage, dégraissage et anticorrosion",
+  "duration": 12,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Mettre une tôle à nu proprement, sans la déformer ni l'échauffer",
+    "Maîtriser la règle des deux chiffons au dégraissage",
+    "Protéger immédiatement une tôle nue contre la corrosion"
+  ],
+  "video": { "query": "décapage tôle dégraissage antisilicone carrosserie préparation", "title": "Décaper et dégraisser dans les règles" },
+  "blocks": [
+    { "t": "note", "kind": "info", "title": "La règle qui gouverne tout ce module", "x": "Une peinture n'adhère pas à une surface : elle adhère à une **surface propre et rugueuse**. Toute la préparation consiste à créer ces deux conditions, puis à ne pas les détruire." },
+    { "t": "h", "x": "Décaper : jusqu'où et comment" },
+    { "t": "table", "head": ["Méthode", "Quand l'utiliser", "Précaution"], "rows": [
+      ["Ponceuse orbitale P80", "Décapage courant d'une zone à réparer", "Aspiration branchée, pression légère, on laisse travailler la machine"],
+      ["Disque à lamelles / meuleuse", "Cordons de soudure, rouille épaisse", "Échauffement rapide : la tôle se voile, la galvanisation part"],
+      ["Disque de décapage (fibre synthétique)", "Retirer un mastic ou une peinture sans attaquer la tôle", "Reste agressif : contrôlez régulièrement l'épaisseur"],
+      ["Aérogommage / sablage doux", "Grandes surfaces, restauration, corrosion diffuse", "Prestation spécialisée, protection obligatoire des mécanismes"],
+      ["Décapant chimique", "Pièces démontées, formes complexes", "Neutralisation et rinçage impératifs, sinon la peinture cloque"]
+    ] },
+    { "t": "note", "kind": "warn", "title": "Ne décapez pas plus large que nécessaire", "x": "Chaque centimètre carré de tôle mis à nu est un centimètre carré qu'il faudra reprotéger. Décapez la zone à réparer, puis dégradez progressivement les couches existantes autour (on parle de **dégradés de ponçage**) plutôt que de tout mettre à nu." },
+    { "t": "h", "x": "Le dégradé de ponçage" },
+    { "t": "p", "x": "Autour de la zone mise à nu, on ouvre les couches existantes en escalier : d'abord le vernis, puis la base, puis l'apprêt d'origine. Chaque couche est poncée avec un grain adapté et déborde légèrement sur la précédente. Résultat : aucune marche visible sous la peinture, et un apprêt qui vient se fondre sans créer de surépaisseur." },
+    { "t": "img", "src": "couches.svg", "caption": "Ce que vous traversez en décapant. Cliquez sur chaque couche.", "hotspots": [
+      { "x": 31.9, "y": 20.3, "label": "Vernis", "text": "40 à 60 µm. C'est la couche que vous matez pour un simple raccord. Poncée au P800/P1000, elle offre déjà une bonne accroche sans toucher à la couleur." },
+      { "x": 31.9, "y": 28.2, "label": "Base de teinte", "text": "15 à 25 µm seulement. Une couche très fine : quelques secondes de ponceuse suffisent à la traverser. C'est elle qui vous indique que vous entrez dans le dégradé." },
+      { "x": 31.9, "y": 36.1, "label": "Apprêt garnissant", "text": "40 à 80 µm. La couche « tampon » : elle absorbe les micro-rayures et donne son uniformité au support. Dès que vous y êtes, ralentissez." },
+      { "x": 31.9, "y": 43, "label": "Cataphorèse", "text": "15 à 20 µm de protection anticorrosion appliquée par immersion à l'usine. **La percer, c'est ouvrir la porte à la rouille** : si vous la traversez, un primaire époxy est obligatoire." },
+      { "x": 31.9, "y": 53.3, "label": "La tôle", "text": "Une fois nue, elle s'oxyde en quelques heures dans une atmosphère humide. Protection le jour même : phosphatant, ou primaire époxy/wash-primer." }
+    ] },
+    { "t": "h", "x": "Le dégraissage : la règle des deux chiffons" },
+    { "t": "p", "x": "Le nettoyant antisilicone se travaille toujours avec **deux chiffons non pelucheux** :" },
+    { "t": "steps", "items": [
+      { "title": "Chiffon n°1 : mouiller", "x": "Imbibé de produit, il dissout et soulève les contaminants sur une petite zone à la fois." },
+      { "title": "Chiffon n°2 : essuyer", "x": "Sec, il retire immédiatement le produit chargé, **avant qu'il ne s'évapore**. Sinon, les contaminants se redéposent en séchant." },
+      { "title": "Deux fois", "x": "Une fois avant le ponçage — sinon vous enfoncez le gras dans les rayures — et une fois après, pour retirer la poussière et les traces de doigts." }
+    ] },
+    { "t": "note", "kind": "danger", "title": "Silicone : l'ennemi invisible", "x": "Un produit lustrant siliconé, un spray de tableau de bord, un démoulant, une simple bombe de silicone utilisée à l'autre bout de l'atelier : il suffit d'une trace pour provoquer des **cratères** dans le vernis. Les ateliers professionnels bannissent le silicone de leurs locaux, y compris des produits d'entretien." },
+    { "t": "h", "x": "Protéger la tôle nue" },
+    { "t": "table", "head": ["Produit", "Rôle", "Quand"], "rows": [
+      ["**Phosphatant / dérouillant**", "Neutralise l'oxydation résiduelle et passive la surface", "Sur tôle nue, en cas de rouille légère. Rinçage et séchage impératifs"],
+      ["**Wash-primer (primaire réactif)**", "Mordance la surface et crée l'accroche", "Sur tôle nue, aluminium, galvanisé"],
+      ["**Primaire époxy 2K**", "Barrière anticorrosion complète, très étanche", "Dès que la cataphorèse est percée, ou sur grandes zones nues"],
+      ["**Primaire soudable au zinc**", "Protège l'interface entre deux tôles", "Entre les tôles avant assemblage soudé"]
+    ] },
+    { "t": "note", "kind": "tip", "x": "Une tôle mise à nu ne passe **jamais la nuit sans protection**. Même dans un atelier chauffé, l'humidité de l'air amorce une oxydation invisible qui ressortira sous la peinture des mois plus tard. Si vous ne finissez pas la journée, appliquez au minimum un époxy." },
+    { "t": "check", "id": "avant-mastic", "items": [
+      "Zone décapée sans surchauffe ni voilage de la tôle",
+      "Dégradé de ponçage réalisé sur les couches périphériques",
+      "Premier dégraissage effectué avant ponçage",
+      "Rouille traitée ou zone remplacée (jamais recouverte)",
+      "Tôle nue protégée le jour même (époxy ou wash-primer)",
+      "Second dégraissage juste avant application"
+    ] }
+  ],
+  "quiz": [
+    { "q": "Pourquoi utilise-t-on deux chiffons au dégraissage ?", "choices": ["Pour économiser du produit", "Pour retirer le produit chargé avant qu'il ne sèche et redépose les contaminants", "Pour éviter les rayures", "Pour respecter la norme COV"], "answer": 1, "why": "Le premier mouille et soulève, le second essuie immédiatement. Laisser sécher le produit, c'est redéposer ce qu'on vient de dissoudre." },
+    { "q": "Vous avez traversé la cataphorèse au ponçage. Que faut-il faire ?", "choices": ["Rien, l'apprêt suffira", "Appliquer un primaire époxy avant la suite", "Passer directement à la base", "Poncer plus finement"], "answer": 1, "why": "La cataphorèse est la protection anticorrosion d'usine. Percée, elle doit être remplacée par une barrière équivalente : époxy ou wash-primer selon le support." },
+    { "q": "Quelle contamination provoque des cratères dans le vernis ?", "choices": ["La poussière de ponçage", "Le silicone", "L'eau de rinçage", "Les résidus de mastic"], "answer": 1, "why": "Le silicone abaisse localement la tension superficielle : la peinture se rétracte autour du point contaminé et forme un cratère (fisheye)." },
+    { "q": "Que faire d'une tôle mise à nu en fin de journée ?", "choices": ["La laisser telle quelle jusqu'au lendemain", "La huiler légèrement", "La protéger le jour même avec un primaire", "La couvrir d'un chiffon"], "answer": 2, "why": "L'oxydation démarre en quelques heures et ressortira sous la peinture. Un époxy ou un wash-primer stoppe le processus." }
+  ]
+}

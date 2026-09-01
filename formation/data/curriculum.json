@@ -1,0 +1,91 @@
+{
+  "title": "E-formation Carrossier-Peintre",
+  "version": "1.0.0",
+  "updated": "2026-09-01",
+  "modules": [
+    {
+      "id": "metier",
+      "short": "Le métier & l'atelier",
+      "title": "Le métier & l'atelier",
+      "level": "Débutant",
+      "icon": "<path d='M14.7 6.3a4 4 0 01-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 015.4-5.4z'/>",
+      "summary": "Ce que fait vraiment un carrossier-peintre, dans quel environnement, avec quelles règles de sécurité.",
+      "intro": "Avant de toucher une ponceuse, il faut comprendre le métier : ce qu'on répare, avec qui on travaille, et surtout comment on protège sa santé. C'est le module qui évite les erreurs qui coûtent une carrière.",
+      "lessons": [
+        { "id": "m1l1", "title": "Le carrossier-peintre aujourd'hui", "duration": 12, "summary": "Missions, spécialisations, marché, formations et salaires réels du métier.", "keywords": ["métier", "CAP", "salaire", "débouchés", "carrière"] },
+        { "id": "m1l2", "title": "Sécurité, EPI et réglementation", "duration": 15, "summary": "Isocyanates, COV, ATEX, EPI, fiches de données de sécurité et gestion des déchets.", "keywords": ["sécurité", "EPI", "isocyanate", "COV", "masque", "ATEX"] },
+        { "id": "m1l3", "title": "L'atelier : zones, machines, cabine", "duration": 13, "summary": "Comment une carrosserie est organisée et comment fonctionne une cabine de peinture.", "keywords": ["cabine", "atelier", "marbre", "compresseur", "aire de préparation"] }
+      ]
+    },
+    {
+      "id": "diagnostic",
+      "short": "Diagnostic & structure",
+      "title": "Diagnostic & structure",
+      "level": "Intermédiaire",
+      "icon": "<circle cx='11' cy='11' r='7'/><path d='M20 20l-3.5-3.5'/>",
+      "summary": "Lire un choc, connaître les matériaux, décider de réparer ou de remplacer, et chiffrer.",
+      "intro": "Un bon carrossier se reconnaît avant même le premier coup de marteau : à sa capacité à comprendre où l'énergie du choc est passée, et à choisir la bonne méthode de réparation.",
+      "lessons": [
+        { "id": "m2l1", "title": "Lire un choc : la méthode de diagnostic", "duration": 14, "summary": "Du contrôle visuel aux mesures sur banc : la chaîne logique du diagnostic.", "keywords": ["diagnostic", "choc", "longeron", "banc de mesure", "jeux"] },
+        { "id": "m2l2", "title": "Matériaux : aciers THLE, aluminium, composites", "duration": 13, "summary": "Ce qui se redresse, ce qui se remplace, et pourquoi la chaleur est votre ennemie.", "keywords": ["acier", "THLE", "aluminium", "composite", "carbone", "matériaux"] },
+        { "id": "m2l3", "title": "Chiffrage, expertise et relation client", "duration": 12, "summary": "Temps barémés, méthodes constructeur, expert, VEI/VGE et devis honnête.", "keywords": ["chiffrage", "devis", "expert", "assurance", "VEI", "barème"] }
+      ]
+    },
+    {
+      "id": "carrosserie",
+      "short": "Réparation carrosserie",
+      "title": "Réparation carrosserie",
+      "level": "Intermédiaire",
+      "icon": "<path d='M3 21l4-1 11-11a2.8 2.8 0 10-4-4L3 16z'/><path d='M14 5l4 4'/>",
+      "summary": "Débosselage, planage, soudure, collage-rivetage et remplacement d'élément.",
+      "intro": "Le cœur du métier de tôlier : redonner à la tôle sa forme et sa résistance d'origine, avec le bon geste et le bon assemblage.",
+      "lessons": [
+        { "id": "m3l1", "title": "Débosselage, planage et rétreinte", "duration": 14, "summary": "Marteau, tas, tire-clou, DSP : remettre la tôle en forme sans l'étirer.", "keywords": ["débosselage", "planage", "DSP", "rétreinte", "marteau", "tas"] },
+        { "id": "m3l2", "title": "Assemblages : MIG-MAG, brasage, collage", "duration": 16, "summary": "Choisir et réussir le bon assemblage selon le matériau et la zone.", "keywords": ["soudure", "MIG", "MAG", "brasage", "collage", "rivet"] },
+        { "id": "m3l3", "title": "Remplacement d'élément et ajustage", "duration": 13, "summary": "Dépose, présentation, jeux d'affleurement, étanchéité et anticorrosion.", "keywords": ["remplacement", "ajustage", "jeux", "mastic d'étanchéité", "corrosion"] }
+      ]
+    },
+    {
+      "id": "preparation",
+      "short": "Préparation des surfaces",
+      "title": "Préparation des surfaces",
+      "level": "Intermédiaire",
+      "icon": "<path d='M4 20h16M6 16l10-10 4 4L10 20z'/><path d='M14 6l4 4'/>",
+      "summary": "Décapage, mastics, ponçage, apprêts et masquage : 80 % du résultat final.",
+      "intro": "Une peinture parfaite sur une préparation moyenne n'existe pas. Ce module est celui qui sépare les amateurs des professionnels.",
+      "lessons": [
+        { "id": "m4l1", "title": "Décapage, dégraissage et anticorrosion", "duration": 12, "summary": "Mettre à nu proprement et protéger la tôle avant toute chose.", "keywords": ["décapage", "dégraissage", "corrosion", "silicone", "phosphatant"] },
+        { "id": "m4l2", "title": "Mastics et logique des grains", "duration": 15, "summary": "Poser, poncer et contrôler un mastic sans jamais laisser de rayure sous la peinture.", "keywords": ["mastic", "ponçage", "grain", "cale", "guide de ponçage"] },
+        { "id": "m4l3", "title": "Apprêts et masquage", "duration": 14, "summary": "Choisir son apprêt, l'appliquer, le poncer et masquer proprement le véhicule.", "keywords": ["apprêt", "primaire", "masquage", "mouillé sur mouillé", "epoxy"] }
+      ]
+    },
+    {
+      "id": "peinture",
+      "short": "Peinture & colorimétrie",
+      "title": "Peinture & colorimétrie",
+      "level": "Avancé",
+      "icon": "<path d='M12 3a9 9 0 000 18c1.7 0 2-1.3 1.2-2.2-.8-1 0-2.3 1.3-2.3H17a4 4 0 004-4c0-5.2-4-9.5-9-9.5z'/><circle cx='8' cy='11' r='1'/><circle cx='12' cy='8' r='1'/><circle cx='16' cy='11' r='1'/>",
+      "summary": "Chimie des produits, recherche de teinte et geste d'application.",
+      "intro": "La partie la plus technique et la plus valorisée du métier : comprendre ce que vous pulvérisez, retrouver exactement la bonne teinte, et déposer la bonne épaisseur au bon endroit.",
+      "lessons": [
+        { "id": "m5l1", "title": "Chimie de la peinture : bases, 2K, vernis", "duration": 14, "summary": "Liant, pigment, solvant, durcisseur : comprendre ce qui se passe dans le godet.", "keywords": ["peinture", "2K", "vernis", "hydro", "durcisseur", "pot life"] },
+        { "id": "m5l2", "title": "Colorimétrie : trouver et ajuster la teinte", "duration": 16, "summary": "Code teinte, variantes, teintes à effet, spectrophotomètre et plaquette d'essai.", "keywords": ["teinte", "colorimétrie", "nacré", "métallisé", "spectrophotomètre", "variante"] },
+        { "id": "m5l3", "title": "Réglage du pistolet et geste d'application", "duration": 15, "summary": "Buse, pression, distance, croisement, épaisseurs et temps d'évaporation.", "keywords": ["pistolet", "HVLP", "buse", "pression", "croisement", "application"] }
+      ]
+    },
+    {
+      "id": "finition",
+      "short": "Finition & carrière",
+      "title": "Finition, qualité & carrière",
+      "level": "Avancé",
+      "icon": "<path d='M12 2l2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L12 16.3 6.2 19.8l1.6-6.6L2.6 8.8l6.8-.5z'/>",
+      "summary": "Défauts et remèdes, lustrage, contrôle qualité, ADAS, véhicules électriques et évolution.",
+      "intro": "Savoir rattraper un défaut, livrer une voiture irréprochable, et faire évoluer sa carrière dans un métier qui se transforme avec l'électrique et les aides à la conduite.",
+      "lessons": [
+        { "id": "m6l1", "title": "Défauts de peinture : diagnostic et remèdes", "duration": 15, "summary": "Coulure, peau d'orange, cratère, bullage, voile : reconnaître, corriger, éviter.", "keywords": ["défaut", "coulure", "peau d'orange", "cratère", "silicone", "voile"] },
+        { "id": "m6l2", "title": "Lustrage, contrôle qualité et livraison", "duration": 13, "summary": "Dénibage, polissage, contrôle sous lampe, mesure d'épaisseur et checklist de livraison.", "keywords": ["lustrage", "polissage", "dénibage", "qualité", "livraison"] },
+        { "id": "m6l3", "title": "ADAS, électrique et évolution de carrière", "duration": 14, "summary": "Calibration des aides à la conduite, sécurité VE, spécialisations et installation à son compte.", "keywords": ["ADAS", "calibration", "véhicule électrique", "habilitation", "carrière", "atelier"] }
+      ]
+    }
+  ]
+}

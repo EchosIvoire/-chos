@@ -1,0 +1,68 @@
+{
+  "id": "m3l3",
+  "title": "Remplacement d'élément et ajustage",
+  "duration": 13,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Dérouler une dépose/repose d'élément sans créer de nouveaux dommages",
+    "Régler des jeux d'affleurement conformes",
+    "Rétablir l'étanchéité et la protection anticorrosion d'origine"
+  ],
+  "video": { "query": "remplacement aile portière ajustage jeux affleurement carrosserie", "title": "Présenter et ajuster un élément neuf" },
+  "blocks": [
+    { "t": "p", "x": "Un élément neuf mal ajusté se voit à dix mètres, avant même la peinture. L'ajustage, c'est ce qui distingue une réparation professionnelle d'un remplacement de pièce." },
+    { "t": "h", "x": "Éléments vissés et éléments soudés" },
+    { "t": "cmp", "left": { "title": "Vissés (aile, capot, porte, hayon)", "items": ["Dépose rapide, réversible", "Réglage possible dans les lumières de fixation", "L'ajustage se fait en présentation, avant peinture", "Attention aux faisceaux, capteurs et câbles"] }, "right": { "title": "Soudés (panneau de custode, doublure, longeron)", "items": ["Découpe au point de soudure ou par section prescrite", "Aucun rattrapage possible après soudure", "Présentation et pointage avant assemblage définitif", "Protection anticorrosion à reconstituer intégralement"] } },
+    { "t": "h", "x": "La séquence de remplacement" },
+    { "t": "steps", "items": [
+      { "title": "Protéger et repérer", "x": "Housses, protections d'ailes, dépose des accessoires fragiles. Photographiez et repérez chaque connecteur, chaque agrafe : le remontage est toujours plus tard qu'on ne croit." },
+      { "title": "Déposer sans forcer", "x": "Les agrafes plastiques cassent si on tire droit. Utilisez les leviers adaptés et, sur les véhicules récents, coupez le contact et attendez le délai prescrit avant de toucher un connecteur d'airbag." },
+      { "title": "Préparer le support", "x": "Nettoyage des plans d'appui, contrôle de la planéité des fixations, redressage des zones tordues **avant** de présenter la pièce neuve." },
+      { "title": "Présenter et ajuster à blanc", "x": "Serrage doux, réglage des jeux, contrôle des affleurements, ouverture-fermeture. Rien n'est serré définitivement à ce stade." },
+      { "title": "Peindre en position démontée si possible", "x": "Un élément peint démonté offre un meilleur accès aux chants et aux retours, et évite de masquer la moitié du véhicule." },
+      { "title": "Remonter, régler définitivement, contrôler", "x": "Serrage au couple prescrit, contrôle final des jeux, essais de fonctionnement (lève-vitre, serrure, ouverture à distance)." }
+    ] },
+    { "t": "note", "kind": "tip", "title": "Toujours ajuster avant de peindre", "x": "Chercher à rattraper un jeu après peinture, c'est risquer de marquer un chant ou d'écailler une arête. L'ajustage se fait à blanc, la peinture vient ensuite." },
+    { "t": "h", "x": "Les jeux d'affleurement" },
+    { "t": "p", "x": "Deux notions à ne pas confondre : le **jeu** est l'espace entre deux éléments (mesuré au calibre ou au réglet) ; l'**affleurement** est la différence de hauteur entre leurs surfaces (contrôlée à la main et à l'œil rasant)." },
+    { "t": "ul", "items": [
+      "Un jeu doit être **constant sur toute la longueur** : c'est la régularité qui frappe l'œil, plus que la valeur absolue.",
+      "Prenez le côté opposé du véhicule comme référence : il porte les cotes d'origine.",
+      "Réglez toujours dans l'ordre : d'abord la porte avant sur le pied, puis la porte arrière sur la porte avant, puis l'aile sur la porte.",
+      "Contrôlez à l'œil rasant, en vous plaçant dans l'axe de l'élément, sous un éclairage franc."
+    ] },
+    { "t": "h", "x": "Rétablir ce qui ne se voit pas" },
+    { "t": "p", "x": "C'est la partie que le client ne verra jamais et qui détermine pourtant la durée de vie de la réparation." },
+    { "t": "table", "head": ["Élément d'origine", "À reconstituer"], "rows": [
+      ["Cordon d'étanchéité d'usine", "Mastic d'étanchéité appliqué à l'identique — forme et emplacement compris"],
+      ["Protection de bas de caisse", "Produit anti-gravillon pulvérisé, texture semblable à l'origine"],
+      ["Cire de corps creux", "Injection dans les corps creux et les longerons après peinture"],
+      ["Mousses d'insonorisation et d'absorption", "Remplacement par les pièces d'origine : elles participent à la structure"],
+      ["Primaire au zinc entre les tôles", "Appliqué avant assemblage, systématiquement"]
+    ] },
+    { "t": "note", "kind": "danger", "x": "Les **mousses structurelles** collées dans les longerons ou les pieds ne sont pas de l'insonorisation : elles participent à l'absorption d'énergie. Les oublier au remontage, c'est modifier le comportement de la caisse au choc." },
+    { "t": "h", "x": "Ce qui vous rattrape trois mois plus tard" },
+    { "t": "ul", "items": [
+      "Une agrafe manquante : bruit de vent à 110 km/h, le client revient.",
+      "Un cordon d'étanchéité non refait : infiltration dans le coffre, tapis mouillé.",
+      "Une cire de corps creux oubliée : cloques de rouille dès le deuxième hiver.",
+      "Un couple de serrage non respecté sur une charnière : jeu qui réapparaît en quelques semaines.",
+      "Un capteur non recalibré : voyant au tableau de bord et système d'aide inopérant."
+    ] },
+    { "t": "check", "id": "remontage", "items": [
+      "Jeux et affleurements contrôlés des deux côtés du véhicule",
+      "Serrages au couple prescrit",
+      "Cordons d'étanchéité refaits à l'identique",
+      "Cire de corps creux injectée après peinture",
+      "Mousses et absorbeurs d'origine remis en place",
+      "Fonctions électriques testées (vitres, serrures, capteurs)",
+      "Calibration ADAS effectuée si un capteur est concerné"
+    ] }
+  ],
+  "quiz": [
+    { "q": "Quand règle-t-on les jeux d'un élément neuf ?", "choices": ["Après peinture, une fois remonté", "À blanc, avant peinture", "Après livraison si le client se plaint", "Peu importe le moment"], "answer": 1, "why": "L'ajustage se fait à blanc : rattraper un jeu après peinture risque de marquer un chant ou d'écailler une arête fraîche." },
+    { "q": "Quelle est la différence entre jeu et affleurement ?", "choices": ["Aucune, ce sont des synonymes", "Le jeu est l'espace entre éléments, l'affleurement la différence de hauteur", "Le jeu concerne les portes, l'affleurement le capot", "L'affleurement se mesure au pied à coulisse"], "answer": 1, "why": "Le jeu se mesure au calibre, l'affleurement se contrôle à la main et à l'œil rasant. Les deux doivent être corrects." },
+    { "q": "À quoi servent les mousses collées dans les longerons ?", "choices": ["À l'insonorisation uniquement", "À l'absorption d'énergie au choc", "À faciliter le montage", "À éviter la condensation"], "answer": 1, "why": "Ce sont des mousses structurelles : elles participent au comportement de la caisse au choc et doivent être remises à l'identique." },
+    { "q": "Quand injecte-t-on la cire de corps creux ?", "choices": ["Avant la peinture", "Après la peinture", "Pendant le masticage", "Elle n'est plus utilisée"], "answer": 1, "why": "Après peinture et séchage : la cire est la dernière barrière anticorrosion, elle ne doit pas gêner l'accroche des couches précédentes." }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "m4l3",
+  "title": "Apprêts et masquage",
+  "duration": 14,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Choisir l'apprêt adapté au support et à la situation",
+    "Appliquer et poncer un apprêt sans créer de marche de raccord",
+    "Masquer un véhicule proprement, sans arête ni arrachement"
+  ],
+  "video": { "query": "application apprêt garnissant masquage voiture peinture carrosserie", "title": "Apprêt et masquage : la dernière ligne droite" },
+  "blocks": [
+    { "t": "p", "x": "L'apprêt est la couche charnière : il **garnit** les micro-rayures, **isole** le support de la peinture, **uniformise** la porosité et donne l'accroche à la base. C'est aussi la dernière occasion de corriger un défaut de surface." },
+    { "t": "h", "x": "Les apprêts et leurs usages" },
+    { "t": "table", "head": ["Apprêt", "Rôle", "Situation typique"], "rows": [
+      ["**Garnissant 2K** (4:1, 5:1)", "Remplit les rayures, se ponce, se met en forme", "Le cas général après mastic"],
+      ["**Époxy 2K**", "Barrière anticorrosion très étanche, faible garnissage", "Tôle nue, cataphorèse percée, réfection complète"],
+      ["**Wash-primer / primaire réactif**", "Mordance chimiquement le support", "Aluminium, galvanisé, tôle nue"],
+      ["**Primaire d'accrochage plastique**", "Crée l'adhérence sur les faibles énergies de surface", "Pare-chocs PP, ABS, PA"],
+      ["**Apprêt mouillé-sur-mouillé**", "Non ponçable, s'applique et se recouvre directement", "Gain de temps sur une surface déjà saine"],
+      ["**Apprêt teinté (gris de fond)**", "Rapproche le fond de la teinte finale", "Teintes couvrantes difficiles : rouges, jaunes, blancs"]
+    ] },
+    { "t": "note", "kind": "tip", "title": "Le gris de fond, le secret des rouges", "x": "Une base rouge ou jaune est peu couvrante : appliquée sur un apprêt blanc, elle demandera cinq couches ; sur un gris de fond adapté, trois suffisent. Les fabricants publient le niveau de gris recommandé pour chaque teinte. Utilisez-le : c'est du temps, du produit et de la régularité de teinte gagnés." },
+    { "t": "h", "x": "Appliquer un apprêt garnissant" },
+    { "t": "steps", "items": [
+      { "title": "Dégraisser et souffler", "x": "Antisilicone en deux chiffons, soufflette, puis chiffon collecteur. La zone doit être irréprochable." },
+      { "title": "Doser et mélanger", "x": "Respectez le ratio de la fiche technique (souvent 4:1 ou 5:1 + 10 % de diluant) et filtrez au godet." },
+      { "title": "Deux à trois couches", "x": "Croisées, avec un temps d'évaporation complet entre chaque. Chargez sur la zone masticée, allégez sur les bords." },
+      { "title": "Sécher", "x": "Air libre selon la fiche technique, ou étuve. Poncer un apprêt insuffisamment sec, c'est l'encrasser et le voir se rétracter plus tard." },
+      { "title": "Guide de ponçage", "x": "Un voile noir avant de poncer : il révèle chaque creux restant." },
+      { "title": "Poncer", "x": "P400/P500 à sec ou P600/P800 à l'eau. Toujours à la cale, en dégradant largement les bords." }
+    ] },
+    { "t": "note", "kind": "warn", "title": "La marche de raccord", "x": "Le défaut n°1 des débutants : un bord d'apprêt qui reste net. Vous ne le voyez pas sous l'apprêt gris, mais il apparaît en relief sous le vernis brillant. Le bord doit être **poncé en dégradé jusqu'à ne plus se sentir sous le doigt**." },
+    { "t": "h", "x": "Masquer : le geste qui fait gagner une heure au démasquage" },
+    { "t": "ol", "items": [
+      "Utilisez un **ruban de qualité carrosserie** : il résiste à la température d'étuvage et se retire sans laisser de colle. Le ruban de bricolage vous coûtera plus cher en temps de nettoyage.",
+      "Posez le ruban **sans le tendre** : tendu, il se rétracte et décolle en séchant, surtout dans les courbes.",
+      "Sur les arêtes vives et les joints, faites un **masquage roulé** (ruban replié sur lui-même) : il crée un bord arrondi au lieu d'une arête franche, invisible après vernis.",
+      "Protégez la voiture entière, pas seulement la zone voisine : le brouillard de pulvérisation se dépose partout, y compris derrière vous.",
+      "Masquez les entrées d'air, les joints d'ouvrants, les grilles et les ouvertures : la poussière et le brouillard s'y logent et ressortent au premier trajet.",
+      "Retirez le ruban **pendant que le vernis est encore tiède**, en tirant à 45° vers l'extérieur, doucement."
+    ] },
+    { "t": "note", "kind": "danger", "x": "Ne masquez jamais directement sur une **peinture fraîche de moins de quelques jours** : le ruban marque et arrache. Si un second passage est nécessaire, respectez le délai de la fiche technique ou décalez la ligne de masquage." },
+    { "t": "h", "x": "Le raccord noyé : masquer sans limite" },
+    { "t": "p", "x": "Sur un élément adjacent, plutôt que de créer une frontière nette, on **noie le raccord** : la base est estompée en dégradé sur l'élément voisin, puis le vernis couvre l'ensemble de la pièce jusqu'à une limite naturelle (nervure, joint, arête). L'œil ne peut alors détecter aucune transition — c'est la technique qui sauve les teintes difficiles." },
+    { "t": "check", "id": "avant-peinture", "items": [
+      "Apprêt parfaitement sec avant ponçage",
+      "Guide de ponçage passé et entièrement effacé",
+      "Bords d'apprêt dégradés, aucune marche au doigt",
+      "Grain final adapté (P500 à sec / P800 à l'eau)",
+      "Surface dégraissée après ponçage, puis chiffon collecteur",
+      "Masquage réalisé sans tension, arêtes roulées",
+      "Joints, grilles et entrées d'air protégés"
+    ] }
+  ],
+  "quiz": [
+    { "q": "À quoi sert un apprêt teinté (gris de fond) ?", "choices": ["À économiser du vernis", "À réduire le nombre de couches nécessaires sur les teintes peu couvrantes", "À accélérer le séchage", "À masquer le mastic"], "answer": 1, "why": "Un fond adapté rapproche la valeur du support de la teinte finale : moins de couches, meilleure régularité, moins de produit consommé." },
+    { "q": "Pourquoi ne faut-il pas tendre le ruban de masquage à la pose ?", "choices": ["Il coûte plus cher", "Tendu, il se rétracte et décolle en séchant", "Il devient trop adhérent", "Il change de couleur"], "answer": 1, "why": "Le ruban tendu cherche à revenir à sa longueur : il se décolle dans les courbes et laisse passer le brouillard." },
+    { "q": "Quel défaut apparaît si le bord de l'apprêt n'est pas dégradé ?", "choices": ["Un manque de brillance", "Une marche visible en relief sous le vernis", "Une coulure", "Une différence de teinte"], "answer": 1, "why": "Invisible sur l'apprêt mat, la marche ressort nettement sous une surface brillante. Le bord doit être imperceptible au doigt." },
+    { "q": "Quand retire-t-on idéalement le ruban de masquage ?", "choices": ["Après refroidissement complet", "Pendant que le vernis est encore tiède, en tirant à 45°", "Avant l'étuvage", "Le lendemain"], "answer": 1, "why": "Tiède, le film se coupe proprement au lieu de s'arracher en filaments. Refroidi et dur, le vernis casse en écailles sur la ligne de masquage." }
+  ]
+}

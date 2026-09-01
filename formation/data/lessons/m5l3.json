@@ -1,0 +1,252 @@
+{
+  "id": "m5l3",
+  "title": "Réglage du pistolet et geste d'application",
+  "duration": 15,
+  "level": "Avancé",
+  "objectives": [
+    "Régler un pistolet HVLP : buse, pression, éventail, débit",
+    "Exécuter une passe régulière avec le bon recouvrement",
+    "Adapter distance, vitesse et temps d'évaporation au produit"
+  ],
+  "video": {
+    "query": "réglage pistolet HVLP peinture automobile croisement passes technique",
+    "title": "Le geste : distance, vitesse, recouvrement"
+  },
+  "blocks": [
+    {
+      "t": "p",
+      "x": "Le pistolet ne fait pas le peintre, mais un pistolet mal réglé empêche le meilleur peintre de travailler. Quatre paramètres, et un geste."
+    },
+    {
+      "t": "img",
+      "src": "pistolet.svg",
+      "caption": "Les réglages d'un pistolet gravité HVLP. Cliquez sur les repères.",
+      "hotspots": [
+        {
+          "x": 35.0,
+          "y": 42.7,
+          "label": "Réglage de l'éventail",
+          "text": "Il règle la forme du jet, de la tache ronde à l'ellipse large. En carrosserie, on travaille **éventail grand ouvert** sur les grandes surfaces ; on le referme pour les petites pièces et les zones étroites."
+        },
+        {
+          "x": 41.7,
+          "y": 42.7,
+          "label": "Réglage du débit produit",
+          "text": "Il limite la course de l'aiguille, donc la quantité de produit. Trop ouvert : surcharge et coulures. Trop fermé : couche sèche et pulvérulente. Réglez-le **en fonction de la vitesse de votre bras**."
+        },
+        {
+          "x": 31.7,
+          "y": 82.0,
+          "label": "Pression d'entrée",
+          "text": "Environ 1,8 à 2,2 bar **gâchette ouverte** — c'est la seule mesure valable, la pression statique ne veut rien dire. Reportez-vous toujours à la fiche technique du produit et du pistolet."
+        },
+        {
+          "x": 64.9,
+          "y": 48.6,
+          "label": "Buse et chapeau",
+          "text": "1,3 mm pour une base, 1,3 à 1,4 mm pour un vernis, 1,7 à 1,9 mm pour un apprêt garnissant. La buse et le chapeau forment un ensemble apparié : on ne les mélange pas entre gammes."
+        },
+        {
+          "x": 44.4,
+          "y": 32.3,
+          "label": "Godet gravité",
+          "text": "Filtre à 125 microns systématique au remplissage : il retire les peaux et les agglomérats. Un vernis non filtré, c'est un dénibage assuré."
+        }
+      ]
+    },
+    {
+      "t": "h",
+      "x": "Le réglage, dans l'ordre"
+    },
+    {
+      "t": "steps",
+      "items": [
+        {
+          "title": "1. Monter la bonne buse",
+          "x": "Selon le produit. Une base pulvérisée avec une buse d'apprêt donne une couche épaisse et marbrée."
+        },
+        {
+          "title": "2. Régler la pression gâchette ouverte",
+          "x": "Au manomètre en pied de pistolet, gâchette actionnée. Une pression lue au repos est toujours fausse."
+        },
+        {
+          "title": "3. Ouvrir l'éventail à fond",
+          "x": "Puis le réduire si la pièce est étroite."
+        },
+        {
+          "title": "4. Régler le débit sur un essai",
+          "x": "Faites un jet d'essai sur un papier de masquage tendu, à 15-20 cm. Le motif doit être une ellipse régulière, sans queues plus chargées aux extrémités, sans grosses gouttes."
+        },
+        {
+          "title": "5. Contrôler la forme du jet",
+          "x": "Un jet en croissant ou en banane signale un chapeau encrassé : nettoyage, jamais de fil métallique dans les trous."
+        }
+      ]
+    },
+    {
+      "t": "h",
+      "x": "Le geste : cinq règles"
+    },
+    {
+      "t": "table",
+      "head": [
+        "Paramètre",
+        "Référence",
+        "Ce qui arrive si on s'écarte"
+      ],
+      "rows": [
+        [
+          "**Distance**",
+          "15 à 20 cm de la tôle",
+          "Trop près : coulures. Trop loin : couche sèche, peau d'orange, perte de produit"
+        ],
+        [
+          "**Orientation**",
+          "Pistolet perpendiculaire, toujours",
+          "Incliné, l'épaisseur varie sur la largeur de la passe"
+        ],
+        [
+          "**Vitesse de passe**",
+          "Constante, environ 30 à 50 cm/s",
+          "Ralentir en fin de passe surcharge le bord"
+        ],
+        [
+          "**Recouvrement**",
+          "50 à 75 % de la passe précédente",
+          "Moins : bandes claires. Plus : surcharge"
+        ],
+        [
+          "**Déclenchement**",
+          "Gâchette ouverte avant la pièce, fermée après",
+          "Sinon accumulation aux extrémités"
+        ]
+      ]
+    },
+    {
+      "t": "note",
+      "kind": "tip",
+      "title": "Le mouvement vient du bras, pas du poignet",
+      "x": "Un poignet qui pivote décrit un arc : la distance varie du début à la fin de la passe. C'est **l'épaule et le bras** qui translatent, en gardant le pistolet parallèle à la surface. C'est le geste le plus difficile à acquérir — et celui qui se voit le plus."
+    },
+    {
+      "t": "h",
+      "x": "Combien de couches, quelle épaisseur"
+    },
+    {
+      "t": "kpi",
+      "items": [
+        {
+          "v": "15–25 µm",
+          "l": "Base de teinte, 2 à 3 couches"
+        },
+        {
+          "v": "40–60 µm",
+          "l": "Vernis, 1,5 à 2 couches"
+        },
+        {
+          "v": "40–80 µm",
+          "l": "Apprêt garnissant, 2 à 3 couches"
+        },
+        {
+          "v": "15–20 cm",
+          "l": "Distance de travail constante"
+        }
+      ]
+    },
+    {
+      "t": "p",
+      "x": "La **couche de voile** en base métallisée est une passe finale très légère, à faible débit et plus grande distance : elle réoriente les paillettes d'aluminium à plat et supprime les marbrures. Sur une nacrée, elle uniformise l'effet."
+    },
+    {
+      "t": "h",
+      "x": "Ordre d'application sur un véhicule"
+    },
+    {
+      "t": "ol",
+      "items": [
+        "Commencez par les **zones difficiles et les chants** : encadrements de porte, montants, retours. On les fait en premier, quand la concentration est intacte.",
+        "Enchaînez les grandes surfaces horizontales, puis verticales, en progressant toujours dans le même sens.",
+        "Gardez un **bord humide** : chaque passe rejoint la précédente avant qu'elle ne commence à tirer.",
+        "Respectez le temps d'évaporation complet entre les couches, y compris quand le planning presse.",
+        "Terminez par la couche de voile si la teinte le demande."
+      ]
+    },
+    {
+      "t": "note",
+      "kind": "danger",
+      "x": "L'erreur la plus coûteuse en cabine : vouloir **charger pour couvrir plus vite**. Une couche épaisse emprisonne du solvant (bullage), coule sur les verticales, et sèche moins bien. Deux couches fines et régulières couvrent mieux qu'une couche chargée, toujours."
+    },
+    {
+      "t": "h",
+      "x": "Entretien du pistolet"
+    },
+    {
+      "t": "ul",
+      "items": [
+        "Nettoyage **immédiatement** après usage, au laveur à circuit fermé puis contrôle manuel des passages.",
+        "Chapeau et buse démontés, trempés, jamais débouchés au fil métallique : un trou déformé ruine le jet définitivement.",
+        "Joints et aiguille vérifiés régulièrement : une fuite d'air au chapeau perturbe le motif.",
+        "Un pistolet de vernis ne sert **qu'au vernis**. Les gammes ne se mélangent pas dans un même corps."
+      ]
+    },
+    {
+      "t": "check",
+      "id": "cabine",
+      "items": [
+        "Buse adaptée au produit",
+        "Pression contrôlée gâchette ouverte",
+        "Jet d'essai régulier, sans queues chargées",
+        "Produit filtré au godet",
+        "Distance et perpendicularité maîtrisées",
+        "Recouvrement de 50 à 75 % tenu sur toute la surface",
+        "Temps d'évaporation respecté entre couches"
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "q": "Comment mesure-t-on correctement la pression d'un pistolet HVLP ?",
+      "choices": [
+        "Au repos, au manomètre du compresseur",
+        "Gâchette ouverte, au manomètre en pied de pistolet",
+        "À l'oreille",
+        "Au manomètre de la cabine"
+      ],
+      "answer": 1,
+      "why": "La pression chute dès que l'air circule. Seule la mesure gâchette ouverte, au plus près du pistolet, correspond à la réalité de l'application."
+    },
+    {
+      "q": "Quel recouvrement entre deux passes ?",
+      "choices": [
+        "10 à 20 %",
+        "50 à 75 %",
+        "100 %",
+        "Aucun, les passes doivent se toucher"
+      ],
+      "answer": 1,
+      "why": "Un recouvrement de moitié à trois quarts garantit une épaisseur homogène et évite les bandes claires ou sombres."
+    },
+    {
+      "q": "Pourquoi le geste doit-il venir du bras et non du poignet ?",
+      "choices": [
+        "Pour moins se fatiguer",
+        "Le poignet décrit un arc et fait varier la distance",
+        "Pour tenir le godet droit",
+        "Pour économiser du produit"
+      ],
+      "answer": 1,
+      "why": "Le pistolet doit rester parallèle à la surface sur toute la passe. Un pivot du poignet éloigne les extrémités et crée des variations d'épaisseur."
+    },
+    {
+      "q": "À quoi sert la couche de voile sur une base métallisée ?",
+      "choices": [
+        "À augmenter l'épaisseur",
+        "À réorienter les paillettes et supprimer les marbrures",
+        "À accélérer le séchage",
+        "À remplacer le vernis"
+      ],
+      "answer": 1,
+      "why": "Appliquée légère et à distance, elle laisse les particules d'aluminium se coucher à plat, ce qui uniformise l'aspect."
+    }
+  ]
+}

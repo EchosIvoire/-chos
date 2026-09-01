@@ -1,0 +1,66 @@
+{
+  "id": "m3l1",
+  "title": "Débosselage, planage et rétreinte",
+  "duration": 14,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Comprendre pourquoi une tôle enfoncée est aussi une tôle étirée",
+    "Utiliser marteau et tas dans le bon ordre et avec le bon geste",
+    "Choisir entre débosselage classique, tirage et DSP"
+  ],
+  "video": { "query": "débosselage planage marteau tas carrosserie technique tôlerie", "title": "Le geste du planage : marteau et tas" },
+  "blocks": [
+    { "t": "p", "x": "Un choc ne fait pas que creuser la tôle : il l'**étire**. C'est la clé de tout ce module. Si vous vous contentez de repousser la bosse, vous vous retrouvez avec un excédent de matière qui ondule — la fameuse tôle « qui claque » sous la pression du doigt." },
+    { "t": "h", "x": "Lire une déformation" },
+    { "t": "table", "head": ["Type", "Aspect", "Traitement"], "rows": [
+      ["**Enfoncement simple**", "Creux souple, tôle non pliée, revient partiellement à la main", "Débosselage progressif, du pourtour vers le centre"],
+      ["**Pli / arête marquée**", "Ligne nette, tôle écrouie sur l'arête", "Détendre l'arête en premier, sinon rien ne bouge"],
+      ["**Tôle étirée**", "Excédent de matière, la zone « claque »", "Rétreinte : ramener la surface, pas seulement la forme"],
+      ["**Impact de grêle**", "Multiples creux peu profonds, peinture intacte", "Débosselage sans peinture (DSP)"],
+      ["**Déchirure**", "Tôle fendue ou percée", "Réparation par soudure, ou remplacement partiel"]
+    ] },
+    { "t": "note", "kind": "info", "title": "La règle du dernier entré, premier sorti", "x": "Une déformation se défait dans l'ordre inverse de sa formation. On commence par relâcher les **contraintes périphériques** (les plis les plus éloignés du point d'impact) et on termine par le centre. Attaquer directement le fond de la bosse, c'est étirer davantage." },
+    { "t": "h", "x": "Marteau et tas : qui fait quoi" },
+    { "t": "p", "x": "Le débutant croit que c'est le marteau qui travaille. C'est faux : **c'est le tas**. Le marteau ne fait que solliciter la tôle contre la masse d'acier placée derrière. Le tas donne la forme, le marteau donne l'impulsion." },
+    { "t": "steps", "items": [
+      { "title": "Planage « sur tas »", "x": "Le tas est exactement en face du point frappé. La tôle est comprimée entre les deux : cela **descend les bosses hautes** et lisse. Attention, c'est aussi ce qui étire le plus." },
+      { "title": "Planage « hors tas »", "x": "Le tas est décalé à côté du point frappé. Cela **remonte les creux** sans étirer. C'est la technique de base pour rattraper une surface." },
+      { "title": "Coups légers et nombreux", "x": "Beaucoup de petits coups valent mieux qu'un coup fort. Le marteau doit rebondir, jamais s'enfoncer." },
+      { "title": "Contrôle permanent", "x": "La main à plat, gantée, glissée sur la tôle détecte des défauts que l'œil ne voit pas. Complétez avec une règle souple ou un guide de ponçage." }
+    ] },
+    { "t": "note", "kind": "tip", "x": "Un truc d'atelier : appliquez un léger voile de **guide de ponçage** (poudre noire) puis passez une cale longue à sec. Les creux restent noirs, les bosses deviennent claires. La cartographie de votre tôle apparaît instantanément." },
+    { "t": "h", "x": "Le tirage : quand on n'a pas accès à l'arrière" },
+    { "t": "p", "x": "Sur les caisses modernes, l'arrière du panneau est souvent inaccessible (mousses, renforts collés, doublures). On travaille alors par **traction depuis l'extérieur** avec un poste à inertie (spotter) :" },
+    { "t": "ol", "items": [
+      "Décapage de la zone jusqu'à la tôle nue (le point de masse doit être propre).",
+      "Soudure de goujons, de rondelles ou d'un peigne selon la surface à tirer.",
+      "Traction progressive avec le tire-clou à inertie : on tire **par petites impulsions réparties**, jamais d'un coup au centre.",
+      "Rétreinte au carbone ou à l'électrode de rétreinte si la tôle est étirée.",
+      "Coupe des goujons, meulage doux, puis protection anticorrosion immédiate de la zone mise à nu."
+    ] },
+    { "t": "note", "kind": "warn", "x": "Chaque point de soudure de goujon détruit localement la protection anticorrosion. Une zone tirée et non reprotégée rouille **par en dessous** en un ou deux hivers, et le client revient avec des cloques dans la peinture." },
+    { "t": "h", "x": "La rétreinte : ramener la matière en excès" },
+    { "t": "p", "x": "Quand la tôle est étirée, il faut réduire sa surface. Deux méthodes coexistent :" },
+    { "t": "cmp", "left": { "title": "Rétreinte thermique", "items": ["Chauffe localisée au rouge sombre (carbone, électrode, chalumeau)", "Refroidissement rapide au chiffon humide", "Le métal se contracte en refroidissant", "Interdite sur THLE et sur aluminium sans procédure spécifique"] }, "right": { "title": "Rétreinte mécanique", "items": ["Marteau à rétreindre à panne quadrillée", "Concentre la matière par petites zones", "Plus lente mais sans apport de chaleur", "Demande un vrai savoir-faire"] } },
+    { "t": "h", "x": "Le débosselage sans peinture (DSP)" },
+    { "t": "p", "x": "Sur un impact où **la peinture n'est pas endommagée**, le DSP redresse la tôle par l'arrière avec des tiges et des leviers, sous un éclairage à lignes qui révèle la moindre ondulation. Résultat : aucune peinture, aucun mastic, la valeur d'origine du véhicule préservée, et une intervention de quelques heures." },
+    { "t": "kpi", "items": [
+      { "v": "Grêle", "l": "Le terrain de jeu principal du DSP" },
+      { "v": "0 mastic", "l": "Peinture d'origine conservée" },
+      { "v": "Éclairage", "l": "L'outil le plus important : la lampe à lignes" }
+    ] },
+    { "t": "note", "kind": "danger", "x": "Le DSP a ses limites : peinture fendue, tôle pliée sur une arête, zone doublée inaccessible, ou aluminium fortement écroui. Forcer sur un DSP impossible, c'est **fissurer la peinture** et transformer une réparation de deux heures en réfection complète d'élément." },
+    { "t": "flip", "items": [
+      { "f": "Qui fait le travail : le marteau ou le tas ?", "b": "Le tas. Le marteau ne fait que solliciter la tôle contre lui." },
+      { "f": "Planage hors tas : quel effet ?", "b": "Il remonte les creux sans étirer la tôle." },
+      { "f": "Dans quel ordre défait-on une déformation ?", "b": "Du pourtour vers le centre : dernier entré, premier sorti." },
+      { "f": "Quand le DSP est-il exclu ?", "b": "Dès que la peinture est fendue ou que la tôle est pliée sur une arête." }
+    ] }
+  ],
+  "quiz": [
+    { "q": "Dans un planage, quel outil donne réellement la forme ?", "choices": ["Le marteau", "Le tas", "La cale à poncer", "Le tire-clou"], "answer": 1, "why": "Le tas placé derrière la tôle définit la forme ; le marteau ne fait que solliciter le métal contre lui." },
+    { "q": "Par où commence-t-on le débosselage d'un enfoncement ?", "choices": ["Par le centre, le plus profond", "Par le pourtour et les plis périphériques", "Par le bas de l'élément", "Indifféremment"], "answer": 1, "why": "Une déformation se défait dans l'ordre inverse de sa formation. Attaquer le centre en premier étire encore plus la tôle." },
+    { "q": "Après avoir soudé des goujons pour un tirage, que ne faut-il jamais oublier ?", "choices": ["De repeindre immédiatement", "De reprotéger la zone contre la corrosion", "De remettre les mousses", "De contrôler la géométrie"], "answer": 1, "why": "La soudure détruit la protection anticorrosion locale. Sans reprise (phosphatant, primaire époxy, cire de corps creux), la rouille repart par-dessous." },
+    { "q": "Quel est l'intérêt principal du débosselage sans peinture ?", "choices": ["Il est plus rapide à apprendre", "Il conserve la peinture d'origine et la valeur du véhicule", "Il fonctionne sur toutes les déformations", "Il permet d'éviter le diagnostic"], "answer": 1, "why": "Aucune peinture ni mastic : le feuil d'origine est préservé, ce qui compte fortement à la revente, notamment sur les dossiers grêle." }
+  ]
+}

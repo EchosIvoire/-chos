@@ -1,0 +1,36 @@
+<svg viewBox="0 0 720 356" role="img" aria-label="Schéma d'un pistolet à peinture HVLP et de ses réglages">
+  <rect class="sk-bg" x="0" y="0" width="720" height="340" rx="12"/>
+  <g class="sk-line" fill="rgba(120,130,160,.22)">
+    <path d="M215 128h150c14 0 26 10 28 24l6 30h-190z"/>            <!-- corps -->
+    <path d="M212 182l-14 96c-2 12 6 22 18 22h34c12 0 20-10 18-22l-14-96z"/> <!-- poignée -->
+    <path d="M232 60h96c8 0 14 6 14 14v54h-124V74c0-8 6-14 14-14z"/> <!-- godet -->
+    <path d="M399 152h58c6 0 10 4 10 10v22c0 6-4 10-10 10h-58z"/>    <!-- chapeau -->
+  </g>
+  <path class="sk-acc-s" d="M467 173h26"/>
+  <!-- jet -->
+  <g class="sk-acc-s" opacity=".85"><path d="M493 173l86-46M493 173l86 46M505 173h74"/></g>
+  <ellipse class="sk-acc" cx="586" cy="173" rx="9" ry="48" opacity=".28"/>
+  <!-- molettes -->
+  <circle class="sk-line" cx="252" cy="152" r="13" fill="rgba(245,166,35,.35)"/>
+  <circle class="sk-line" cx="300" cy="152" r="13" fill="rgba(0,217,181,.35)"/>
+  <circle class="sk-line" cx="228" cy="292" r="13" fill="rgba(108,99,255,.35)"/>
+  <path class="sk-line" d="M240 196l-6 34" stroke-width="6"/>       <!-- gâchette -->
+  <g class="sk-line" stroke-width="1" stroke-dasharray="3 3">
+    <path d="M252 139V96M300 139V96M228 279v-24M342 100h72M586 121V88"/>
+  </g>
+  <g class="sk-ink">
+    <text x="40" y="36" font-weight="700" font-size="13">Pistolet HVLP — les quatre réglages qui font la finition</text>
+    <text x="196" y="88" font-weight="700">Éventail</text>
+    <text x="278" y="88" font-weight="700">Débit produit</text>
+    <text x="150" y="250" font-weight="700">Pression d'entrée</text>
+    <text x="150" y="266" opacity=".7">1,8 à 2,2 bar gâchette ouverte</text>
+    <text x="424" y="104" font-weight="700">Godet gravité</text>
+    <text x="424" y="119" opacity=".7">filtre 125 µ obligatoire</text>
+    <text x="530" y="84" font-weight="700">Jet en ellipse</text>
+    <text x="530" y="99" opacity=".7">recouvrement 50 à 75 %</text>
+    <text x="470" y="240" font-weight="700">Distance buse / tôle</text>
+    <text x="470" y="255" opacity=".7">15 à 20 cm, pistolet perpendiculaire</text>
+    <text x="40" y="330" opacity=".75">Buse : 1,3 mm pour la base · 1,3–1,4 mm pour le vernis · 1,7–1,9 mm pour l'apprêt</text>
+  </g>
+  <g class="sk-acc-s" stroke-dasharray="4 4"><path d="M493 216h93"/></g>
+</svg>

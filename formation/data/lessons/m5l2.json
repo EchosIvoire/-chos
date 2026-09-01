@@ -1,0 +1,63 @@
+{
+  "id": "m5l2",
+  "title": "Colorimétrie : trouver et ajuster la teinte",
+  "duration": 16,
+  "level": "Avancé",
+  "objectives": [
+    "Retrouver un code teinte et comprendre la notion de variante",
+    "Utiliser nuancier, spectrophotomètre et plaquette d'essai dans le bon ordre",
+    "Savoir quand et pourquoi passer par un raccord noyé"
+  ],
+  "video": { "query": "recherche teinte carrosserie code couleur variante spectrophotomètre plaquette", "title": "Trouver la bonne teinte : la méthode complète" },
+  "blocks": [
+    { "t": "p", "x": "C'est la compétence qui fait la réputation d'un peintre. Deux voitures du même code couleur, sorties de deux usines différentes, n'ont pas exactement la même teinte — et une voiture de dix ans n'a plus la teinte de sa fiche technique." },
+    { "t": "h", "x": "Étape 1 — Trouver le code teinte" },
+    { "t": "p", "x": "Le code figure sur une **étiquette constructeur** : montant de porte conducteur, sous le capot, dans le coffre sous le tapis, ou sur la trappe à carburant selon les marques. Il s'accompagne parfois du numéro de VIN, qui permet une recherche plus fine dans la base du fabricant de peinture." },
+    { "t": "note", "kind": "warn", "title": "Le code ne suffit jamais", "x": "Un même code peut correspondre à **plusieurs dizaines de variantes** : usines différentes, années de production différentes, fournisseurs de peinture différents. Le code vous donne la famille, pas la teinte exacte de la voiture qui est devant vous." },
+    { "t": "h", "x": "Étape 2 — Choisir la variante" },
+    { "t": "steps", "items": [
+      { "title": "Le nuancier constructeur", "x": "Un éventail de plaquettes réelles pour chaque variante d'un code. On le présente **contre l'élément nettoyé et poli**, sous plusieurs éclairages, en le faisant pivoter." },
+      { "title": "Le spectrophotomètre", "x": "Il lit la teinte sous plusieurs angles et interroge la base du fabricant pour proposer les formules les plus proches. Il **oriente** — il ne décide pas." },
+      { "title": "L'observation à trois angles", "x": "Une teinte à effet change selon l'angle : de face (le « face »), à 45°, et en fuite (le « flop »). Une variante peut coller de face et diverger complètement en fuite." },
+      { "title": "L'éclairage", "x": "Contrôlez sous plusieurs sources : lumière du jour, lampe de contrôle à spectre normalisé, néon d'atelier. Deux teintes identiques sous une source peuvent différer sous une autre — c'est le **métamérisme**." }
+    ] },
+    { "t": "h", "x": "Étape 3 — La plaquette d'essai : non négociable" },
+    { "t": "p", "x": "On pèse la formule, on la pulvérise sur une **plaquette d'essai** apprêtée du même gris de fond que le chantier, avec le **même pistolet**, le **même réglage** et le **même nombre de couches** que sur la voiture. On vernit, on sèche, puis on compare sur l'élément." },
+    { "t": "note", "kind": "danger", "x": "Une plaquette réalisée avec un autre pistolet, une autre pression ou un nombre de couches différent **ne vaut rien** sur une teinte à effet : l'orientation des particules métalliques change tout. Sur ces teintes, la technique d'application fait autant que la formule." },
+    { "t": "h", "x": "Comprendre les teintes à effet" },
+    { "t": "table", "head": ["Type", "Ce qui la compose", "Difficulté"], "rows": [
+      ["**Opaque (unie)**", "Pigments couvrants seuls", "La plus simple : bon pouvoir couvrant, peu d'effet d'angle"],
+      ["**Métallisée**", "Paillettes d'aluminium orientées dans le film", "L'orientation dépend du geste : marbrures possibles, couche de voile nécessaire"],
+      ["**Nacrée**", "Pigments à interférence (mica) souvent en 3 couches", "Fond + nacre + vernis : le nombre de couches de nacre change la teinte"],
+      ["**Tri-couche / candy**", "Fond couvrant puis couche translucide colorée", "Très difficile : la teinte dépend directement de l'épaisseur"],
+      ["**Mate**", "Vernis matant", "Aucun lustrage possible : le moindre défaut est définitif"]
+    ] },
+    { "t": "note", "kind": "tip", "title": "Le réflexe qui sauve", "x": "Sur une nacrée ou une tri-couche, réalisez une plaquette **en escalier** : deux couches sur une bande, trois sur la suivante, quatre sur la dernière. Vous voyez immédiatement combien de couches donnent la teinte cible — et vous la reproduisez sur la voiture." },
+    { "t": "h", "x": "Étape 4 — Quand la teinte ne colle pas parfaitement" },
+    { "t": "p", "x": "Sur un véhicule qui a vécu, la teinte d'origine a évolué : UV, lavages, oxydation. Même la meilleure formule ne correspondra pas exactement. Deux réponses professionnelles :" },
+    { "t": "cmp", "left": { "title": "Le raccord noyé (fondu)", "items": ["On estompe la base en dégradé sur l'élément voisin", "On vernit l'élément voisin en entier", "L'œil ne peut pas détecter une transition progressive", "C'est la solution standard sur teintes difficiles"] }, "right": { "title": "L'ajustement de formule", "items": ["On corrige la formule par petites touches de bases pures", "Réservé aux peintres expérimentés", "Toujours revalidé par une nouvelle plaquette", "Notez chaque correction : la traçabilité, c'est le métier"] } },
+    { "t": "note", "kind": "info", "x": "Il n'y a **aucune honte** à faire un fondu : c'est une technique professionnelle reconnue, pas un aveu d'échec. Ce qui se remarque, c'est une frontière nette entre deux éléments, jamais un dégradé bien exécuté." },
+    { "t": "h", "x": "Le laboratoire de teintes" },
+    { "t": "ul", "items": [
+      "**Balance de précision** : les formules se pèsent au dixième de gramme. Une erreur de pesée sur une base de fond change toute la teinte.",
+      "**Agitation régulière** des bases : les pigments décantent ; une base non agitée donne une teinte fausse.",
+      "**Propreté absolue** : une trace de base foncée dans un godet, et votre blanc est mort.",
+      "**Traçabilité** : notez le code, la variante, la formule, les corrections. Le client reviendra peut-être dans deux ans pour un autre élément."
+    ] },
+    { "t": "check", "id": "teinte", "items": [
+      "Code teinte relevé sur l'étiquette constructeur",
+      "Élément nettoyé et poli avant comparaison",
+      "Variante choisie au nuancier et/ou au spectrophotomètre",
+      "Observation sous au moins deux éclairages et trois angles",
+      "Plaquette d'essai réalisée dans les conditions exactes du chantier",
+      "Fondu prévu sur les éléments voisins si nécessaire",
+      "Formule et corrections notées dans le dossier"
+    ] }
+  ],
+  "quiz": [
+    { "q": "Pourquoi le code teinte ne suffit-il pas à peindre ?", "choices": ["Il est souvent illisible", "Un même code compte de nombreuses variantes selon usine et année", "Il ne concerne que le vernis", "Il change à chaque révision"], "answer": 1, "why": "Le code donne la famille de teinte. La variante exacte dépend de l'usine, de l'année et du fournisseur : d'où le nuancier et la plaquette." },
+    { "q": "Que doit reproduire une plaquette d'essai ?", "choices": ["Uniquement la formule", "Les conditions exactes du chantier : pistolet, réglage, gris de fond, nombre de couches", "La forme de l'élément", "La température extérieure"], "answer": 1, "why": "Sur les teintes à effet, l'orientation des particules dépend de l'application. Une plaquette faite autrement ne prédit rien." },
+    { "q": "Qu'est-ce que le métamérisme ?", "choices": ["Un défaut de pulvérisation", "Deux teintes identiques sous une source lumineuse et différentes sous une autre", "Une variation d'épaisseur", "Un type de vernis"], "answer": 1, "why": "D'où la nécessité de contrôler sous plusieurs éclairages, dont une lampe à spectre normalisé et la lumière du jour." },
+    { "q": "Sur une teinte difficile, quelle est la solution professionnelle standard ?", "choices": ["Repeindre tout le véhicule", "Réaliser un raccord noyé sur les éléments voisins", "Accepter la différence", "Ajouter du vernis mat"], "answer": 1, "why": "Le fondu rend la transition progressive, donc indétectable. C'est une technique reconnue, pas un compromis." }
+  ]
+}

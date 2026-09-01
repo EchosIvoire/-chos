@@ -1,0 +1,65 @@
+{
+  "id": "m3l2",
+  "title": "Assemblages : MIG-MAG, brasage, collage",
+  "duration": 16,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Choisir le mode d'assemblage imposé par le matériau et la zone",
+    "Régler un poste MIG-MAG et reconnaître un cordon correct",
+    "Comprendre le rôle du collage structural et du rivetage dans les caisses modernes"
+  ],
+  "video": { "query": "soudure MIG MAG carrosserie réglage cordon brasage bronze", "title": "Réglage et geste du poste MIG-MAG" },
+  "blocks": [
+    { "t": "p", "x": "Assembler, ce n'est pas « souder ». Le constructeur a choisi un mode d'assemblage pour chaque liaison, en fonction du matériau, de l'effort transmis et de la corrosion. Votre travail est de reproduire cette liaison, pas d'en inventer une." },
+    { "t": "h", "x": "Les quatre modes d'assemblage" },
+    { "t": "table", "head": ["Mode", "Principe", "Usage typique"], "rows": [
+      ["**Soudure par points de résistance**", "Deux électrodes pincent les tôles et les fondent par effet Joule", "Reproduction des points d'usine sur acier, quand l'accès le permet"],
+      ["**MIG-MAG (fil fusible)**", "Fil d'apport fondu sous protection gazeuse", "Bouchonnage, cordons, réparations de tôle acier"],
+      ["**Brasage MIG (CuSi3)**", "Fil de bronze fondu à basse température, les tôles ne fondent pas", "Aciers à haute résistance et tôles galvanisées : préserve le zinc et le traitement thermique"],
+      ["**Collage structural + rivetage**", "Colle bicomposante haute performance, complétée de rivets auto-poinçonneurs", "Aluminium, assemblages mixtes, panneaux de grandes dimensions"]
+    ] },
+    { "t": "note", "kind": "info", "title": "Pourquoi le brasage a pris tant de place", "x": "Le brasage fond autour de 900 °C, contre plus de 1500 °C pour une soudure acier. La tôle n'entre pas en fusion : la **galvanisation** est préservée sur une zone bien plus étroite, et le traitement thermique des aciers à haute résistance n'est pas ruiné. C'est pour cela que de nombreux constructeurs l'imposent." },
+    { "t": "h", "x": "Régler un poste MIG-MAG" },
+    { "t": "steps", "items": [
+      { "title": "Choisir le gaz", "x": "Mélange argon/CO₂ pour l'acier (MAG), argon pur pour l'aluminium et le brasage (MIG). Le gaz protège le bain de fusion de l'oxygène : sans lui, le cordon est poreux." },
+      { "title": "Régler la tension", "x": "Elle détermine la largeur et la pénétration du cordon. Trop faible : cordon bombé qui ne pénètre pas. Trop forte : perçage de la tôle." },
+      { "title": "Régler la vitesse de fil", "x": "Elle doit s'accorder à la tension. Le bon réglage a un **son régulier de friture** ; un claquement irrégulier signale un déséquilibre." },
+      { "title": "Faire un essai sur chute", "x": "Toujours, sur une chute de même épaisseur et même matériau. On contrôle la pénétration au dos et on ajuste avant de toucher la voiture." },
+      { "title": "Préparer les surfaces", "x": "Métal nu, propre, sec, sans peinture ni galvanisation à l'endroit soudé, et un point de masse à proximité immédiate." }
+    ] },
+    { "t": "note", "kind": "warn", "title": "La masse", "x": "Une masse éloignée ou mal fixée, et le courant cherche son chemin : il peut traverser un roulement, un calculateur ou un faisceau. Sur un véhicule moderne — et **impérativement** sur un véhicule électrique ou hybride — la masse se place au plus près du point de soudure, batterie déconnectée selon la procédure constructeur." },
+    { "t": "h", "x": "Reconnaître un cordon correct" },
+    { "t": "cmp", "left": { "title": "Un bon cordon", "items": ["Régulier, écailles serrées et homogènes", "Pénétration visible au dos, sans perçage", "Raccordement franc aux deux tôles", "Peu de projections autour"] }, "right": { "title": "Les défauts classiques", "items": ["Cordon bombé qui « pose » : manque de tension", "Perçage : tension trop élevée ou avance trop lente", "Porosités : gaz absent, courant d'air, tôle sale", "Manque de fusion : surfaces mal préparées"] } },
+    { "t": "h", "x": "Le bouchonnage : reproduire un point d'usine" },
+    { "t": "ol", "items": [
+      "Percer la tôle supérieure au diamètre prévu (généralement 6 à 8 mm) sans percer la tôle inférieure.",
+      "Décaper les deux faces en contact et appliquer un **primaire soudable au zinc** entre les tôles.",
+      "Serrer fermement les deux tôles : un jeu, et le point ne tient pas.",
+      "Souder en démarrant au centre du trou et en remplissant en spirale vers le bord.",
+      "Meuler à l'affleurement, sans creuser la tôle, puis protéger la zone."
+    ] },
+    { "t": "note", "kind": "danger", "x": "Le nombre et l'emplacement des points ne s'improvisent pas : la méthode constructeur indique combien de points, à quel pas, sur quelle ligne. Une soudure « au jugé » sur une zone structurelle modifie le comportement de la caisse au choc." },
+    { "t": "h", "x": "Collage structural et rivetage" },
+    { "t": "p", "x": "Sur l'aluminium et les assemblages mixtes, la soudure est souvent proscrite. La liaison se fait alors par **colle bicomposante structurale** (époxy ou polyuréthane haute performance), complétée par des **rivets auto-poinçonneurs** ou des rivets aveugles qui assurent la tenue pendant la polymérisation." },
+    { "t": "ul", "items": [
+      "La colle assure l'étanchéité, isole les métaux entre eux (donc évite la corrosion galvanique) et **répartit** les efforts au lieu de les concentrer.",
+      "La préparation est tout : dégraissage, ponçage au grain prescrit, nouveau dégraissage, activateur si la fiche technique l'exige.",
+      "Le **temps ouvert** de la colle est court. Tout doit être prêt, présenté et positionné avant l'extrusion.",
+      "Le serrage se maintient pendant toute la polymérisation, sans déplacer les pièces."
+    ] },
+    { "t": "check", "id": "assemblage", "items": [
+      "Méthode constructeur consultée pour cette liaison",
+      "Matériau identifié (acier doux, THLE, aluminium)",
+      "Essai réalisé sur chute de même épaisseur",
+      "Surfaces décapées, primaire soudable au zinc appliqué entre tôles",
+      "Masse placée au plus près, batterie déconnectée si nécessaire",
+      "Anticorrosion et cire de corps creux prévues après meulage"
+    ] }
+  ],
+  "quiz": [
+    { "q": "Pourquoi de nombreux constructeurs imposent-ils le brasage plutôt que la soudure ?", "choices": ["C'est plus rapide", "La température plus basse préserve la galvanisation et le traitement thermique", "Le fil coûte moins cher", "Cela évite le meulage"], "answer": 1, "why": "Le brasage fond le fil de bronze sans faire entrer les tôles en fusion : le zinc et les propriétés des aciers à haute résistance sont préservés." },
+    { "q": "Un cordon MIG bombé, qui ne pénètre pas, signale :", "choices": ["Une tension trop faible", "Un gaz mal choisi", "Une tôle trop épaisse", "Une vitesse de fil trop lente"], "answer": 0, "why": "Le cordon « pose » sur la tôle sans fusionner : il manque de tension (donc d'énergie) pour pénétrer." },
+    { "q": "Que place-t-on entre deux tôles avant un bouchonnage ?", "choices": ["Du mastic polyester", "Un primaire soudable au zinc", "De la cire de corps creux", "Rien du tout"], "answer": 1, "why": "Le primaire au zinc rétablit la protection anticorrosion dans l'interstice, là où elle a été détruite par le décapage et la chaleur." },
+    { "q": "Dans un collage structural, quel est le facteur décisif de réussite ?", "choices": ["La quantité de colle", "La préparation des surfaces", "La température de la pièce", "La couleur de la colle"], "answer": 1, "why": "Dégraissage, ponçage au grain prescrit, nouveau dégraissage et respect du temps ouvert : une colle parfaite sur une surface mal préparée ne tient pas." }
+  ]
+}

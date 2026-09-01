@@ -1,0 +1,34 @@
+<svg viewBox="0 0 720 380" role="img" aria-label="Coupe d'une cabine de peinture à flux vertical">
+  <rect class="sk-bg" x="0" y="0" width="720" height="380" rx="12"/>
+  <g class="sk-line">
+    <rect x="120" y="52" width="480" height="272" rx="10" fill="rgba(120,130,160,.10)"/>
+    <rect x="132" y="64" width="456" height="30" rx="4" fill="rgba(0,217,181,.18)"/>
+    <rect x="132" y="286" width="456" height="26" rx="4" fill="rgba(108,99,255,.18)"/>
+  </g>
+  <!-- flux d'air -->
+  <g class="sk-acc-s" opacity=".8">
+    <path d="M190 104v168M270 104v168M350 104v168M430 104v168M510 104v168"/>
+    <path d="M184 264l6 10 6-10M264 264l6 10 6-10M344 264l6 10 6-10M424 264l6 10 6-10M504 264l6 10 6-10"/>
+  </g>
+  <!-- voiture -->
+  <g class="sk-line" fill="rgba(255,92,57,.18)">
+    <path d="M242 236c8-30 18-52 34-58h168c16 6 26 28 34 58z"/>
+    <path d="M228 236h264v22H228z"/>
+  </g>
+  <g class="sk-line" fill="rgba(120,130,160,.35)">
+    <circle cx="284" cy="258" r="12"/><circle cx="436" cy="258" r="12"/>
+  </g>
+  <g class="sk-ink">
+    <text x="40" y="34" font-weight="700" font-size="13">Cabine à flux vertical descendant — le principe</text>
+    <text x="612" y="82" font-weight="700">Plénum</text>
+    <text x="612" y="96" opacity=".7">+ filtres</text>
+    <text x="612" y="303" font-weight="700">Caillebotis</text>
+    <text x="612" y="317" opacity=".7">extraction</text>
+    <text x="40" y="352" opacity=".75">Application 20–25 °C · Séchage 60 °C pendant 30 min (temps compté après montée en température)</text>
+    <text x="40" y="120" opacity=".85">Air filtré,</text>
+    <text x="40" y="136" opacity=".85">chauffé,</text>
+    <text x="40" y="152" opacity=".85">en surpression</text>
+  </g>
+  <text class="sk-a2" x="140" y="84" font-weight="700" font-size="11">AIR NEUF ↓</text>
+  <text class="sk-acc" x="140" y="304" font-weight="700" font-size="11">BROUILLARD ASPIRÉ ↓</text>
+</svg>

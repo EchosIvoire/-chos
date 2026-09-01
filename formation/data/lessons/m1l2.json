@@ -1,0 +1,76 @@
+{
+  "id": "m1l2",
+  "title": "Sécurité, EPI et réglementation",
+  "duration": 15,
+  "level": "Débutant",
+  "objectives": [
+    "Identifier les trois risques majeurs du métier et leur parade",
+    "Choisir l'EPI adapté à chaque opération",
+    "Lire une fiche de données de sécurité et gérer les déchets de l'atelier"
+  ],
+  "video": { "query": "EPI peintre carrosserie masque adduction air isocyanate sécurité", "title": "Les EPI en carrosserie : ce qui protège vraiment" },
+  "blocks": [
+    { "t": "note", "kind": "danger", "title": "La leçon la plus importante de la formation", "x": "Les maladies professionnelles du carrossier-peintre ne font pas de bruit : elles s'installent en dix ans. **L'asthme aux isocyanates est irréversible et met fin à une carrière.** Tout ce qui suit n'est pas de la paperasse, c'est votre santé." },
+    { "t": "h", "x": "Les trois risques majeurs" },
+    { "t": "table", "head": ["Risque", "Origine", "Conséquence si non protégé"], "rows": [
+      ["**Chimique**", "Isocyanates des durcisseurs 2K, solvants, poussières de ponçage", "Asthme professionnel, allergies cutanées, atteintes neurologiques"],
+      ["**Physique**", "Bruit (95 dB à la ponceuse), vibrations, postures, port de charges", "Surdité, troubles musculo-squelettiques, lombalgies chroniques"],
+      ["**Incendie / explosion**", "Vapeurs de solvant, chiffons imbibés, meulage près d'un réservoir", "Feu d'atelier, explosion en zone ATEX"]
+    ] },
+    { "t": "h", "x": "L'équipement de protection, poste par poste" },
+    { "t": "img", "src": "epi.svg", "caption": "La tenue complète du peintre. Cliquez sur les points pour le détail.", "hotspots": [
+      { "x": 50, "y": 29.5, "label": "Protection respiratoire", "text": "En cabine avec un produit 2K : **masque à adduction d'air** relié à un réseau d'air respirable filtré, point final. Un demi-masque à cartouches A2P3 convient pour le ponçage et le dégraissage, jamais pour la pulvérisation d'isocyanates." },
+      { "x": 50, "y": 56, "label": "Combinaison", "text": "Combinaison jetable **type 5/6** (poussières et projections légères), antistatique, fermée au cou et aux poignets. Elle protège votre peau *et* votre peinture des peluches." },
+      { "x": 62.5, "y": 65.8, "label": "Gants", "text": "**Nitrile** pour les produits peinture : le latex est perméable aux solvants et sensibilise. Gants anti-coupure pour la manipulation de tôle, gants de soudeur pour le poste MIG." },
+      { "x": 44.4, "y": 86.8, "label": "Chaussures et audition", "text": "Chaussures de sécurité S3 antidérapantes. Bouchons moulés ou casque dès qu'une ponceuse ou une meuleuse tourne : au-delà de 85 dB, la protection est obligatoire." }
+    ] },
+    { "t": "h", "x": "Les isocyanates : comprendre pourquoi c'est sérieux" },
+    { "t": "p", "x": "Les durcisseurs des produits **2K** (vernis, apprêts, certains mastics) contiennent des isocyanates. Ce sont des *sensibilisants respiratoires* : le corps ne développe pas une tolérance, il développe une hypersensibilité. Une fois sensibilisé, une trace suffit à déclencher une crise, et le seul traitement est de quitter le métier." },
+    { "t": "ul", "items": [
+      "Le risque existe **pendant la pulvérisation** mais aussi lors du **nettoyage du pistolet** et de l'**ouverture des bidons**.",
+      "Le brouillard de pulvérisation reste en suspension : ne retirez jamais le masque dans une cabine juste après application.",
+      "Les isocyanates passent aussi par la **peau** — d'où la combinaison et les gants.",
+      "Un suivi médical renforcé est prévu : ne le zappez pas, c'est lui qui détecte une sensibilisation débutante."
+    ] },
+    { "t": "note", "kind": "warn", "title": "Le réflexe qui tue une carrière", "x": "« C'est juste un petit raccord, je ne mets pas le masque. » Un raccord de dix minutes dans un local mal ventilé expose davantage qu'une heure en cabine correctement équipée." },
+    { "t": "h", "x": "Lire une fiche de données de sécurité (FDS)" },
+    { "t": "p", "x": "Chaque produit chimique est livré avec sa FDS, en 16 rubriques. Vous n'avez pas à tout lire, mais quatre sections doivent être connues avant d'ouvrir le bidon :" },
+    { "t": "steps", "items": [
+      { "title": "Section 2 — Dangers", "x": "Les pictogrammes et les mentions H (H317 : peut provoquer une allergie cutanée, H334 : peut provoquer de l'asthme…)." },
+      { "title": "Section 4 — Premiers secours", "x": "Que faire en cas de projection dans l'œil ou d'inhalation. À connaître avant l'accident, pas pendant." },
+      { "title": "Section 8 — Protection individuelle", "x": "Le type exact de masque, de filtre et de gants exigé pour ce produit." },
+      { "title": "Section 7 — Stockage", "x": "Température, incompatibilités, ventilation du local de stockage." }
+    ] },
+    { "t": "h", "x": "Zone ATEX et incendie" },
+    { "t": "ul", "items": [
+      "Une cabine en fonctionnement est une **atmosphère explosive** : matériel électrique certifié, éclairage étanche, pas de flamme, pas de téléphone non ATEX.",
+      "Les **chiffons imbibés** de solvant ou de durcisseur s'auto-échauffent : ils vont dans un conteneur métallique fermé, jamais dans une poubelle ouverte.",
+      "Jamais de meulage ou de soudure à proximité d'un réservoir, d'une canalisation de carburant ou d'une batterie de traction.",
+      "Extincteurs à poudre ABC vérifiés, accessibles, et vous devez savoir où ils sont **avant** d'en avoir besoin."
+    ] },
+    { "t": "h", "x": "Les déchets : ce n'est pas une option" },
+    { "t": "table", "head": ["Déchet", "Filière"], "rows": [
+      ["Pots de peinture, durcisseurs, restes de mélange", "Déchet dangereux — collecteur agréé, bordereau de suivi (BSD)"],
+      ["Chiffons et filtres souillés", "Déchet dangereux — conteneur fermé dédié"],
+      ["Poussières de ponçage aspirées", "Déchet dangereux si peinture au plomb ou chromates"],
+      ["Tôle, pièces métalliques", "Ferraille — recyclage matière"],
+      ["Pare-chocs et plastiques", "Filière plastique automobile"],
+      ["Eaux de rinçage des pistolets", "Jamais à l'égout — laveur de pistolets à circuit fermé"]
+    ] },
+    { "t": "check", "id": "avant-cabine", "items": [
+      "Combinaison antistatique fermée, cagoule en place",
+      "Masque à adduction d'air raccordé, débit vérifié",
+      "Gants nitrile neufs",
+      "Extraction de cabine en marche depuis au moins une minute",
+      "Aucun produit ni chiffon inutile laissé dans la cabine",
+      "Téléphone et objets non ATEX restés à l'extérieur"
+    ] },
+    { "t": "note", "kind": "tip", "x": "Cette check-list se coche : elle est enregistrée dans votre navigateur. Prenez l'habitude de la dérouler mentalement avant chaque passage en cabine — c'est exactement ce que font les professionnels." }
+  ],
+  "quiz": [
+    { "q": "Quel équipement respiratoire est exigé pour pulvériser un vernis 2K en cabine ?", "choices": ["Un masque papier FFP2", "Un demi-masque à cartouches A2P3", "Un masque à adduction d'air", "Aucun si la cabine est ventilée"], "answer": 2, "why": "Les cartouches ne retiennent pas durablement les isocyanates et ne préviennent pas de leur saturation. Seul l'air respirable amené de l'extérieur protège réellement." },
+    { "q": "Pourquoi l'asthme aux isocyanates est-il particulièrement redouté ?", "choices": ["Il se soigne mal mais disparaît en un an", "La sensibilisation est irréversible et met fin à l'exposition", "Il ne touche que les fumeurs", "Il n'apparaît qu'après 40 ans de métier"], "answer": 1, "why": "Une fois sensibilisé, l'organisme réagit à des doses infimes. Il n'existe pas de désensibilisation : la seule issue est l'arrêt de l'exposition, donc du poste." },
+    { "q": "Où jeter les chiffons imbibés de solvant ?", "choices": ["Dans la poubelle de l'atelier", "Dans un conteneur métallique fermé dédié", "Dans le bac à ferraille", "À l'extérieur, pour qu'ils sèchent"], "answer": 1, "why": "Ils s'auto-échauffent et sont une cause classique de départ de feu. Ils suivent la filière des déchets dangereux, dans un conteneur métallique fermé." },
+    { "q": "Quelle section de la FDS indique le type de gants et de masque à utiliser ?", "choices": ["Section 2", "Section 4", "Section 8", "Section 16"], "answer": 2, "why": "La section 8 « Contrôle de l'exposition / protection individuelle » précise les EPI adaptés au produit concerné." }
+  ]
+}

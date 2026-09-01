@@ -1,0 +1,14 @@
+{
+  "name": "E-formation Carrossier-Peintre",
+  "short_name": "Carrosserie",
+  "description": "Formation interactive au métier de carrossier-peintre : 18 leçons, quiz, schémas et outils d'atelier.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0f14",
+  "theme_color": "#0d0f14",
+  "lang": "fr",
+  "icons": [
+    { "src": "assets/img/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "id": "m5l1",
+  "title": "Chimie de la peinture : bases, 2K, vernis",
+  "duration": 14,
+  "level": "Avancé",
+  "objectives": [
+    "Décomposer une peinture en liant, pigment, solvant et additifs",
+    "Distinguer produits 1K et 2K, et comprendre la réticulation",
+    "Maîtriser ratio, pot life et temps d'évaporation"
+  ],
+  "video": { "query": "peinture automobile base hydro vernis 2K durcisseur chimie", "title": "Comprendre ce qu'il y a dans le godet" },
+  "blocks": [
+    { "t": "p", "x": "Un peintre qui comprend la chimie de ses produits ne subit plus les défauts : il les anticipe. Voici ce que contient n'importe quel pot de peinture automobile." },
+    { "t": "h", "x": "Les quatre composants" },
+    { "t": "table", "head": ["Composant", "Rôle", "Conséquence pratique"], "rows": [
+      ["**Liant (résine)**", "Forme le film, colle les pigments entre eux et au support", "C'est lui qui donne dureté, brillance et tenue dans le temps"],
+      ["**Pigments**", "Apportent couleur, opacité et effet (métallisé, nacré)", "Leur nature détermine le pouvoir couvrant : un rouge transparent demandera plus de couches"],
+      ["**Solvant / eau**", "Rend le produit pulvérisable, puis s'évapore", "Le choix du diluant (lent, moyen, rapide) s'accorde à la température de l'atelier"],
+      ["**Additifs**", "Anti-UV, agents d'étalement, matants, assouplissants", "L'assouplissant est indispensable sur les pièces souples"]
+    ] },
+    { "t": "h", "x": "1K contre 2K : la vraie différence" },
+    { "t": "cmp", "left": { "title": "Produit 1K (monocomposant)", "items": ["Sèche par simple évaporation du solvant", "Le film reste re-solubilisable par un solvant", "Résistance mécanique et chimique faible", "Exemples : bases de teinte, apprêts d'accrochage"] }, "right": { "title": "Produit 2K (bicomposant)", "items": ["Sèche par réaction chimique avec un durcisseur", "**Réticulation irréversible** : réseau tridimensionnel", "Dureté, brillance et résistance élevées", "Exemples : vernis, apprêts garnissants, mastics"] } },
+    { "t": "note", "kind": "info", "title": "La réticulation en une image", "x": "Un produit 1K, c'est un tas de spaghettis qui sèchent : ils se collent, mais on peut toujours les redissoudre. Un produit 2K, c'est un filet tricoté : les molécules se lient chimiquement entre elles. On ne défait pas un filet — d'où la résistance du vernis." },
+    { "t": "h", "x": "Le durcisseur : ni plus ni moins" },
+    { "t": "p", "x": "Le ratio indiqué sur la fiche technique (2:1, 4:1, 5:1…) n'est pas une indication : c'est une **stœchiométrie**. Chaque molécule de durcisseur trouve exactement sa molécule de résine." },
+    { "t": "table", "head": ["Erreur", "Ce qui se passe"], "rows": [
+      ["Durcisseur sous-dosé", "Molécules de résine sans partenaire : le film reste tendre, marque à l'ongle, jaunit et ne résiste pas aux solvants"],
+      ["Durcisseur sur-dosé", "Excès non réagi : film cassant, microfissures, brillance irrégulière, parfois voile"],
+      ["Durcisseur d'une autre gamme", "Incompatibilité : réticulation incomplète, adhérence aléatoire"],
+      ["Durcisseur mal refermé", "Il réagit avec l'humidité de l'air, se charge et perd son efficacité"]
+    ] },
+    { "t": "note", "kind": "tip", "x": "Utilisez l'**outil de calcul de mélange** de cette formation pour convertir un ratio en millilitres selon le volume dont vous avez besoin, marge de perte comprise. Vous le trouverez dans l'onglet Outils." },
+    { "t": "h", "x": "Pot life et temps d'évaporation : deux notions distinctes" },
+    { "t": "steps", "items": [
+      { "title": "Le pot life (durée de vie en pot)", "x": "Le temps pendant lequel le mélange reste utilisable après ajout du durcisseur — typiquement une à deux heures. Passé ce délai, il continue de réticuler dans le godet : il ne s'étale plus, tire, et sèche mal. Un mélange trop vieux se jette, il ne se rattrape pas au diluant." },
+      { "title": "Le temps d'évaporation entre couches", "x": "Quelques minutes entre deux passes, le temps que les solvants sortent du film. Le sauter, c'est emprisonner du solvant : bullage, coulures, perte de brillance." },
+      { "title": "Le temps avant recouvrement", "x": "Le délai à respecter avant d'appliquer la couche suivante d'un autre produit (base sur apprêt, vernis sur base). Trop tôt : le solvant du dessus attaque le dessous. Trop tard : l'accroche chimique n'existe plus, il faut poncer." }
+    ] },
+    { "t": "h", "x": "Bases solvantées, bases hydro" },
+    { "t": "cmp", "left": { "title": "Base solvantée", "items": ["Séchage par évaporation de solvants organiques", "Peu sensible à l'hygrométrie", "Forte teneur en COV : usage désormais restreint", "Application plus « tolérante »"] }, "right": { "title": "Base hydrodiluable", "items": ["Solvant principal : l'eau", "Faible teneur en COV — le standard actuel", "Très sensible à l'hygrométrie et à la température", "Exige un **soufflage** entre couches et une cabine bien réglée"] } },
+    { "t": "note", "kind": "warn", "x": "En base hydro, l'eau s'évapore beaucoup plus lentement que les solvants au-dessus de 65 % d'humidité. Sans soufflage (venturi ou buses de cabine) et sans hygrométrie maîtrisée, la base reste humide sous le vernis : voile, manque d'accroche, marbrures." },
+    { "t": "h", "x": "Le vernis, seul rempart du film de couleur" },
+    { "t": "ul", "items": [
+      "Il apporte la **brillance** et la **tension** : c'est lui qu'on voit, pas la base.",
+      "Il filtre les **UV** : sans lui, les pigments se dégradent en quelques mois.",
+      "Il encaisse les agressions chimiques : fientes, sève, carburant, produits de lavage.",
+      "Il porte l'essentiel de l'épaisseur du système : 40 à 60 µm, contre 15 à 25 pour la base.",
+      "Ses variantes (HS haut extrait sec, MS, mat, anti-rayures) se choisissent selon le chantier et la teinte d'origine."
+    ] },
+    { "t": "flip", "items": [
+      { "f": "Qu'est-ce que la réticulation ?", "b": "La réaction chimique irréversible entre résine et durcisseur qui crée un réseau tridimensionnel." },
+      { "f": "Un durcisseur sous-dosé donne quoi ?", "b": "Un film tendre qui marque à l'ongle, jaunit et ne résiste pas aux solvants." },
+      { "f": "Pot life ou temps d'évaporation ?", "b": "Le pot life concerne le mélange dans le godet ; le temps d'évaporation, l'attente entre deux couches." },
+      { "f": "Pourquoi le vernis est-il indispensable ?", "b": "Brillance, tension, protection UV et résistance chimique : la base seule ne tient pas." }
+    ] }
+  ],
+  "quiz": [
+    { "q": "Qu'est-ce qui différencie fondamentalement un produit 2K d'un 1K ?", "choices": ["Le prix", "Il sèche par réaction chimique irréversible avec un durcisseur", "Il contient plus de pigments", "Il s'applique au pinceau"], "answer": 1, "why": "Le 1K sèche par évaporation et reste re-solubilisable ; le 2K réticule chimiquement, ce qui lui donne dureté et résistance." },
+    { "q": "Que provoque un durcisseur sous-dosé dans un vernis ?", "choices": ["Un séchage plus rapide", "Un film qui reste tendre, marque et jaunit", "Une meilleure brillance", "Une couleur plus foncée"], "answer": 1, "why": "Sans partenaire, une partie de la résine ne réticule pas. Le film n'atteint jamais sa dureté finale." },
+    { "q": "En base hydrodiluable, quel paramètre devient critique ?", "choices": ["La couleur du fond", "L'hygrométrie et le soufflage entre couches", "La dureté de l'abrasif", "La pression du réseau d'air uniquement"], "answer": 1, "why": "L'eau s'évapore lentement en air humide. Sans soufflage ni maîtrise de l'hygrométrie, la base reste humide sous le vernis." },
+    { "q": "Que faire d'un mélange 2K dont le pot life est dépassé ?", "choices": ["Le rediluer et l'utiliser", "Le jeter", "Le conserver au frais", "Ajouter du durcisseur"], "answer": 1, "why": "La réticulation est déjà engagée dans le godet : ni le diluant ni le froid ne l'inversent. Le produit ne s'étale plus et sèche mal." }
+  ]
+}

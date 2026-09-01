@@ -1,0 +1,69 @@
+{
+  "id": "m2l1",
+  "title": "Lire un choc : la méthode de diagnostic",
+  "duration": 14,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Suivre une chaîne de diagnostic complète, du visuel à la mesure",
+    "Repérer les indices d'une déformation structurelle non visible",
+    "Savoir quand un passage au banc de mesure devient obligatoire"
+  ],
+  "video": { "query": "diagnostic choc carrosserie contrôle longeron banc de mesure", "title": "Diagnostiquer un choc avant de démonter" },
+  "blocks": [
+    { "t": "p", "x": "Un choc, c'est de l'énergie qui entre dans une caisse et qui doit bien ressortir quelque part. Le rôle du diagnostic est de suivre ce chemin. **Le piège du débutant : ne regarder que là où c'est cabossé.**" },
+    { "t": "img", "src": "zones-choc.svg", "caption": "Le trajet de l'énergie après un choc avant. Cliquez sur les points.", "hotspots": [
+      { "x": 50, "y": 22.6, "label": "Zone d'impact", "text": "Ce que voit le client. C'est la zone la moins informative : les éléments d'aspect (pare-chocs, capot) sont conçus pour se déformer et **cachent** ce qui s'est passé derrière." },
+      { "x": 32.2, "y": 39.5, "label": "Longerons et absorbeurs", "text": "Les vraies pièces de structure. Contrôlez les **plis d'absorption** : s'ils sont écrasés, l'énergie a dépassé la zone programmée. Un longeron plié impose la mesure sur banc, jamais l'estimation à l'œil." },
+      { "x": 50, "y": 50, "label": "Habitacle — pieds A, B, C", "text": "Contrôlez les jeux de portes des deux côtés, l'ouverture et la fermeture, et la présence de plis dans les bas de caisse. Une porte qui frotte après un choc avant est le signe d'une caisse vrillée." },
+      { "x": 50, "y": 71, "label": "Plancher et zones arrière", "text": "L'énergie transite par le plancher. Cherchez les plis sous les tapis, les traces de peinture craquelée sur les soudures et les fixations de sièges déformées." }
+    ] },
+    { "t": "h", "x": "La chaîne de diagnostic, dans l'ordre" },
+    { "t": "steps", "items": [
+      { "title": "Interroger le client", "x": "Vitesse estimée, angle du choc, obstacle fixe ou mobile, airbags déclenchés, véhicule roulé après le choc. Ces réponses orientent tout le reste." },
+      { "title": "Contrôle visuel complet, véhicule fermé", "x": "Faites le tour. Regardez les **jeux d'affleurement** capot/ailes, portes, hayon. Un jeu qui varie de 2 mm d'un côté à 6 mm de l'autre parle plus que la tôle froissée." },
+      { "title": "Contrôle des ouvrants", "x": "Ouvrez et fermez chaque porte, le capot, le hayon. Un ouvrant dur ou qui claque anormalement révèle une caisse contrainte." },
+      { "title": "Démontage d'investigation", "x": "Dépose des éléments d'aspect pour accéder à la structure. C'est souvent là que le devis double : ce qui était caché apparaît." },
+      { "title": "Mesure", "x": "Réglet et jauge pour les cotes simples, équerre de contrôle, puis **banc de mesure** dès qu'une cote structurelle est en jeu. Les valeurs de référence sont celles du constructeur." },
+      { "title": "Contrôle électronique", "x": "Lecture des défauts au valise : capteurs de choc, airbags, radars ADAS, caméras. Un capteur déplacé de quelques millimètres fausse tout un système." }
+    ] },
+    { "t": "note", "kind": "warn", "title": "Le contrôle en diagonale", "x": "La déformation structurelle la plus fréquente est le **vrillage**. On le détecte en mesurant les diagonales entre points symétriques (par exemple angle avant gauche vers angle arrière droit, et inversement). Un écart supérieur à quelques millimètres entre deux diagonales symétriques signe une caisse déformée." },
+    { "t": "h", "x": "Les indices qui ne trompent pas" },
+    { "t": "table", "head": ["Indice observé", "Ce qu'il signifie"], "rows": [
+      ["Peinture craquelée sur un cordon de soudure", "La structure a travaillé à cet endroit"],
+      ["Boulons de fixation dont la peinture est écaillée", "Élément déjà déposé, ou fixation contrainte"],
+      ["Jeu de porte irrégulier du haut vers le bas", "Pied déformé ou caisse vrillée"],
+      ["Trace de mastic sous le vernis (jauge > 400 µm)", "Réparation antérieure non déclarée"],
+      ["Plis d'absorption écrasés sur un longeron", "L'énergie a dépassé la zone programmée : contrôle sur banc"],
+      ["Pneus usés en biais après le choc", "Géométrie ou train roulant touché"]
+    ] },
+    { "t": "h", "x": "Quand le banc de mesure devient obligatoire" },
+    { "t": "ul", "items": [
+      "Dès qu'un **élément structurel** est touché : longeron, berceau, pied, bas de caisse, plancher.",
+      "Dès qu'un **airbag** s'est déclenché : l'énergie a été suffisante pour solliciter la structure.",
+      "Dès qu'un ouvrant ne ferme plus normalement sans cause visible.",
+      "Dès que la géométrie des trains roulants sort des tolérances après réglage."
+    ] },
+    { "t": "note", "kind": "danger", "x": "Réparer une caisse déformée sans mesure, c'est livrer un véhicule qui ne se comportera pas comme prévu au prochain choc. Les zones d'absorption sont calculées : une structure mal remise en cote n'absorbe plus au bon endroit. C'est une **question de sécurité**, pas de finition." },
+    { "t": "h", "x": "Documenter : votre meilleure protection" },
+    { "t": "check", "id": "diag", "items": [
+      "Photos avant démontage, sous plusieurs angles, avec le compteur kilométrique",
+      "Photos des dommages préexistants sans rapport avec le sinistre",
+      "Relevé des jeux d'affleurement avant intervention",
+      "Impression du rapport de mesure du banc (avant et après)",
+      "Lecture des codes défaut électroniques enregistrée",
+      "Référence de la méthode constructeur utilisée"
+    ] },
+    { "t": "flip", "items": [
+      { "f": "Premier réflexe devant un choc ?", "b": "Regarder les jeux d'affleurement, pas la tôle froissée." },
+      { "f": "Que signale un airbag déclenché ?", "b": "Une énergie suffisante pour avoir sollicité la structure : contrôle sur banc." },
+      { "f": "Comment détecter un vrillage ?", "b": "En comparant les diagonales entre points symétriques de la caisse." },
+      { "f": "La référence de mesure, c'est quoi ?", "b": "Les cotes du constructeur, jamais la symétrie apparente du véhicule." }
+    ] }
+  ],
+  "quiz": [
+    { "q": "Que révèle le mieux une déformation structurelle non visible ?", "choices": ["L'aspect du pare-chocs", "Les jeux d'affleurement des ouvrants", "La couleur de la peinture", "Le bruit du moteur"], "answer": 1, "why": "Les éléments d'aspect sont conçus pour se déformer. Les jeux entre ouvrants traduisent directement la géométrie de la caisse." },
+    { "q": "Un airbag s'est déclenché. Quelle conséquence sur le diagnostic ?", "choices": ["Aucune, c'est un élément indépendant", "Il faut contrôler la structure sur banc de mesure", "Il suffit de remplacer l'airbag", "On peut réduire le contrôle visuel"], "answer": 1, "why": "Le déclenchement suppose une décélération importante : l'énergie a traversé la structure, qui doit être contrôlée en cotes." },
+    { "q": "Comment détecte-t-on un vrillage de caisse ?", "choices": ["Au niveau à bulle", "En comparant les diagonales entre points symétriques", "En pesant le véhicule", "En mesurant la hauteur de caisse à l'avant"], "answer": 1, "why": "Le contrôle en diagonale met en évidence une déformation en parallélogramme que l'œil ne perçoit pas." },
+    { "q": "La référence pour valider une réparation structurelle est :", "choices": ["La symétrie apparente du véhicule", "Les cotes du constructeur", "L'expérience du carrossier", "Le rapport de l'expert"], "answer": 1, "why": "Seules les cotes constructeur, relevées sur banc, valident la remise en géométrie. Le reste est une appréciation." }
+  ]
+}

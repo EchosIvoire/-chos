@@ -1,0 +1,69 @@
+{
+  "id": "m4l2",
+  "title": "Mastics et logique des grains",
+  "duration": 15,
+  "level": "Intermédiaire",
+  "objectives": [
+    "Choisir et appliquer le bon mastic, dans les bonnes épaisseurs",
+    "Maîtriser la progression des grains sans jamais sauter d'étape",
+    "Contrôler une surface avec le guide de ponçage et la cale"
+  ],
+  "video": { "query": "application mastic polyester ponçage cale guide de ponçage carrosserie", "title": "Poser et poncer un mastic correctement" },
+  "blocks": [
+    { "t": "note", "kind": "danger", "title": "Ce que le mastic n'est pas", "x": "Le mastic ne remplace jamais la tôle. Il **corrige** une surface déjà remise en forme à 95 %. Un mastic de 10 mm posé dans un creux non redressé finira par fissurer, se décoller ou marquer sous la peinture. Si vous en mettez plus de 3 à 5 mm, retournez à la tôlerie." },
+    { "t": "h", "x": "Les familles de mastic" },
+    { "t": "table", "head": ["Mastic", "Usage", "Ponçage"], "rows": [
+      ["**Polyester standard**", "Rebouchage courant après tôlerie", "P80 → P120 → P180"],
+      ["**Mastic fibré (verre)**", "Renfort sur perforation réparée, zone sollicitée", "Très dur : dégrossir au P80, jamais seul en surface"],
+      ["**Mastic light / allégé**", "Grandes surfaces, faible densité, facile à poncer", "Idem polyester, ponçage plus rapide"],
+      ["**Mastic fin (finition)**", "Efface les pores et les micro-défauts du polyester", "P180 → P240 → P320"],
+      ["**Mastic pour plastique / aluminium**", "Supports spécifiques, souple ou non ferreux", "Selon fiche technique — un polyester classique ne tient pas dessus"]
+    ] },
+    { "t": "h", "x": "Appliquer un mastic" },
+    { "t": "steps", "items": [
+      { "title": "Doser le durcisseur", "x": "Environ 2 à 3 % en masse, selon la fiche technique et la température. Trop peu : le mastic ne durcit jamais à cœur. Trop : il devient cassant, jaunit et peut ressortir en tache sous la peinture." },
+      { "title": "Malaxer sans battre", "x": "On mélange à plat, en écrasant, jusqu'à couleur parfaitement homogène. Battre incorpore de l'air, donc des pores à reboucher plus tard." },
+      { "title": "Première passe : serrer", "x": "Une passe fine appuyée pour faire pénétrer le mastic dans les rayures du P80 et chasser l'air. C'est elle qui donne l'accroche." },
+      { "title": "Deuxième passe : garnir", "x": "On charge la forme légèrement au-dessus du niveau final, en suivant la courbure de l'élément." },
+      { "title": "Attendre le durcissement complet", "x": "Poncer un mastic encore mou l'arrache et encrasse l'abrasif. Le test de l'ongle sur le bord de la spatule ne trompe pas." }
+    ] },
+    { "t": "note", "kind": "warn", "x": "Le mastic polyester ne se pose **jamais directement sur une tôle nue non protégée** ni sur une peinture non poncée. Sur tôle nue : primaire époxy d'abord (le polyester est poreux et laisse passer l'humidité). Sur ancienne peinture : ponçage au P80/P120 pour créer l'accroche." },
+    { "t": "h", "x": "La logique des grains" },
+    { "t": "img", "src": "grains.svg", "caption": "Chaque grain efface les rayures du précédent. On ne saute jamais plus de deux graduations." },
+    { "t": "p", "x": "Le principe est mécanique : un grain P80 laisse des rayures profondes ; le P120 les efface en laissant les siennes, moins profondes ; et ainsi de suite jusqu'à ce que les rayures deviennent assez fines pour être comblées par l'apprêt. **Sauter du P80 au P320, c'est enfermer les rayures du P80 sous la peinture** — elles réapparaîtront au premier soleil rasant." },
+    { "t": "table", "head": ["Étape", "Grain", "Outil"], "rows": [
+      ["Dégrossissage du mastic", "P80 → P120", "Cale longue, ponçage croisé"],
+      ["Mise en forme", "P150 → P180", "Cale, en suivant la courbure"],
+      ["Finition du mastic", "P240", "Cale souple ou orbitale"],
+      ["Mastic fin", "P320", "Orbitale course 3 mm"],
+      ["Apprêt à sec", "P400 → P500", "Orbitale + aspiration"],
+      ["Apprêt à l'eau", "P600 → P800", "Cale souple, eau propre"],
+      ["Matage pour raccord", "P1000 + pad abrasif", "Manuel"]
+    ] },
+    { "t": "h", "x": "La cale : votre meilleure alliée" },
+    { "t": "ul", "items": [
+      "**Sans cale, la main creuse.** Les doigts appuient plus fort que la paume : vous créez des ondulations invisibles à sec, évidentes une fois vernies.",
+      "Cale longue et rigide pour les surfaces planes et les grandes courbes.",
+      "Cale souple pour les galbes, les arêtes et les zones de raccord.",
+      "Poncez **en croisant** les passes (à 45° dans un sens, puis dans l'autre) : c'est ainsi qu'on repère et qu'on supprime les points hauts."
+    ] },
+    { "t": "h", "x": "Contrôler : le guide de ponçage" },
+    { "t": "p", "x": "Le guide de ponçage est une poudre noire très fine pulvérisée en léger voile sur la surface. Après quelques passes de cale : **ce qui est encore noir est un creux, ce qui est devenu clair est un point haut**. C'est le seul contrôle objectif d'une surface, et il coûte quelques secondes." },
+    { "t": "note", "kind": "tip", "title": "Le contrôle à la main", "x": "Passez la main **gantée et à plat** sur la surface, sans regarder. La paume détecte des variations de quelques centièmes que l'œil ne voit pas. Les professionnels contrôlent au toucher bien plus souvent qu'à la vue." },
+    { "t": "check", "id": "mastic", "items": [
+      "Support poncé au P80/P120 ou protégé à l'époxy",
+      "Durcisseur dosé selon la fiche technique, mélange homogène",
+      "Première passe serrée pour l'accroche",
+      "Durcissement complet avant ponçage",
+      "Progression des grains respectée, aucune graduation sautée",
+      "Contrôle au guide de ponçage et à la main",
+      "Bords du mastic parfaitement dégradés, sans marche"
+    ] }
+  ],
+  "quiz": [
+    { "q": "Quelle épaisseur de mastic polyester ne faut-il pas dépasser ?", "choices": ["1 mm", "3 à 5 mm", "10 mm", "Il n'y a pas de limite"], "answer": 1, "why": "Au-delà, le mastic fissure, se décolle et marque. S'il en faut plus, c'est que la tôlerie n'est pas terminée." },
+    { "q": "Que se passe-t-il si on passe directement du P80 au P320 ?", "choices": ["Rien, on gagne du temps", "Les rayures du P80 restent et réapparaîtront sous la peinture", "Le mastic devient poreux", "L'apprêt n'accroche plus"], "answer": 1, "why": "Chaque grain doit effacer les rayures du précédent. Le P320 est trop fin pour supprimer une rayure de P80 : elle sera simplement recouverte, puis visible." },
+    { "q": "À quoi sert le guide de ponçage ?", "choices": ["À faire adhérer l'abrasif", "À révéler creux et points hauts pendant le ponçage", "À colorer le mastic", "À protéger la tôle"], "answer": 1, "why": "La poudre reste dans les creux et disparaît sur les points hauts : c'est une cartographie instantanée de la surface." },
+    { "q": "Pourquoi poncer avec une cale plutôt qu'à la main nue ?", "choices": ["C'est plus rapide", "La main crée des ondulations car les doigts appuient plus que la paume", "Pour économiser l'abrasif", "Pour éviter les brûlures"], "answer": 1, "why": "La cale répartit la pression. Sans elle, on creuse des ondulations invisibles à sec mais très visibles une fois vernies." }
+  ]
+}
